@@ -1,4 +1,4 @@
-package strikd.game.match.powerups;
+package strikd.game.powerups;
 
 public abstract class PowerUp
 {

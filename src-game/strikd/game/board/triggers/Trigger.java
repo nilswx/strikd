@@ -1,4 +1,4 @@
-package strikd.game.match.board.triggers;
+package strikd.game.board.triggers;
 
 public abstract class Trigger
 {

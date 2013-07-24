@@ -1,6 +1,6 @@
-package strikd.game.match.board;
+package strikd.game.board;
 
-import strikd.game.match.board.tiles.Tile;
+import strikd.game.board.tiles.Tile;
 
 /**
  * A rectangular space of squares. A square can hold a {@link Tile} or <code>null</code>.

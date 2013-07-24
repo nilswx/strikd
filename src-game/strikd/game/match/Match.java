@@ -1,7 +1,7 @@
 package strikd.game.match;
 
-import strikd.game.match.board.Board;
-import strikd.game.match.board.SimpleBoard;
+import strikd.game.board.Board;
+import strikd.game.board.SimpleBoard;
 
 public class Match
 {

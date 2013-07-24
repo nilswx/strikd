@@ -1,10 +1,10 @@
-package strikd.game.match.board;
+package strikd.game.board;
 
 import java.io.IOException;
 import java.util.Random;
 
-import strikd.game.match.board.tiles.Tile;
-import strikd.game.match.board.triggers.BombTrigger;
+import strikd.game.board.tiles.Tile;
+import strikd.game.board.triggers.BombTrigger;
 
 public class SimpleBoard extends Board
 {

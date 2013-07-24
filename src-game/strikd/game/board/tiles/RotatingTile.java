@@ -1,6 +1,6 @@
-package strikd.game.match.board.tiles;
+package strikd.game.board.tiles;
 
-import strikd.game.match.board.triggers.Trigger;
+import strikd.game.board.triggers.Trigger;
 
 public class RotatingTile extends Tile
 {
