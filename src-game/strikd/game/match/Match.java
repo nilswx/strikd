@@ -1,19 +1,19 @@
 package strikd.game.match;
 
-import strikd.game.board.Board;
-import strikd.game.board.SimpleBoard;
+import strikd.game.board.AbstractBoard;
+import strikd.game.board.GappieBoard;
 
 public class Match
 {
 	private final MatchPlayer players[];
 	private final MatchTimer timer;
-	private final Board board;
+	private final AbstractBoard board;
 	
 	public Match(MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
 		this.players = new MatchPlayer[] { playerOne, playerTwo };
 		this.timer = new MatchTimer(2 * 60);
-		this.board = new SimpleBoard(20, 20);
+		this.board = new GappieBoard(20, 20);
 	}
 	
 	private boolean isExtraTimeActive()
@@ -50,7 +50,7 @@ public class Match
 		return this.timer;
 	}
 	
-	public Board getBoard()
+	public AbstractBoard getBoard()
 	{
 		return this.board;
 	}

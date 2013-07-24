@@ -8,11 +8,11 @@ import strikd.game.board.tiles.Tile;
  * @author nilsw
  * 
  */
-public abstract class Board
+public abstract class AbstractBoard
 {
-	private final Tile[][] squares;
+	protected final Tile[][] squares;
 
-	protected Board(int width, int height)
+	protected AbstractBoard(int width, int height)
 	{
 		this.squares = new Tile[width][height];
 	}
@@ -111,7 +111,6 @@ public abstract class Board
 			sb.append(x);
 			sb.append("  ");
 		}
-		
 		
 		return sb.toString();
 	}
