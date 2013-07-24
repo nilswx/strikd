@@ -1,0 +1,155 @@
+package strikd.game.board;
+
+import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import strikd.game.board.tiles.Tile;
+import strikd.game.util.Direction8;
+import strikd.locale.LocaleBundle;
+import strikd.locale.LocaleBundle.DictionaryType;
+import strikd.locale.LocaleBundleManager;
+import strikd.words.Word;
+import strikd.words.WordDictionary;
+
+public class BruteBoard extends AbstractBoard
+{
+	public BruteBoard(int width, int height)
+	{
+		super(width, height);
+	}
+
+	@Override
+	public void regenerate()
+	{
+		super.clear();
+		this.hideWords();
+	}
+	
+	public void hideWords()
+	{
+		// Reusable resources
+		Random rand = new Random();
+		List<Word> triedWords = new ArrayList<Word>();
+		List<Point> triedRoots = new ArrayList<Point>(this.getWidth() * this.getHeight());
+		List<Direction8> triedDirs = new ArrayList<Direction8>(8);
+		
+		// 1. Pick a random word from the list
+		nextWord: for(int i = 0; this.hasGap() && i < 1000; i++)
+		{
+			// Get an untried random word
+			Word word = dict.pickOne();
+			if(triedWords.contains(word))
+			{
+				continue nextWord;
+			}
+			else
+			{
+				triedWords.add(word);
+			}
+			
+			// 2. Pick a random cell on the grid
+			triedRoots.clear();
+			nextRoot: do
+			{
+				// Get an untried random root
+				Point root = new Point(rand.nextInt(this.getWidth()), rand.nextInt(this.getHeight()));
+				if(triedRoots.contains(root))
+				{
+					continue nextRoot;
+				}
+				
+				// 3. Pick a random direction to have the word oriented
+				triedDirs.clear();
+				nextDirection: do
+				{
+					// Get an untried random direction
+					Direction8 dir = Direction8.random();
+					if(triedDirs.contains(dir))
+					{
+						continue nextDirection;
+					}
+					
+					// 4. See if the word will fit into the grid starting from that cell and running in that direction.
+					Point diff = dir.getDiff();
+					char[] letters = word.letters();
+					for(int step = 0; step < letters.length; step++)
+					{
+						Point next = new Point(root.x + (step * diff.x), root.y + (step * diff.y));
+						
+						// Square doesn't exist at all?
+						if(!this.squareExists(next.x, next.y)
+								
+						// Or it does exist, and the letter on it is different?
+						|| (this.squares[next.x][next.y] != null && this.squares[next.x][next.y].getLetter() != letters[step]))
+						{
+							triedDirs.add(dir);
+							continue nextDirection;
+						}
+					}
+					
+					// Put the letters
+					for(int step = 0; step < letters.length; step++)
+					{
+						Point next = new Point(root.x + (step * diff.x), root.y + (step * diff.y));
+						this.squares[next.x][next.y] = new Tile(next.x, next.y, letters[step]);
+					}
+					
+					// Yay!
+					System.out.println("Added " + word);
+					continue nextWord;
+				}
+				while(triedDirs.size() < 8);
+				
+				// Tried all directions for this root
+				triedRoots.add(root);
+				continue nextRoot;
+			}
+			while(triedRoots.size() < (this.getWidth() * this.getHeight()));
+			
+			// Give up on this word!
+			continue nextWord;
+		}
+	}
+	
+	private boolean hasGap()
+	{
+		for(int x = 0; x < this.getWidth(); x++)
+		{
+			for(int y = 0; y < this.getHeight(); y++)
+			{
+				if(this.squares[x][y] == null)
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	public static void main(String[] args) throws IOException
+	{
+		long start = System.currentTimeMillis();
+		AbstractBoard abstractBoard = new BruteBoard(6, 6);
+		abstractBoard.regenerate();
+		long time = System.currentTimeMillis() - start;
+		
+		System.out.println(abstractBoard.toString() + " => " + time + " ms");
+		System.out.println();
+		System.out.println(abstractBoard.toLongString());
+	}
+	
+	
+	static
+	{
+		// Will be passed from higher on
+		LocaleBundleManager locMgr = new LocaleBundleManager(new File("locale"));
+		LocaleBundle enUS = locMgr.getBundle("en_US");
+		dict = enUS.getDictionary(DictionaryType.GENERATOR);
+	}
+	
+	private static WordDictionary dict;
+}

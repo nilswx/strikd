@@ -64,7 +64,7 @@ public class LocaleBundle
 	{
 		// Essential
 		COMPLETE,
-		BASIC,
+		GENERATOR,
 		
 		// Extras etc
 		SEASONAL
