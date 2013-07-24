@@ -1,7 +1,6 @@
 package strikd.game.match.board;
 
 import strikd.game.match.board.tiles.Tile;
-import strikd.game.match.board.tiles.TriggerTile;
 
 /**
  * A rectangular space of squares. A square can hold a {@link Tile} or <code>null</code>.
@@ -79,23 +78,26 @@ public abstract class Board
 				sb.append('[');
 				
 				Tile tile = this.squares[x][y];
-				if(tile instanceof TriggerTile)
-				{
-					TriggerTile t = (TriggerTile)tile;
-					sb.append(t.getLetter());
-					sb.append(':');
-					sb.append(Character.toUpperCase(t.getTrigger().getTypeName().charAt(0)));
-				}
-				else if(tile instanceof Tile)
-				{
-					sb.append(' ');
-					sb.append(tile.getLetter());
-					sb.append(' ');
-				}
-				else
+				if(tile == null)
 				{
 					sb.append("   ");
 				}
+				else
+				{
+					if(tile.getTrigger() == null)
+					{
+						sb.append(' ');
+						sb.append(tile.getLetter());
+						sb.append(' ');
+					}
+					else
+					{
+						sb.append(tile.getLetter());
+						sb.append(':');
+						sb.append(Character.toUpperCase(tile.getTrigger().getTypeName().charAt(0)));
+					}
+				}
+				
 				sb.append(']');
 			}
 			sb.append(System.lineSeparator());

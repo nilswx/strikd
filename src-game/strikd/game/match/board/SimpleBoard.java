@@ -3,8 +3,8 @@ package strikd.game.match.board;
 import java.util.Random;
 
 import strikd.game.match.board.tiles.Tile;
-import strikd.game.match.board.tiles.TriggerTile;
 import strikd.game.match.board.triggers.BombTrigger;
+import strikd.game.words.WordNormalizer;
 
 public class SimpleBoard extends Board
 {
@@ -20,11 +20,13 @@ public class SimpleBoard extends Board
 		
 		Random rand = new Random();
 		this.setTile(new Tile(rand.nextInt(this.getWidth()), rand.nextInt(this.getHeight()), 'K'));
-		this.setTile(new TriggerTile(rand.nextInt(this.getWidth()), rand.nextInt(this.getHeight()), 'P', new BombTrigger()));
+		this.setTile(new Tile(rand.nextInt(this.getWidth()), rand.nextInt(this.getHeight()), 'P', new BombTrigger()));
 	}
 	
 	public static void main(String[] args)
 	{
+		System.out.println(WordNormalizer.normalize("july's"));
+		
 		Board board = new SimpleBoard(5, 5);
 		board.regenerate();
 		
