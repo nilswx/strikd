@@ -1,10 +1,10 @@
 package strikd.game.match.board;
 
+import java.io.IOException;
 import java.util.Random;
 
 import strikd.game.match.board.tiles.Tile;
 import strikd.game.match.board.triggers.BombTrigger;
-import strikd.game.words.WordNormalizer;
 
 public class SimpleBoard extends Board
 {
@@ -23,10 +23,8 @@ public class SimpleBoard extends Board
 		this.setTile(new Tile(rand.nextInt(this.getWidth()), rand.nextInt(this.getHeight()), 'P', new BombTrigger()));
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
-		System.out.println(WordNormalizer.normalize("july's"));
-		
 		Board board = new SimpleBoard(5, 5);
 		board.regenerate();
 		
