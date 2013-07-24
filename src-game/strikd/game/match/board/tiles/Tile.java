@@ -1,14 +1,16 @@
 package strikd.game.match.board.tiles;
 
-public abstract class Tile
+public class Tile
 {
 	private final int x;
 	private final int y;
+	private final char letter;
 	
-	protected Tile(int x, int y)
+	public Tile(int x, int y, char letter)
 	{
 		this.x = x;
 		this.y = y;
+		this.letter = letter;
 	}
 	
 	public int getX()
@@ -19,5 +21,10 @@ public abstract class Tile
 	public int getY()
 	{
 		return this.y;
+	}
+	
+	public char getLetter()
+	{
+		return this.letter;
 	}
 }

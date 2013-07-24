@@ -1,8 +1,8 @@
 package strikd.game.match.board.tiles;
 
-import strikd.game.match.triggers.Trigger;
+import strikd.game.match.board.triggers.Trigger;
 
-public class TriggerTile extends LetterTile
+public class TriggerTile extends Tile
 {
 	private final Trigger trigger;
 	

@@ -12,7 +12,7 @@ public class Match
 	public Match(MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
 		this.players = new MatchPlayer[] { playerOne, playerTwo };
-		this.timer = new MatchTimer(0);
+		this.timer = new MatchTimer(2 * 60);
 		this.board = new SimpleBoard(20, 20);
 	}
 	
