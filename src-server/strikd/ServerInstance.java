@@ -4,10 +4,10 @@ import org.apache.log4j.Logger;
 
 public class ServerInstance
 {
-	private final Logger logger = Logger.getLogger(this.getClass());
+	private static final Logger logger = Logger.getLogger(ServerInstance.class);
 	
 	public ServerInstance(String propertiesFile)
 	{
-		this.logger.info("starting");
+		logger.info("starting");
 	}
 }
