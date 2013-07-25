@@ -91,13 +91,13 @@ public class GappieBoard extends AbstractBoard
 	public static void main(String[] args) throws IOException
 	{
 		long start = System.currentTimeMillis();
-		AbstractBoard abstractBoard = new GappieBoard(5, 5);
-		abstractBoard.regenerate();
+		AbstractBoard board = new GappieBoard(5, 5);
+		board.regenerate();
 		long time = System.currentTimeMillis() - start;
 		
-		System.out.println(abstractBoard.toString() + " => " + time + " ms");
+		System.out.println(board.toString() + " => " + time + " ms");
 		System.out.println();
-		System.out.println(abstractBoard.toLongString());
+		System.out.println(board.toLongString());
 	}
 	
 	

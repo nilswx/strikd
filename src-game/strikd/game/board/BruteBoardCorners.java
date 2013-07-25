@@ -15,9 +15,9 @@ import strikd.locale.LocaleBundleManager;
 import strikd.words.Word;
 import strikd.words.WordDictionary;
 
-public class BruteBoard extends AbstractBoard
+public class BruteBoardCorners extends AbstractBoard
 {
-	public BruteBoard(int width, int height)
+	public BruteBoardCorners(int width, int height)
 	{
 		super(width, height);
 	}
@@ -26,10 +26,10 @@ public class BruteBoard extends AbstractBoard
 	public void regenerate()
 	{
 		super.clear();
-		this.hideWords();
+		this.fillGaps();
 	}
 	
-	public void hideWords()
+	public void fillGaps()
 	{
 		// Reusable resources
 		Random rand = new Random();
@@ -142,7 +142,7 @@ public class BruteBoard extends AbstractBoard
 	public static void main(String[] args) throws IOException
 	{
 		long start = System.currentTimeMillis();
-		AbstractBoard board = new BruteBoard(6, 6);
+		AbstractBoard board = new BruteBoardCorners(6, 6);
 		board.regenerate();
 		long time = System.currentTimeMillis() - start;
 		
