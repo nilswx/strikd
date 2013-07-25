@@ -10,11 +10,11 @@ import strikd.game.board.tiles.Tile;
  */
 public abstract class AbstractBoard
 {
-	protected final Tile[][] squares;
+	protected final Tile[][] tiles;
 
 	protected AbstractBoard(int width, int height)
 	{
-		this.squares = new Tile[width][height];
+		this.tiles = new Tile[width][height];
 	}
 
 	public final void clear()
@@ -23,7 +23,7 @@ public abstract class AbstractBoard
 		{
 			for(int y = 0; y < this.getHeight(); y++)
 			{
-				this.squares[x][y] = null;
+				this.tiles[x][y] = null;
 			}
 		}
 	}
@@ -32,7 +32,7 @@ public abstract class AbstractBoard
 
 	public final Tile getTile(int x, int y)
 	{
-		return this.squareExists(x, y) ? this.squares[x][y] : null;
+		return this.squareExists(x, y) ? this.tiles[x][y] : null;
 	}
 	
 	protected final void setTile(Tile tile)
@@ -40,7 +40,7 @@ public abstract class AbstractBoard
 		int x = tile.getX(), y = tile.getY();
 		if(this.squareExists(x, y))
 		{
-			this.squares[x][y] = tile;
+			this.tiles[x][y] = tile;
 		}
 	}
 
@@ -51,12 +51,12 @@ public abstract class AbstractBoard
 
 	public final int getWidth()
 	{
-		return this.squares.length;
+		return this.tiles.length;
 	}
 
 	public final int getHeight()
 	{
-		return this.squares[0].length;
+		return this.tiles[0].length;
 	}
 	
 	@Override
@@ -77,7 +77,7 @@ public abstract class AbstractBoard
 			{
 				sb.append('[');
 				
-				Tile tile = this.squares[x][y];
+				Tile tile = this.tiles[x][y];
 				if(tile == null)
 				{
 					sb.append("   ");

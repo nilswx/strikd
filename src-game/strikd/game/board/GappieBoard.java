@@ -41,7 +41,7 @@ public class GappieBoard extends AbstractBoard
 		{
 			for(int y = 0; y < this.getHeight(); y++)
 			{
-				if(this.squares[x][y] == null)
+				if(this.tiles[x][y] == null)
 				{
 					return new Point(x, y);
 				}
@@ -62,7 +62,7 @@ public class GappieBoard extends AbstractBoard
 		for(int i = 0; i < letters.length; i++)
 		{
 			// Fill this square with a tile for this one
-			this.squares[x][y] = new Tile(x, y, letters[i]);
+			this.tiles[x][y] = new Tile(x, y, letters[i]);
 			
 			// Get random direction
 			boolean dirOK = false;
