@@ -5,17 +5,24 @@ import strikd.game.board.GappieBoard;
 
 public class Match
 {
+	private final long matchId;
 	private final MatchPlayer players[];
 	private final MatchTimer timer;
 	private final AbstractBoard board;
 	
-	public Match(MatchPlayer playerOne, MatchPlayer playerTwo)
+	public Match(long matchId, MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
+		this.matchId = matchId;
 		this.players = new MatchPlayer[] { playerOne, playerTwo };
 		this.timer = new MatchTimer(2 * 60);
 		this.board = new GappieBoard(20, 20);
 	}
 	
+	public void destroy()
+	{
+		// TODO Auto-generated method stub		
+	}
+
 	private boolean isExtraTimeActive()
 	{
 		// Test for players that have their extra timer running
@@ -33,6 +40,12 @@ public class Match
 	public boolean isEnded()
 	{
 		return this.timer.isDone() && !this.isExtraTimeActive();
+	}
+	
+	
+	public long getMatchId()
+	{
+		return this.matchId;
 	}
 	
 	public MatchPlayer getPlayerOne()

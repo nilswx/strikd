@@ -24,7 +24,6 @@ public class LocaleBundleManager
 		}
 		
 		this.bundleDir = bundleDir;
-		this.reload();
 	}
 	
 	public void reload()
