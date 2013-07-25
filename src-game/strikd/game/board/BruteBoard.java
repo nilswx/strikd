@@ -1,7 +1,8 @@
 package strikd.game.board;
 
+import static strikd.game.board.StaticLocale.dict;
+
 import java.awt.Point;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +10,7 @@ import java.util.Random;
 
 import strikd.game.board.tiles.Tile;
 import strikd.game.util.Direction8;
-import strikd.locale.LocaleBundle;
-import strikd.locale.LocaleBundle.DictionaryType;
-import strikd.locale.LocaleBundleManager;
 import strikd.words.Word;
-import strikd.words.WordDictionary;
 
 public class BruteBoard extends AbstractBoard
 {
@@ -139,8 +136,11 @@ public class BruteBoard extends AbstractBoard
 		
 		return false;
 	}
+	
 	public static void main(String[] args) throws IOException
 	{
+		StaticLocale.init();
+		
 		long start = System.currentTimeMillis();
 		AbstractBoard board = new BruteBoard(6, 6);
 		board.regenerate();
@@ -150,15 +150,4 @@ public class BruteBoard extends AbstractBoard
 		System.out.println();
 		System.out.println(board.toLongString());
 	}
-	
-	
-	static
-	{
-		// Will be passed from higher on
-		LocaleBundleManager locMgr = new LocaleBundleManager(new File("locale"));
-		LocaleBundle enUS = locMgr.getBundle("en_US");
-		dict = enUS.getDictionary(DictionaryType.GENERATOR);
-	}
-	
-	private static WordDictionary dict;
 }
