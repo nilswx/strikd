@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 
 import strikd.game.board.tiles.Tile;
-import strikd.game.util.Direction8;
 import strikd.words.Word;
 
 public class BruteBoard extends AbstractBoard

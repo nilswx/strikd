@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.io.IOException;
 
 import strikd.game.board.tiles.Tile;
-import strikd.game.util.Direction8;
 import strikd.words.Word;
 
 public class GappieBoard extends AbstractBoard
