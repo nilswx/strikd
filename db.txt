@@ -1,0 +1,22 @@
+var player = 
+{
+	// Identity
+	id : Int64,
+	name : String,
+
+	// Player
+	joined : Date,
+	lang : String,
+	xp : Int32,
+	items : Array,
+	avatar : 
+	{
+		// key/value object (avatar part key, part ID)
+	}
+
+	// Facebook (+ OAuth)
+	fbUserId : Int64,
+	fbToken : String,
+	fbSecret: String,
+	fbCountry : String
+}
