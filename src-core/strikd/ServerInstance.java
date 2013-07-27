@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import strikd.game.match.MatchManager;
 import strikd.locale.LocaleBundleManager;
+import strikd.net.NetListener;
 
 public class ServerInstance
 {
@@ -17,6 +18,7 @@ public class ServerInstance
 	
 	private final ServerInstance.Descriptor descriptor;
 	private final LocaleBundleManager localeMgr;
+	private final NetListener gameListener;
 	private final MatchManager matchMgr;
 	
 	public ServerInstance(File propsFile) throws Exception
@@ -39,6 +41,9 @@ public class ServerInstance
 		
 		// Setup match manager
 		this.matchMgr = new MatchManager();
+		
+		// Setup net
+		this.gameListener = new NetListener(13381);
 		
 		// Print instance info
 		this.descriptor = new ServerInstance.Descriptor(props.getProperty("instance.name"), ServerInstance.version);
@@ -99,7 +104,7 @@ public class ServerInstance
 		@Override
 		public String toString()
 		{
-			return String.format("'%s' @ %s (m=%d, mem=%d MiB)", this.name, this.version, this.activeMatches(), this.getMemUsage());
+			return String.format("'%s' @ v%s (m=%d, mem=%d MiB)", this.name, this.version, this.activeMatches(), this.getMemUsage());
 		}
 	}
 
