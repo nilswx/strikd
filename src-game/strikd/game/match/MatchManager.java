@@ -12,6 +12,7 @@ public class MatchManager
 	
 	private final AtomicLong matchCounter = new AtomicLong();
 	private final Map<Long, Match> active = new ConcurrentHashMap<Long, Match>(16, 0.75f, 8);
+	private final MatchMaker matchMaker = new MatchMaker();
 	
 	public Match createMatch(MatchPlayer p1, MatchPlayer p2)
 	{
