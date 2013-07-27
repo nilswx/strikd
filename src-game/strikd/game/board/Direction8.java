@@ -1,4 +1,4 @@
-package strikd.game.util;
+package strikd.game.board;
 
 import java.awt.Point;
 import java.util.Random;
