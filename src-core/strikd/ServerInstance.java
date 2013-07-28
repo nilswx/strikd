@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import strikd.game.match.MatchManager;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
+import strikd.sessions.SessionManager;
 
 public class ServerInstance
 {
@@ -18,8 +19,13 @@ public class ServerInstance
 	
 	private final ServerInstance.Descriptor descriptor;
 	private final LocaleBundleManager localeMgr;
+	
 	private final NetListener gameListener;
+	private final SessionManager sessionMgr;
 	private final MatchManager matchMgr;
+	
+	private boolean isShutdownMode;
+	private String shutdownMessage;
 	
 	public ServerInstance(File propsFile) throws Exception
 	{
@@ -39,15 +45,55 @@ public class ServerInstance
 		this.localeMgr = new LocaleBundleManager(new File(props.getProperty("locale.dir")));
 		this.localeMgr.reload();
 		
-		// Setup match manager
-		this.matchMgr = new MatchManager();
+		// Setup session manager
+		this.sessionMgr = new SessionManager();
 		
-		// Setup net
+		// Setup match manager
+		this.matchMgr = new MatchManager(this);
+		
+		// Start accepting connections
 		this.gameListener = new NetListener(13381);
 		
 		// Print instance info
 		this.descriptor = new ServerInstance.Descriptor(props.getProperty("instance.name"), ServerInstance.version);
 		logger.info(String.format("this is instance %s", this.descriptor));
+	}
+
+	public void destroy()
+	{
+		this.destroy(false);
+	}
+	
+	private void destroy(boolean force)
+	{
+		// No active matches?
+		if(this.matchMgr.active() > 0 && !force)
+		{
+			logger.warn("destroy() called while there were active matches");
+		}
+		else
+		{
+			logger.info("destroying process");
+			System.exit(0);
+		}
+	}
+	
+	public void shutdown(String message)
+	{
+		if(this.matchMgr.active() == 0)
+		{
+			this.shutdownNow();
+		}
+		else
+		{
+			this.isShutdownMode = true;
+			this.shutdownMessage = message;
+		}
+	}
+	
+	public void shutdownNow()
+	{
+		this.destroy(true);
 	}
 	
 	public ServerInstance.Descriptor getDescriptor()
@@ -59,10 +105,25 @@ public class ServerInstance
 	{
 		return this.localeMgr;
 	}
+	
+	public SessionManager getSessionMgr()
+	{
+		return this.sessionMgr;
+	}
 
 	public MatchManager getMatchMgr()
 	{
 		return this.matchMgr;
+	}
+	
+	public boolean isShutdownMode()
+	{
+		return this.isShutdownMode;
+	}
+	
+	public String getShutdownMessage()
+	{
+		return this.shutdownMessage;
 	}
 	
 	public class Descriptor
@@ -107,5 +168,4 @@ public class ServerInstance
 			return String.format("'%s' @ v%s (m=%d, mem=%d MiB)", this.name, this.version, this.activeMatches(), this.getMemUsage());
 		}
 	}
-
 }

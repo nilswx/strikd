@@ -23,6 +23,8 @@ public class NetConnection extends SimpleChannelHandler
 	private final String ipAddress;
 	private final long startTime;
 	
+	private Object cryptoHandler; // NetConnection becomes a Session after crypto handshake
+	
 	public NetConnection(Channel channel)
 	{
 		this.channel = channel;

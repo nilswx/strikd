@@ -9,7 +9,6 @@ public class Session
 {
 	private final long sessionId;
 	private final NetConnection connection;
-	private Object crypto;
 	private Player player;
 	
 	private MatchPlayer matchPlayer;
