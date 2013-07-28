@@ -13,6 +13,7 @@ import org.jongo.Jongo;
 import com.mongodb.CommandResult;
 import com.mongodb.MongoClient;
 
+import strikd.game.items.ItemShop;
 import strikd.game.match.MatchManager;
 import strikd.game.player.PlayerRegister;
 import strikd.locale.LocaleBundleManager;
@@ -32,6 +33,7 @@ public class ServerInstance
 	private final SessionManager sessionMgr;
 	private final PlayerRegister playerRegister;
 	private final MatchManager matchMgr;
+	private final ItemShop shop;
 	
 	private boolean isShutdownMode;
 	private String shutdownMessage;
@@ -75,6 +77,10 @@ public class ServerInstance
 		this.sessionMgr = new SessionManager();
 		this.playerRegister = new PlayerRegister(this);
 		this.matchMgr = new MatchManager(this);
+		
+		// Load shop assortment
+		this.shop = new ItemShop();
+		this.shop.reload();
 		
 		// Start accepting connections
 		try
@@ -165,6 +171,11 @@ public class ServerInstance
 	public MatchManager getMatchMgr()
 	{
 		return this.matchMgr;
+	}
+	
+	public ItemShop getShop()
+	{
+		return this.shop;
 	}
 	
 	public boolean isShutdownMode()
