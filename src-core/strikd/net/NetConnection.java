@@ -14,6 +14,8 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import strikd.net.codec.MessageEncoder;
 import strikd.net.codec.StrikMessage;
+import strikd.sessions.Session;
+import strikd.sessions.SessionManager;
 
 public class NetConnection extends SimpleChannelHandler
 {
@@ -25,9 +27,14 @@ public class NetConnection extends SimpleChannelHandler
 	
 	private Object cryptoHandler; // NetConnection becomes a Session after crypto handshake
 	
-	public NetConnection(Channel channel)
+	private Session session;
+	private final SessionManager sessionMgr;
+	
+	public NetConnection(Channel channel, SessionManager sessionMgr)
 	{
 		this.channel = channel;
+		this.sessionMgr = sessionMgr;
+		
 		this.ipAddress = ((InetSocketAddress)channel.getRemoteAddress()).getAddress().getHostAddress();
 		this.startTime = System.currentTimeMillis();
 		this.channel.getPipeline().addLast("encoder", new MessageEncoder());
@@ -38,6 +45,14 @@ public class NetConnection extends SimpleChannelHandler
 		if(this.channel.isOpen())
 		{
 			this.channel.write(ChannelBuffers.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+		}
+	}
+	
+	public void initSession()
+	{
+		if(this.session == null)
+		{
+			this.session = this.sessionMgr.newSession(this);
 		}
 	}
 
@@ -93,5 +108,15 @@ public class NetConnection extends SimpleChannelHandler
 	public long getUptime()
 	{
 		return (System.currentTimeMillis() - this.startTime);
+	}
+	
+	public Session getSession()
+	{
+		return this.session;
+	}
+	
+	public SessionManager getSessionMgr()
+	{
+		return this.sessionMgr;
 	}
 }

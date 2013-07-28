@@ -4,8 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
+import org.jongo.Jongo;
+
+import com.mongodb.CommandResult;
+import com.mongodb.MongoClient;
 
 import strikd.game.match.MatchManager;
 import strikd.locale.LocaleBundleManager;
@@ -17,12 +23,13 @@ public class ServerInstance
 	private static final String version = "0.0.1-dev";
 	private static final Logger logger = Logger.getLogger(ServerInstance.class);
 	
-	private final ServerInstance.Descriptor descriptor;
+	private final InstanceDescriptor instanceDescriptor;
 	private final LocaleBundleManager localeMgr;
 	
+	private final Jongo dbCluster;
 	private final NetListener gameListener;
 	private final SessionManager sessionMgr;
-	private final MatchManager matchMgr;
+	final MatchManager matchMgr;
 	
 	private boolean isShutdownMode;
 	private String shutdownMessage;
@@ -41,6 +48,23 @@ public class ServerInstance
 		}
 		logger.info(String.format("loaded %d entries from %s", props.size(), propsFile));
 
+		// Setup database
+		try
+		{
+			Jongo cluster = new Jongo(new MongoClient(props.getProperty("db.server")).getDB(props.getProperty("db.name")));
+			CommandResult stats = cluster.getDatabase().getStats();
+			logger.info(String.format("db '%s' @ %s, col=%d, size=%f MiB",
+							stats.get("db"),
+							stats.get("serverUsed"),
+							stats.getInt("collections"),
+							((float)stats.getInt("dataSize") / 1024f / 1024f)));
+			this.dbCluster = cluster;
+		}
+		catch(Exception ex)
+		{
+			throw new Exception(String.format("cannot connect to db '%s'", props.getProperty("db.name")), ex);
+		}
+		
 		// Load locale
 		this.localeMgr = new LocaleBundleManager(new File(props.getProperty("locale.dir")));
 		this.localeMgr.reload();
@@ -52,11 +76,13 @@ public class ServerInstance
 		this.matchMgr = new MatchManager(this);
 		
 		// Start accepting connections
-		this.gameListener = new NetListener(13381);
+		this.gameListener = new NetListener(13381, this.sessionMgr);
 		
 		// Print instance info
-		this.descriptor = new ServerInstance.Descriptor(props.getProperty("instance.name"), ServerInstance.version);
-		logger.info(String.format("this is instance %s", this.descriptor));
+		this.instanceDescriptor = new InstanceDescriptor(this, props.getProperty("instance.name"));
+		logger.info(String.format("this is instance %s", this.instanceDescriptor));
+		
+		Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new StatsWorker(this), 0, 1000, TimeUnit.MILLISECONDS);
 	}
 
 	public void destroy()
@@ -96,14 +122,24 @@ public class ServerInstance
 		this.destroy(true);
 	}
 	
-	public ServerInstance.Descriptor getDescriptor()
+	public String getVersion()
 	{
-		return this.descriptor;
+		return ServerInstance.version;
+	}
+	
+	public InstanceDescriptor getDescriptor()
+	{
+		return this.instanceDescriptor;
 	}
 	
 	public LocaleBundleManager getLocaleMgr()
 	{
 		return this.localeMgr;
+	}
+	
+	public Jongo getDbCluster()
+	{
+		return this.dbCluster;
 	}
 	
 	public SessionManager getSessionMgr()
@@ -124,48 +160,5 @@ public class ServerInstance
 	public String getShutdownMessage()
 	{
 		return this.shutdownMessage;
-	}
-	
-	public class Descriptor
-	{
-		private final String name;
-		private final String version;
-		
-		private Descriptor(String name, String version)
-		{
-			this.name = name;
-			this.version = version;
-		}
-		
-		public String getName()
-		{
-			return this.name;
-		}
-		
-		public String getVersion()
-		{
-			return this.version;
-		}
-		
-		public long activeMatches()
-		{
-			return ServerInstance.this.matchMgr.active();
-		}
-		
-		public long getMemUsage()
-		{
-			// Retrieve current memory usage in bytes
-			Runtime rt = Runtime.getRuntime();
-			long bytes = (rt.totalMemory() - rt.freeMemory());
-			
-			// Return as megabytes
-			return (bytes / 1024 / 1024);
-		}
-		
-		@Override
-		public String toString()
-		{
-			return String.format("'%s' @ v%s (m=%d, mem=%d MiB)", this.name, this.version, this.activeMatches(), this.getMemUsage());
-		}
 	}
 }

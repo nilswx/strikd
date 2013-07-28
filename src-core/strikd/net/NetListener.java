@@ -16,6 +16,7 @@ import org.jboss.netty.util.ThreadNameDeterminer;
 import org.jboss.netty.util.ThreadRenamingRunnable;
 
 import strikd.net.codec.StrikMessage;
+import strikd.sessions.SessionManager;
 
 public class NetListener
 {
@@ -25,7 +26,7 @@ public class NetListener
 	private ExecutorService bossExecutor;
 	private ExecutorService workerExecutor;
 	
-	public NetListener(int port)
+	public NetListener(int port, final SessionManager sessionMgr)
 	{
 		// Create thread pools
 		this.bossExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("NetServer/Boss #%d"));
@@ -40,7 +41,7 @@ public class NetListener
 			@Override
 			public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception
 			{
-				NetConnection conn = new NetConnection(ctx.getChannel());
+				NetConnection conn = new NetConnection(ctx.getChannel(), sessionMgr);
 				logger.info("accepted conn from " + conn.getIpAddress());
 				
 				

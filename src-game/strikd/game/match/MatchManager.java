@@ -63,7 +63,7 @@ public class MatchManager
 		return this.active.get(matchId);
 	}
 
-	public long active()
+	public int active()
 	{
 		return this.active.size();
 	}

@@ -1,3 +1,6 @@
+// One big MongoDB database (can shard)
+
+// Player collection
 var player = 
 {
 	// Identity
@@ -19,4 +22,21 @@ var player =
 	fbToken : String,
 	fbSecret: String,
 	fbCountry : String
+}
+
+// Online instances collection
+var instances = 
+{
+	name : String,
+	host : String, // hostname
+	port : Integer, // default port
+	version : String,
+	started : Date, // DateTime (can calculate uptime!)
+	
+	memory : Integer, // in MiB
+	logins : Integer,
+	onlinePlayers : Integer,
+	activeMatches : Integer,
+	totalMatches : Integer,
+	avgWaitingTime : Integer, // seconds
 }
