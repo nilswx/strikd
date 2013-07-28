@@ -14,12 +14,13 @@ public class InstanceDescriptor
 	private final ServerInstance instance;
 	
 	@Id
-	public final ObjectId dbId = ObjectId.get();
+	public final ObjectId dbId;
 	public final String name;
 	public final Date started;
 	
 	public InstanceDescriptor(ServerInstance instance, String name)
 	{
+		this.dbId = ObjectId.get();
 		this.instance = instance;
 		this.name = name;
 		this.started = new Date(System.currentTimeMillis());
@@ -51,6 +52,12 @@ public class InstanceDescriptor
 	@JsonProperty
 	public int onlinePlayers()
 	{
+		return this.instance.getSessionMgr().players();
+	}
+	
+	@JsonProperty
+	public long totalLogins()
+	{
 		return 0;
 	}
 	
@@ -61,9 +68,9 @@ public class InstanceDescriptor
 	}
 	
 	@JsonProperty
-	public int totalMatches()
+	public long totalMatches()
 	{
-		return 999;
+		return this.instance.getMatchMgr().matchCounter();
 	}
 	
 	@JsonProperty
@@ -81,6 +88,6 @@ public class InstanceDescriptor
 	@Override
 	public String toString()
 	{
-		return String.format("'%s' @ v%s (m=%d, mem=%d MiB)", this.name, this.version(), this.activeMatches(), this.memoryUsage());
+		return String.format("'%s' @ v%s (p=%d, m=%d, mem=%d MiB)", this.name, this.version(), this.onlinePlayers(), this.activeMatches(), this.memoryUsage());
 	}
 }

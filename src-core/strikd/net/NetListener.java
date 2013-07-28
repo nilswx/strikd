@@ -1,12 +1,14 @@
 package strikd.net;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelException;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.Channels;
@@ -15,53 +17,63 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.util.ThreadNameDeterminer;
 import org.jboss.netty.util.ThreadRenamingRunnable;
 
+import strikd.ServerInstance;
 import strikd.net.codec.StrikMessage;
+import strikd.sessions.Session;
 import strikd.sessions.SessionManager;
 
 public class NetListener
 {
-	private static final Logger logger = Logger.getLogger(NetListener.class);
-	
-	private ServerBootstrap server;
+	private Channel listener;
 	private ExecutorService bossExecutor;
 	private ExecutorService workerExecutor;
 	
-	public NetListener(int port, final SessionManager sessionMgr)
+	public NetListener(int port, final ServerInstance instance) throws IOException
 	{
 		// Create thread pools
 		this.bossExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("NetServer/Boss #%d"));
 		this.workerExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("NetServer/Worker #%d"));
 		
 		// Create server boss and worker threadpools using defaults
-		this.server = new ServerBootstrap(new NioServerSocketChannelFactory(this.bossExecutor, this.workerExecutor));
+		ServerBootstrap bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(this.bossExecutor, this.workerExecutor));
+		
+		// Get session manager
+		final SessionManager sessionMgr = instance.getSessionMgr();
 		
 		// Add a 'connection acceptor' handler to the pipeline
-		this.server.setPipeline(Channels.pipeline(new SimpleChannelHandler()
+		bootstrap.setPipeline(Channels.pipeline(new SimpleChannelHandler()
 		{
 			@Override
 			public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception
 			{
 				NetConnection conn = new NetConnection(ctx.getChannel(), sessionMgr);
-				logger.info("accepted conn from " + conn.getIpAddress());
 				
+				// DEBUG: skip to post-handshake
+				Session session = sessionMgr.newSession(conn);
 				
-				
+				// Greet client
 				StrikMessage msg = new StrikMessage("WELCOME");
-				msg.set("motd", "Welcome to the server!");
-				msg.set("sessId", 4488448);
-				conn.send(msg);
+				msg.set("sessId", session.getSessionId());
+				msg.set("instance", instance.getDescriptor().name);
+				msg.set("version", instance.getDescriptor().version());
+				msg.set("avgWaitingTime", instance.getDescriptor().avgWaitingTime());
+				msg.set("motd", "Win 4 games today to collect the special XMAS 2013 Hat!");
+				session.send(msg);
 				
-				StrikMessage msg2 = new StrikMessage("ALERT");
-				msg2.set("text", "Strik is in beta!");
-				msg2.set("color", "blue");
-				conn.send(msg2);
+				// DEBUG: skip to post-login
+				sessionMgr.completeLogin(sessionMgr.newSession(conn));
 				
-				for(int i = 0; i < 50; i++)
-				{
-					conn.send(msg);
-					conn.send(msg2);
-				}
+				// Login OK!
+				StrikMessage msg2 = new StrikMessage("LOGIN_OK");
+				msg2.set("playerId", session.getPlayer().id.toString());
+				msg2.set("name", session.getPlayer().name);
+				session.send(msg2);
 				
+				// Sure!
+				StrikMessage msg3 = new StrikMessage("ALERT");
+				msg3.set("text", "Strik is in beta!");
+				msg3.set("color", "blue");
+				session.send(msg3);
 			}
 			
 			@Override
@@ -72,16 +84,25 @@ public class NetListener
 		}));
 		
 		// Setup pipeline factor
-		Channel listener = this.server.bind(new InetSocketAddress(port));
-		if(listener.isOpen())
+		try
 		{
-			logger.info(String.format("listening on tcp/%d", port));
+			this.listener = bootstrap.bind(new InetSocketAddress(port));
 		}
+		catch(ChannelException ex)
+		{
+			throw new IOException(String.format("could not bind to tcp/%d", port), ex);
+		}
+		
 	}
 	
+	public SocketAddress getLocalAddress()
+	{
+		return this.listener.getLocalAddress();
+	}
+	
+	// Disable Netty's thread renaming, create executors
 	static
 	{
-		// Disable Netty's thread renaming, create executors
 		ThreadRenamingRunnable.setThreadNameDeterminer(ThreadNameDeterminer.CURRENT);
 	}
 }

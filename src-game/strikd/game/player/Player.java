@@ -33,4 +33,10 @@ public class Player
 	{
 		return (this.matches - this.wins);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("#%s ('%s')", this.id, this.name);
+	}
 }

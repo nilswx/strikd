@@ -67,4 +67,9 @@ public class MatchManager
 	{
 		return this.active.size();
 	}
+
+	public long matchCounter()
+	{
+		return this.matchCounter.longValue();
+	}
 }

@@ -14,6 +14,7 @@ import com.mongodb.CommandResult;
 import com.mongodb.MongoClient;
 
 import strikd.game.match.MatchManager;
+import strikd.game.player.PlayerRegister;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
 import strikd.sessions.SessionManager;
@@ -25,11 +26,12 @@ public class ServerInstance
 	
 	private final InstanceDescriptor instanceDescriptor;
 	private final LocaleBundleManager localeMgr;
-	
 	private final Jongo dbCluster;
-	private final NetListener gameListener;
+	private final NetListener listener;
+	
 	private final SessionManager sessionMgr;
-	final MatchManager matchMgr;
+	private final PlayerRegister playerRegister;
+	private final MatchManager matchMgr;
 	
 	private boolean isShutdownMode;
 	private String shutdownMessage;
@@ -60,28 +62,36 @@ public class ServerInstance
 							((float)stats.getInt("dataSize") / 1024f / 1024f)));
 			this.dbCluster = cluster;
 		}
-		catch(Exception ex)
+		catch(Exception e)
 		{
-			throw new Exception(String.format("cannot connect to db '%s'", props.getProperty("db.name")), ex);
+			throw new Exception(String.format("could not connect to db '%s'", props.getProperty("db.name")), e);
 		}
 		
 		// Load locale
 		this.localeMgr = new LocaleBundleManager(new File(props.getProperty("locale.dir")));
 		this.localeMgr.reload();
 		
-		// Setup session manager
+		// Setup registers and managers
 		this.sessionMgr = new SessionManager();
-		
-		// Setup match manager
+		this.playerRegister = new PlayerRegister(this);
 		this.matchMgr = new MatchManager(this);
 		
 		// Start accepting connections
-		this.gameListener = new NetListener(13381, this.sessionMgr);
+		try
+		{
+			this.listener = new NetListener(13381, this);
+		}
+		catch(IOException e)
+		{
+			throw new Exception("could not start network server", e);
+		}
+		logger.info(String.format("listening on %s", this.listener.getLocalAddress()));
 		
 		// Print instance info
 		this.instanceDescriptor = new InstanceDescriptor(this, props.getProperty("instance.name"));
 		logger.info(String.format("this is instance %s", this.instanceDescriptor));
 		
+		// Start stats worker
 		Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new StatsWorker(this), 0, 1000, TimeUnit.MILLISECONDS);
 	}
 
@@ -145,6 +155,11 @@ public class ServerInstance
 	public SessionManager getSessionMgr()
 	{
 		return this.sessionMgr;
+	}
+	
+	public PlayerRegister getPlayerRegister()
+	{
+		return this.playerRegister;
 	}
 
 	public MatchManager getMatchMgr()
