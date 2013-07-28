@@ -28,7 +28,10 @@ public class Match
 	{
 		for(MatchPlayer player : this.players)
 		{
-			player.getSession().send(msg);
+			if(!(player instanceof MatchBotPlayer))
+			{
+				player.getSession().send(msg);
+			}
 		}
 	}
 
