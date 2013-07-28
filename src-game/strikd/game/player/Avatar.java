@@ -25,7 +25,7 @@ public class Avatar
 	
 	public enum PartType
 	{
-		Hat,
+		Hat, // birthday hat!
 		Hair,
 		Head,
 		Eyes,

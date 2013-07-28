@@ -2,6 +2,7 @@ package strikd.game.match;
 
 import strikd.game.board.AbstractBoard;
 import strikd.game.board.GappieBoard;
+import strikd.net.codec.StrikMessage;
 
 public class Match
 {
@@ -22,6 +23,14 @@ public class Match
 	{
 		// TODO Auto-generated method stub		
 	}
+	
+	public void broadcast(StrikMessage msg)
+	{
+		for(MatchPlayer player : this.players)
+		{
+			player.getSession().send(msg);
+		}
+	}
 
 	private boolean isExtraTimeActive()
 	{
@@ -41,7 +50,6 @@ public class Match
 	{
 		return this.timer.isDone() && !this.isExtraTimeActive();
 	}
-	
 	
 	public long getMatchId()
 	{
