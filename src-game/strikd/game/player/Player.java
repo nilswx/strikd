@@ -4,11 +4,13 @@ import java.util.Date;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
+import org.jongo.marshall.jackson.oid.Id;
 
 import strikd.game.items.Item;
 
 public class Player
 {
+	@Id
 	public ObjectId id;
 	public String name;
 	
