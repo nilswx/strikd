@@ -1,6 +1,6 @@
 package strikd.game.match;
 
-import strikd.game.player.Player;
+import strikd.game.user.User;
 import strikd.sessions.Session;
 
 public class MatchPlayer
@@ -19,9 +19,9 @@ public class MatchPlayer
 		return this.session;
 	}
 	
-	public Player getInfo()
+	public User getInfo()
 	{
-		return this.session.getPlayer();
+		return this.session.getUser();
 	}
 	
 	public Match getMatch()

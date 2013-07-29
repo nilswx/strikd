@@ -15,9 +15,9 @@ public class FacebookUnlinkHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		if(session.getPlayer().fbIdentity != null)
+		if(session.getUser().fbIdentity != null)
 		{
-			// Delete link and reset player name to random guest name
+			// Delete link and reset user name to random guest name
 		}
 	}
 }

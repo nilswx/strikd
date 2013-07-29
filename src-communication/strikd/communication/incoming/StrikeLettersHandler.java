@@ -15,6 +15,6 @@ public class StrikeLettersHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// Remove from MatchMaker
+		
 	}
 }

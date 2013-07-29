@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
-import strikd.game.player.Player;
+import strikd.game.user.User;
 import strikd.net.NetConnection;
 
 public class SessionManager
@@ -18,7 +18,7 @@ public class SessionManager
 	private final Map<Long, Session> sessions = new ConcurrentHashMap<Long, Session>();
 	
 	private final AtomicLong loginCounter = new AtomicLong();
-	private final Map<ObjectId, Session> playerSessions = new ConcurrentHashMap<ObjectId, Session>();
+	private final Map<ObjectId, Session> userSessions = new ConcurrentHashMap<ObjectId, Session>();
 	
 	/**
 	 * Called once when a connection has performed crypto handshake.
@@ -28,7 +28,7 @@ public class SessionManager
 	public Session newSession(NetConnection connection)
 	{
 		// Create a session with a new ID
-		long sessionId = 5;this.sessionCounter.incrementAndGet();
+		long sessionId = this.sessionCounter.incrementAndGet();
 		Session session = new Session(sessionId, connection);
 		this.sessions.put(sessionId, session);
 		
@@ -40,11 +40,11 @@ public class SessionManager
 		Session session = this.sessions.remove(sessionId);
 		if(session != null)
 		{
-			Player player = session.getPlayer();
-			if(player != null)
+			User user = session.getUser();
+			if(user != null)
 			{
-				this.playerSessions.remove(player.id);
-				logger.debug(player + " logged out");
+				this.userSessions.remove(user.id);
+				logger.debug(user + " logged out");
 			}
 		}
 	}
@@ -52,20 +52,20 @@ public class SessionManager
 	public void completeLogin(Session session)
 	{
 		// Given session is indeed logged in?
-		Player player = session.getPlayer();
-		if(player != null)
+		User user = session.getUser();
+		if(user != null)
 		{
 			// Disconnect old login (if online)
-			Session concurrent = this.getPlayerSession(player.id);
+			Session concurrent = this.getUserSession(user.id);
 			if(concurrent != null)
 			{
 				this.endSession(concurrent.getSessionId());
 			}
 			
-			// Add to player map and increment logins
-			this.playerSessions.put(player.id, session);
+			// Add to user map and increment logins
+			this.userSessions.put(user.id, session);
 			this.loginCounter.incrementAndGet();
-			logger.debug(String.format("%s logged in from %s", player, session.getConnection().getIpAddress()));
+			logger.debug(String.format("%s logged in from %s", user, session.getConnection().getIpAddress()));
 		}
 	}
 	
@@ -74,9 +74,9 @@ public class SessionManager
 		return this.sessions.get(sessionId);
 	}
 	
-	public Session getPlayerSession(ObjectId playerId)
+	public Session getUserSession(ObjectId userId)
 	{
-		return this.sessions.get(playerId);
+		return this.sessions.get(userId);
 	}
 	
 	public int sessions()
@@ -89,9 +89,9 @@ public class SessionManager
 		return this.sessionCounter.get();
 	}
 	
-	public int players()
+	public int users()
 	{
-		return this.playerSessions.size();
+		return this.userSessions.size();
 	}
 	
 	public long totalLogins()

@@ -15,7 +15,7 @@ public class FacebookLinkHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		if(session.getPlayer().fbIdentity == null)
+		if(session.getUser().fbIdentity == null)
 		{
 			long userId = request.readLong();
 			String authToken = request.readStr();

@@ -1,4 +1,4 @@
-package strikd.game.player;
+package strikd.game.user;
 
 public class FacebookIdentity
 {

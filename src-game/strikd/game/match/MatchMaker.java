@@ -32,7 +32,7 @@ public class MatchMaker
 	{
 		if(session.isLoggedIn())
 		{
-			return this.queues.get(session.getPlayer().language);
+			return this.queues.get(session.getUser().language);
 		}
 		else
 		{

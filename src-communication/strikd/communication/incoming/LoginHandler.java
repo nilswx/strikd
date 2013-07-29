@@ -19,10 +19,10 @@ public class LoginHandler extends MessageHandler
 	{
 		if(!session.isLoggedIn())
 		{
-			ObjectId playerId = new ObjectId(request.readStr());
+			ObjectId userId = new ObjectId(request.readStr());
 			String token = request.readStr();
 			
-			// TODO: load player data and check whether token matches
+			// TODO: load user data and check whether token matches
 		}
 	}
 }

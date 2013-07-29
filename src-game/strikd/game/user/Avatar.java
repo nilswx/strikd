@@ -1,4 +1,4 @@
-package strikd.game.player;
+package strikd.game.user;
 
 import java.util.HashMap;
 import java.util.Map;

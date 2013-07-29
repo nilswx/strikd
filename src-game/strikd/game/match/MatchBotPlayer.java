@@ -1,18 +1,18 @@
 package strikd.game.match;
 
-import strikd.game.player.Player;
+import strikd.game.user.User;
 
 public class MatchBotPlayer extends MatchPlayer
 {
-	private Player bot;
+	private User bot;
 	
-	public MatchBotPlayer(Player bot)
+	public MatchBotPlayer(User bot)
 	{
 		super(null);
 	}
 
 	@Override
-	public Player getInfo()
+	public User getInfo()
 	{
 		return this.bot;
 	}
