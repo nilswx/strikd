@@ -16,7 +16,7 @@ import com.mongodb.MongoClient;
 import strikd.communication.incoming.MessageHandlers;
 import strikd.game.items.ItemShop;
 import strikd.game.match.MatchManager;
-import strikd.game.player.PlayerRegister;
+import strikd.game.user.UserRegister;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
 import strikd.sessions.SessionManager;
@@ -32,7 +32,7 @@ public class ServerInstance
 	private final NetListener listener;
 	
 	private final SessionManager sessionMgr;
-	private final PlayerRegister playerRegister;
+	private final UserRegister playerRegister;
 	private final MatchManager matchMgr;
 	private final ItemShop shop;
 	
@@ -76,7 +76,7 @@ public class ServerInstance
 		
 		// Setup registers and managers
 		this.sessionMgr = new SessionManager();
-		this.playerRegister = new PlayerRegister(this);
+		this.playerRegister = new UserRegister(this);
 		this.matchMgr = new MatchManager(this);
 		
 		// Load shop assortment
@@ -167,7 +167,7 @@ public class ServerInstance
 		return this.sessionMgr;
 	}
 	
-	public PlayerRegister getPlayerRegister()
+	public UserRegister getPlayerRegister()
 	{
 		return this.playerRegister;
 	}

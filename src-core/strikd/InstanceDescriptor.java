@@ -50,9 +50,9 @@ public class InstanceDescriptor
 	}
 	
 	@JsonProperty
-	public int onlinePlayers()
+	public int onlineUsers()
 	{
-		return this.instance.getSessionMgr().players();
+		return this.instance.getSessionMgr().users();
 	}
 	
 	@JsonProperty
@@ -88,6 +88,6 @@ public class InstanceDescriptor
 	@Override
 	public String toString()
 	{
-		return String.format("'%s' @ v%s (p=%d, m=%d, mem=%d MiB)", this.name, this.version(), this.onlinePlayers(), this.activeMatches(), this.memoryUsage());
+		return String.format("'%s' @ v%s (u=%d, m=%d, mem=%d MiB)", this.name, this.version(), this.onlineUsers(), this.activeMatches(), this.memoryUsage());
 	}
 }

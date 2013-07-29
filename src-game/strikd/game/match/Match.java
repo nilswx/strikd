@@ -64,16 +64,6 @@ public class Match
 		return this.players;
 	}
 	
-	public MatchPlayer getPlayerOne()
-	{
-		return this.players[0];
-	}
-	
-	public MatchPlayer getPlayerTwo()
-	{
-		return this.players[0];
-	}
-	
 	public MatchTimer getTimer()
 	{
 		return this.timer;

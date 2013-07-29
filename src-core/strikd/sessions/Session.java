@@ -2,7 +2,7 @@ package strikd.sessions;
 
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
-import strikd.game.player.Player;
+import strikd.game.user.User;
 import strikd.net.NetConnection;
 import strikd.net.codec.OutgoingMessage;
 
@@ -11,7 +11,7 @@ public class Session
 	private final long sessionId;
 	private final NetConnection connection;
 	
-	private Player player;
+	private User user;
 	private MatchPlayer matchPlayer;
 	private PlayerQueue.Entry queueEntry;
 	
@@ -19,10 +19,6 @@ public class Session
 	{
 		this.sessionId = sessionId;
 		this.connection = connection;
-		
-		this.player = new Player();
-		//this.player.id = ObjectId.get();
-		this.player.name = "nilsw";
 	}
 	
 	public void send(OutgoingMessage msg)
@@ -42,12 +38,12 @@ public class Session
 	
 	public boolean isLoggedIn()
 	{
-		return (this.player != null);
+		return (this.user != null);
 	}
 	
-	public Player getPlayer()
+	public User getUser()
 	{
-		return this.player;
+		return this.user;
 	}
 	
 	public boolean isInQueue()

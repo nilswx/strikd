@@ -7,7 +7,7 @@ public interface Opcodes
 	public enum Incoming implements Opcode
 	{
 		NOP,
-		CREATE_PLAYER,
+		CREATE_USER,
 		LOGIN,
 		FACEBOOK_LINK,
 		FACEBOOK_UNLINK,
@@ -30,7 +30,7 @@ public interface Opcodes
 		NOP,
 		LOGIN_OK,
 		ALERT,
-		PLAYER_INFO,
+		USER_INFO,
 		AVATAR,
 		ITEMS,
 		CURRENCY_BALANCE,

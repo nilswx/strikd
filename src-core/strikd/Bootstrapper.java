@@ -13,7 +13,7 @@ public class Bootstrapper
 		try
 		{
 			ServerInstance server = new ServerInstance(new File("strikd.properties"));
-			server.getPlayerRegister().newPlayer();
+			server.getPlayerRegister().newUser();
 		}
 		catch(Exception e)
 		{

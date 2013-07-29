@@ -17,7 +17,7 @@ public class ChangeNameHandler extends MessageHandler
 	public void handle(Session session, IncomingMessage request)
 	{
 		String newName = request.readStr();
-		session.getPlayer().name = newName;
+		session.getUser().name = newName;
 		session.send(new NameChangedMessage(true, null, newName));
 	}
 }

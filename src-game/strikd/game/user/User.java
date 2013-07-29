@@ -1,4 +1,4 @@
-package strikd.game.player;
+package strikd.game.user;
 
 import java.util.Date;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.jongo.marshall.jackson.oid.Id;
 
 import strikd.game.items.Item;
 
-public class Player
+public class User
 {
 	@Id
 	public ObjectId id;

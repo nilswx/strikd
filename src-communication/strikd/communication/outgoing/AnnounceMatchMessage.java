@@ -3,7 +3,7 @@ package strikd.communication.outgoing;
 import strikd.communication.Opcodes;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
-import strikd.game.player.Player;
+import strikd.game.user.User;
 import strikd.net.codec.OutgoingMessage;
 
 public class AnnounceMatchMessage extends OutgoingMessage
@@ -20,15 +20,15 @@ public class AnnounceMatchMessage extends OutgoingMessage
 		super.writeByte((byte)match.getPlayers().length);
 		for(MatchPlayer player : match.getPlayers())
 		{
-			Player info = player.getInfo();
+			User user = player.getInfo();
 			super.writeByte((byte)0); // actor ID (virtual ID)
-			super.writeStr(info.id.toString());
-			super.writeStr(info.name);
-			super.writeStr(info.avatar.toString());
-			super.writeStr((info.fbIdentity != null) ? info.fbIdentity.country : "");
-			super.writeInt(info.xp);
-			super.writeInt(info.matches);
-			super.writeInt(info.wins);
+			super.writeStr(user.id.toString());
+			super.writeStr(user.name);
+			super.writeStr(user.avatar.toString());
+			super.writeStr((user.fbIdentity != null) ? user.fbIdentity.country : "");
+			super.writeInt(user.xp);
+			super.writeInt(user.matches);
+			super.writeInt(user.wins);
 		}
 	}
 }
