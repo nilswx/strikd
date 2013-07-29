@@ -30,7 +30,7 @@ public interface Opcodes
 		NOP,
 		LOGIN_OK,
 		ALERT,
-		PLAYERINFO,
+		PLAYER_INFO,
 		AVATAR,
 		ITEMS,
 		CURRENCY_BALANCE,

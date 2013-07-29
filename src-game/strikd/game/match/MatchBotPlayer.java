@@ -12,7 +12,7 @@ public class MatchBotPlayer extends MatchPlayer
 	}
 
 	@Override
-	public Player getPlayer()
+	public Player getInfo()
 	{
 		return this.bot;
 	}

@@ -13,27 +13,27 @@ public abstract class IncomingMessage extends NetMessage<Opcodes.Incoming>
 		this.buf.writeByte(op.ordinal());
 	}
 	
-	public boolean readBool()
+	public final boolean readBool()
 	{
 		return (this.buf.readByte() == 1);
 	}
 	
-	public byte readByte()
+	public final byte readByte()
 	{
 		return this.buf.readByte();
 	}
 
-	public int readInt()
+	public final int readInt()
 	{
 		return this.buf.readInt();
 	}
 	
-	public long readLong()
+	public final long readLong()
 	{
 		return this.buf.readLong();
 	}
 	
-	public String readStr()
+	public final String readStr()
 	{
 		// Read specified amount of bytes
 		short length = this.buf.readShort();

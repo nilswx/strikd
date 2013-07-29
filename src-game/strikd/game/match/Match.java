@@ -59,6 +59,11 @@ public class Match
 		return this.matchId;
 	}
 	
+	public MatchPlayer[] getPlayers()
+	{
+		return this.players;
+	}
+	
 	public MatchPlayer getPlayerOne()
 	{
 		return this.players[0];

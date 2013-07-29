@@ -19,7 +19,7 @@ public class MatchPlayer
 		return this.session;
 	}
 	
-	public Player getPlayer()
+	public Player getInfo()
 	{
 		return this.session.getPlayer();
 	}
