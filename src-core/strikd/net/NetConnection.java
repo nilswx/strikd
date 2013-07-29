@@ -16,7 +16,6 @@ import strikd.net.codec.MessageDecoder;
 import strikd.net.codec.MessageEncoder;
 import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
-import strikd.sessions.SessionManager;
 
 public class NetConnection extends SimpleChannelHandler
 {
@@ -27,12 +26,10 @@ public class NetConnection extends SimpleChannelHandler
 	private final long startTime;
 	
 	private Session session;
-	private final SessionManager sessionMgr;
 	
-	public NetConnection(Channel channel, SessionManager sessionMgr)
+	public NetConnection(Channel channel)
 	{
 		this.channel = channel;
-		this.sessionMgr = sessionMgr;
 		
 		this.ipAddress = ((InetSocketAddress)channel.getRemoteAddress()).getAddress().getHostAddress();
 		this.startTime = System.currentTimeMillis();
@@ -50,15 +47,6 @@ public class NetConnection extends SimpleChannelHandler
 		}
 	}
 	
-	public void initSession()
-	{
-		// Post-crypto
-		if(this.session == null)
-		{
-			this.session = this.sessionMgr.newSession(this);
-		}
-	}
-
 	private void requestClose(String reason)
 	{
 		this.close();
@@ -117,9 +105,12 @@ public class NetConnection extends SimpleChannelHandler
 	{
 		return this.session;
 	}
-	
-	public SessionManager getSessionMgr()
+
+	public void setSession(Session session)
 	{
-		return this.sessionMgr;
+		if(this.session == null)
+		{
+			this.session = session;
+		}
 	}
 }

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
 import strikd.Server;
+import strikd.ServerDescriptor;
 import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.game.user.User;
 import strikd.net.NetConnection;
@@ -37,10 +38,12 @@ public class SessionManager extends Server.Referent
 		// Create a session with a new ID
 		long sessionId = this.sessionCounter.incrementAndGet();
 		Session session = new Session(sessionId, connection, this.getServer());
+		connection.setSession(session);
 		this.sessions.put(sessionId, session);
 		
 		// Greet session
-		session.send(new SessionInfoMessage(sessionId, this.getServer().getDescriptor().name));
+		ServerDescriptor server = this.getServer().getDescriptor();
+		session.send(new SessionInfoMessage(sessionId, server.name));
 		
 		return session;
 	}
