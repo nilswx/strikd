@@ -3,6 +3,8 @@ package strikd.communication.incoming;
 import org.bson.types.ObjectId;
 
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.UserInfoMessage;
+import strikd.game.user.User;
 import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
 
@@ -22,7 +24,17 @@ public class LoginHandler extends MessageHandler
 			ObjectId userId = new ObjectId(request.readStr());
 			String token = request.readStr();
 			
-			// TODO: load user data and check whether token matches
+			User user = session.getServer().getUserRegister().findUser(userId);
+			if(user == null || !token.equals(user.token))
+			{
+				session.end("bad login");
+			}
+			else
+			{
+				session.setUser(user);
+				session.send(new UserInfoMessage(user));
+				session.getServer().getSessionMgr().completeLogin(session);
+			}
 		}
 	}
 }

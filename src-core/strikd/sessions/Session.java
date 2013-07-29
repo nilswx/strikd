@@ -23,6 +23,11 @@ public class Session extends Server.Referent
 		this.connection = connection;
 	}
 	
+	public void end(String reason)
+	{
+		
+	}
+	
 	public void send(OutgoingMessage msg)
 	{
 		this.connection.send(msg);
@@ -46,6 +51,14 @@ public class Session extends Server.Referent
 	public User getUser()
 	{
 		return this.user;
+	}
+	
+	public void setUser(User user)
+	{
+		if(this.user == null)
+		{
+			this.user = user;
+		}
 	}
 	
 	public boolean isInQueue()

@@ -49,7 +49,7 @@ public class UserRegister extends Server.Referent
 		this.dbUsers.save(user);
 	}
 	
-	public User getUser(ObjectId userId)
+	public User findUser(ObjectId userId)
 	{
 		Session session = this.getServer().getSessionMgr().getUserSession(userId);
 		if(session != null)

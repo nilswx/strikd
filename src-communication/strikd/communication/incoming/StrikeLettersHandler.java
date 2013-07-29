@@ -15,6 +15,9 @@ public class StrikeLettersHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		
+		if(session.isInMatch())
+		{
+			// make move with session.getMatchPlayer()
+		}
 	}
 }
