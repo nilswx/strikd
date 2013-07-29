@@ -6,7 +6,9 @@ import strikd.sessions.Session;
 public class MatchPlayer
 {
 	private final Session session;
+	
 	private Match match;
+	private int actorId;
 	private MatchTimer extraTimer;
 	
 	public MatchPlayer(Session session)
@@ -14,6 +16,11 @@ public class MatchPlayer
 		this.session = session;
 	}
 
+	public int getActorId()
+	{
+		return this.actorId;
+	}
+	
 	public Session getSession()
 	{
 		return this.session;

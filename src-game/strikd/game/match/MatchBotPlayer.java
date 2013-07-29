@@ -9,6 +9,7 @@ public class MatchBotPlayer extends MatchPlayer
 	public MatchBotPlayer(User bot)
 	{
 		super(null);
+		this.bot = bot;
 	}
 
 	@Override

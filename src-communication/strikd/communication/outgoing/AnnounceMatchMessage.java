@@ -21,7 +21,7 @@ public class AnnounceMatchMessage extends OutgoingMessage
 		for(MatchPlayer player : match.getPlayers())
 		{
 			User user = player.getInfo();
-			super.writeByte((byte)0); // actor ID (virtual ID)
+			super.writeByte((byte)player.getActorId());
 			super.writeStr(user.id.toString());
 			super.writeStr(user.name);
 			super.writeStr(user.avatar.toString());
