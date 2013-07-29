@@ -3,7 +3,7 @@ package strikd.sessions;
 import strikd.game.match.MatchPlayer;
 import strikd.game.player.Player;
 import strikd.net.NetConnection;
-import strikd.net.codec.StrikMessage;
+import strikd.net.codec.OutgoingMessage;
 
 public class Session
 {
@@ -23,7 +23,7 @@ public class Session
 		this.player.name = "nilsw";
 	}
 	
-	public void send(StrikMessage msg)
+	public void send(OutgoingMessage msg)
 	{
 		this.connection.send(msg);
 	}

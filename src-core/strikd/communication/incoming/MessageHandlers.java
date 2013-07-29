@@ -1,23 +1,25 @@
 package strikd.communication.incoming;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 
+import strikd.communication.Opcodes;
+
 public final class MessageHandlers
 {
 	private static final Logger logger = Logger.getLogger(MessageHandlers.class);
-	private static final HashMap<String, MessageHandler> handlers = new HashMap<String, MessageHandler>();
+	private static final EnumMap<Opcodes.Incoming, MessageHandler> handlers = new EnumMap<Opcodes.Incoming, MessageHandler>(Opcodes.Incoming.class);
 	
 	private MessageHandlers()
 	{
 		
 	}
 	
-	public static final MessageHandler get(String opcode)
+	public static final MessageHandler get(Opcodes.Incoming op)
 	{
-		return handlers.get(opcode);
+		return handlers.get(op);
 	}
 	
 	private static final void register(Class<? extends MessageHandler> clazz)
@@ -26,7 +28,7 @@ public final class MessageHandlers
 		{
 			MessageHandler handler = clazz.newInstance();
 			handlers.put(handler.getOpcode(), handler);
-			logger.debug(String.format("\"%s\" > %s", handler.getOpcode(), clazz.getName()));
+			logger.debug(String.format("%s > %s", handler.getOpcode(), clazz.getName()));
 		}
 		catch(InstantiationException | IllegalAccessException e)
 		{

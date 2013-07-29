@@ -1,18 +1,19 @@
 package strikd.communication.incoming;
 
 import strikd.sessions.Session;
-import strikd.net.codec.StrikMessage;
+import strikd.communication.Opcodes;
+import strikd.net.codec.IncomingMessage;
 
 public class NopHandler extends MessageHandler
 {	
 	@Override
-	public final String getOpcode()
+	public Opcodes.Incoming getOpcode()
 	{
-		return "NOP";
+		return Opcodes.Incoming.NOP;
 	}
 	
 	@Override
-	public final void handle(Session session, StrikMessage request)
+	public final void handle(Session session, IncomingMessage request)
 	{
 		
 	}

@@ -2,30 +2,27 @@ package strikd.communication.incoming;
 
 import org.bson.types.ObjectId;
 
-import strikd.net.codec.StrikMessage;
+import strikd.communication.Opcodes;
+import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
 
 public class LoginHandler extends MessageHandler
 {
 	@Override
-	public String getOpcode()
+	public Opcodes.Incoming getOpcode()
 	{
-		return "LOGIN";
+		return Opcodes.Incoming.LOGIN;
 	}
 	
 	@Override
-	public void handle(Session session, StrikMessage request)
+	public void handle(Session session, IncomingMessage request)
 	{
 		if(!session.isLoggedIn())
 		{
-			ObjectId playerId = new ObjectId((String)request.get("playerId"));
-			String token = request.get("token");
+			ObjectId playerId = new ObjectId(request.readStr());
+			String token = request.readStr();
 			
 			// TODO: load player data and check whether token matches
-			
-			StrikMessage msg = new StrikMessage("LoginOK");
-			msg.set("coins", session.getPlayer().coins);
-			session.send(msg);
 		}
 	}
 }

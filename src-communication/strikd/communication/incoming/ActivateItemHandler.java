@@ -1,19 +1,20 @@
 package strikd.communication.incoming;
 
 import strikd.sessions.Session;
-import strikd.net.codec.StrikMessage;
+import strikd.communication.Opcodes;
+import strikd.net.codec.IncomingMessage;
 
 public class ActivateItemHandler extends MessageHandler
 {
 	@Override
-	public String getOpcode()
+	public Opcodes.Incoming getOpcode()
 	{
-		return "ACTIVATE";
+		return Opcodes.Incoming.ACTIVATE_ITEM;
 	}
 	
 	@Override
-	public void handle(Session session, StrikMessage request)
+	public void handle(Session session, IncomingMessage request)
 	{
-		int itemId = request.get("id");
+		int itemId = request.readInt();
 	}
 }

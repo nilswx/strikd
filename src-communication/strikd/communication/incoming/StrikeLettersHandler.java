@@ -1,18 +1,19 @@
 package strikd.communication.incoming;
 
 import strikd.sessions.Session;
-import strikd.net.codec.StrikMessage;
+import strikd.communication.Opcodes;
+import strikd.net.codec.IncomingMessage;
 
 public class StrikeLettersHandler extends MessageHandler
 {
 	@Override
-	public String getOpcode()
+	public Opcodes.Incoming getOpcode()
 	{
-		return "STRIKE";
+		return Opcodes.Incoming.STRIKE_LETTERS;
 	}
 	
 	@Override
-	public void handle(Session session, StrikMessage request)
+	public void handle(Session session, IncomingMessage request)
 	{
 		// Remove from MatchMaker
 	}

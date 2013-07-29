@@ -1,18 +1,19 @@
 package strikd.communication.incoming;
 
 import strikd.sessions.Session;
-import strikd.net.codec.StrikMessage;
+import strikd.communication.Opcodes;
+import strikd.net.codec.IncomingMessage;
 
 public class FacebookUnlinkHandler extends MessageHandler
 {
 	@Override
-	public String getOpcode()
+	public Opcodes.Incoming getOpcode()
 	{
-		return "UNLINK";
+		return Opcodes.Incoming.FACEBOOK_UNLINK;
 	}
 	
 	@Override
-	public void handle(Session session, StrikMessage request)
+	public void handle(Session session, IncomingMessage request)
 	{
 		if(session.getPlayer().fbIdentity != null)
 		{

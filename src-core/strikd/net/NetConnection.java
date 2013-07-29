@@ -14,7 +14,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import strikd.net.codec.MessageDecoder;
 import strikd.net.codec.MessageEncoder;
-import strikd.net.codec.StrikMessage;
+import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
 import strikd.sessions.SessionManager;
 
@@ -92,7 +92,7 @@ public class NetConnection extends SimpleChannelHandler
 		logger.error("caught exception", e.getCause());
 	}
 	
-	public void send(StrikMessage msg)
+	public void send(OutgoingMessage msg)
 	{
 		logger.debug(msg);
 		this.channel.write(msg);

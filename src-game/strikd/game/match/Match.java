@@ -2,7 +2,7 @@ package strikd.game.match;
 
 import strikd.game.board.AbstractBoard;
 import strikd.game.board.GappieBoard;
-import strikd.net.codec.StrikMessage;
+import strikd.net.codec.OutgoingMessage;
 
 public class Match
 {
@@ -24,7 +24,7 @@ public class Match
 		// TODO Auto-generated method stub		
 	}
 	
-	public void broadcast(StrikMessage msg)
+	public void broadcast(OutgoingMessage msg)
 	{
 		for(MatchPlayer player : this.players)
 		{

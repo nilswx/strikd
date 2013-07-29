@@ -1,18 +1,19 @@
 package strikd.communication.incoming;
 
 import strikd.sessions.Session;
-import strikd.net.codec.StrikMessage;
+import strikd.communication.Opcodes;
+import strikd.net.codec.IncomingMessage;
 
 public class CancelRequestMatchHandler extends MessageHandler
 {
 	@Override
-	public String getOpcode()
+	public Opcodes.Incoming getOpcode()
 	{
-		return "CANCEL_REQ";
+		return Opcodes.Incoming.CANCEL_REQUEST_MATCH;
 	}
 	
 	@Override
-	public void handle(Session session, StrikMessage request)
+	public void handle(Session session, IncomingMessage request)
 	{
 		// Receive one or more letter coordinates
 	}

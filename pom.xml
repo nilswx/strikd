@@ -33,16 +33,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.msgpack</groupId>
-			<artifactId>msgpack</artifactId>
-			<version>0.6.7</version>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.9-RC1</version>
 		</dependency>
-		
-		<dependency>
-	<groupId>org.reflections</groupId>
-	<artifactId>reflections</artifactId>
-	<version>0.9.9-RC1</version>
-</dependency>
-            
 	</dependencies>
 </project>

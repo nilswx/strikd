@@ -1,11 +1,12 @@
 package strikd.communication.incoming;
 
-import strikd.net.codec.StrikMessage;
+import strikd.communication.Opcodes;
+import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
 
 public abstract class MessageHandler
 {
-	public abstract String getOpcode();
+	public abstract Opcodes.Incoming getOpcode();
 	
-	public abstract void handle(Session session, StrikMessage request);
+	public abstract void handle(Session session, IncomingMessage request);
 }

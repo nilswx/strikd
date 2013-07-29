@@ -1,19 +1,22 @@
 package strikd.communication.incoming;
 
+import strikd.communication.Opcodes;
+import strikd.communication.outgoing.AlertMessage;
+import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
-import strikd.net.codec.StrikMessage;
 
 public class ChangeNameHandler extends MessageHandler
 {
 	@Override
-	public String getOpcode()
+	public Opcodes.Incoming getOpcode()
 	{
-		return "RENAME";
+		return Opcodes.Incoming.CHANGE_NAME;
 	}
 	
 	@Override
-	public void handle(Session session, StrikMessage request)
+	public void handle(Session session, IncomingMessage request)
 	{
-		String newName = request.get("name");
+		String newName = request.readStr();
+		session.send(new AlertMessage("HAHA GELUKT"));
 	}
 }
