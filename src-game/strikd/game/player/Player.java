@@ -20,7 +20,7 @@ public class Player
 	public int matches;
 	public int wins;
 	
-	public int coins;
+	public int currency;
 	public String language;
 	public Avatar avatar;
 	public Map<Integer, Item> items;

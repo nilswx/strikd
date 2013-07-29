@@ -27,11 +27,13 @@ public interface Opcodes
 	
 	public enum Outgoing implements Opcode
 	{
+		NOP,
 		LOGIN_OK,
 		ALERT,
 		PLAYERINFO,
 		AVATAR,
 		ITEMS,
+		CURRENCY_BALANCE,
 		NAME_CHANGED;
 		
 		private static final Opcodes.Outgoing[] values = values();

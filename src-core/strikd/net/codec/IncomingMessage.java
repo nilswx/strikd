@@ -9,38 +9,43 @@ public abstract class IncomingMessage extends NetMessage<Opcodes.Incoming>
 	protected IncomingMessage(Opcodes.Incoming incoming, ChannelBuffer buf)
 	{
 		super(incoming, buf);
-		this.data.writeShort(0); // Length placeholder
-		this.data.writeByte(op.ordinal());
+		this.buf.writeShort(0); // Length placeholder
+		this.buf.writeByte(op.ordinal());
 	}
 	
 	public boolean readBool()
 	{
-		return (this.data.readByte() == 1);
+		return (this.buf.readByte() == 1);
 	}
 	
 	public byte readByte()
 	{
-		return this.data.readByte();
+		return this.buf.readByte();
 	}
 
 	public int readInt()
 	{
-		return this.data.readInt();
+		return this.buf.readInt();
 	}
 	
 	public long readLong()
 	{
-		return this.data.readLong();
+		return this.buf.readLong();
 	}
 	
 	public String readStr()
 	{
 		// Read specified amount of bytes
-		short length = this.data.readShort();
+		short length = this.buf.readShort();
 		byte[] bytes = new byte[length];
-		this.data.readBytes(bytes);
+		this.buf.readBytes(bytes);
 		
 		// Return result
 		return new String(bytes);
+	}
+	
+	public final int length()
+	{
+		return 0;
 	}
 }

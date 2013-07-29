@@ -8,6 +8,6 @@ public class AlertMessage extends OutgoingMessage
 	public AlertMessage(String text)
 	{
 		super(Outgoing.ALERT);
-		this.writeStr(text);
+		super.writeStr(text);
 	}
 }
