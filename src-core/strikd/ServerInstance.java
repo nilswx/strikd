@@ -13,6 +13,7 @@ import org.jongo.Jongo;
 import com.mongodb.CommandResult;
 import com.mongodb.MongoClient;
 
+import strikd.communication.incoming.MessageHandlers;
 import strikd.game.items.ItemShop;
 import strikd.game.match.MatchManager;
 import strikd.game.player.PlayerRegister;
@@ -81,6 +82,9 @@ public class ServerInstance
 		// Load shop assortment
 		this.shop = new ItemShop();
 		this.shop.reload();
+		
+		// Force message registry loading
+		MessageHandlers.get(null);
 		
 		// Start accepting connections
 		try

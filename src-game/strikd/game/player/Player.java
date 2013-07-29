@@ -12,6 +12,7 @@ public class Player
 {
 	@Id
 	public ObjectId id;
+	public String token;
 	public String name;
 	
 	// Stats

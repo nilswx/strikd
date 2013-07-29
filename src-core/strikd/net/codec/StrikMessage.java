@@ -22,9 +22,15 @@ public class StrikMessage
 		this.data = data;
 	}
 	
-	public void set(String key, Object value)
+	public <T> void set(String key, T value)
 	{
 		this.data.put(key, value);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T get(String key)
+	{
+		return (T)this.data.get(key);
 	}
 	
 	public String getOp()

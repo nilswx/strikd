@@ -1,7 +1,5 @@
 package strikd.sessions;
 
-import org.bson.types.ObjectId;
-
 import strikd.game.match.MatchPlayer;
 import strikd.game.player.Player;
 import strikd.net.NetConnection;

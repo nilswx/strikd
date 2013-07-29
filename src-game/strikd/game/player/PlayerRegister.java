@@ -1,6 +1,7 @@
 package strikd.game.player;
 
 import java.util.Random;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -26,6 +27,7 @@ public class PlayerRegister
 	{
 		// Create new player with default data
 		Player player = new Player();
+		player.token = UUID.randomUUID().toString();
 		player.name = this.generateGuestName();
 		this.dbPlayers.save(player);
 		
