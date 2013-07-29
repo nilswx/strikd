@@ -15,6 +15,9 @@ public class CancelRequestMatchHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// Receive one or more letter coordinates
+		if(session.isInQueue())
+		{
+			session.exitQueue();
+		}
 	}
 }

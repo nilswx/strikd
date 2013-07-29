@@ -32,7 +32,7 @@ public abstract class PlayerQueue
 			this.queue = queue;
 		}
 		
-		public void cancel()
+		public void exit()
 		{
 			this.queue.dequeue(this);
 		}

@@ -65,11 +65,16 @@ public class Session
 		return this.matchPlayer;
 	}
 
+	public void exitQueue()
+	{
+		this.setQueueEntry(null);
+	}
+	
 	public void setQueueEntry(PlayerQueue.Entry entry)
 	{
 		if(this.isInQueue())
 		{
-			this.queueEntry.cancel();
+			this.queueEntry.exit();
 		}
 		this.queueEntry = entry;
 	}
