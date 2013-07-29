@@ -2,6 +2,8 @@ package strikd.communication.incoming;
 
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
+import strikd.game.match.MatchMaker;
+import strikd.game.match.queues.PlayerQueue;
 import strikd.net.codec.IncomingMessage;
 
 public class RequestMatchHandler extends MessageHandler
@@ -15,6 +17,14 @@ public class RequestMatchHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// Add to the MatchMaker, wait for x seconds, MatchMaker can return a bot
+		if(!session.isInMatch())
+		{
+			MatchMaker matchMaker = null;
+			PlayerQueue.Entry queueEntry = matchMaker.requestMatch(session);
+			if(queueEntry != null)
+			{
+				session.setQueueEntry(queueEntry);
+			}
+		}
 	}
 }

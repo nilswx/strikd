@@ -1,6 +1,7 @@
 package strikd.sessions;
 
 import strikd.game.match.MatchPlayer;
+import strikd.game.match.queues.PlayerQueue;
 import strikd.game.player.Player;
 import strikd.net.NetConnection;
 import strikd.net.codec.OutgoingMessage;
@@ -12,6 +13,7 @@ public class Session
 	
 	private Player player;
 	private MatchPlayer matchPlayer;
+	private PlayerQueue.Entry queueEntry;
 	
 	public Session(long sessionId, NetConnection connection)
 	{
@@ -48,6 +50,11 @@ public class Session
 		return this.player;
 	}
 	
+	public boolean isInQueue()
+	{
+		return (this.queueEntry != null);
+	}
+	
 	public boolean isInMatch()
 	{
 		return (this.matchPlayer != null);
@@ -56,5 +63,14 @@ public class Session
 	public MatchPlayer getMatchPlayer()
 	{
 		return this.matchPlayer;
+	}
+
+	public void setQueueEntry(PlayerQueue.Entry entry)
+	{
+		if(this.isInQueue())
+		{
+			this.queueEntry.cancel();
+		}
+		this.queueEntry = entry;
 	}
 }

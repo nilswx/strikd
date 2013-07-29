@@ -1,7 +1,7 @@
 package strikd.communication.incoming;
 
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.AlertMessage;
+import strikd.communication.outgoing.NameChangedMessage;
 import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
 
@@ -17,6 +17,7 @@ public class ChangeNameHandler extends MessageHandler
 	public void handle(Session session, IncomingMessage request)
 	{
 		String newName = request.readStr();
-		session.send(new AlertMessage("HAHA GELUKT"));
+		session.getPlayer().name = newName;
+		session.send(new NameChangedMessage(true, null, newName));
 	}
 }

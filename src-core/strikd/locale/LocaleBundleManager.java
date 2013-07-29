@@ -1,6 +1,7 @@
 package strikd.locale;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,5 +58,10 @@ public class LocaleBundleManager
 	public LocaleBundle getBundle(String locale)
 	{
 		return this.bundles.get(locale);
+	}
+
+	public Collection<LocaleBundle> getBundles()
+	{
+		return this.bundles.values();
 	}
 }

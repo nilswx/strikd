@@ -15,11 +15,12 @@ public class MatchManager
 	private final ServerInstance instance;
 	private final AtomicLong matchCounter = new AtomicLong();
 	private final Map<Long, Match> active = new ConcurrentHashMap<Long, Match>(16, 0.75f, 8);
-	private final MatchMaker matchMaker = new MatchMaker();
+	private final MatchMaker matchMaker;
 	
 	public MatchManager(ServerInstance instance)
 	{
 		this.instance = instance;
+		this.matchMaker = new MatchMaker(instance);
 	}
 	
 	public Match createMatch(MatchPlayer p1, MatchPlayer p2)

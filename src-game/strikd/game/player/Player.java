@@ -13,6 +13,8 @@ public class Player
 	@Id
 	public ObjectId id;
 	public String token;
+	public String email;
+	
 	public String name;
 	
 	// Stats
