@@ -1,13 +1,13 @@
 package strikd.game.match.queues;
 
-import strikd.game.match.MatchMaker;
+import strikd.game.match.MatchManager;
 import strikd.sessions.Session;
 
 public class TimedPlayerQueue extends PlayerQueue
 {
-	public TimedPlayerQueue(MatchMaker maker)
+	public TimedPlayerQueue(MatchManager matchMgr)
 	{
-		super(maker);
+		super(matchMgr);
 	}
 
 	@Override

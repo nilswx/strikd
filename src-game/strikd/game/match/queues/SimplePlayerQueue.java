@@ -1,6 +1,6 @@
 package strikd.game.match.queues;
 
-import strikd.game.match.MatchMaker;
+import strikd.game.match.MatchManager;
 import strikd.game.match.MatchPlayer;
 import strikd.sessions.Session;
 
@@ -8,9 +8,9 @@ public class SimplePlayerQueue extends PlayerQueue
 {
 	private SimplePlayerQueue.Entry waiting;
 	
-	public SimplePlayerQueue(MatchMaker maker)
+	public SimplePlayerQueue(MatchManager matchMgr)
 	{
-		super(maker);
+		super(matchMgr);
 	}
 
 	@Override

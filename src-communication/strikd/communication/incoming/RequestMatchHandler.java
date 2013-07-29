@@ -2,7 +2,7 @@ package strikd.communication.incoming;
 
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
-import strikd.game.match.MatchMaker;
+import strikd.game.match.MatchManager;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.net.codec.IncomingMessage;
 
@@ -19,8 +19,8 @@ public class RequestMatchHandler extends MessageHandler
 	{
 		if(!session.isInMatch())
 		{
-			MatchMaker matchMaker = null;
-			PlayerQueue.Entry queueEntry = matchMaker.requestMatch(session);
+			MatchManager matchMgr = null;
+			PlayerQueue.Entry queueEntry = matchMgr.requestMatch(session);
 			if(queueEntry != null)
 			{
 				session.setQueueEntry(queueEntry);

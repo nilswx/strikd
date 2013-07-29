@@ -1,20 +1,20 @@
 package strikd.game.match.queues;
 
-import strikd.game.match.MatchMaker;
+import strikd.game.match.MatchManager;
 import strikd.sessions.Session;
 
 public abstract class PlayerQueue
 {
-	private final MatchMaker maker;
+	private final MatchManager matchMgr;
 	
-	protected PlayerQueue(MatchMaker maker)
+	protected PlayerQueue(MatchManager maker)
 	{
-		this.maker = maker;
+		this.matchMgr = maker;
 	}
 	
-	public MatchMaker getMaker()
+	public MatchManager getMaker()
 	{
-		return this.maker;
+		return this.matchMgr;
 	}
 	
 	public abstract Entry enqueue(Session session);
