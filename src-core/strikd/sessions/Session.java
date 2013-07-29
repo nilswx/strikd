@@ -58,6 +58,7 @@ public class Session extends Server.Referent
 		if(this.user == null)
 		{
 			this.user = user;
+			this.getServer().getSessionMgr().completeLogin(this);
 		}
 	}
 	

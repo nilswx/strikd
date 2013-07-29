@@ -33,7 +33,6 @@ public class LoginHandler extends MessageHandler
 			{
 				session.setUser(user);
 				session.send(new UserInfoMessage(user));
-				session.getServer().getSessionMgr().completeLogin(session);
 			}
 		}
 	}
