@@ -19,7 +19,7 @@ public class RequestMatchHandler extends MessageHandler
 	{
 		if(!session.isInMatch())
 		{
-			MatchManager matchMgr = null;
+			MatchManager matchMgr = session.getServer().getMatchMgr();
 			PlayerQueue.Entry queueEntry = matchMgr.requestMatch(session);
 			if(queueEntry != null)
 			{

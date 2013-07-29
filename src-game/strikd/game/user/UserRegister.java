@@ -1,5 +1,6 @@
 package strikd.game.user;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -7,20 +8,20 @@ import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
 
-import strikd.ServerInstance;
+import strikd.Server;
+import strikd.game.items.Item;
 import strikd.sessions.Session;
 
-public class UserRegister
+public class UserRegister extends Server.Referent
 {
 	private static final Logger logger = Logger.getLogger(UserRegister.class);
 	
-	private final ServerInstance instance;
 	private final MongoCollection dbUsers;
 	
-	public UserRegister(ServerInstance instance)
+	public UserRegister(Server server)
 	{
-		this.instance = instance;
-		this.dbUsers = instance.getDbCluster().getCollection("users");
+		super(server);
+		this.dbUsers = this.getServer().getDbCluster().getCollection("users");
 	}
 	
 	public User newUser()
@@ -29,6 +30,13 @@ public class UserRegister
 		User user = new User();
 		user.token = UUID.randomUUID().toString();
 		user.name = this.generateGuestName();
+		
+		Item x = new Item();
+		x.typeId = 5;
+		x.timestamp = new Date();
+		x.data = "adasdf";
+		user.items.add(x);
+		
 		this.dbUsers.save(user);
 		
 		logger.debug(String.format("created user %s", user));
@@ -43,7 +51,7 @@ public class UserRegister
 	
 	public User getUser(ObjectId userId)
 	{
-		Session session = this.instance.getSessionMgr().getUserSession(userId);
+		Session session = this.getServer().getSessionMgr().getUserSession(userId);
 		if(session != null)
 		{
 			return session.getUser();

@@ -14,7 +14,7 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.util.ThreadNameDeterminer;
 import org.jboss.netty.util.ThreadRenamingRunnable;
 
-import strikd.ServerInstance;
+import strikd.sessions.SessionManager;
 
 public class NetListener
 {
@@ -22,7 +22,7 @@ public class NetListener
 	private ExecutorService bossExecutor;
 	private ExecutorService workerExecutor;
 	
-	public NetListener(int port, final ServerInstance instance) throws IOException
+	public NetListener(int port, SessionManager sessionMgr) throws IOException
 	{
 		// Create thread pools
 		this.bossExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("NetServer/Boss #%d"));
@@ -32,7 +32,7 @@ public class NetListener
 		ServerBootstrap bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(this.bossExecutor, this.workerExecutor));
 		
 		// Add a 'connection management handler' to ALL accepted channels
-		ConnectionManagementHandler mgmt = ConnectionManagementHandler.getInstance(instance.getSessionMgr());
+		ConnectionManagementHandler mgmt = ConnectionManagementHandler.getInstance(sessionMgr);
 		bootstrap.setPipeline(Channels.pipeline(mgmt));
 		
 		// Bind listener
@@ -44,7 +44,6 @@ public class NetListener
 		{
 			throw new IOException(String.format("could not bind to tcp/%d", port), ex);
 		}
-		
 	}
 	
 	public SocketAddress getLocalAddress()

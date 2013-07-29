@@ -7,10 +7,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
+import strikd.Server;
+import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.game.user.User;
 import strikd.net.NetConnection;
 
-public class SessionManager
+public class SessionManager extends Server.Referent
 {
 	private static final Logger logger = Logger.getLogger(SessionManager.class);
 	
@@ -20,6 +22,11 @@ public class SessionManager
 	private final AtomicLong loginCounter = new AtomicLong();
 	private final Map<ObjectId, Session> userSessions = new ConcurrentHashMap<ObjectId, Session>();
 	
+	public SessionManager(Server server)
+	{
+		super(server);
+	}
+
 	/**
 	 * Called once when a connection has performed crypto handshake.
 	 * @param connection
@@ -29,8 +36,11 @@ public class SessionManager
 	{
 		// Create a session with a new ID
 		long sessionId = this.sessionCounter.incrementAndGet();
-		Session session = new Session(sessionId, connection);
+		Session session = new Session(sessionId, connection, this.getServer());
 		this.sessions.put(sessionId, session);
+		
+		// Greet session
+		session.send(new SessionInfoMessage(sessionId, this.getServer().getDescriptor().name));
 		
 		return session;
 	}

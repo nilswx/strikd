@@ -1,12 +1,13 @@
 package strikd.sessions;
 
+import strikd.Server;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.user.User;
 import strikd.net.NetConnection;
 import strikd.net.codec.OutgoingMessage;
 
-public class Session
+public class Session extends Server.Referent
 {
 	private final long sessionId;
 	private final NetConnection connection;
@@ -15,8 +16,9 @@ public class Session
 	private MatchPlayer matchPlayer;
 	private PlayerQueue.Entry queueEntry;
 	
-	public Session(long sessionId, NetConnection connection)
+	public Session(long sessionId, NetConnection connection, Server server)
 	{
+		super(server);
 		this.sessionId = sessionId;
 		this.connection = connection;
 	}

@@ -1,10 +1,13 @@
 package strikd.game.user;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.jongo.marshall.jackson.oid.Id;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import strikd.game.items.Item;
 
@@ -25,7 +28,9 @@ public class User
 	public int currency;
 	public String language;
 	public Avatar avatar;
-	public Map<Integer, Item> items;
+	
+	@JsonFormat(shape=JsonFormat.Shape.ARRAY)
+	public List<Item> items = new ArrayList<Item>();
 	
 	public FacebookIdentity fbIdentity;
 	

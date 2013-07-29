@@ -28,6 +28,7 @@ public interface Opcodes
 	public enum Outgoing implements Opcode
 	{
 		NOP,
+		SESSION_INFO,
 		LOGIN_OK,
 		ALERT,
 		USER_INFO,

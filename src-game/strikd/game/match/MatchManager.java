@@ -7,25 +7,24 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 
-import strikd.ServerInstance;
+import strikd.Server;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.match.queues.SimplePlayerQueue;
 import strikd.locale.LocaleBundle;
 import strikd.sessions.Session;
 
-public class MatchManager
+public class MatchManager extends Server.Referent
 {
 	private static final Logger logger = Logger.getLogger(MatchManager.class);
 	
-	private final ServerInstance instance;
 	private final AtomicLong matchCounter = new AtomicLong();
 	private final Map<Long, Match> active = new ConcurrentHashMap<Long, Match>(16, 0.75f, 8);
 	private final Map<String, PlayerQueue> queues = new HashMap<String, PlayerQueue>(); 
 	
-	public MatchManager(ServerInstance instance)
+	public MatchManager(Server server)
 	{
-		this.instance = instance;
-		for(LocaleBundle locale : instance.getLocaleMgr().getBundles())
+		super(server);
+		for(LocaleBundle locale : this.getServer().getLocaleMgr().getBundles())
 		{
 			PlayerQueue queue = new SimplePlayerQueue(this);
 			this.queues.put(locale.getLocale(), queue);
@@ -34,11 +33,10 @@ public class MatchManager
 		}
 	}
 	
-	
 	public Match createMatch(MatchPlayer p1, MatchPlayer p2)
 	{
 		// Allow new matches?
-		if(this.instance.isShutdownMode())
+		if(this.getServer().isShutdownMode())
 		{
 			return null;
 		}
@@ -63,10 +61,10 @@ public class MatchManager
 			match.destroy();
 			logger.info(String.format("destroyed match #%d", matchId));
 			
-			// Is this instance in shutdown mode?
-			if(this.instance.isShutdownMode() && this.active() == 0)
+			// Is this server in shutdown mode?
+			if(this.getServer().isShutdownMode() && this.active() == 0)
 			{
-				this.instance.destroy();
+				this.getServer().destroy();
 			}
 		}
 	}

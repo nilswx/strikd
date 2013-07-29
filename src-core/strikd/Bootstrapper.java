@@ -1,6 +1,7 @@
 package strikd;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -10,10 +11,11 @@ public class Bootstrapper
 	
 	public static void main(String[] args)
 	{
+		logger.info("args=" + Arrays.toString(args));
+		
 		try
 		{
-			ServerInstance server = new ServerInstance(new File("strikd.properties"));
-			server.getPlayerRegister().newUser();
+			new Server(new File("strikd.properties"));
 		}
 		catch(Exception e)
 		{

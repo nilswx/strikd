@@ -4,24 +4,24 @@ import org.jongo.MongoCollection;
 
 public class StatsWorker implements Runnable
 {
-	private InstanceDescriptor descriptor;
-	private MongoCollection dbInstances;
+	private ServerDescriptor descriptor;
+	private MongoCollection dbServers;
 	
-	public StatsWorker(ServerInstance instance)
+	public StatsWorker(Server server)
 	{
-		this.descriptor = instance.getDescriptor();
-		this.dbInstances = instance.getDbCluster().getCollection("instances");
+		this.descriptor = server.getDescriptor();
+		this.dbServers = server.getDbCluster().getCollection("servers");
 		this.deleteOldDescriptor();
 	}
 	
 	private void deleteOldDescriptor()
 	{
-		this.dbInstances.remove("{name: #}", this.descriptor.name);
+		this.dbServers.remove("{name: #}", this.descriptor.name);
 	}
 	
 	@Override
 	public void run()
 	{
-		this.dbInstances.save(this.descriptor);
+		this.dbServers.save(this.descriptor);
 	}
 }

@@ -21,12 +21,12 @@ import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
 import strikd.sessions.SessionManager;
 
-public class ServerInstance
+public class Server
 {
 	private static final String version = "0.0.1-dev";
-	private static final Logger logger = Logger.getLogger(ServerInstance.class);
+	private static final Logger logger = Logger.getLogger(Server.class);
 	
-	private final InstanceDescriptor instanceDescriptor;
+	private final ServerDescriptor descriptor;
 	private final LocaleBundleManager localeMgr;
 	private final Jongo dbCluster;
 	private final NetListener listener;
@@ -39,7 +39,7 @@ public class ServerInstance
 	private boolean isShutdownMode;
 	private String shutdownMessage;
 	
-	public ServerInstance(File propsFile) throws Exception
+	public Server(File propsFile) throws Exception
 	{
 		// Load startup configuration
 		Properties props = new Properties();
@@ -75,12 +75,12 @@ public class ServerInstance
 		this.localeMgr.reload();
 		
 		// Setup registers and managers
-		this.sessionMgr = new SessionManager();
+		this.sessionMgr = new SessionManager(this);
 		this.playerRegister = new UserRegister(this);
 		this.matchMgr = new MatchManager(this);
 		
 		// Load shop assortment
-		this.shop = new ItemShop();
+		this.shop = new ItemShop(this);
 		this.shop.reload();
 		
 		// Force message registry loading
@@ -89,7 +89,7 @@ public class ServerInstance
 		// Start accepting connections
 		try
 		{
-			this.listener = new NetListener(13381, this);
+			this.listener = new NetListener(13381, this.sessionMgr);
 		}
 		catch(IOException e)
 		{
@@ -97,9 +97,9 @@ public class ServerInstance
 		}
 		logger.info(String.format("listening on %s", this.listener.getLocalAddress()));
 		
-		// Print instance info
-		this.instanceDescriptor = new InstanceDescriptor(this, props.getProperty("instance.name"));
-		logger.info(String.format("this is instance %s", this.instanceDescriptor));
+		// Print server info
+		this.descriptor = new ServerDescriptor(this, props.getProperty("instance.name"));
+		logger.info(String.format("SERVER ONLINE %s", this.descriptor));
 		
 		// Start stats worker
 		Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new StatsWorker(this), 0, 1000, TimeUnit.MILLISECONDS);
@@ -144,12 +144,12 @@ public class ServerInstance
 	
 	public String getVersion()
 	{
-		return ServerInstance.version;
+		return Server.version;
 	}
 	
-	public InstanceDescriptor getDescriptor()
+	public ServerDescriptor getDescriptor()
 	{
-		return this.instanceDescriptor;
+		return this.descriptor;
 	}
 	
 	public LocaleBundleManager getLocaleMgr()
@@ -167,7 +167,7 @@ public class ServerInstance
 		return this.sessionMgr;
 	}
 	
-	public UserRegister getPlayerRegister()
+	public UserRegister getUserRegister()
 	{
 		return this.playerRegister;
 	}
@@ -190,5 +190,20 @@ public class ServerInstance
 	public String getShutdownMessage()
 	{
 		return this.shutdownMessage;
+	}
+	
+	public static abstract class Referent
+	{
+		private final Server server;
+		
+		public Referent(Server server)
+		{
+			this.server = server;
+		}
+		
+		public final Server getServer()
+		{
+			return this.server;
+		}
 	}
 }

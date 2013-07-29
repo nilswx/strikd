@@ -8,20 +8,20 @@ import org.jongo.marshall.jackson.oid.Id;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class InstanceDescriptor
+public class ServerDescriptor
 {
 	@JsonIgnore
-	private final ServerInstance instance;
+	private final Server server;
 	
 	@Id
 	public final ObjectId dbId;
 	public final String name;
 	public final Date started;
 	
-	public InstanceDescriptor(ServerInstance instance, String name)
+	public ServerDescriptor(Server server, String name)
 	{
 		this.dbId = ObjectId.get();
-		this.instance = instance;
+		this.server = server;
 		this.name = name;
 		this.started = new Date(System.currentTimeMillis());
 	}
@@ -35,7 +35,7 @@ public class InstanceDescriptor
 	@JsonProperty
 	public String version()
 	{
-		return this.instance.getVersion();
+		return this.server.getVersion();
 	}
 	
 	@JsonProperty
@@ -52,7 +52,7 @@ public class InstanceDescriptor
 	@JsonProperty
 	public int onlineUsers()
 	{
-		return this.instance.getSessionMgr().users();
+		return this.server.getSessionMgr().users();
 	}
 	
 	@JsonProperty
@@ -64,13 +64,13 @@ public class InstanceDescriptor
 	@JsonProperty
 	public int activeMatches()
 	{
-		return this.instance.getMatchMgr().active();
+		return this.server.getMatchMgr().active();
 	}
 	
 	@JsonProperty
 	public long totalMatches()
 	{
-		return this.instance.getMatchMgr().matchCounter();
+		return this.server.getMatchMgr().matchCounter();
 	}
 	
 	@JsonProperty
@@ -82,7 +82,7 @@ public class InstanceDescriptor
 	@JsonProperty
 	public boolean online()
 	{
-		return !this.instance.isShutdownMode();
+		return !this.server.isShutdownMode();
 	}
 	
 	@Override
