@@ -1,5 +1,6 @@
 package strikd.net.codec;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
@@ -11,7 +12,11 @@ public class MessageEncoder extends OneToOneEncoder
 	{
 		if(obj instanceof OutgoingMessage)
 		{
-			return null;
+			OutgoingMessage msg = (OutgoingMessage)obj;
+			
+			ChannelBuffer buf = msg.getBuffer();
+			
+			return buf;
 		}
 		else
 		{

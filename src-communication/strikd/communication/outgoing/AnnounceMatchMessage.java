@@ -10,7 +10,7 @@ public class AnnounceMatchMessage extends OutgoingMessage
 {
 	public AnnounceMatchMessage(Match match)
 	{
-		super(Opcodes.Outgoing.NOP);
+		super(Opcodes.Outgoing.ANNOUNCE_MATCH);
 		
 		super.writeLong(match.getMatchId());
 		super.writeByte((byte)match.getBoard().getDimension());

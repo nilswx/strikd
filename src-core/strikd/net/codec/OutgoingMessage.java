@@ -1,5 +1,6 @@
 package strikd.net.codec;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 
 import strikd.communication.Opcodes;
@@ -10,7 +11,7 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 	{
 		super(op, ChannelBuffers.dynamicBuffer());
 		this.buf.writeShort(0); // Length placeholder
-		this.buf.writeByte(op.ordinal());
+		this.buf.writeByte(op.ordinal()); // Opcode placeholder
 	}
 	
 	public final void writeBool(boolean b)
@@ -36,6 +37,7 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 	public final void writeStr(String str)
 	{
 		if(str == null) str = "";
+		
 		byte[] bytes = str.getBytes();
 		this.buf.writeShort(bytes.length);
 		this.buf.writeBytes(bytes);
@@ -46,5 +48,11 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 	{
 		// The bytes of the int16 for message length are not counted, mister!
 		return this.buf.writerIndex() - 2;
+	}
+	
+	public ChannelBuffer getBuffer()
+	{
+		this.buf.setShort(0, this.length());
+		return this.buf;
 	}
 }

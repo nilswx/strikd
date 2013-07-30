@@ -10,6 +10,7 @@ public class MatchPlayer
 	private Match match;
 	private int actorId;
 	private MatchTimer extraTimer;
+	private boolean ready;
 	
 	public MatchPlayer(Session session)
 	{
@@ -34,6 +35,17 @@ public class MatchPlayer
 	public Match getMatch()
 	{
 		return this.match;
+	}
+	
+	public void setReady()
+	{
+		this.ready = true;
+		this.match.checkReady();
+	}
+	
+	public boolean isReady()
+	{
+		return this.ready;
 	}
 	
 	public MatchTimer getExtraTimer()

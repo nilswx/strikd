@@ -15,19 +15,8 @@ public class Bootstrapper
 		
 		try
 		{
-			final Server instance = new Server(new File("strikd.properties"));
-			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if(!instance.isShutdownMode())
-					{
-						instance.shutdown("unexpected shutdown detected");
-					}
-				}
-			}));
-			instance.shutdown("die for me");
+			Server instance = new Server(new File("strikd.properties"));
+			logger.debug("created " + instance);
 		}
 		catch(Exception e)
 		{

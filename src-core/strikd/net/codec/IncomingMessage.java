@@ -4,13 +4,11 @@ import org.jboss.netty.buffer.ChannelBuffer;
 
 import strikd.communication.Opcodes;
 
-public abstract class IncomingMessage extends NetMessage<Opcodes.Incoming>
+public final class IncomingMessage extends NetMessage<Opcodes.Incoming>
 {
-	protected IncomingMessage(Opcodes.Incoming incoming, ChannelBuffer buf)
+	protected IncomingMessage(Opcodes.Incoming op, ChannelBuffer buf)
 	{
-		super(incoming, buf);
-		this.buf.writeShort(0); // Length placeholder
-		this.buf.writeByte(op.ordinal());
+		super(op, buf);
 	}
 	
 	public final boolean readBool()
@@ -35,12 +33,10 @@ public abstract class IncomingMessage extends NetMessage<Opcodes.Incoming>
 	
 	public final String readStr()
 	{
-		// Read specified amount of bytes
 		short length = this.buf.readShort();
 		byte[] bytes = new byte[length];
 		this.buf.readBytes(bytes);
 		
-		// Return result
 		return new String(bytes);
 	}
 	

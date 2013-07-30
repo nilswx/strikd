@@ -1,5 +1,6 @@
 package strikd.game.match;
 
+import strikd.communication.outgoing.StartMatchMessage;
 import strikd.game.board.Board;
 import strikd.game.board.GappieBoard;
 import strikd.net.codec.OutgoingMessage;
@@ -39,6 +40,26 @@ public class Match
 				player.getSession().send(msg);
 			}
 		}
+	}
+	
+	public void checkReady()
+	{
+		for(MatchPlayer player : this.players)
+		{
+			if(!player.isReady())
+			{
+				return;
+			}
+		}
+		
+		this.start();
+	}
+	
+	public void start()
+	{
+		this.broadcast(new StartMatchMessage());
+		
+		// TODO: start match loop?
 	}
 
 	private boolean isExtraTimeActive()
@@ -88,5 +109,5 @@ public class Match
 	public byte getLoadingTime()
 	{
 		return this.loadingTime;
-	}
+	}	
 }
