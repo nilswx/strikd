@@ -2,14 +2,18 @@ package strikd.game.match.queues;
 
 import java.util.Iterator;
 
+import strikd.game.match.MatchBotFactory;
 import strikd.game.match.MatchManager;
 import strikd.sessions.Session;
 
 public class TimedPlayerQueue extends PlayerQueue
 {
+	private final MatchBotFactory botFactory;
+	
 	public TimedPlayerQueue(MatchManager matchMgr)
 	{
 		super(matchMgr);
+		this.botFactory = new MatchBotFactory();
 	}
 
 	@Override
