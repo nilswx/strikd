@@ -11,7 +11,7 @@ import java.util.Random;
 import strikd.game.board.tiles.Tile;
 import strikd.words.Word;
 
-public class BruteBoardCorners extends AbstractBoard
+public class BruteBoardCorners extends Board
 {
 	public BruteBoardCorners(int width, int height)
 	{
@@ -141,7 +141,7 @@ public class BruteBoardCorners extends AbstractBoard
 		StaticLocale.init();
 		
 		long start = System.currentTimeMillis();
-		AbstractBoard board = new BruteBoardCorners(6, 6);
+		Board board = new BruteBoardCorners(6, 6);
 		board.regenerate();
 		long time = System.currentTimeMillis() - start;
 		

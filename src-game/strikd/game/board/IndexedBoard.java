@@ -1,6 +1,6 @@
 package strikd.game.board;
 
-public class IndexedBoard extends AbstractBoard
+public class IndexedBoard extends Board
 {
 	protected IndexedBoard(int width, int height)
 	{

@@ -14,8 +14,8 @@ public class AnnounceMatchMessage extends OutgoingMessage
 		
 		super.writeLong(match.getMatchId());
 		super.writeByte((byte)match.getBoard().getDimension());
-		super.writeByte((byte)0); // music ID
-		super.writeByte((byte)5); // "Loading..." time in seconds
+		super.writeByte(match.getMusicId());
+		super.writeByte(match.getLoadingTime()); // "Loading..." time in seconds
 		
 		super.writeByte((byte)match.getPlayers().length);
 		for(MatchPlayer player : match.getPlayers())

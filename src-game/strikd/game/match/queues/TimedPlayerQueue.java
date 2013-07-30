@@ -1,5 +1,7 @@
 package strikd.game.match.queues;
 
+import java.util.Iterator;
+
 import strikd.game.match.MatchManager;
 import strikd.sessions.Session;
 
@@ -25,6 +27,12 @@ public class TimedPlayerQueue extends PlayerQueue
 	public int getAvgWaitingTime()
 	{
 		return 0;
+	}
+	
+	@Override
+	public Iterator<PlayerQueue.Entry> iterator()
+	{
+		return null;
 	}
 	
 	private static class Entry extends PlayerQueue.Entry

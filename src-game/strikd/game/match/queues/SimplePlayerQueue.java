@@ -1,5 +1,7 @@
 package strikd.game.match.queues;
 
+import java.util.Iterator;
+
 import strikd.game.match.MatchManager;
 import strikd.game.match.MatchPlayer;
 import strikd.sessions.Session;
@@ -33,12 +35,12 @@ public class SimplePlayerQueue extends PlayerQueue
 			}
 		}
 		
-		// Was there an opponent waiting
+		// Create a new match between these players
 		MatchPlayer p1 = new MatchPlayer(opponent);
 		MatchPlayer p2 = new MatchPlayer(session);	
-		this.getMaker().newMatch(p1, p2);
+		this.getMatchMgr().newMatch(p1, p2);
 		
-		// Not waiting
+		// Queue empty
 		return null;
 	}
 
@@ -52,6 +54,34 @@ public class SimplePlayerQueue extends PlayerQueue
 				this.waiting = null;
 			}
 		}
+	}
+	
+	@Override
+	public Iterator<PlayerQueue.Entry> iterator()
+	{
+		return new Iterator<PlayerQueue.Entry>()
+		{
+			@Override
+			public boolean hasNext()
+			{
+				return (waiting != null);
+			}
+
+			@Override
+			public PlayerQueue.Entry next()
+			{
+				return waiting;
+			}
+
+			@Override
+			public void remove()
+			{
+				if(waiting != null)
+				{
+					waiting.exit();
+				}
+			}
+		};
 	}
 	
 	private static class Entry extends PlayerQueue.Entry

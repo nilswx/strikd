@@ -32,10 +32,15 @@ public interface Opcodes
 		LOGIN_OK,
 		ALERT,
 		USER_INFO,
+		CURRENCY_BALANCE,
 		AVATAR,
 		ITEMS,
-		CURRENCY_BALANCE,
-		NAME_CHANGED;
+		ITEM_ADDED,
+		NAME_CHANGED,
+		BOARD_UPDATE,
+		
+		SERVER_SHUTTING_DOWN,
+		SERVER_REDIRECT;
 		
 		private static final Opcodes.Outgoing[] values = values();
 		

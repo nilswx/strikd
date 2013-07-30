@@ -30,6 +30,6 @@ public abstract class NetMessage<T extends Enum<?>>
 		{
 			buf = buf.replace(Character.toString((char)i), "[" + i + "]");
 		}
-		return String.format("%s=0x%02X [%s]", this.op.name(), this.op.ordinal() & 0x0FFFFF, buf);
+		return String.format("%s [%s]", this.op.name(), buf);
 	}
 }

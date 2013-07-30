@@ -3,24 +3,24 @@ package strikd.game.match.queues;
 import strikd.game.match.MatchManager;
 import strikd.sessions.Session;
 
-public abstract class PlayerQueue
+public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 {
 	private final MatchManager matchMgr;
 	
-	protected PlayerQueue(MatchManager maker)
+	protected PlayerQueue(MatchManager matchMgr)
 	{
-		this.matchMgr = maker;
+		this.matchMgr = matchMgr;
 	}
 	
-	public MatchManager getMaker()
+	public MatchManager getMatchMgr()
 	{
 		return this.matchMgr;
 	}
 	
-	public abstract Entry enqueue(Session session);
+	public abstract PlayerQueue.Entry enqueue(Session session);
 	
 	public abstract void dequeue(Entry entry);
-	
+		
 	public static abstract class Entry
 	{
 		private final Session session;

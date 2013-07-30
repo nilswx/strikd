@@ -8,7 +8,7 @@ import java.io.IOException;
 import strikd.game.board.tiles.Tile;
 import strikd.words.Word;
 
-public class GappieBoard extends AbstractBoard
+public class GappieBoard extends Board
 {
 	public GappieBoard(int width, int height)
 	{
@@ -92,7 +92,7 @@ public class GappieBoard extends AbstractBoard
 		StaticLocale.init();
 		
 		long start = System.currentTimeMillis();
-		AbstractBoard board = new GappieBoard(5, 5);
+		Board board = new GappieBoard(5, 5);
 		board.regenerate();
 		long time = System.currentTimeMillis() - start;
 

@@ -8,9 +8,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.log4j.Logger;
 
 import strikd.Server;
+import strikd.communication.outgoing.ServerShuttingDownMessage;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.match.queues.SimplePlayerQueue;
 import strikd.locale.LocaleBundle;
+import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
 
 public class MatchManager extends Server.Referent
@@ -31,25 +33,6 @@ public class MatchManager extends Server.Referent
 			
 			logger.debug(String.format("created %s for %s", queue.getClass().getSimpleName(), locale.getLocale()));
 		}
-	}
-	
-	public Match createMatch(MatchPlayer p1, MatchPlayer p2)
-	{
-		// Allow new matches?
-		if(this.getServer().isShutdownMode())
-		{
-			return null;
-		}
-		
-		// Create match with next ID
-		long matchId = this.matchCounter.incrementAndGet();
-		Match match = new Match(matchId, p1, p2);
-		
-		// Map match to collection
-		logger.info(String.format("created match #%d", matchId));
-		this.active.put(matchId, match);
-		
-		return match;
 	}
 	
 	public void destroyMatch(long matchId)
@@ -96,9 +79,37 @@ public class MatchManager extends Server.Referent
 		return null;
 	}
 
-	public void newMatch(MatchPlayer... players)
+	public Match newMatch(MatchPlayer... players)
 	{
-		
+		// Allow new matches?
+		if(this.getServer().isShutdownMode())
+		{
+			return null;
+		}
+		else
+		{
+			long matchId = this.matchCounter.incrementAndGet();
+			Match match = new Match(matchId, players);
+			
+			logger.info(String.format("created match #%d", matchId));
+			this.active.put(matchId, match);
+			
+			return match;
+		}
+	}
+	
+	public synchronized void shutdownQueues(String message)
+	{
+		OutgoingMessage msg = new ServerShuttingDownMessage(message);
+		for(PlayerQueue queue : this.queues.values())
+		{
+			for(PlayerQueue.Entry player : queue)
+			{
+				player.getSession().send(msg);
+				player.exit();
+			}
+		}
+		this.queues.clear();
 	}
 	
 	public Match getMatch(int matchId)

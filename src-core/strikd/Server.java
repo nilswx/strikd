@@ -134,6 +134,7 @@ public class Server
 		{
 			this.isShutdownMode = true;
 			this.shutdownMessage = message;
+			this.matchMgr.shutdownQueues(message);
 		}
 	}
 	
