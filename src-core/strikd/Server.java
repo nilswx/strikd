@@ -125,16 +125,22 @@ public class Server
 	
 	public void shutdown(String message)
 	{
-		logger.info(String.format("shutting down... (\"%s\")", message));
-		if(this.matchMgr.active() == 0)
+		if(!this.isShutdownMode)
 		{
-			this.shutdownNow();
-		}
-		else
-		{
+			// Set shutdown mode so it can't be triggered twice in a row
 			this.isShutdownMode = true;
 			this.shutdownMessage = message;
-			this.matchMgr.shutdownQueues(message);
+			logger.info(String.format("shutdown received (\"%s\")", message));
+			
+			// Can safely shutdown right now?
+			if(this.matchMgr.active() == 0)
+			{
+				this.shutdownNow();
+			}
+			else
+			{
+				this.matchMgr.shutdownQueues(message);
+			}
 		}
 	}
 	
