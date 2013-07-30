@@ -100,6 +100,8 @@ public class MatchManager extends Server.Referent
 	
 	public synchronized void shutdownQueues(String message)
 	{
+		logger.debug("shutting down queues");
+		
 		OutgoingMessage msg = new ServerShuttingDownMessage(message);
 		for(PlayerQueue queue : this.queues.values())
 		{

@@ -112,7 +112,6 @@ public class Server
 	
 	private void destroy(boolean force)
 	{
-		// No active matches?
 		if(this.matchMgr.active() > 0 && !force)
 		{
 			logger.warn("destroy() called while there were active matches");
@@ -126,6 +125,7 @@ public class Server
 	
 	public void shutdown(String message)
 	{
+		logger.info(String.format("shutting down... (\"%s\")", message));
 		if(this.matchMgr.active() == 0)
 		{
 			this.shutdownNow();
