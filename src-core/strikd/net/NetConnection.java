@@ -12,6 +12,8 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
+import strikd.communication.incoming.MessageHandlers;
+import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.MessageDecoder;
 import strikd.net.codec.MessageEncoder;
 import strikd.net.codec.OutgoingMessage;
@@ -50,9 +52,7 @@ public class NetConnection extends SimpleChannelHandler
 	private void requestClose(String reason)
 	{
 		this.close();
-		
-		// TODO: notify session with reason
-		logger.info(reason);
+		this.session.onNetClose(reason);
 	}
 	
 	@Override
@@ -70,7 +70,14 @@ public class NetConnection extends SimpleChannelHandler
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 	{
-		logger.debug("received " + e.getMessage());
+		if(e.getMessage() instanceof IncomingMessage)
+		{
+			IncomingMessage msg = (IncomingMessage) e.getMessage();
+			
+			logger.debug("received " + msg);
+			
+			MessageHandlers.get(msg.op).handle(this.session, msg);
+		}
 	}
 	
 	@Override

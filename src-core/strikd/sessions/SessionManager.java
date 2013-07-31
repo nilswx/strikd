@@ -48,7 +48,7 @@ public class SessionManager extends Server.Referent
 		return session;
 	}
 	
-	public void endSession(long sessionId)
+	public void endSession(long sessionId, String reason)
 	{
 		Session session = this.sessions.remove(sessionId);
 		if(session != null)
@@ -57,8 +57,9 @@ public class SessionManager extends Server.Referent
 			if(user != null)
 			{
 				this.userSessions.remove(user.id);
-				logger.debug(user + " logged out");
+				logger.debug(String.format("%s logged out (%s)", user, reason));
 			}
+			session.onEnd();
 		}
 	}
 	
@@ -72,7 +73,7 @@ public class SessionManager extends Server.Referent
 			Session concurrent = this.getUserSession(user.id);
 			if(concurrent != null)
 			{
-				this.endSession(concurrent.getSessionId());
+				this.endSession(concurrent.getSessionId(), "concurrent login");
 			}
 			
 			// Add to user map and increment logins
@@ -89,7 +90,7 @@ public class SessionManager extends Server.Referent
 	
 	public Session getUserSession(ObjectId userId)
 	{
-		return this.sessions.get(userId);
+		return this.userSessions.get(userId);
 	}
 	
 	public int sessions()
