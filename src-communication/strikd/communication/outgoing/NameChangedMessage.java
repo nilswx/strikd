@@ -5,11 +5,9 @@ import strikd.net.codec.OutgoingMessage;
 
 public class NameChangedMessage extends OutgoingMessage
 {
-	public NameChangedMessage(boolean success, String message, String newName)
+	public NameChangedMessage(String newName)
 	{
 		super(Opcodes.Outgoing.NAME_CHANGED);
-		super.writeBool(success);
-		super.writeStr(message);
 		super.writeStr(newName);
 	}
 }

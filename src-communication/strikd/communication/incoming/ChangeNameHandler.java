@@ -1,6 +1,7 @@
 package strikd.communication.incoming;
 
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.NameRejectedMessage;
 import strikd.communication.outgoing.NameChangedMessage;
 import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
@@ -17,7 +18,19 @@ public class ChangeNameHandler extends MessageHandler
 	public void handle(Session session, IncomingMessage request)
 	{
 		String newName = request.readStr();
-		session.getUser().name = newName;
-		session.send(new NameChangedMessage(true, null, newName));
+		
+		// Filter & validate new name
+		newName = newName.replace("fuck", "");
+		
+		// Reject name?
+		if(newName.equals("Satan"))
+		{
+			session.send(new NameRejectedMessage("forbidden"));
+		}
+		else
+		{
+			session.getUser().name = newName;
+			session.send(new NameChangedMessage(newName));
+		}
 	}
 }
