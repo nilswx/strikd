@@ -9,6 +9,6 @@ public class AvatarMessage extends OutgoingMessage
 	public AvatarMessage(Avatar avatar)
 	{
 		super(Opcodes.Outgoing.AVATAR);
-		super.writeStr(avatar.toString());
+		super.writeStr(avatar != null ? avatar.toString() : "");
 	}
 }
