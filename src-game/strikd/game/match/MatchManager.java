@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import strikd.Server;
 import strikd.communication.outgoing.ServerShuttingDownMessage;
 import strikd.game.match.queues.PlayerQueue;
-import strikd.game.match.queues.SimplePlayerQueue;
+import strikd.game.match.queues.SimpleBotQueue;
 import strikd.locale.LocaleBundle;
 import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
@@ -28,7 +28,7 @@ public class MatchManager extends Server.Referent
 		super(server);
 		for(LocaleBundle locale : this.getServer().getLocaleMgr().getBundles())
 		{
-			PlayerQueue queue = new SimplePlayerQueue(this);
+			PlayerQueue queue = new SimpleBotQueue(this);//SimplePlayerQueue(this);
 			this.queues.put(locale.getLocale(), queue);
 			
 			logger.debug(String.format("created %s for %s", queue.getClass().getSimpleName(), locale.getLocale()));
@@ -66,12 +66,6 @@ public class MatchManager extends Server.Referent
 	
 	public PlayerQueue.Entry requestMatch(Session session)
 	{
-		MatchBotFactory mbf = new MatchBotFactory();
-		MatchPlayer pla = new MatchPlayer(session);
-		MatchPlayer bot = mbf.newBot();
-		this.newMatch(pla, bot);
-		
-		/*
 		PlayerQueue queue = this.getQueue(session);
 		if(queue != null)
 		{
@@ -80,7 +74,7 @@ public class MatchManager extends Server.Referent
 			{
 				return entry;
 			}
-		}*/
+		}
 		
 		return null;
 	}
