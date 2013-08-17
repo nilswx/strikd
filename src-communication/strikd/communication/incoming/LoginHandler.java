@@ -3,10 +3,8 @@ package strikd.communication.incoming;
 import org.bson.types.ObjectId;
 
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.AvatarMessage;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.ItemsMessage;
-import strikd.communication.outgoing.LoginOkMessage;
 import strikd.communication.outgoing.UserInfoMessage;
 import strikd.game.user.User;
 import strikd.net.codec.IncomingMessage;
@@ -36,9 +34,7 @@ public class LoginHandler extends MessageHandler
 			else
 			{
 				session.setUser(user);
-				session.send(new LoginOkMessage());
 				session.send(new UserInfoMessage(user));
-				session.send(new AvatarMessage(user.avatar));
 				session.send(new CurrencyBalanceMessage(user.currency));
 				session.send(new ItemsMessage(user.items));
 			}

@@ -8,6 +8,7 @@ import strikd.sessions.Session;
 
 public class SimplePlayerQueue extends PlayerQueue
 {
+	private final Object waitLock = new Object();
 	private SimplePlayerQueue.Entry waiting;
 	
 	public SimplePlayerQueue(MatchManager matchMgr)
@@ -19,7 +20,7 @@ public class SimplePlayerQueue extends PlayerQueue
 	public PlayerQueue.Entry enqueue(Session session)
 	{
 		Session opponent = null;
-		synchronized(this.waiting)
+		synchronized(this.waitLock)
 		{
 			if(this.waiting == null)
 			{
@@ -47,7 +48,7 @@ public class SimplePlayerQueue extends PlayerQueue
 	@Override
 	public void dequeue(PlayerQueue.Entry entry)
 	{
-		synchronized(this.waiting)
+		synchronized(this.waitLock)
 		{
 			if(entry == this.waiting)
 			{

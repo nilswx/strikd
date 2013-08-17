@@ -6,17 +6,17 @@ public interface Opcodes
 	
 	public enum Incoming implements Opcode
 	{
-		NOP,
-		CREATE_USER,
-		LOGIN,
-		FACEBOOK_LINK,
-		FACEBOOK_UNLINK,
-		CHANGE_NAME,
-		REQUEST_MATCH,
-		EXIT_MATCH_QUEUE,
-		PLAYER_READY,
-		STRIKE_LETTERS,
-		ACTIVATE_ITEM;
+	    NOP,
+	    CREATE_USER,
+	    LOGIN,
+	    FACEBOOK_LINK,
+	    FACEBOOK_UNLINK,
+	    CHANGE_NAME,
+	    REQUEST_MATCH,
+	    EXIT_MATCH_QUEUE,
+	    PLAYER_READY,
+	    STRIKE_LETTERS,
+	    ACTIVATE_ITEM;
 		
 		private static final Opcodes.Incoming[] values = values();
 		
@@ -28,22 +28,22 @@ public interface Opcodes
 	
 	public enum Outgoing implements Opcode
 	{
-		NOP,
-		SESSION_INFO,
-		LOGIN_OK,
+	    NOP,
+	    SESSION_INFO,
+	    USER_INFO,
+	    CURRENCY_BALANCE,
+	    ITEMS,
+	    ITEM_ADDED,
+	    NAME_CHANGED,
+	    NAME_REJECTED,
+		QUEUE_ENTERED,
+		QUEUE_EXITED,
+	    BOARD_UPDATE,
+	    ANNOUNCE_MATCH,
+	    START_MATCH,
 		ALERT,
-		USER_INFO,
-		CURRENCY_BALANCE,
-		AVATAR,
-		ITEMS,
-		ITEM_ADDED,
-		NAME_CHANGED,
-		NAME_REJECTED,
-		BOARD_UPDATE,
-		ANNOUNCE_MATCH,
-		START_MATCH,
-		SERVER_SHUTTING_DOWN,
-		SERVER_REDIRECT;
+	    SERVER_SHUTTING_DOWN,
+	    SERVER_REDIRECT;
 		
 		private static final Opcodes.Outgoing[] values = values();
 		

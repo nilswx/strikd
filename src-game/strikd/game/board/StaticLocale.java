@@ -15,6 +15,7 @@ public class StaticLocale
 	{
 		// Will be passed from higher on
 		LocaleBundleManager locMgr = new LocaleBundleManager(new File("locale"));
+		locMgr.reload();
 		LocaleBundle enUS = locMgr.getBundle("en_US");
 		dict = enUS.getDictionary(DictionaryType.GENERATOR);
 	}

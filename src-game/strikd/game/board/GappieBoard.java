@@ -71,10 +71,8 @@ public class GappieBoard extends Board
 				int testX = (x + diff.x);
 				int testY = (y + diff.y);
 
-				if(this.squareExists(testX, testY) /*
-													 * && this.getTile(testX,
-													 * testY) == null
-													 */)
+				if(this.squareExists(testX, testY) && this.getTile(testX,
+											testY) == null)
 				{
 					dirOK = true;
 					x = testX;

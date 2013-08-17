@@ -11,5 +11,6 @@ public class UserInfoMessage extends OutgoingMessage
 		super(Opcodes.Outgoing.USER_INFO);
 		super.writeStr(u.id.toString());
 		super.writeStr(u.name);
+		super.writeStr(u.avatar != null ? u.avatar.toString() : "");
 	}
 }

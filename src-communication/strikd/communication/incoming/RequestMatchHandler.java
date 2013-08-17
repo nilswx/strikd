@@ -19,22 +19,29 @@ public class RequestMatchHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		if(!session.isInMatch())
+		if(session.isInMatch())
 		{
-			Server server = session.getServer();
-			if(server.isShutdownMode())
+			// Exit match (= lose)
+		}
+		
+		if(session.isInQueue())
+		{
+			session.exitQueue();
+		}
+		
+		Server server = session.getServer();
+		if(server.isShutdownMode())
+		{
+			String info = server.getShutdownMessage();
+			session.send(new ServerShuttingDownMessage(info));
+		}
+		else
+		{
+			MatchManager matchMgr = server.getMatchMgr();
+			PlayerQueue.Entry queueEntry = matchMgr.requestMatch(session);
+			if(queueEntry != null)
 			{
-				String info = server.getShutdownMessage();
-				session.send(new ServerShuttingDownMessage(info));
-			}
-			else
-			{
-				MatchManager matchMgr = server.getMatchMgr();
-				PlayerQueue.Entry queueEntry = matchMgr.requestMatch(session);
-				if(queueEntry != null)
-				{
-					session.setQueueEntry(queueEntry);
-				}
+				session.setQueueEntry(queueEntry);
 			}
 		}
 	}

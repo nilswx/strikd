@@ -3,10 +3,10 @@ package strikd.communication.outgoing;
 import strikd.communication.Opcodes;
 import strikd.net.codec.OutgoingMessage;
 
-public class LoginOkMessage extends OutgoingMessage
+public class QueueExitedMessage extends OutgoingMessage
 {
-	public LoginOkMessage()
+	public QueueExitedMessage()
 	{
-		super(Opcodes.Outgoing.LOGIN_OK);
+		super(Opcodes.Outgoing.QUEUE_EXITED);
 	}
 }
