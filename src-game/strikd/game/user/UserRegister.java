@@ -29,6 +29,7 @@ public class UserRegister extends Server.Referent
 		user.token = UUID.randomUUID().toString();
 		user.name = this.generateGuestName();
 		user.language = "en_US";
+		user.balance = 5;
 		this.dbUsers.save(user);
 		
 		logger.debug(String.format("created user %s", user));

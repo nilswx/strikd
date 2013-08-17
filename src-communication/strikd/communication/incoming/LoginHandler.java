@@ -35,7 +35,7 @@ public class LoginHandler extends MessageHandler
 			{
 				session.setUser(user);
 				session.send(new UserInfoMessage(user));
-				session.send(new CurrencyBalanceMessage(user.currency));
+				session.send(new CurrencyBalanceMessage(user.balance));
 				session.send(new ItemsMessage(user.items));
 			}
 		}

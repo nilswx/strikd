@@ -27,7 +27,7 @@ public class User
 	public int matches;
 	public int wins;
 	
-	public int currency;
+	public int balance;
 	public String language;
 	
 	@JsonFormat(shape=JsonFormat.Shape.ARRAY)

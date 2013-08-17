@@ -30,6 +30,7 @@ public interface Opcodes
 	{
 	    NOP,
 	    SESSION_INFO,
+	    CREDENTIALS,
 	    USER_INFO,
 	    CURRENCY_BALANCE,
 	    ITEMS,
@@ -41,6 +42,7 @@ public interface Opcodes
 	    BOARD_UPDATE,
 	    ANNOUNCE_MATCH,
 	    START_MATCH,
+	    END_MATCH,
 		ALERT,
 	    SERVER_SHUTTING_DOWN,
 	    SERVER_REDIRECT;
