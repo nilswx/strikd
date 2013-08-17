@@ -15,8 +15,13 @@ public class MatchBotFactory
 		
 		User bot = new User();
 		bot.id = ObjectId.get();
-		bot.name = "bot" + rand.nextInt(1000);
+		bot.name = String.format("Bot-%d", rand.nextInt(1000));
 		bot.avatar = new Avatar();
+		bot.country = "bot"; // A cog wheel or so!
+		
+		bot.matches = rand.nextInt(300);
+		bot.wins = rand.nextInt(bot.matches);
+		bot.xp = bot.matches * 45;
 		
 		return new MatchBotPlayer(bot);
 	}

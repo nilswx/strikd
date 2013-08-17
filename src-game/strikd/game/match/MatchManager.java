@@ -66,6 +66,12 @@ public class MatchManager extends Server.Referent
 	
 	public PlayerQueue.Entry requestMatch(Session session)
 	{
+		MatchBotFactory mbf = new MatchBotFactory();
+		MatchPlayer pla = new MatchPlayer(session);
+		MatchPlayer bot = mbf.newBot();
+		this.newMatch(pla, bot);
+		
+		/*
 		PlayerQueue queue = this.getQueue(session);
 		if(queue != null)
 		{
@@ -74,7 +80,7 @@ public class MatchManager extends Server.Referent
 			{
 				return entry;
 			}
-		}
+		}*/
 		
 		return null;
 	}
@@ -93,6 +99,8 @@ public class MatchManager extends Server.Referent
 			
 			logger.info(String.format("created match #%d", matchId));
 			this.active.put(matchId, match);
+			
+			match.announce();
 			
 			return match;
 		}

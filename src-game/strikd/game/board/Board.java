@@ -48,11 +48,6 @@ public abstract class Board
 	{
 		return (x >= 0 && x < this.getWidth() && y >= 0 && y < this.getWidth());
 	}
-
-	public final int getDimension()
-	{
-		return this.tiles.length;
-	}
 	
 	public final int getWidth()
 	{

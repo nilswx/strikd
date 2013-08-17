@@ -19,6 +19,8 @@ public class User
 	public String email;
 	
 	public String name;
+	public Avatar avatar;
+	public String country;
 	
 	// Stats
 	public int xp;
@@ -27,7 +29,6 @@ public class User
 	
 	public int currency;
 	public String language;
-	public Avatar avatar;
 	
 	@JsonFormat(shape=JsonFormat.Shape.ARRAY)
 	public List<Item> items = new ArrayList<Item>();

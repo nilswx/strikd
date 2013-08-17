@@ -104,6 +104,11 @@ public class Session extends Server.Referent
 	{
 		return this.matchPlayer;
 	}
+	
+	public void setMatchPlayer(MatchPlayer player)
+	{
+		this.matchPlayer = player;
+	}
 
 	public void exitQueue()
 	{

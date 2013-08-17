@@ -1,5 +1,7 @@
 package strikd.game.match;
 
+import strikd.communication.outgoing.AnnounceMatchMessage;
+import strikd.communication.outgoing.BoardUpdateMessage;
 import strikd.communication.outgoing.StartMatchMessage;
 import strikd.game.board.Board;
 import strikd.game.board.GappieBoard;
@@ -12,7 +14,6 @@ public class Match
 	private final MatchTimer timer;
 	private final Board board;
 	
-	private final byte musicId;
 	private final byte loadingTime;
 	
 	public Match(long matchId, MatchPlayer... players)
@@ -21,9 +22,13 @@ public class Match
 		this.players = players;
 		this.timer = new MatchTimer(2 * 60);
 		this.board = new GappieBoard(20, 20);
-		
-		this.musicId = 1;
 		this.loadingTime = 5;
+		
+		// Assign unique actor IDs
+		for(int actorId = 0; actorId < players.length; actorId++)
+		{
+			players[actorId].setMatch(actorId, this);
+		}
 	}
 	
 	public void destroy()
@@ -31,14 +36,17 @@ public class Match
 		// TODO Auto-generated method stub		
 	}
 	
+	public void announce()
+	{
+		this.players[0].send(new AnnounceMatchMessage(this, this.players[0], this.players[1]));
+		this.players[1].send(new AnnounceMatchMessage(this, this.players[1], this.players[0]));
+	}
+	
 	public void broadcast(OutgoingMessage msg)
 	{
 		for(MatchPlayer player : this.players)
 		{
-			if(!(player instanceof MatchBotPlayer))
-			{
-				player.getSession().send(msg);
-			}
+			player.send(msg);
 		}
 	}
 	
@@ -57,28 +65,18 @@ public class Match
 	
 	public void start()
 	{
+		// Initial board!
+		this.broadcast(new BoardUpdateMessage(1, this.board));
+		
+		// Start the timers at the clients etc, the game is ON!
 		this.broadcast(new StartMatchMessage());
 		
-		// TODO: start match loop?
-	}
-
-	private boolean isExtraTimeActive()
-	{
-		// Test for players that have their extra timer running
-		for(MatchPlayer player : this.players)
-		{
-			if(!player.getExtraTimer().isDone())
-			{
-				return true;
-			}
-		}
-		
-		return false;
+		// TODO: start serverside match loop for bot AI etc?
 	}
 	
 	public boolean isEnded()
 	{
-		return this.timer.isDone() && !this.isExtraTimeActive();
+		return this.timer.isDone();
 	}
 	
 	public long getMatchId()
@@ -99,11 +97,6 @@ public class Match
 	public Board getBoard()
 	{
 		return this.board;
-	}
-	
-	public byte getMusicId()
-	{
-		return this.musicId;
 	}
 	
 	public byte getLoadingTime()
