@@ -113,4 +113,10 @@ public class Match
 	{
 		return this.loadingTime;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("match #%d (%s)", this.matchId, this.language);
+	}
 }

@@ -42,7 +42,7 @@ public class MatchManager extends Server.Referent
 		{
 			// Destroy this match
 			match.destroy();
-			logger.info(String.format("destroyed match #%d", matchId));
+			logger.info(String.format("destroyed %s", match));
 			
 			// Is this server in shutdown mode?
 			if(this.getServer().isShutdownMode() && this.active() == 0)
@@ -91,7 +91,7 @@ public class MatchManager extends Server.Referent
 			long matchId = this.matchCounter.incrementAndGet();
 			Match match = new Match(matchId, language, players);
 			
-			logger.info(String.format("created %s match #%d", language, matchId));
+			logger.info(String.format("created %s", match));
 			this.active.put(matchId, match);
 			
 			match.announce();
