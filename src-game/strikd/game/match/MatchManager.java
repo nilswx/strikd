@@ -28,10 +28,10 @@ public class MatchManager extends Server.Referent
 		super(server);
 		for(LocaleBundle locale : this.getServer().getLocaleMgr().getBundles())
 		{
-			PlayerQueue queue = new SimpleBotQueue(this);//SimplePlayerQueue(this);
+			PlayerQueue queue = new SimpleBotQueue(locale.getLocale(), this);//SimplePlayerQueue(this);
 			this.queues.put(locale.getLocale(), queue);
 			
-			logger.debug(String.format("created %s for %s", queue.getClass().getSimpleName(), locale.getLocale()));
+			logger.debug(String.format("opened %s", queue));
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class MatchManager extends Server.Referent
 		return null;
 	}
 
-	public Match newMatch(MatchPlayer... players)
+	public Match newMatch(String language, MatchPlayer... players)
 	{
 		// Allow new matches?
 		if(this.getServer().isShutdownMode())
@@ -89,9 +89,9 @@ public class MatchManager extends Server.Referent
 		else
 		{
 			long matchId = this.matchCounter.incrementAndGet();
-			Match match = new Match(matchId, players);
+			Match match = new Match(matchId, language, players);
 			
-			logger.info(String.format("created match #%d", matchId));
+			logger.info(String.format("created %s match #%d", language, matchId));
 			this.active.put(matchId, match);
 			
 			match.announce();

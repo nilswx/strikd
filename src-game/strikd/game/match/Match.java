@@ -9,15 +9,17 @@ import strikd.net.codec.OutgoingMessage;
 public class Match
 {
 	private final long matchId;
+	private final String language;
 	private final MatchPlayer players[];
 	private final MatchTimer timer;
 	private final Board board;
 	
 	private final byte loadingTime;
 	
-	public Match(long matchId, MatchPlayer... players)
+	public Match(long matchId, String language, MatchPlayer... players)
 	{
 		this.matchId = matchId;
+		this.language = language;
 		this.players = players;
 		this.timer = new MatchTimer(2 * 60);
 		this.board = new GappieBoard(5, 6);
@@ -87,6 +89,11 @@ public class Match
 		return this.matchId;
 	}
 	
+	public String getLanguage()
+	{
+		return this.language;
+	}	
+	
 	public MatchPlayer[] getPlayers()
 	{
 		return this.players;
@@ -105,5 +112,5 @@ public class Match
 	public byte getLoadingTime()
 	{
 		return this.loadingTime;
-	}	
+	}
 }

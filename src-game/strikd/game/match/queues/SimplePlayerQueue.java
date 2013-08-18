@@ -11,9 +11,9 @@ public class SimplePlayerQueue extends PlayerQueue
 	private final Object waitLock = new Object();
 	private SimplePlayerQueue.Entry waiting;
 	
-	public SimplePlayerQueue(MatchManager matchMgr)
+	public SimplePlayerQueue(String language, MatchManager matchMgr)
 	{
-		super(matchMgr);
+		super(language, matchMgr);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class SimplePlayerQueue extends PlayerQueue
 		// Create a new match between these players
 		MatchPlayer p1 = new MatchPlayer(opponent);
 		MatchPlayer p2 = new MatchPlayer(session);	
-		this.getMatchMgr().newMatch(p1, p2);
+		this.newMatch(p1, p2);
 		
 		// Queue empty
 		return null;

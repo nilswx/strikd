@@ -8,12 +8,11 @@ import strikd.sessions.Session;
 
 public class TimedPlayerQueue extends PlayerQueue
 {
-	private final MatchBotFactory botFactory;
+	private final MatchBotFactory botFactory = new MatchBotFactory();
 	
-	public TimedPlayerQueue(MatchManager matchMgr)
+	public TimedPlayerQueue(String language, MatchManager matchMgr)
 	{
-		super(matchMgr);
-		this.botFactory = new MatchBotFactory();
+		super(language, matchMgr);
 	}
 
 	@Override

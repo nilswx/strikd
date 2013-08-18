@@ -10,12 +10,11 @@ import strikd.sessions.Session;
 
 public class SimpleBotQueue extends PlayerQueue
 {
-	private MatchBotFactory botFactory;
+	private MatchBotFactory botFactory = new MatchBotFactory();
 	
-	public SimpleBotQueue(MatchManager matchMgr)
+	public SimpleBotQueue(String language, MatchManager matchMgr)
 	{
-		super(matchMgr);
-		this.botFactory = new MatchBotFactory();
+		super(language, matchMgr);
 	}
 
 	@Override
@@ -23,7 +22,7 @@ public class SimpleBotQueue extends PlayerQueue
 	{
 		MatchPlayer player = new MatchPlayer(session);
 		MatchPlayer bot = this.botFactory.newBot();
-		this.getMatchMgr().newMatch(player, bot);
+		this.newMatch(player, bot);
 		
 		// Doesn't return entries, creates matches straight away
 		return null;
@@ -32,7 +31,7 @@ public class SimpleBotQueue extends PlayerQueue
 	@Override
 	public void dequeue(PlayerQueue.Entry entry)
 	{
-		throw new java.lang.UnsupportedOperationException("this type has no backing queue");
+		throw new UnsupportedOperationException("this type has no backing queue");
 	}
 	
 	@Override
