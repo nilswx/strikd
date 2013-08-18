@@ -20,7 +20,7 @@ public class Match
 		this.matchId = matchId;
 		this.players = players;
 		this.timer = new MatchTimer(2 * 60);
-		this.board = new BruteBoard(5, 5);
+		this.board = new BruteBoard(5, 6);
 		this.loadingTime = 5;
 		
 		// Assign unique actor IDs

@@ -59,6 +59,6 @@ public class UserRegister extends Server.Referent
 	{
 		Random rand = new Random();
 		
-		return "guest" + (rand.nextInt(9999 - 100 + 1) + 100);
+		return String.format("Guest-%d", (rand.nextInt(9999 - 100 + 1) + 100));
 	}
 }
