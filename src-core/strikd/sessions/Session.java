@@ -53,7 +53,9 @@ public class Session extends Server.Referent
 	
 	private void onLogout()
 	{
-		logger.warn("no LOGOUT LOGIC implemented");
+		logger.debug("performing logout logic, save user");
+		
+		this.getServer().getUserRegister().saveUser(this.user);
 	}
 	
 	public void send(OutgoingMessage msg)

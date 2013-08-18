@@ -79,7 +79,9 @@ public class SessionManager extends Server.Referent
 			// Add to user map and increment logins
 			this.userSessions.put(user.id, session);
 			this.loginCounter.incrementAndGet();
-			logger.debug(String.format("%s logged in from %s", user, session.getConnection().getIpAddress()));
+			user.logins++;
+			
+			logger.debug(String.format("%s logged in (#%d) in from %s", user, user.logins, session.getConnection().getIpAddress()));
 		}
 	}
 	
