@@ -27,7 +27,7 @@ public class UserRegister extends Server.Referent
 		// Create new user with default data
 		User user = new User();
 		user.token = UUID.randomUUID().toString();
-		user.name = this.generateGuestName();
+		user.name = this.generateDefaultName();
 		user.language = "en_US";
 		user.balance = 5;
 		this.dbUsers.save(user);
@@ -55,10 +55,10 @@ public class UserRegister extends Server.Referent
 		}
 	}
 	
-	public String generateGuestName()
+	public String generateDefaultName()
 	{
 		Random rand = new Random();
 		
-		return String.format("Guest-%d", (rand.nextInt(9999 - 100 + 1) + 100));
+		return String.format("Strik-%d", (rand.nextInt(9999 - 100 + 1) + 100));
 	}
 }
