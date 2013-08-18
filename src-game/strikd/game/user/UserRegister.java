@@ -59,6 +59,6 @@ public class UserRegister extends Server.Referent
 	{
 		Random rand = new Random();
 		
-		return String.format("Strik-%d", (rand.nextInt(9999 - 100 + 1) + 100));
+		return String.format("Player-%d", (rand.nextInt(99999 - 100 + 1) + 100));
 	}
 }

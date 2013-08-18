@@ -16,7 +16,7 @@ public class Bootstrapper
 		try
 		{
 			Server instance = new Server(new File("strikd.properties"));
-			instance.getUserRegister().newUser();
+			instance.toString();
 		}
 		catch(Exception e)
 		{
