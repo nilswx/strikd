@@ -29,6 +29,7 @@ public class UserRegister extends Server.Referent
 		user.token = UUID.randomUUID().toString();
 		user.name = this.generateDefaultName();
 		user.language = "en_US";
+		user.country = "nl"; // From FB
 		user.balance = 5;
 		this.dbUsers.save(user);
 		
