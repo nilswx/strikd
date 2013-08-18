@@ -1,5 +1,6 @@
 package strikd.game.board;
 
+import strikd.game.board.tiles.Square;
 import strikd.game.board.tiles.Tile;
 
 /**
@@ -10,11 +11,14 @@ import strikd.game.board.tiles.Tile;
  */
 public abstract class Board
 {
-	protected final Tile[][] tiles;
-
+	protected final Square[][] squares;
+	
+	private final BoardUpdateGenerator updates;
+	
 	protected Board(int width, int height)
 	{
-		this.tiles = new Tile[width][height];
+		this.squares = new Square[width][height];
+		this.updates = new BoardUpdateGenerator(this);
 	}
 
 	public final void clear()
@@ -23,27 +27,22 @@ public abstract class Board
 		{
 			for(int y = 0; y < this.getHeight(); y++)
 			{
-				this.tiles[x][y] = null;
+				if(this.squares[x][y] == null)
+				{
+					this.squares[x][y] = new Square(x, y, this);
+				}
+				this.squares[x][y].clear();
 			}
 		}
 	}
 
 	public abstract void regenerate();
 
-	public final Tile getTile(int x, int y)
+	public final Square getSquare(int x, int y)
 	{
-		return this.squareExists(x, y) ? this.tiles[x][y] : null;
+		return this.squares[x][y];
 	}
 	
-	protected final void setTile(Tile tile)
-	{
-		int x = tile.getX(), y = tile.getY();
-		if(this.squareExists(x, y))
-		{
-			this.tiles[x][y] = tile;
-		}
-	}
-
 	public final boolean squareExists(int x, int y)
 	{
 		return (x >= 0 && x < this.getWidth() && y >= 0 && y < this.getWidth());
@@ -51,12 +50,17 @@ public abstract class Board
 	
 	public final int getWidth()
 	{
-		return this.tiles.length;
+		return this.squares.length;
 	}
 
 	public final int getHeight()
 	{
-		return this.tiles[0].length;
+		return this.squares[0].length;
+	}
+	
+	public BoardUpdateGenerator getUpdateGenerator()
+	{
+		return this.updates;
 	}
 	
 	@Override
@@ -77,24 +81,24 @@ public abstract class Board
 			{
 				sb.append('[');
 				
-				Tile tile = this.tiles[x][y];
-				if(tile == null)
+				Square square = this.squares[x][y];
+				if(square.isNull())
 				{
 					sb.append("   ");
 				}
 				else
 				{
-					if(tile.getTrigger() == null)
+					if(!square.hasTrigger())
 					{
 						sb.append(' ');
-						sb.append(tile.getLetter());
+						sb.append(square.getLetter());
 						sb.append(' ');
 					}
 					else
 					{
-						sb.append(tile.getLetter());
+						sb.append(square.getLetter());
 						sb.append(':');
-						sb.append(Character.toUpperCase(tile.getTrigger().getTypeName().charAt(0)));
+						sb.append(Character.toUpperCase(square.getTrigger().getTypeName().charAt(0)));
 					}
 				}
 				

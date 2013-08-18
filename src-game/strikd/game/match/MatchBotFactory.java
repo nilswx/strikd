@@ -19,7 +19,7 @@ public class MatchBotFactory
 		bot.avatar = new Avatar();
 		bot.country = "bot"; // A cog wheel or so!
 		
-		bot.matches = rand.nextInt(300);
+		bot.matches = rand.nextInt(300) + 1;
 		bot.wins = rand.nextInt(bot.matches);
 		bot.xp = bot.matches * 45;
 		

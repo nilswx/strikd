@@ -39,7 +39,7 @@ public interface Opcodes
 	    NAME_REJECTED,
 		QUEUE_ENTERED,
 		QUEUE_EXITED,
-	    BOARD_UPDATE,
+	    SQUARE_UPDATES,
 	    ANNOUNCE_MATCH,
 	    START_MATCH,
 	    END_MATCH,

@@ -1,10 +1,9 @@
 package strikd.game.match;
 
 import strikd.communication.outgoing.AnnounceMatchMessage;
-import strikd.communication.outgoing.BoardUpdateMessage;
 import strikd.communication.outgoing.StartMatchMessage;
 import strikd.game.board.Board;
-import strikd.game.board.GappieBoard;
+import strikd.game.board.BruteBoard;
 import strikd.net.codec.OutgoingMessage;
 
 public class Match
@@ -21,7 +20,7 @@ public class Match
 		this.matchId = matchId;
 		this.players = players;
 		this.timer = new MatchTimer(2 * 60);
-		this.board = new GappieBoard(20, 20);
+		this.board = new BruteBoard(5, 5);
 		this.loadingTime = 5;
 		
 		// Assign unique actor IDs
@@ -29,6 +28,10 @@ public class Match
 		{
 			players[actorId].setMatch(actorId, this);
 		}
+		
+		// Generate board
+		this.board.regenerate();
+		System.out.println(this.board.toLongString());
 	}
 	
 	public void destroy()
@@ -66,7 +69,7 @@ public class Match
 	public void start()
 	{
 		// Initial board!
-		this.broadcast(new BoardUpdateMessage(1, this.board));
+		this.broadcast(this.board.getUpdateGenerator().generateUpdates());
 		
 		// Start the timers at the clients etc, the game is ON!
 		this.broadcast(new StartMatchMessage());

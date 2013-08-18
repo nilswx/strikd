@@ -5,7 +5,6 @@ import static strikd.game.board.StaticLocale.dict;
 import java.awt.Point;
 import java.io.IOException;
 
-import strikd.game.board.tiles.Tile;
 import strikd.words.Word;
 
 public class GappieBoard extends Board
@@ -37,7 +36,7 @@ public class GappieBoard extends Board
 		{
 			for(int y = 0; y < this.getHeight(); y++)
 			{
-				if(this.tiles[x][y] == null)
+				if(this.getSquare(x, y).isNull())
 				{
 					return new Point(x, y);
 				}
@@ -58,7 +57,7 @@ public class GappieBoard extends Board
 		for(int i = 0; i < letters.length; i++)
 		{
 			// Fill this square with a tile for this one
-			this.tiles[x][y] = new Tile(x, y, letters[i]);
+			this.squares[x][y].setLetter(letters[i]);
 
 			// Get random direction
 			boolean dirOK = false;
@@ -71,8 +70,7 @@ public class GappieBoard extends Board
 				int testX = (x + diff.x);
 				int testY = (y + diff.y);
 
-				if(this.squareExists(testX, testY) && this.getTile(testX,
-											testY) == null)
+				if(this.squareExists(testX, testY) /* && this.squares[testX][testY].isNull()*/)
 				{
 					dirOK = true;
 					x = testX;

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import strikd.game.board.tiles.Tile;
 import strikd.words.Word;
 
 public class BruteBoard extends Board
@@ -80,7 +79,7 @@ public class BruteBoard extends Board
 						if(!this.squareExists(next.x, next.y)
 								
 						// Or it does exist, and the letter on it is different?
-						|| (this.tiles[next.x][next.y] != null && this.tiles[next.x][next.y].getLetter() != letters[step]))
+						|| (this.squares[next.x][next.y].hasLetter() && this.squares[next.x][next.y].getLetter() != letters[step]))
 						{
 							triedDirs.add(dir);
 							continue nextDirection;
@@ -91,7 +90,7 @@ public class BruteBoard extends Board
 					for(int step = 0; step < letters.length; step++)
 					{
 						Point next = new Point(root.x + (step * diff.x), root.y + (step * diff.y));
-						this.tiles[next.x][next.y] = new Tile(next.x, next.y, letters[step]);
+						this.squares[next.x][next.y].setLetter(letters[step]);
 					}
 					
 					// Yay!
@@ -119,12 +118,12 @@ public class BruteBoard extends Board
 		{
 			for(int y = 0; y < this.getHeight(); y++)
 			{
-				if(this.tiles[x][y] == null)
+				if(this.squares[x][y].isNull())
 				{
 					for(Direction8 dir : GAP_LINK_DIRS)
 					{
 						Point diff = dir.getDiff();
-						if(this.squareExists(x + diff.x, y + diff.y) && this.tiles[x + diff.x][y + diff.y] == null)
+						if(this.squareExists(x + diff.x, y + diff.y) && this.squares[x + diff.x][y + diff.y].isNull())
 						{
 							return true;
 						}
@@ -141,7 +140,7 @@ public class BruteBoard extends Board
 		StaticLocale.init();
 		
 		long start = System.currentTimeMillis();
-		Board board = new BruteBoard(6, 6);
+		Board board = new BruteBoard(5, 6);
 		board.regenerate();
 		long time = System.currentTimeMillis() - start;
 		
