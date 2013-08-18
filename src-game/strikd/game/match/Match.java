@@ -3,7 +3,7 @@ package strikd.game.match;
 import strikd.communication.outgoing.AnnounceMatchMessage;
 import strikd.communication.outgoing.StartMatchMessage;
 import strikd.game.board.Board;
-import strikd.game.board.BruteBoard;
+import strikd.game.board.GappieBoard;
 import strikd.net.codec.OutgoingMessage;
 
 public class Match
@@ -20,7 +20,7 @@ public class Match
 		this.matchId = matchId;
 		this.players = players;
 		this.timer = new MatchTimer(2 * 60);
-		this.board = new BruteBoard(5, 6);
+		this.board = new GappieBoard(5, 6);
 		this.loadingTime = 5;
 		
 		// Assign unique actor IDs

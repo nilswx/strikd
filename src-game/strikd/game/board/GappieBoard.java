@@ -88,7 +88,7 @@ public class GappieBoard extends Board
 		StaticLocale.init();
 		
 		long start = System.currentTimeMillis();
-		Board board = new GappieBoard(5, 5);
+		Board board = new GappieBoard(5, 6);
 		board.regenerate();
 		long time = System.currentTimeMillis() - start;
 
