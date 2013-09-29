@@ -1,5 +1,6 @@
 package strikd.game.match;
 
+import strikd.Server;
 import strikd.communication.outgoing.AnnounceMatchMessage;
 import strikd.communication.outgoing.StartMatchMessage;
 import strikd.game.board.Board;
@@ -38,7 +39,7 @@ public class Match
 	
 	public void destroy()
 	{
-		// TODO Auto-generated method stub		
+		
 	}
 	
 	public void announce()
@@ -77,6 +78,17 @@ public class Match
 		this.broadcast(new StartMatchMessage());
 		
 		// TODO: start serverside match loop for bot AI etc?
+	}
+	
+
+	public void removePlayer(MatchPlayer player)
+	{
+		// The given player loses...
+		// TODO: lose
+		
+		// ... and the match is destroyed!
+		Server server = player.getSession().getServer();
+		server.getMatchMgr().destroyMatch(this.matchId);
 	}
 	
 	public boolean isEnded()

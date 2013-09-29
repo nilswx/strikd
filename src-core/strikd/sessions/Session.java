@@ -53,8 +53,17 @@ public class Session extends Server.Referent
 	
 	private void onLogout()
 	{
-		logger.debug("performing logout logic, save user");
+		// Exit queue or match
+		if(this.isInQueue())
+		{
+			this.exitQueue();
+		}
+		else if(this.isInMatch())
+		{
+			this.exitMatch();
+		}
 		
+		// Save complete user object
 		this.getServer().getUserRegister().saveUser(this.user);
 	}
 	
@@ -109,7 +118,16 @@ public class Session extends Server.Referent
 	
 	public void setMatchPlayer(MatchPlayer player)
 	{
+		if(this.matchPlayer != null)
+		{
+			this.matchPlayer.leave();
+		}
 		this.matchPlayer = player;
+	}
+	
+	public void exitMatch()
+	{
+		this.setMatchPlayer(null);
 	}
 
 	public void exitQueue()

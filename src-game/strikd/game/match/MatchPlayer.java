@@ -32,6 +32,11 @@ public class MatchPlayer
 		}
 	}
 	
+	public void leave()
+	{
+		this.match.removePlayer(this);
+	}
+	
 	public Session getSession()
 	{
 		return this.session;
