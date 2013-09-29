@@ -40,6 +40,9 @@ public class MatchManager extends Server.Referent
 		Match match = this.active.remove(matchId);
 		if(match != null)
 		{
+			// Record statistics etc
+			this.writeMatchJournal(match);
+			
 			// Destroy this match
 			match.destroy();
 			logger.info(String.format("destroyed %s", match));
@@ -88,12 +91,15 @@ public class MatchManager extends Server.Referent
 		}
 		else
 		{
+			// Initialize a new match with given details and a fresh match ID
 			long matchId = this.matchCounter.incrementAndGet();
 			Match match = new Match(matchId, language, players);
 			
+			// Add to map
 			logger.info(String.format("created %s", match));
 			this.active.put(matchId, match);
 			
+			// Notify players of match data
 			match.announce();
 			
 			return match;
@@ -114,6 +120,13 @@ public class MatchManager extends Server.Referent
 			}
 		}
 		this.queues.clear();
+	}
+	
+	private void writeMatchJournal(Match match)
+	{
+		logger.debug(String.format("writing match journal for match %s", match));
+		
+		// TODO: stats
 	}
 	
 	public Match getMatch(int matchId)

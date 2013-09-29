@@ -1,5 +1,7 @@
 package strikd.game.match;
 
+import java.util.concurrent.TimeUnit;
+
 import strikd.Server;
 import strikd.communication.outgoing.AnnounceMatchMessage;
 import strikd.communication.outgoing.StartMatchMessage;
@@ -16,17 +18,24 @@ public class Match
 	private final Board board;
 	
 	private final byte loadingTime;
+	private final long startTime;
 	
 	public Match(long matchId, String language, MatchPlayer... players)
 	{
 		this.matchId = matchId;
 		this.language = language;
 		this.players = players;
-		this.timer = new MatchTimer(2 * 60);
+		
+		// The round length for this match
+		this.timer = new MatchTimer((int)TimeUnit.MINUTES.toSeconds(2));
+		
+		// Install the board generation algorithm for this match
 		this.board = new GappieBoard(5, 6);
+		
+		// The loading/advertisement time for this match (0 for development)
 		this.loadingTime = 0;
 		
-		// Assign unique actor IDs
+		// Assign unique actor IDs to all players
 		for(int actorId = 0; actorId < players.length; actorId++)
 		{
 			players[actorId].setMatch(actorId, this);
@@ -35,6 +44,9 @@ public class Match
 		// Generate board
 		this.board.regenerate();
 		System.out.println(this.board.toMatrixString());
+		
+		// Record start time
+		this.startTime = System.currentTimeMillis();
 	}
 	
 	public void destroy()
@@ -124,6 +136,11 @@ public class Match
 	public byte getLoadingTime()
 	{
 		return this.loadingTime;
+	}
+	
+	public long getStartTime()
+	{
+		return this.startTime;
 	}
 	
 	@Override

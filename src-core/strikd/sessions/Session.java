@@ -118,10 +118,19 @@ public class Session extends Server.Referent
 	
 	public void setMatchPlayer(MatchPlayer player)
 	{
+		// Leave the queue!
+		if(this.queueEntry != null)
+		{
+			this.exitQueue();
+		}
+		
+		// Leave the old match
 		if(this.matchPlayer != null)
 		{
 			this.matchPlayer.leave();
 		}
+		
+		// Set the new player reference
 		this.matchPlayer = player;
 	}
 	
@@ -137,7 +146,7 @@ public class Session extends Server.Referent
 	
 	public void setQueueEntry(PlayerQueue.Entry entry)
 	{
-		if(this.isInQueue())
+		if(this.queueEntry != null)
 		{
 			this.queueEntry.exit();
 		}

@@ -46,6 +46,11 @@ public class User
 		return (this.matches - this.wins);
 	}
 	
+	public boolean isFacebookLinked()
+	{
+		return (this.fbIdentity != null);
+	}
+	
 	@Override
 	public String toString()
 	{
