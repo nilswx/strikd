@@ -69,11 +69,11 @@ public abstract class Board
 		return String.format("%s %dx%d", this.getClass().getSimpleName(), this.getWidth(), this.getHeight());
 	}
 	
-	public final String toLongString()
+	public final String toMatrixString()
 	{
 		StringBuilder sb = new StringBuilder();
 		
-		for(int y = 0; y < this.getHeight(); y++)
+		for(int y = this.getHeight() - 1; y > 0; y--)
 		{
 			sb.append(y);
 			sb.append("  ");

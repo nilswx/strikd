@@ -21,7 +21,7 @@ public class RequestMatchHandler extends MessageHandler
 	{
 		if(session.isInMatch())
 		{
-			// Exit match (= lose)
+			// TODO: exit match (= lose)
 		}
 		
 		if(session.isInQueue())

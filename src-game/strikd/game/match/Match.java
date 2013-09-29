@@ -23,7 +23,7 @@ public class Match
 		this.players = players;
 		this.timer = new MatchTimer(2 * 60);
 		this.board = new GappieBoard(5, 6);
-		this.loadingTime = 5;
+		this.loadingTime = 0;
 		
 		// Assign unique actor IDs
 		for(int actorId = 0; actorId < players.length; actorId++)
@@ -33,7 +33,7 @@ public class Match
 		
 		// Generate board
 		this.board.regenerate();
-		System.out.println(this.board.toLongString());
+		System.out.println(this.board.toMatrixString());
 	}
 	
 	public void destroy()

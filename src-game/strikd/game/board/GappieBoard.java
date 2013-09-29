@@ -94,6 +94,6 @@ public class GappieBoard extends Board
 
 		System.out.println(board.toString() + " => " + time + " ms");
 		System.out.println();
-		System.out.println(board.toLongString());
+		System.out.println(board.toMatrixString());
 	}
 }
