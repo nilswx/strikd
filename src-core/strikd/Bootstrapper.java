@@ -15,6 +15,7 @@ public class Bootstrapper
 		
 		try
 		{
+			logger.info("Starting server");
 			Server instance = new Server(new File("strikd.properties"));
 			logger.debug("created " + instance);
 		}
