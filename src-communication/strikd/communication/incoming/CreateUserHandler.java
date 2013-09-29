@@ -2,6 +2,8 @@ package strikd.communication.incoming;
 
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.CredentialsMessage;
+import strikd.game.user.User;
 import strikd.net.codec.IncomingMessage;
 
 public class CreateUserHandler extends MessageHandler
@@ -15,6 +17,10 @@ public class CreateUserHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// Create user, login and send LoginOK as if the new credentials were routed through LoginMessageHandler
+		if(!session.isLoggedIn())
+		{
+			User user = session.getServer().getUserRegister().newUser();
+			session.send(new CredentialsMessage(user.id, user.token));
+		}
 	}
 }

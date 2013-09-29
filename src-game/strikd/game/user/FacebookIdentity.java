@@ -5,7 +5,6 @@ public class FacebookIdentity
 	public long userId;
 	public String authToken;
 	public String authSecret;
-	public String country;
 	
 	@Override
 	public String toString()

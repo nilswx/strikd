@@ -18,16 +18,18 @@ public class User
 	public String token;
 	public String email;
 	
-	public String name;
+	public String name; // Allow users to purchase a name color?
+	public Avatar avatar;
+	public String country;
 	
 	// Stats
+	public int logins;
 	public int xp;
 	public int matches;
 	public int wins;
 	
-	public int currency;
+	public int balance;
 	public String language;
-	public Avatar avatar;
 	
 	@JsonFormat(shape=JsonFormat.Shape.ARRAY)
 	public List<Item> items = new ArrayList<Item>();

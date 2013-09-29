@@ -1,6 +1,5 @@
 package strikd.game.user;
 
-import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -9,7 +8,6 @@ import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
 
 import strikd.Server;
-import strikd.game.items.Item;
 import strikd.sessions.Session;
 
 public class UserRegister extends Server.Referent
@@ -29,14 +27,10 @@ public class UserRegister extends Server.Referent
 		// Create new user with default data
 		User user = new User();
 		user.token = UUID.randomUUID().toString();
-		user.name = this.generateGuestName();
-		
-		Item x = new Item();
-		x.typeId = 5;
-		x.timestamp = new Date();
-		x.data = "adasdf";
-		user.items.add(x);
-		
+		user.name = this.generateDefaultName();
+		user.language = "en_US";
+		user.country = "nl"; // From FB
+		user.balance = 5;
 		this.dbUsers.save(user);
 		
 		logger.debug(String.format("created user %s", user));
@@ -62,10 +56,10 @@ public class UserRegister extends Server.Referent
 		}
 	}
 	
-	public String generateGuestName()
+	public String generateDefaultName()
 	{
 		Random rand = new Random();
 		
-		return "guest" + (rand.nextInt(9999 - 100 + 1) + 100);
+		return String.format("Player-%d", (rand.nextInt(99999 - 100 + 1) + 100));
 	}
 }
