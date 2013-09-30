@@ -1,7 +1,6 @@
 package strikd.game.board;
 
 import strikd.communication.outgoing.SquareUpdatesMessage;
-import strikd.game.board.tiles.Square;
 
 public class BoardUpdateGenerator
 {

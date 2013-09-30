@@ -1,6 +1,5 @@
-package strikd.game.board.tiles;
+package strikd.game.board;
 
-import strikd.game.board.Board;
 import strikd.game.board.triggers.Trigger;
 
 public class Square
@@ -59,7 +58,7 @@ public class Square
 		return (this.letter == 0);
 	}
 	
-	public boolean hasLetter()
+	public boolean isTile()
 	{
 		return !this.isNull();
 	}

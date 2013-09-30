@@ -1,10 +1,8 @@
 package strikd.game.board;
 
-import strikd.game.board.tiles.Square;
-import strikd.game.board.tiles.Tile;
 
 /**
- * A rectangular space of squares. A square can hold a {@link Tile} or <code>null</code>.
+ * A rectangular space of squares. A square can hold a {@link Square} or <code>null</code>.
  * 
  * @author nilsw
  * 

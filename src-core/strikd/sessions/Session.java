@@ -3,6 +3,7 @@ package strikd.sessions;
 import org.apache.log4j.Logger;
 
 import strikd.Server;
+import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.user.User;
@@ -132,6 +133,11 @@ public class Session extends Server.Referent
 		
 		// Set the new player reference
 		this.matchPlayer = player;
+	}
+	
+	public Match getMatch()
+	{
+		return this.matchPlayer.getMatch();
 	}
 	
 	public void exitMatch()

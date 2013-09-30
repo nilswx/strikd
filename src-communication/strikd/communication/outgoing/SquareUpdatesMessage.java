@@ -2,7 +2,7 @@ package strikd.communication.outgoing;
 
 import strikd.communication.Opcodes;
 import strikd.game.board.BoardUpdateGenerator;
-import strikd.game.board.tiles.Square;
+import strikd.game.board.Square;
 import strikd.net.codec.OutgoingMessage;
 
 public class SquareUpdatesMessage extends OutgoingMessage

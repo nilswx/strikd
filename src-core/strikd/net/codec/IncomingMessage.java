@@ -16,6 +16,22 @@ public final class IncomingMessage extends NetMessage<Opcodes.Incoming>
 		return (this.buf.readByte() == 1);
 	}
 	
+	public final byte readNibble(boolean high)
+	{
+		if(high)
+		{
+			this.buf.markReaderIndex();
+			byte b = this.buf.readByte();
+			this.buf.resetReaderIndex();
+			
+			return (byte)(b >> 4);
+		}
+		else
+		{
+			return (byte)(this.buf.readByte() & 0xFF);
+		}
+	}
+	
 	public final byte readByte()
 	{
 		return this.buf.readByte();

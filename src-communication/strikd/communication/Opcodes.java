@@ -14,7 +14,8 @@ public interface Opcodes
 	    REQUEST_MATCH,
 	    EXIT_MATCH_QUEUE,
 	    PLAYER_READY,
-	    STRIKE_LETTERS,
+	    SELECT_TILES,
+	    PURCHASE_ITEM,
 	    ACTIVATE_ITEM;
 		
 		private static final Opcodes.Incoming[] values = values();

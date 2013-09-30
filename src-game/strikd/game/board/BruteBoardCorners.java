@@ -79,7 +79,7 @@ public class BruteBoardCorners extends Board
 						if(!this.squareExists(next.x, next.y)
 								
 						// Or it does exist, and the letter on it is different?
-						|| (this.squares[next.x][next.y].hasLetter() && this.squares[next.x][next.y].getLetter() != letters[step]))
+						|| (this.squares[next.x][next.y].isTile() && this.squares[next.x][next.y].getLetter() != letters[step]))
 						{
 							triedDirs.add(dir);
 							continue nextDirection;
