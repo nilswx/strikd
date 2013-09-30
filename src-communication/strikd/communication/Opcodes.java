@@ -6,7 +6,6 @@ public interface Opcodes
 	
 	public enum Incoming implements Opcode
 	{
-	    NOP,
 	    CREATE_USER,
 	    LOGIN,
 	    FACEBOOK_LINK,
@@ -28,7 +27,7 @@ public interface Opcodes
 	
 	public enum Outgoing implements Opcode
 	{
-	    NOP,
+	    VERSIONCHECK,
 	    SESSION_INFO,
 	    CREDENTIALS,
 	    USER_INFO,

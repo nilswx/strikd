@@ -10,6 +10,7 @@ import org.bson.types.ObjectId;
 import strikd.Server;
 import strikd.ServerDescriptor;
 import strikd.communication.outgoing.SessionInfoMessage;
+import strikd.communication.outgoing.VersionCheckMessage;
 import strikd.game.user.User;
 import strikd.net.NetConnection;
 
@@ -44,6 +45,9 @@ public class SessionManager extends Server.Referent
 		// Greet session
 		ServerDescriptor server = this.getServer().getDescriptor();
 		session.send(new SessionInfoMessage(sessionId, server.name));
+		
+		// Notify of latest version (forces client to validate and update if needed)
+		session.send(new VersionCheckMessage(1, 0, "Waterduck"));
 		
 		return session;
 	}
