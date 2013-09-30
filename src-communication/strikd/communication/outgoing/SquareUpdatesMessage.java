@@ -21,8 +21,7 @@ public class SquareUpdatesMessage extends OutgoingMessage
 	
 	public void appendUpdate(Square square)
 	{
-		super.writeByte((byte)square.x);
-		super.writeByte((byte)square.y);
+		super.writeByte((byte)(square.x << 4 | square.y));
 		if(square.isNull())
 		{
 			super.writeByte((byte)0);

@@ -73,7 +73,7 @@ public abstract class Board
 	{
 		StringBuilder sb = new StringBuilder();
 		
-		for(int y = this.getHeight() - 1; y > 0; y--)
+		for(int y = this.getHeight() - 1; y >= 0; y--)
 		{
 			sb.append(y);
 			sb.append("  ");
