@@ -17,15 +17,15 @@ public class ChangeNameHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		String newName = request.readStr();
+		String requestedName = request.readStr();
 		
 		// Filter & validate new name
-		newName = newName.replace("fuck", "");
+		String newName = requestedName.replace("fuck", "");
 		
 		// Reject name?
 		if(newName.equals("Satan"))
 		{
-			session.send(new NameRejectedMessage("forbidden"));
+			session.send(new NameRejectedMessage(requestedName, "forbidden"));
 		}
 		else
 		{
