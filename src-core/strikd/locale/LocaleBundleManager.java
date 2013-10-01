@@ -15,7 +15,7 @@ public class LocaleBundleManager
 	private static final Logger logger = Logger.getLogger(LocaleBundleManager.class);
 	
 	private final File bundleDir;
-	private Map<String, LocaleBundle> bundles = new HashMap<String, LocaleBundle>();
+	private Map<String, LocaleBundle> bundles = Collections.emptyMap();
 	
 	public LocaleBundleManager(File bundleDir)
 	{
@@ -29,7 +29,7 @@ public class LocaleBundleManager
 	
 	public void reload()
 	{
-		logger.info(String.format("reloading locales from %s...", this.bundleDir));
+		logger.info(String.format("reloading and indexing locales from %s...", this.bundleDir));
 		
 		// Load all bundles
 		Map<String, LocaleBundle> bundles = new HashMap<String, LocaleBundle>();
@@ -53,14 +53,18 @@ public class LocaleBundleManager
 			}
 		}
 		
-		// NO bundles at all?
-		if(bundles.isEmpty())
+		// Found bundles?
+		if(!bundles.isEmpty())
+		{
+			this.bundles = Collections.unmodifiableMap(bundles);
+		}
+		
+		// Has bundles at all?
+		if(this.bundles.isEmpty())
 		{
 			logger.fatal(String.format("no locale bundles at all!"));
 			System.exit(0);
 		}
-		
-		this.bundles = Collections.unmodifiableMap(bundles);
 	}
 	
 	public LocaleBundle getBundle(String locale)

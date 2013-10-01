@@ -67,6 +67,7 @@ public class LocaleBundle
 		GENERATOR,
 		
 		// Extras etc
-		SEASONAL
+		SEASONAL,
+		BRANDING
 	}
 }
