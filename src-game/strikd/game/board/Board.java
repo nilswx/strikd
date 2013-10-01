@@ -1,5 +1,7 @@
 package strikd.game.board;
 
+import strikd.words.WordDictionary;
+
 
 /**
  * A rectangular space of squares. A square can hold a {@link Square} or <code>null</code>.
@@ -10,12 +12,14 @@ package strikd.game.board;
 public abstract class Board
 {
 	protected final Square[][] squares;
+	protected final WordDictionary dictionary;
 	
 	private final BoardUpdateGenerator updates;
 	
-	protected Board(int width, int height)
+	protected Board(int width, int height, WordDictionary dictionary)
 	{
 		this.squares = new Square[width][height];
+		this.dictionary = dictionary;
 		this.updates = new BoardUpdateGenerator(this);
 	}
 
@@ -34,7 +38,13 @@ public abstract class Board
 		}
 	}
 
-	public abstract void regenerate();
+	public void regenerate()
+	{
+		this.clear();
+		this.fill();
+	}
+	
+	public abstract void fill();
 
 	public final Square getSquare(int x, int y)
 	{

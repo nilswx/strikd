@@ -5,8 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -14,8 +15,8 @@ public class WordDictionary
 {
 	private final String locale;
 	
-	private final Set<Word> set;
-	private final Word[] array;
+	private final Word[] select;
+	private final Set<String> check;
 	
 	public WordDictionary(String locale, File file) throws IOException
 	{
@@ -24,22 +25,24 @@ public class WordDictionary
 		// Load and normalize words, one word per line
 		String line;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-		Set<Word> set = new HashSet<Word>();
+		List<Word> select = new ArrayList<Word>();
+		Set<String> check = new HashSet<String>();
 		while((line = reader.readLine()) != null)
 		{
 			Word word = Word.parse(line);
-			set.add(word);
+			select.add(word);
+			check.add(word.toString());
 		}
 		
 		// Create immutable collections for all kinds of purposes
-		this.set = Collections.unmodifiableSet(set);
-		this.array = set.toArray(new Word[0]);
+		this.select = select.toArray(new Word[0]);
+		this.check = check;
 	}
 	
 	public Word pickOne()
 	{
 		Random rand = new Random();
-		return this.array[rand.nextInt(this.array.length)];
+		return this.select[rand.nextInt(this.select.length)];
 	}
 	
 	public Word[] pick(int amount)
@@ -49,7 +52,7 @@ public class WordDictionary
 		Word[] words = new Word[amount];
 		for(int i = 0; i < amount; i++)
 		{
-			words[i] = this.array[rand.nextInt(this.array.length)];
+			words[i] = this.select[rand.nextInt(this.select.length)];
 		}
 		
 		return words;
@@ -57,7 +60,7 @@ public class WordDictionary
 	
 	public boolean contains(Word word)
 	{
-		return this.set.contains(word);
+		return this.check.contains(word.toString());
 	}
 	
 	public String getLocale()
@@ -67,6 +70,6 @@ public class WordDictionary
 	
 	public int size()
 	{
-		return this.set.size();
+		return this.select.length;
 	}
 }

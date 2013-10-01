@@ -6,13 +6,15 @@ import strikd.Server;
 import strikd.communication.outgoing.AnnounceMatchMessage;
 import strikd.communication.outgoing.StartMatchMessage;
 import strikd.game.board.Board;
-import strikd.game.board.GappieBoard;
+import strikd.game.board.BruteBoard;
+import strikd.locale.LocaleBundle;
+import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.OutgoingMessage;
 
 public class Match
 {
 	private final long matchId;
-	private final String language;
+	private final LocaleBundle locale;
 	private final MatchPlayer players[];
 	private final MatchTimer timer;
 	private final Board board;
@@ -20,25 +22,25 @@ public class Match
 	private final byte loadingTime;
 	private final long startTime;
 	
-	public Match(long matchId, String language, MatchPlayer... players)
+	public Match(long matchId, LocaleBundle locale, MatchPlayer... players)
 	{
 		this.matchId = matchId;
-		this.language = language;
+		this.locale = locale;
 		this.players = players;
 		
 		// The round length for this match
 		this.timer = new MatchTimer((int)TimeUnit.MINUTES.toSeconds(2));
 		
 		// Install the board generation algorithm for this match
-		this.board = new GappieBoard(5, 6);
+		this.board = new BruteBoard(5, 6, locale.getDictionary(DictionaryType.GENERATOR));
 		
 		// The loading/advertisement time for this match (0 for development)
 		this.loadingTime = 0;
 		
-		// Assign unique actor IDs to all players
-		for(int actorId = 0; actorId < players.length; actorId++)
+		// Assign unique IDs to all players
+		for(int playerId = 0; playerId < players.length; playerId++)
 		{
-			players[actorId].setMatch(actorId, this);
+			players[playerId].setMatch(this, playerId);
 		}
 		
 		// Generate board
@@ -113,9 +115,9 @@ public class Match
 		return this.matchId;
 	}
 	
-	public String getLanguage()
+	public LocaleBundle getLocale()
 	{
-		return this.language;
+		return this.locale;
 	}	
 	
 	public MatchPlayer[] getPlayers()
@@ -146,6 +148,6 @@ public class Match
 	@Override
 	public String toString()
 	{
-		return String.format("match #%d (%s)", this.matchId, this.language);
+		return String.format("match #%d (%s)", this.matchId, this.locale);
 	}
 }

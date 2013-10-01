@@ -28,7 +28,7 @@ public class MatchManager extends Server.Referent
 		super(server);
 		for(LocaleBundle locale : this.getServer().getLocaleMgr().getBundles())
 		{
-			PlayerQueue queue = new SimpleBotQueue(locale.getLocale(), this);//SimplePlayerQueue(this);
+			PlayerQueue queue = new SimpleBotQueue(locale, this);//SimplePlayerQueue(this);
 			this.queues.put(locale.getLocale(), queue);
 			
 			logger.debug(String.format("opened %s", queue));
@@ -82,7 +82,7 @@ public class MatchManager extends Server.Referent
 		return null;
 	}
 
-	public Match newMatch(String language, MatchPlayer... players)
+	public Match newMatch(LocaleBundle locale, MatchPlayer... players)
 	{
 		// Allow new matches?
 		if(this.getServer().isShutdownMode())
@@ -93,7 +93,7 @@ public class MatchManager extends Server.Referent
 		{
 			// Initialize a new match with given details and a fresh match ID
 			long matchId = this.matchCounter.incrementAndGet();
-			Match match = new Match(matchId, language, players);
+			Match match = new Match(matchId, locale, players);
 			
 			// Add to map
 			logger.info(String.format("created %s", match));

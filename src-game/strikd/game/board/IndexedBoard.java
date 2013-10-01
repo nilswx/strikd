@@ -1,15 +1,17 @@
 package strikd.game.board;
 
+import strikd.words.WordDictionary;
+
 public class IndexedBoard extends Board
 {
-	protected IndexedBoard(int width, int height)
+	protected IndexedBoard(int width, int height, WordDictionary dictionary)
 	{
-		super(width, height);
+		super(width, height, dictionary);
 	}
 
 	@Override
-	public void regenerate()
+	public void fill()
 	{
-		this.clear();
+		// TODO Auto-generated method stub
 	}
 }

@@ -4,15 +4,16 @@ import java.util.Iterator;
 
 import strikd.game.match.MatchBotFactory;
 import strikd.game.match.MatchManager;
+import strikd.locale.LocaleBundle;
 import strikd.sessions.Session;
 
 public class TimedPlayerQueue extends PlayerQueue
 {
 	private final MatchBotFactory botFactory = new MatchBotFactory();
 	
-	public TimedPlayerQueue(String language, MatchManager matchMgr)
+	public TimedPlayerQueue(LocaleBundle locale, MatchManager matchMgr)
 	{
-		super(language, matchMgr);
+		super(locale, matchMgr);
 	}
 
 	@Override

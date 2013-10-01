@@ -31,6 +31,7 @@ public class LocaleBundleManager
 	{
 		logger.info(String.format("reloading locales from %s...", this.bundleDir));
 		
+		// Load all bundles
 		Map<String, LocaleBundle> bundles = new HashMap<String, LocaleBundle>();
 		for(File file : this.bundleDir.listFiles())
 		{
@@ -50,6 +51,13 @@ public class LocaleBundleManager
 					logger.info(String.format("loaded %s (%d dicts)", locale, bundle.size()));
 				}
 			}
+		}
+		
+		// NO bundles at all?
+		if(bundles.isEmpty())
+		{
+			logger.fatal(String.format("no locale bundles at all!"));
+			System.exit(0);
 		}
 		
 		this.bundles = Collections.unmodifiableMap(bundles);

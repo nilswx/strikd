@@ -6,15 +6,16 @@ import java.util.Iterator;
 import strikd.game.match.MatchBotFactory;
 import strikd.game.match.MatchManager;
 import strikd.game.match.MatchPlayer;
+import strikd.locale.LocaleBundle;
 import strikd.sessions.Session;
 
 public class SimpleBotQueue extends PlayerQueue
 {
 	private MatchBotFactory botFactory = new MatchBotFactory();
 	
-	public SimpleBotQueue(String language, MatchManager matchMgr)
+	public SimpleBotQueue(LocaleBundle locale, MatchManager matchMgr)
 	{
-		super(language, matchMgr);
+		super(locale, matchMgr);
 	}
 
 	@Override

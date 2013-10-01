@@ -1,9 +1,16 @@
 package strikd.communication.incoming;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import strikd.sessions.Session;
+import strikd.words.Word;
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.WordFoundMessage;
 import strikd.game.board.Board;
 import strikd.game.board.Square;
+import strikd.game.match.Match;
+import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.IncomingMessage;
 
 public class SelectTilesHandler extends MessageHandler
@@ -20,9 +27,15 @@ public class SelectTilesHandler extends MessageHandler
 		// In valid match, and not frozen, etc?
 		if(session.isInMatch())
 		{
-			Board board = session.getMatch().getBoard();
+			// Short-hand variables
+			Match match = session.getMatch();
+			Board board = match.getBoard();
 			
-			// Select all specified tiles
+			// Build list of selected tiles and letters while they are being processed
+			List<Square> tiles = new ArrayList<Square>();
+			StringBuilder letters = new StringBuilder();
+			
+			// Process all specified tiles
 			int amount = request.readByte();
 			for(int i = 0; i < amount; i++)
 			{
@@ -38,10 +51,39 @@ public class SelectTilesHandler extends MessageHandler
 					Square square = board.getSquare(x, y);
 					if(square.isTile())
 					{
-						System.out.println(String.format("%s selected %s", session.getUser(), square));
+						tiles.add(square);
+						letters.append(square.getLetter());
 					}
 				}
 			}
+			
+			// Word formed?
+			Word word = Word.parse(letters.toString());
+			if(match.getLocale().getDictionary(DictionaryType.COMPLETE).contains(word))
+			{
+				// Assign points!
+				int points = word.length();
+				session.getMatchPlayer().modScore(+points);
+				match.broadcast(new WordFoundMessage(session.getMatchPlayer(), word, +points));
+				
+				// Clear tiles, fill gaps
+				for(Square tile : tiles)
+				{
+					tile.clear();
+				}
+				board.fill();
+			}
+			else
+			{
+				// Reset letters
+				for(Square tile : tiles)
+				{
+					tile.setLetter(tile.getLetter());
+				}
+			}
+			
+			// Broadcast updated tiles
+			match.broadcast(board.getUpdateGenerator().generateUpdates());
 		}
 	}
 }

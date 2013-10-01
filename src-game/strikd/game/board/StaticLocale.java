@@ -9,11 +9,8 @@ import strikd.words.WordDictionary;
 
 public class StaticLocale
 {
-	public static void init() { }
-	
 	static
 	{
-		// Will be passed from higher on
 		LocaleBundleManager locMgr = new LocaleBundleManager(new File("locale"));
 		locMgr.reload();
 		LocaleBundle enUS = locMgr.getBundle("en_US");

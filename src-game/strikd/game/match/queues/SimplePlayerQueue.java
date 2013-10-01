@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import strikd.game.match.MatchManager;
 import strikd.game.match.MatchPlayer;
+import strikd.locale.LocaleBundle;
 import strikd.sessions.Session;
 
 public class SimplePlayerQueue extends PlayerQueue
@@ -11,9 +12,9 @@ public class SimplePlayerQueue extends PlayerQueue
 	private final Object waitLock = new Object();
 	private SimplePlayerQueue.Entry waiting;
 	
-	public SimplePlayerQueue(String language, MatchManager matchMgr)
+	public SimplePlayerQueue(LocaleBundle locale, MatchManager matchMgr)
 	{
-		super(language, matchMgr);
+		super(locale, matchMgr);
 	}
 
 	@Override

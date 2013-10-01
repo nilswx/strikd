@@ -1,27 +1,20 @@
 package strikd.game.board;
 
-import static strikd.game.board.StaticLocale.dict;
-
 import java.awt.Point;
 import java.io.IOException;
 
 import strikd.words.Word;
+import strikd.words.WordDictionary;
 
 public class GappieBoard extends Board
 {
-	public GappieBoard(int width, int height)
+	public GappieBoard(int width, int height, WordDictionary dictionary)
 	{
-		super(width, height);
+		super(width, height, dictionary);
 	}
-
+	
 	@Override
-	public void regenerate()
-	{
-		super.clear();
-		this.fillGaps();
-	}
-
-	public void fillGaps()
+	public void fill()
 	{
 		Point gap;
 		while((gap = this.findGap()) != null)
@@ -49,7 +42,7 @@ public class GappieBoard extends Board
 	private void fillGap(Point root)
 	{
 		// Pick a random word and get the letters
-		Word word = dict.pickOne();
+		Word word = this.dictionary.pickOne();
 		char[] letters = word.letters();
 
 		// Mingle the letters through the board
@@ -85,10 +78,8 @@ public class GappieBoard extends Board
 
 	public static void main(String[] args) throws IOException
 	{
-		StaticLocale.init();
-		
 		long start = System.currentTimeMillis();
-		Board board = new GappieBoard(5, 6);
+		Board board = new GappieBoard(5, 6, StaticLocale.dict);
 		board.regenerate();
 		long time = System.currentTimeMillis() - start;
 

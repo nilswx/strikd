@@ -1,7 +1,5 @@
 package strikd.game.board;
 
-import static strikd.game.board.StaticLocale.dict;
-
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,22 +7,17 @@ import java.util.List;
 import java.util.Random;
 
 import strikd.words.Word;
+import strikd.words.WordDictionary;
 
 public class BruteBoardCorners extends Board
 {
-	public BruteBoardCorners(int width, int height)
+	public BruteBoardCorners(int width, int height, WordDictionary dictionary)
 	{
-		super(width, height);
-	}
-
-	@Override
-	public void regenerate()
-	{
-		super.clear();
-		this.fillGaps();
+		super(width, height, dictionary);
 	}
 	
-	public void fillGaps()
+	@Override
+	public void fill()
 	{
 		// Reusable resources
 		Random rand = new Random();
@@ -36,14 +29,19 @@ public class BruteBoardCorners extends Board
 		nextWord: while(this.hasGap())
 		{
 			// Get an untried random word
-			Word word = dict.pickOne();
+			Word word = this.dictionary.pickOne();
 			if(triedWords.contains(word))
 			{
 				continue nextWord;
 			}
 			else
 			{
+				// Tried all words?
 				triedWords.add(word);
+				if(triedWords.size() == this.dictionary.size())
+				{
+					break nextWord;
+				}
 			}
 			
 			// 2. Pick a random cell on the grid
@@ -137,11 +135,9 @@ public class BruteBoardCorners extends Board
 	
 	public static void main(String[] args) throws IOException
 	{
-		StaticLocale.init();
-		
 		long start = System.currentTimeMillis();
-		Board board = new BruteBoardCorners(5, 6);
-		board.regenerate();
+		Board board = new BruteBoardCorners(5, 6, StaticLocale.dict);
+		board.fill();
 		long time = System.currentTimeMillis() - start;
 		
 		System.out.println(board.toString() + " => " + time + " ms");

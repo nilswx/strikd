@@ -3,16 +3,17 @@ package strikd.game.match.queues;
 import strikd.game.match.Match;
 import strikd.game.match.MatchManager;
 import strikd.game.match.MatchPlayer;
+import strikd.locale.LocaleBundle;
 import strikd.sessions.Session;
 
 public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 {
-	private final String language;
+	private final LocaleBundle locale;
 	private final MatchManager matchMgr;
 	
-	protected PlayerQueue(String language, MatchManager matchMgr)
+	protected PlayerQueue(LocaleBundle locale, MatchManager matchMgr)
 	{
-		this.language = language;
+		this.locale = locale;
 		this.matchMgr = matchMgr;
 	}
 	
@@ -22,12 +23,12 @@ public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 	
 	protected Match newMatch(MatchPlayer... players)
 	{
-		return this.matchMgr.newMatch(this.language, players);
+		return this.matchMgr.newMatch(this.locale, players);
 	}
 	
-	public String getLanguage()
+	public LocaleBundle getLocale()
 	{
-		return this.language;
+		return this.locale;
 	}
 	
 	public MatchManager getMatchMgr()
@@ -38,7 +39,7 @@ public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 	@Override
 	public String toString()
 	{
-		return String.format("%s (%s)", this.getClass().getSimpleName(), this.language);
+		return String.format("%s (%s)", this.getClass().getSimpleName(), this.locale);
 	}
 	
 	public static abstract class Entry

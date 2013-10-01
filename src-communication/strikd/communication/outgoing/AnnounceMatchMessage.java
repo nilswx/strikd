@@ -11,10 +11,10 @@ public class AnnounceMatchMessage extends OutgoingMessage
 	{
 		super(Opcodes.Outgoing.ANNOUNCE_MATCH);
 		super.writeLong(match.getMatchId());
-		super.writeStr(match.getLanguage());
+		super.writeStr(match.getLocale().getLocale());
 		super.writeInt(match.getTimer().getTimeLeft());
-		super.writeByte((byte)player.getActorId());
-		super.writeByte((byte)opponent.getActorId());
+		super.writeByte((byte)player.getPlayerId());
+		super.writeByte((byte)opponent.getPlayerId());
 		UserInfoMessage.serializeUser(opponent.getInfo(), this);
 		super.writeByte((byte)match.getBoard().getWidth());
 		super.writeByte((byte)match.getBoard().getHeight());
