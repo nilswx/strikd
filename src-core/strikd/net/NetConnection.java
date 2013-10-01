@@ -28,6 +28,7 @@ public class NetConnection extends SimpleChannelHandler
 	private final long startTime;
 	
 	private Session session;
+	private boolean closeRequested;
 	
 	public NetConnection(Channel channel)
 	{
@@ -51,8 +52,12 @@ public class NetConnection extends SimpleChannelHandler
 	
 	private void requestClose(String reason)
 	{
-		this.close();
-		this.session.onNetClose(reason);
+		if(!this.closeRequested)
+		{
+			this.closeRequested = true;
+			this.close();
+			this.session.onNetClose(reason);
+		}
 	}
 	
 	@Override
@@ -83,8 +88,8 @@ public class NetConnection extends SimpleChannelHandler
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
 	{
-		this.requestClose("disconnected by error");
 		logger.error("caught exception", e.getCause());
+		this.requestClose("disconnected by error");
 	}
 	
 	public void send(OutgoingMessage msg)
