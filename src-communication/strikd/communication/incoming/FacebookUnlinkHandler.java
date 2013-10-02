@@ -2,6 +2,7 @@ package strikd.communication.incoming;
 
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.NameChangedMessage;
 import strikd.net.codec.IncomingMessage;
 
@@ -21,6 +22,7 @@ public class FacebookUnlinkHandler extends MessageHandler
 		{
 			// Remove Facebook data
 			session.getUser().fbIdentity = null;
+			session.send(new FacebookStatusMessage(false));
 			
 			// Restore name to a random name
 			session.getUser().name = session.getServer().getUserRegister().generateDefaultName();

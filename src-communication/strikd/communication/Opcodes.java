@@ -35,6 +35,7 @@ public interface Opcodes
 	    CURRENCY_BALANCE,
 	    ITEMS,
 	    ITEM_ADDED,
+	    FACEBOOK_STATUS,
 	    NAME_CHANGED,
 	    NAME_REJECTED,
 		QUEUE_ENTERED,

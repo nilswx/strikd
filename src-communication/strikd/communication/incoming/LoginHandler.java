@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
+import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.ItemsMessage;
 import strikd.communication.outgoing.UserInfoMessage;
 import strikd.game.user.User;
@@ -40,6 +41,7 @@ public class LoginHandler extends MessageHandler
 			{
 				session.setUser(user, String.format("%s @ %s", hardware, systemVersion));
 				session.send(new UserInfoMessage(user));
+				session.send(new FacebookStatusMessage(user.isFacebookLinked()));
 				session.send(new CurrencyBalanceMessage(user.balance));
 				session.send(new ItemsMessage(user.items));
 			}
