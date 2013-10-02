@@ -3,6 +3,9 @@ package strikd.sessions;
 import org.apache.log4j.Logger;
 
 import strikd.Server;
+import strikd.ServerDescriptor;
+import strikd.communication.outgoing.SessionInfoMessage;
+import strikd.communication.outgoing.VersionCheckMessage;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
@@ -27,6 +30,16 @@ public class Session extends Server.Referent
 		super(server);
 		this.sessionId = sessionId;
 		this.connection = connection;
+	}
+
+	public void hello()
+	{
+		// Send session info
+		ServerDescriptor server = this.getServer().getDescriptor();
+		this.send(new SessionInfoMessage(this.sessionId, server.name));
+		
+		// Notify of latest version (forces client to validate and update if needed)
+		this.send(new VersionCheckMessage(1, 0, "Waterduck"));
 	}
 	
 	public void end(String reason)
