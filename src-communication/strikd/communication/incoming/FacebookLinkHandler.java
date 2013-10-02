@@ -16,18 +16,17 @@ public class FacebookLinkHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// Not linked yet?
-		if(!session.getUser().isFacebookLinked())
-		{
-			// Receive Facebook link credentials
-			long userId = request.readLong();
-			String token = request.readStr();
+		// Receive latest Facebook link credentials
+		long userId = request.readLong();
+		String token = request.readStr();
 			
-			// Validate and link
-			FacebookIdentity identity = new FacebookIdentity();
-			identity.userId = userId;
-			identity.authToken = token;
-			session.getUser().fbIdentity = identity;
-		}
+		// Validate and link
+		FacebookIdentity identity = new FacebookIdentity();
+		identity.userId = userId;
+		identity.token = token;
+		session.getUser().fbIdentity = identity;
+		
+		// Save immediately
+		session.saveData();
 	}
 }

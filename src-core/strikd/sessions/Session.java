@@ -103,6 +103,14 @@ public class Session extends Server.Referent
 		}
 	}
 	
+	public void saveData()
+	{
+		if(this.isLoggedIn())
+		{
+			this.getServer().getUserRegister().saveUser(this.user);
+		}
+	}
+	
 	public boolean isInQueue()
 	{
 		return (this.queueEntry != null);
