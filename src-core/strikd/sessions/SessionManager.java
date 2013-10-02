@@ -85,7 +85,7 @@ public class SessionManager extends Server.Referent
 			this.loginCounter.incrementAndGet();
 			user.logins++;
 			
-			logger.debug(String.format("%s logged in (#%d) in from %s", user, user.logins, session.getConnection().getIpAddress()));
+			logger.debug(String.format("%s logged in (#%d) in from %s (%s)", user, user.logins, session.getConnection().getIpAddress(), user.platform));
 		}
 	}
 	

@@ -21,11 +21,16 @@ public class LoginHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
+		// Not logged in already?
 		if(!session.isLoggedIn())
 		{
+			// Read login info
 			ObjectId userId = new ObjectId(request.readStr());
 			String token = request.readStr();
+			String hardware = request.readStr();
+			String systemVersion = request.readStr();
 			
+			// Correct account and password?
 			User user = session.getServer().getUserRegister().findUser(userId);
 			if(user == null || !token.equals(user.token))
 			{
@@ -33,7 +38,7 @@ public class LoginHandler extends MessageHandler
 			}
 			else
 			{
-				session.setUser(user);
+				session.setUser(user, String.format("%s @ %s", hardware, systemVersion));
 				session.send(new UserInfoMessage(user));
 				session.send(new CurrencyBalanceMessage(user.balance));
 				session.send(new ItemsMessage(user.items));

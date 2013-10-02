@@ -93,11 +93,12 @@ public class Session extends Server.Referent
 		return this.user;
 	}
 	
-	public void setUser(User user)
+	public void setUser(User user, String platform)
 	{
 		if(this.user == null)
 		{
 			this.user = user;
+			this.user.platform = platform;
 			this.getServer().getSessionMgr().completeLogin(this);
 		}
 	}

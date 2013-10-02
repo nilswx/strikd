@@ -124,7 +124,7 @@ public class MatchManager extends Server.Referent
 	
 	private void writeMatchJournal(Match match)
 	{
-		logger.debug(String.format("writing match journal for match %s", match));
+		logger.debug(String.format("writing match journal for %s", match));
 		
 		// TODO: stats
 	}

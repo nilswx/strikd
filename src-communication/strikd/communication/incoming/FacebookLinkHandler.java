@@ -21,14 +21,12 @@ public class FacebookLinkHandler extends MessageHandler
 		{
 			// Receive Facebook link credentials
 			long userId = request.readLong();
-			String authToken = request.readStr();
-			String authSecret = request.readStr();
+			String token = request.readStr();
 			
 			// Validate and link
 			FacebookIdentity identity = new FacebookIdentity();
 			identity.userId = userId;
-			identity.authToken = authToken;
-			identity.authSecret = authSecret;
+			identity.authToken = token;
 			session.getUser().fbIdentity = identity;
 		}
 	}

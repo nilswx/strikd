@@ -27,6 +27,7 @@ public class User
 	public int xp;
 	public int matches;
 	public int wins;
+	public String platform;
 	
 	public int balance;
 	public String language;
