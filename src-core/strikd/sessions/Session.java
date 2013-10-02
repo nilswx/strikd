@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import strikd.Server;
 import strikd.ServerDescriptor;
+import strikd.communication.outgoing.NameChangedMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.communication.outgoing.VersionCheckMessage;
 import strikd.game.match.Match;
@@ -179,5 +180,14 @@ public class Session extends Server.Referent
 			this.queueEntry.exit();
 		}
 		this.queueEntry = entry;
+	}
+	
+	public void renameUser(String name)
+	{
+		if(this.isLoggedIn())
+		{
+			this.user.name = name;
+			this.send(new NameChangedMessage(name));
+		}
 	}
 }

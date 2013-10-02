@@ -1,5 +1,8 @@
 package strikd.communication.incoming;
 
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.FacebookProfile;
+
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookStatusMessage;
@@ -22,13 +25,26 @@ public class FacebookLinkHandler extends MessageHandler
 		identity.userId = request.readLong();
 		identity.token = request.readStr();
 		
-		// TODO: validate
-		
-		// Set data
-		session.getUser().fbIdentity = identity;
-		session.send(new FacebookStatusMessage(true));
-		
-		// Save immediately
+		// Validate identity
+		Facebook facebook = identity.getAPI();
+		if(facebook.isAuthorized())
+		{
+			// Set identity
+			session.getUser().fbIdentity = identity;
+			
+			// Rename user to user's first name
+			FacebookProfile profile = facebook.userOperations().getUserProfile();
+			session.renameUser(profile.getFirstName());
+		}
+		else
+		{
+			session.getUser().fbIdentity = null;
+		}
 		session.saveData();
+		
+		// Send current status
+		session.send(new FacebookStatusMessage(true));
 	}
+	
+	//logger.debug(String.format("FB #%s (\"%s %s\", %s) has %d FB friends", profile.getId(), profile.getFirstName(), profile.getLastName(), profile.getGender(), facebook.friendOperations().getFriendIds().size())); 
 }

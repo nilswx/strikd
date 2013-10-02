@@ -2,7 +2,6 @@ package strikd.communication.incoming;
 
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.NameRejectedMessage;
-import strikd.communication.outgoing.NameChangedMessage;
 import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
 
@@ -29,8 +28,7 @@ public class ChangeNameHandler extends MessageHandler
 		}
 		else
 		{
-			session.getUser().name = newName;
-			session.send(new NameChangedMessage(newName));
+			session.renameUser(newName);
 		}
 	}
 }
