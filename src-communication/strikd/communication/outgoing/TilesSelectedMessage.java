@@ -8,14 +8,14 @@ import strikd.net.codec.OutgoingMessage;
 
 public class TilesSelectedMessage extends OutgoingMessage
 {
-	public TilesSelectedMessage(int playerId, List<Square> squares)
+	public TilesSelectedMessage(int playerId, List<Square> tiles)
 	{
-		super(Opcodes.Outgoing.CREDENTIALS);
+		super(Opcodes.Outgoing.TILES_SELECTED);
 		super.writeByte((byte)playerId);
-		super.writeByte((byte)squares.size());
-		for(Square square : squares)
+		super.writeByte((byte)tiles.size());
+		for(Square tile : tiles)
 		{
-			super.writeByte((byte)(square.x << 4 | square.y));
+			super.writeByte((byte)(tile.x << 4 | tile.y));
 		}
 	}
 }
