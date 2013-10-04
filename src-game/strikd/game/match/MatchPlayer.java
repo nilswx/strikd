@@ -1,10 +1,8 @@
 package strikd.game.match;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import strikd.communication.outgoing.TilesSelectedMessage;
 import strikd.game.board.Square;
 import strikd.game.user.User;
 import strikd.net.codec.OutgoingMessage;
@@ -12,8 +10,6 @@ import strikd.sessions.Session;
 
 public class MatchPlayer
 {
-	private static final List<Square> NO_SELECTION = Collections.emptyList();
-	
 	private final Session session;
 	
 	private Match match;
@@ -110,6 +106,5 @@ public class MatchPlayer
 	public void clearSelection()
 	{
 		this.selected.clear();
-		this.match.broadcast(new TilesSelectedMessage(this.playerId, NO_SELECTION));
 	}
 }

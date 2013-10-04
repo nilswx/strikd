@@ -1,8 +1,12 @@
 package strikd.communication.incoming;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import strikd.sessions.Session;
 import strikd.words.Word;
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.TilesSelectedMessage;
 import strikd.communication.outgoing.WordFoundMessage;
 import strikd.game.board.Board;
 import strikd.game.board.Square;
@@ -10,6 +14,8 @@ import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.IncomingMessage;
+
+import static strikd.communication.outgoing.TilesSelectedMessage.CLEAR_SELECTION;
 
 public class SelectTilesHandler extends MessageHandler
 {
@@ -32,6 +38,7 @@ public class SelectTilesHandler extends MessageHandler
 			
 			// Select all specified tiles
 			int amount = request.readByte();
+			List<Square> newSelected = new ArrayList<Square>();
 			for(int i = 0; i < amount; i++)
 			{
 				// Unpack position
@@ -42,13 +49,18 @@ public class SelectTilesHandler extends MessageHandler
 				// In range?
 				if(board.squareExists(x, y))
 				{
-					player.selectTile(board.getSquare(x, y));
+					Square square = board.getSquare(x, y);
+					if(square.isTile())
+					{
+						player.selectTile(board.getSquare(x, y));
+						newSelected.add(square);
+					}
 				}
 			}
 			
 			// Was this the last batch?
-			boolean checkWord = request.readBool();
-			if(checkWord)
+			boolean isComplete = request.readBool();
+			if(isComplete)
 			{
 				// Validate selection and concat letters
 				StringBuilder letters = new StringBuilder(player.getSelection().size());
@@ -73,12 +85,8 @@ public class SelectTilesHandler extends MessageHandler
 					}
 				}
 				
-				// Invalid selection?
-				if(letters == null || letters.length() == 0)
-				{
-					player.clearSelection();
-				}
-				else
+				// Valid selection?
+				if(letters != null && letters.length() > 0)
 				{
 					// Word formed?
 					Word word = Word.parse(letters.toString());
@@ -95,12 +103,24 @@ public class SelectTilesHandler extends MessageHandler
 							tile.clear();
 						}
 						board.fill();
+						
+						// Send updated letters
+						match.broadcast(board.getUpdateGenerator().generateUpdates());
 					}
-					
-					// Clear selection and broadcast any updated tiles
-					player.clearSelection();
-					match.broadcast(board.getUpdateGenerator().generateUpdates());
 				}
+			}
+			
+			// Clear selection?
+			if(isComplete)
+			{
+				newSelected = CLEAR_SELECTION;
+				player.clearSelection();
+			}
+			
+			// Broadcast updates?
+			if(!newSelected.isEmpty() || newSelected == CLEAR_SELECTION)
+			{
+				match.broadcast(new TilesSelectedMessage(player, newSelected));
 			}
 		}
 	}
