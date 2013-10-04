@@ -6,7 +6,8 @@ import java.util.List;
 import strikd.sessions.Session;
 import strikd.words.Word;
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.TilesSelectedMessage;
+import strikd.communication.outgoing.TileSelectionClearedMessage;
+import strikd.communication.outgoing.TileSelectionExtendedMessage;
 import strikd.communication.outgoing.WordFoundMessage;
 import strikd.game.board.Board;
 import strikd.game.board.Square;
@@ -15,14 +16,12 @@ import strikd.game.match.MatchPlayer;
 import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.IncomingMessage;
 
-import static strikd.communication.outgoing.TilesSelectedMessage.CLEAR_SELECTION;
-
-public class SelectTilesHandler extends MessageHandler
+public class UpdateTileSelectionHandler extends MessageHandler
 {
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
-		return Opcodes.Incoming.SELECT_TILES;
+		return Opcodes.Incoming.UPDATE_TILE_SELECTION;
 	}
 	
 	@Override
@@ -49,6 +48,7 @@ public class SelectTilesHandler extends MessageHandler
 				// In range?
 				if(board.squareExists(x, y))
 				{
+					// Valid addition?
 					Square square = board.getSquare(x, y);
 					if(square.isTile())
 					{
@@ -60,28 +60,32 @@ public class SelectTilesHandler extends MessageHandler
 			
 			// Was this the last batch?
 			boolean isComplete = request.readBool();
-			if(isComplete)
+			if(!isComplete)
+			{
+				// Any updates?
+				if(newSelected.size() > 0)
+				{
+					match.broadcast(new TileSelectionExtendedMessage(player, newSelected));
+				}
+			}
+			else
 			{
 				// Validate selection and concat letters
 				StringBuilder letters = new StringBuilder(player.getSelection().size());
 				Square previous = null;
 				for(Square square : player.getSelection())
 				{
-					// Still a letter tile here?
-					if(square.isTile())
+					// Check tile + distance (anti-cheat)
+					if(square.isTile() && (previous == null || (Math.abs(square.x - previous.x) <= 1 && Math.abs(square.y - previous.y) <= 1)))
 					{
-						// Check distance (anti-cheat)
-						if(previous == null || (Math.abs(square.x - previous.x) <= 1 && Math.abs(square.y - previous.y) <= 1))
-						{
-							letters.append(square.getLetter());
-							previous = square;
-						}
-						else
-						{
-							// Invalid selection
-							letters = null;
-							break;
-						}
+						letters.append(square.getLetter());
+						previous = square;
+					}
+					else
+					{
+						// Invalid selection
+						letters = null;
+						break;
 					}
 				}
 				
@@ -108,19 +112,10 @@ public class SelectTilesHandler extends MessageHandler
 						match.broadcast(board.getUpdateGenerator().generateUpdates());
 					}
 				}
-			}
-			
-			// Clear selection?
-			if(isComplete)
-			{
-				newSelected = CLEAR_SELECTION;
+				
+				// Clear selection 
 				player.clearSelection();
-			}
-			
-			// Broadcast updates?
-			if(!newSelected.isEmpty() || newSelected == CLEAR_SELECTION)
-			{
-				match.broadcast(new TilesSelectedMessage(player, newSelected));
+				match.broadcast(new TileSelectionClearedMessage(player));
 			}
 		}
 	}
