@@ -4,8 +4,12 @@ import java.nio.charset.Charset;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 
+import com.google.common.base.Charsets;
+
 public abstract class NetMessage<T extends Enum<?>>
 {
+	protected static final Charset UTF_8 = Charsets.UTF_8;
+	
 	public final T op;
 	protected final ChannelBuffer buf;
 	
@@ -25,7 +29,7 @@ public abstract class NetMessage<T extends Enum<?>>
 	@Override
 	public final String toString()
 	{
-		String buf = this.buf.toString(Charset.defaultCharset());
+		String buf = this.buf.toString(UTF_8);
 		for(int i = 0; i <= 13; i++)
 		{
 			buf = buf.replace(Character.toString((char)i), "[" + i + "]");

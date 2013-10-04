@@ -53,7 +53,7 @@ public final class IncomingMessage extends NetMessage<Opcodes.Incoming>
 		byte[] bytes = new byte[length];
 		this.buf.readBytes(bytes);
 		
-		return new String(bytes);
+		return new String(bytes, UTF_8);
 	}
 	
 	public final int length()

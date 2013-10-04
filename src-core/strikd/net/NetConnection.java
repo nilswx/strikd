@@ -7,16 +7,18 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
-import strikd.communication.incoming.MessageHandlers;
 import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.MessageDecoder;
 import strikd.net.codec.MessageEncoder;
 import strikd.net.codec.OutgoingMessage;
+import strikd.net.security.ChannelDecryptionHandler;
+import strikd.net.security.ChannelEncryptionHandler;
 import strikd.sessions.Session;
 
 public class NetConnection extends SimpleChannelHandler
@@ -77,11 +79,7 @@ public class NetConnection extends SimpleChannelHandler
 	{
 		if(e.getMessage() instanceof IncomingMessage)
 		{
-			IncomingMessage msg = (IncomingMessage) e.getMessage();
-			
-			logger.debug("received " + msg);
-			
-			MessageHandlers.get(msg.op).handle(this.session, msg);
+			this.session.onNetMessage((IncomingMessage) e.getMessage());
 		}
 	}
 	
@@ -94,8 +92,17 @@ public class NetConnection extends SimpleChannelHandler
 	
 	public void send(OutgoingMessage msg)
 	{
-		logger.debug(msg);
 		this.channel.write(msg);
+	}
+	
+	public void setServerCrypto(byte[] key)
+	{
+		this.channel.getPipeline().addBefore("encoder", "encryption", new ChannelEncryptionHandler(key));
+	}
+	
+	public void setClientCrypto(byte[] key)
+	{
+		this.channel.getPipeline().addBefore("decoder", "decryption", new ChannelDecryptionHandler(key));
 	}
 	
 	public boolean isOpen()
@@ -124,5 +131,11 @@ public class NetConnection extends SimpleChannelHandler
 		{
 			this.session = session;
 		}
+	}
+	
+	public boolean isSecure()
+	{
+		ChannelPipeline pipeline = this.channel.getPipeline();
+		return (pipeline.get(ChannelEncryptionHandler.class) != null && pipeline.get(ChannelDecryptionHandler.class) != null);
 	}
 }

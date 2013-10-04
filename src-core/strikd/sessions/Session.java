@@ -1,10 +1,15 @@
 package strikd.sessions;
 
+import java.util.UUID;
+
 import org.apache.log4j.Logger;
 
 import strikd.Server;
 import strikd.ServerDescriptor;
+import strikd.communication.Opcodes;
+import strikd.communication.incoming.MessageHandlers;
 import strikd.communication.outgoing.NameChangedMessage;
+import strikd.communication.outgoing.ServerCryptoMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.communication.outgoing.VersionCheckMessage;
 import strikd.game.match.Match;
@@ -12,16 +17,20 @@ import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.user.User;
 import strikd.net.NetConnection;
+import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.OutgoingMessage;
 
 public class Session extends Server.Referent
 {
+	private static final boolean USE_CRYPTO = true;
+	
 	private static final Logger logger = Logger.getLogger(Session.class);
 	
 	private final long sessionId;
 	private final NetConnection connection;
 	private boolean isEnded;
 	
+	private boolean handshakeOK;
 	private User user;
 	private MatchPlayer matchPlayer;
 	private PlayerQueue.Entry queueEntry;
@@ -35,12 +44,33 @@ public class Session extends Server.Referent
 
 	public void hello()
 	{
+		// Forces client to validate version and update if needed
+		this.send(new VersionCheckMessage(1, 0, "Waterduck"));
+		
+		// Crypto enabled?
+		if(USE_CRYPTO)
+		{
+			// Initiate handshake flow
+			byte[] key = UUID.randomUUID().toString().getBytes();
+			this.send(new ServerCryptoMessage(key));
+			this.connection.setServerCrypto(key);
+		}
+		else
+		{
+			// Short-circuit flow
+			this.handshakeOK();
+		}
+	}
+	
+	public void handshakeOK()
+	{
+		// Handshake OK!
+		logger.debug("handshake OK");
+		this.handshakeOK = true;
+		
 		// Send session info
 		ServerDescriptor server = this.getServer().getDescriptor();
 		this.send(new SessionInfoMessage(this.sessionId, server.name));
-		
-		// Notify of latest version (forces client to validate and update if needed)
-		this.send(new VersionCheckMessage(1, 0, "Waterduck"));
 	}
 	
 	public void end(String reason)
@@ -82,8 +112,24 @@ public class Session extends Server.Referent
 		this.getServer().getUserRegister().saveUser(this.user);
 	}
 	
+	public void onNetMessage(IncomingMessage msg)
+	{
+		logger.debug("received " + msg);
+		
+		if(this.handshakeOK || (msg.op == Opcodes.Incoming.CLIENT_CRYPTO))
+		{
+			MessageHandlers.get(msg.op).handle(this, msg);
+		}
+		else
+		{
+			this.end(String.format("received %s before handshake", msg.op));
+		}
+	}
+	
 	public void send(OutgoingMessage msg)
 	{
+		logger.debug("send " + msg);
+		
 		this.connection.send(msg);
 	}
 	
@@ -95,6 +141,11 @@ public class Session extends Server.Referent
 	public NetConnection getConnection()
 	{
 		return this.connection;
+	}
+	
+	public boolean isHandshakeOK()
+	{
+		return this.handshakeOK;
 	}
 	
 	public boolean isLoggedIn()

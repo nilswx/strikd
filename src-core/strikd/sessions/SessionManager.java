@@ -51,7 +51,11 @@ public class SessionManager extends Server.Referent
 		if(session != null)
 		{
 			User user = session.getUser();
-			if(user != null)
+			if(user == null)
+			{
+				logger.warn(String.format("session #%d (%s) ended early (%s)", sessionId, session.getConnection().getIpAddress(), reason));
+			}
+			else
 			{
 				this.userSessions.remove(user.id);
 				logger.debug(String.format("%s logged out (%s)", user, reason));
@@ -78,7 +82,7 @@ public class SessionManager extends Server.Referent
 			this.loginCounter.incrementAndGet();
 			user.logins++;
 			
-			logger.debug(String.format("%s logged in (#%d) in from %s (%s)", user, user.logins, session.getConnection().getIpAddress(), user.platform));
+			logger.info(String.format("%s logged in (#%d) in from %s (%s)", user, user.logins, session.getConnection().getIpAddress(), user.platform));
 		}
 	}
 	

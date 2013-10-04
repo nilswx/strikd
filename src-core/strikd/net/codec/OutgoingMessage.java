@@ -38,7 +38,7 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 	{
 		if(str == null) str = "";
 		
-		byte[] bytes = str.getBytes();
+		byte[] bytes = str.getBytes(UTF_8);
 		this.buf.writeShort(bytes.length);
 		this.buf.writeBytes(bytes);
 	}

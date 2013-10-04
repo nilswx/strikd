@@ -6,6 +6,7 @@ public interface Opcodes
 	
 	public enum Incoming implements Opcode
 	{
+		CLIENT_CRYPTO,
 	    CREATE_USER,
 	    LOGIN,
 	    FACEBOOK_LINK,
@@ -29,6 +30,7 @@ public interface Opcodes
 	public enum Outgoing implements Opcode
 	{
 	    VERSIONCHECK,
+		SERVER_CRYPTO,
 	    SESSION_INFO,
 	    CREDENTIALS,
 	    USER_INFO,
@@ -48,12 +50,5 @@ public interface Opcodes
 		ALERT,
 	    SERVER_SHUTTING_DOWN,
 	    SERVER_REDIRECT;
-		
-		private static final Opcodes.Outgoing[] values = values();
-		
-		public static final Opcodes.Outgoing valueOf(byte opcode)
-		{
-			return values[opcode];
-		}
 	}
 }
