@@ -22,18 +22,20 @@ public class FacebookLinkHandler extends MessageHandler
 	{
 		// Receive latest Facebook link credentials
 		FacebookIdentity identity = new FacebookIdentity();
-		identity.userId = request.readLong();
 		identity.token = request.readStr();
 		
 		// Validate identity
 		Facebook facebook = identity.getAPI();
 		if(facebook.isAuthorized())
 		{
+			// Retrieve user profile
+			FacebookProfile profile = facebook.userOperations().getUserProfile();
+			
 			// Set identity
+			identity.userId = Long.parseLong(profile.getId());
 			session.getUser().fbIdentity = identity;
 			
 			// Rename user to user's first name
-			FacebookProfile profile = facebook.userOperations().getUserProfile();
 			session.renameUser(profile.getFirstName());
 		}
 		else
