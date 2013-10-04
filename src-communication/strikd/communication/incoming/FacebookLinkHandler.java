@@ -1,5 +1,6 @@
 package strikd.communication.incoming;
 
+import org.apache.log4j.Logger;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 
@@ -11,6 +12,8 @@ import strikd.net.codec.IncomingMessage;
 
 public class FacebookLinkHandler extends MessageHandler
 {
+	private static final Logger logger = Logger.getLogger(FacebookLinkHandler.class);
+	
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
@@ -21,31 +24,34 @@ public class FacebookLinkHandler extends MessageHandler
 	public void handle(Session session, IncomingMessage request)
 	{
 		// Receive latest Facebook link credentials
-		FacebookIdentity identity = new FacebookIdentity();
-		identity.token = request.readStr();
+		FacebookIdentity newIdentity = new FacebookIdentity();
+		newIdentity.token = request.readStr();
 		
-		// Validate identity
-		Facebook facebook = identity.getAPI();
-		if(facebook.isAuthorized())
+		// Validate token (perform on a background worker system?)
+		Facebook facebook = newIdentity.getAPI();
+		try
 		{
-			// Retrieve user profile
+			// If this operation succeeds, then the token is valid
 			FacebookProfile profile = facebook.userOperations().getUserProfile();
 			
-			// Set identity
-			identity.userId = Long.parseLong(profile.getId());
-			session.getUser().fbIdentity = identity;
-			
+			// Set user ID for quick lookups later
+			newIdentity.userId = Long.parseLong(profile.getId());
+				
 			// Rename user to user's first name
 			session.renameUser(profile.getFirstName());
 		}
-		else
+		catch(Exception e)
 		{
-			session.getUser().fbIdentity = null;
+			logger.warn(String.format("Facebook link failed!", e));
+			newIdentity = null;
 		}
+		
+		// Save current link status
+		session.getUser().fbIdentity = newIdentity;
 		session.saveData();
 		
 		// Send current status
-		session.send(new FacebookStatusMessage(true));
+		session.send(new FacebookStatusMessage(session.getUser().isFacebookLinked()));
 	}
 	
 	//logger.debug(String.format("FB #%s (\"%s %s\", %s) has %d FB friends", profile.getId(), profile.getFirstName(), profile.getLastName(), profile.getGender(), facebook.friendOperations().getFriendIds().size())); 
