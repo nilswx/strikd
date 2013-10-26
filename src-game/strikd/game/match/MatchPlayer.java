@@ -109,4 +109,10 @@ public class MatchPlayer
 	{
 		this.selected.clear();
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getInfo().name;
+	}
 }

@@ -2,6 +2,8 @@ package strikd.game.match;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
+
 import strikd.Server;
 import strikd.communication.outgoing.AnnounceMatchMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
@@ -13,6 +15,8 @@ import strikd.net.codec.OutgoingMessage;
 
 public class Match
 {
+	private static final Logger logger = Logger.getLogger(Match.class);
+	
 	private final long matchId;
 	private final LocaleBundle locale;
 	
@@ -45,9 +49,6 @@ public class Match
 		// Generate board
 		this.board.regenerate();
 		System.out.println(this.board.toMatrixString());
-		
-		// Record start time
-		this.startTime = System.currentTimeMillis();
 	}
 	
 	public void destroy()
@@ -96,8 +97,10 @@ public class Match
 
 	public void removePlayer(MatchPlayer player)
 	{
-		// The given player loses...
-		// TODO: lose
+		// The removed player loses
+		MatchPlayer winner = this.getOpponent(player);
+		MatchPlayer loser = player;
+		logger.debug(String.format("%s - %s wins, %s loses!", this, winner, loser));
 		
 		// ... and the match is destroyed!
 		Server server = player.getSession().getServer();
