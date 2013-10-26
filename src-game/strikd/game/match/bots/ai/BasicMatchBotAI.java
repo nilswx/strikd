@@ -11,7 +11,7 @@ import strikd.game.match.bots.MatchBotPlayer;
 
 public class BasicMatchBotAI extends MatchBotAI
 {
-	private static final Logger logger = Logger.getLogger(MatchBotPlayer.class);
+	private static final Logger logger = Logger.getLogger(BasicMatchBotAI.class);
 	
 	public BasicMatchBotAI(MatchBotPlayer player)
 	{
