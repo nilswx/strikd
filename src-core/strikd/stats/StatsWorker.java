@@ -1,6 +1,9 @@
-package strikd;
+package strikd.stats;
 
 import org.jongo.MongoCollection;
+
+import strikd.Server;
+import strikd.ServerDescriptor;
 
 public class StatsWorker implements Runnable
 {

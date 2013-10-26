@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,8 @@ import strikd.game.user.UserRegister;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
 import strikd.sessions.SessionManager;
+import strikd.stats.MemoryWatchdog;
+import strikd.stats.StatsWorker;
 
 public class Server
 {
@@ -101,8 +104,10 @@ public class Server
 		this.descriptor = new ServerDescriptor(this, props.getProperty("instance.name"));
 		logger.info(String.format("SERVER ONLINE %s", this.descriptor));
 		
-		// Start stats worker
-		Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new StatsWorker(this), 0, 1000, TimeUnit.MILLISECONDS);
+		// Start statistics workers
+		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+		scheduler.scheduleWithFixedDelay(new StatsWorker(this), 0, 1, TimeUnit.SECONDS);
+		scheduler.scheduleWithFixedDelay(new MemoryWatchdog(), 0, 30, TimeUnit.SECONDS);
 	}
 
 	public void destroy()
