@@ -29,7 +29,7 @@ public class MatchPlayer
 		this.session.send(msg);
 	}
 		
-	public void setMatch(Match match, int playerId)
+	public MatchPlayer setMatch(Match match, int playerId)
 	{
 		this.match = match;
 		this.playerId = playerId;
@@ -37,6 +37,8 @@ public class MatchPlayer
 		{
 			this.session.setMatchPlayer(this);
 		}
+		
+		return this;
 	}
 	
 	public void leave()

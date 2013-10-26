@@ -1,5 +1,6 @@
-package strikd.game.board;
+package strikd.game.board.impl;
 
+import strikd.game.board.Board;
 import strikd.words.WordDictionary;
 
 public class IndexedBoard extends Board

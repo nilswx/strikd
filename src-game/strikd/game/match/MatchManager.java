@@ -82,7 +82,7 @@ public class MatchManager extends Server.Referent
 		return null;
 	}
 
-	public Match newMatch(LocaleBundle locale, MatchPlayer... players)
+	public Match newMatch(LocaleBundle locale, MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
 		// Allow new matches?
 		if(this.getServer().isShutdownMode())
@@ -93,7 +93,7 @@ public class MatchManager extends Server.Referent
 		{
 			// Initialize a new match with given details and a fresh match ID
 			long matchId = this.matchCounter.incrementAndGet();
-			Match match = new Match(matchId, locale, players);
+			Match match = new Match(matchId, locale, playerOne, playerTwo);
 			
 			// Add to map
 			logger.info(String.format("created %s", match));

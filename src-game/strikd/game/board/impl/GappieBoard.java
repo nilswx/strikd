@@ -1,8 +1,11 @@
-package strikd.game.board;
+package strikd.game.board.impl;
 
 import java.awt.Point;
 import java.io.IOException;
 
+import strikd.game.board.Board;
+import strikd.game.board.Direction8;
+import strikd.game.board.StaticLocale;
 import strikd.words.Word;
 import strikd.words.WordDictionary;
 

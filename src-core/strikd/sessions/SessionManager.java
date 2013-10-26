@@ -37,7 +37,10 @@ public class SessionManager extends Server.Referent
 		long sessionId = this.sessionCounter.incrementAndGet();
 		Session session = new Session(sessionId, connection, this.getServer());
 		connection.setSession(session);
+		
+		// Add to session map
 		this.sessions.put(sessionId, session);
+		logger.debug(String.format("session #%d connected from %s", session.getSessionId(), session.getConnection().getIpAddress()));
 		
 		// Greet session
 		session.hello();

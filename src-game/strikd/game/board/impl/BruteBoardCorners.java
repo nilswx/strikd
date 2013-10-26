@@ -1,4 +1,4 @@
-package strikd.game.board;
+package strikd.game.board.impl;
 
 import java.awt.Point;
 import java.io.IOException;
@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import strikd.game.board.Board;
+import strikd.game.board.Direction8;
+import strikd.game.board.StaticLocale;
 import strikd.words.Word;
 import strikd.words.WordDictionary;
 
-public class BruteBoard extends Board
+public class BruteBoardCorners extends Board
 {
-	public BruteBoard(int width, int height, WordDictionary dictionary)
+	public BruteBoardCorners(int width, int height, WordDictionary dictionary)
 	{
 		super(width, height, dictionary);
 	}
@@ -136,12 +139,14 @@ public class BruteBoard extends Board
 	public static void main(String[] args) throws IOException
 	{
 		long start = System.currentTimeMillis();
-		Board board = new BruteBoard(5, 6, StaticLocale.dict);
-		board.regenerate();
+		Board board = new BruteBoardCorners(5, 6, StaticLocale.dict);
+		board.fill();
 		long time = System.currentTimeMillis() - start;
 		
 		System.out.println(board.toString() + " => " + time + " ms");
 		System.out.println();
 		System.out.println(board.toMatrixString());
+		
+		System.out.println(board.getUpdateGenerator().generateUpdates());
 	}
 }

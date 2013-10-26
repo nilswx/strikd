@@ -39,7 +39,10 @@ public class LoginHandler extends MessageHandler
 			}
 			else
 			{
+				// Login OK!
 				session.setUser(user, String.format("%s @ %s", hardware, systemVersion));
+				
+				// Push user data
 				session.send(new UserInfoMessage(user));
 				session.send(new FacebookStatusMessage(user.isFacebookLinked()));
 				session.send(new CurrencyBalanceMessage(user.balance));

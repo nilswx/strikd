@@ -21,9 +21,9 @@ public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 	
 	public abstract void dequeue(Entry entry);
 	
-	protected Match newMatch(MatchPlayer... players)
+	protected Match newMatch(MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
-		return this.matchMgr.newMatch(this.locale, players);
+		return this.matchMgr.newMatch(this.locale, playerOne, playerTwo);
 	}
 	
 	public LocaleBundle getLocale()

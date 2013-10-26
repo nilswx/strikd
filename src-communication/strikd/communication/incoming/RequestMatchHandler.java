@@ -19,16 +19,17 @@ public class RequestMatchHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		if(session.isInMatch())
-		{
-			// TODO: exit match (= lose)
-		}
-		
+		// Exit queue/match
 		if(session.isInQueue())
 		{
 			session.exitQueue();
 		}
+		else if(session.isInMatch())
+		{
+			session.exitMatch();
+		}
 		
+		// Can play matches?
 		Server server = session.getServer();
 		if(server.isShutdownMode())
 		{
@@ -37,6 +38,7 @@ public class RequestMatchHandler extends MessageHandler
 		}
 		else
 		{
+			// Request match
 			MatchManager matchMgr = server.getMatchMgr();
 			PlayerQueue.Entry queueEntry = matchMgr.requestMatch(session);
 			if(queueEntry != null)

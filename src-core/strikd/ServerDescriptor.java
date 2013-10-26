@@ -58,7 +58,7 @@ public class ServerDescriptor
 	@JsonProperty
 	public long totalLogins()
 	{
-		return 0;
+		return this.server.getSessionMgr().totalLogins();
 	}
 	
 	@JsonProperty

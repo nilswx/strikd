@@ -4,9 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 import strikd.Server;
 import strikd.communication.outgoing.AnnounceMatchMessage;
-import strikd.communication.outgoing.StartMatchMessage;
+import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Board;
-import strikd.game.board.BruteBoard;
+import strikd.game.board.impl.BruteBoard;
 import strikd.locale.LocaleBundle;
 import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.OutgoingMessage;
@@ -15,33 +15,32 @@ public class Match
 {
 	private final long matchId;
 	private final LocaleBundle locale;
-	private final MatchPlayer players[];
+	
+	private final MatchPlayer playerOne;
+	private final MatchPlayer playerTwo;
+	
 	private final MatchTimer timer;
 	private final Board board;
 	
 	private final byte loadingTime;
-	private final long startTime;
+	private long startTime;
 	
-	public Match(long matchId, LocaleBundle locale, MatchPlayer... players)
+	public Match(long matchId, LocaleBundle locale, MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
+		// Setup static match data
 		this.matchId = matchId;
 		this.locale = locale;
-		this.players = players;
-		
-		// The round length for this match
-		this.timer = new MatchTimer((int)TimeUnit.MINUTES.toSeconds(2));
-		
-		// Install the board generation algorithm for this match
-		this.board = new BruteBoard(5, 6, locale.getDictionary(DictionaryType.GENERATOR));
-		
-		// The loading/advertisement time for this match (0 for development)
 		this.loadingTime = 0;
 		
-		// Assign unique IDs to all players
-		for(int playerId = 0; playerId < players.length; playerId++)
-		{
-			players[playerId].setMatch(this, playerId);
-		}
+		// Setup timer
+		this.timer = new MatchTimer((int)TimeUnit.MINUTES.toSeconds(2));
+		
+		// Install the board implementation
+		this.board = new BruteBoard(5, 6, locale.getDictionary(DictionaryType.GENERATOR));
+		
+		// Link the players to this match with a personal ID
+		this.playerOne = playerOne.setMatch(this, 1);
+		this.playerTwo = playerTwo.setMatch(this, 2);
 		
 		// Generate board
 		this.board.regenerate();
@@ -58,42 +57,42 @@ public class Match
 	
 	public void announce()
 	{
-		this.players[0].send(new AnnounceMatchMessage(this, this.players[0], this.players[1]));
-		this.players[1].send(new AnnounceMatchMessage(this, this.players[1], this.players[0]));
+		// Send personal ANNOUNCE messages to both players
+		this.playerOne.send(new AnnounceMatchMessage(this, this.playerOne, this.playerTwo));
+		this.playerTwo.send(new AnnounceMatchMessage(this, this.playerTwo, this.playerOne));
 	}
 	
 	public void broadcast(OutgoingMessage msg)
 	{
-		for(MatchPlayer player : this.players)
-		{
-			player.send(msg);
-		}
+		// Send to both players
+		this.playerOne.send(msg);
+		this.playerTwo.send(msg);
 	}
 	
 	public void checkReady()
 	{
-		for(MatchPlayer player : this.players)
+		// Both players ready?
+		if(this.playerOne.isReady() && this.playerTwo.isReady())
 		{
-			if(!player.isReady())
-			{
-				return;
-			}
+			this.start();
 		}
-		
-		this.start();
 	}
 	
-	public void start()
+	private void start()
 	{
-		// Initial board!
-		this.broadcast(this.board.getUpdateGenerator().generateUpdates());
-		
-		// Start the timers at the clients etc, the game is ON!
-		this.broadcast(new StartMatchMessage());
-		
-		// TODO: start serverside match loop for bot AI etc?
+		// Not already started?
+		if(this.startTime == 0)
+		{
+			// Initial board!
+			this.broadcast(this.board.getUpdateGenerator().generateUpdates());
+			
+			// Start the timers at the clients etc, the game is ON!
+			this.broadcast(new MatchStartedMessage());
+			
+			// Record start time
+			this.startTime = System.currentTimeMillis();
+		}
 	}
-	
 
 	public void removePlayer(MatchPlayer player)
 	{
@@ -118,11 +117,16 @@ public class Match
 	public LocaleBundle getLocale()
 	{
 		return this.locale;
-	}	
+	}
+	
+	public MatchPlayer getOpponent(MatchPlayer player)
+	{
+		return (player == this.playerOne) ? this.playerTwo : this.playerOne;
+	}
 	
 	public MatchPlayer[] getPlayers()
 	{
-		return this.players;
+		return new MatchPlayer[] { this.playerOne, this.playerTwo };
 	}
 	
 	public MatchTimer getTimer()

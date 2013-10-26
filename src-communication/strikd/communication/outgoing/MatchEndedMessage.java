@@ -3,10 +3,10 @@ package strikd.communication.outgoing;
 import strikd.communication.Opcodes;
 import strikd.net.codec.OutgoingMessage;
 
-public class StartMatchMessage extends OutgoingMessage
+public class MatchEndedMessage extends OutgoingMessage
 {
-	public StartMatchMessage()
+	public MatchEndedMessage()
 	{
-		super(Opcodes.Outgoing.START_MATCH);
+		super(Opcodes.Outgoing.END_MATCH);
 	}
 }

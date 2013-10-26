@@ -7,8 +7,6 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.jongo.marshall.jackson.oid.Id;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import strikd.game.items.Item;
 
 public class User
@@ -18,21 +16,27 @@ public class User
 	public String token;
 	public String email;
 	
-	public String name; // Allow users to purchase a name color?
+	// Customization
+	public String name;
 	public Avatar avatar;
 	public String country;
+	public String language;
+	
+	public int currentServerId;
+	
+	// Ranking
+	public int xp;
+	public int level;
 	
 	// Stats
 	public int logins;
-	public int xp;
 	public int matches;
 	public int wins;
+	public int losses;
 	public String platform;
 	
+	// Inventory
 	public int balance;
-	public String language;
-	
-	@JsonFormat(shape=JsonFormat.Shape.ARRAY)
 	public List<Item> items = new ArrayList<Item>();
 	
 	public FacebookIdentity fbIdentity;
@@ -42,14 +46,19 @@ public class User
 		return new Date(this.id.getTime());
 	}
 	
-	public int getLosses()
+	public int getDraws()
 	{
-		return (this.matches - this.wins);
+		return (this.matches - (this.wins - this.losses));
 	}
 	
 	public boolean isFacebookLinked()
 	{
 		return (this.fbIdentity != null);
+	}
+	
+	public boolean isOnline()
+	{
+		return (this.currentServerId > 0);
 	}
 	
 	@Override

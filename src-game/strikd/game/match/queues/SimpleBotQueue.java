@@ -3,9 +3,9 @@ package strikd.game.match.queues;
 import java.util.Collections;
 import java.util.Iterator;
 
-import strikd.game.match.MatchBotFactory;
 import strikd.game.match.MatchManager;
 import strikd.game.match.MatchPlayer;
+import strikd.game.match.bots.MatchBotFactory;
 import strikd.locale.LocaleBundle;
 import strikd.sessions.Session;
 
