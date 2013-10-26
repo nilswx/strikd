@@ -7,6 +7,6 @@ public class MatchStartedMessage extends OutgoingMessage
 {
 	public MatchStartedMessage()
 	{
-		super(Opcodes.Outgoing.START_MATCH);
+		super(Opcodes.Outgoing.MATCH_STARTED);
 	}
 }

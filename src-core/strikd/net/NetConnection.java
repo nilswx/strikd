@@ -92,7 +92,10 @@ public class NetConnection extends SimpleChannelHandler
 	
 	public void send(OutgoingMessage msg)
 	{
-		this.channel.write(msg);
+		if(this.channel.isOpen())
+		{
+			this.channel.write(msg);
+		}
 	}
 	
 	public void setServerCrypto(byte[] key)

@@ -7,6 +7,6 @@ public class MatchEndedMessage extends OutgoingMessage
 {
 	public MatchEndedMessage()
 	{
-		super(Opcodes.Outgoing.END_MATCH);
+		super(Opcodes.Outgoing.MATCH_ENDED);
 	}
 }

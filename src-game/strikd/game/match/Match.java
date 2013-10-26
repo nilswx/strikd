@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
-import strikd.Server;
 import strikd.communication.outgoing.AnnounceMatchMessage;
+import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Board;
 import strikd.game.board.impl.BruteBoard;
@@ -19,6 +19,7 @@ public class Match
 	
 	private final long matchId;
 	private final LocaleBundle locale;
+	private final MatchManager matchMgr;
 	
 	private final MatchPlayer playerOne;
 	private final MatchPlayer playerTwo;
@@ -29,14 +30,15 @@ public class Match
 	private final byte loadingTime;
 	private long startTime;
 	
-	public Match(long matchId, LocaleBundle locale, MatchPlayer playerOne, MatchPlayer playerTwo)
+	public Match(long matchId, LocaleBundle locale, MatchManager matchMgr, MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
 		// Setup static match data
 		this.matchId = matchId;
 		this.locale = locale;
-		this.loadingTime = 0;
+		this.matchMgr = matchMgr;
 		
 		// Setup timer
+		this.loadingTime = 0;
 		this.timer = new MatchTimer((int)TimeUnit.MINUTES.toSeconds(2));
 		
 		// Install the board implementation
@@ -82,7 +84,7 @@ public class Match
 	private void start()
 	{
 		// Not already started?
-		if(this.startTime == 0)
+		if(!this.isStarted())
 		{
 			// Initial board!
 			this.broadcast(this.board.getUpdateGenerator().generateUpdates());
@@ -95,16 +97,39 @@ public class Match
 		}
 	}
 
+
+	public void end(MatchPlayer winner)
+	{
+		// Can be ended?
+		if(this.isStarted())
+		{
+			// Draw?
+			if(winner == null)
+			{
+				logger.debug(String.format("%s: draw...", this));
+			}
+			else
+			{
+				// Determine loser
+				MatchPlayer loser = this.getOpponent(winner);
+				
+				// Update stats
+				winner.getInfo().wins++;
+				loser.getInfo().losses++;
+				logger.debug(String.format("%s: %s wins, %s loses!", this, winner, loser));
+				
+				// Broadcast event
+				this.broadcast(new MatchEndedMessage());
+			}
+			
+			// Request match to be destroyed
+			this.matchMgr.destroyMatch(this.matchId);
+		}
+	}
+	
 	public void removePlayer(MatchPlayer player)
 	{
-		// The removed player loses
-		MatchPlayer winner = this.getOpponent(player);
-		MatchPlayer loser = player;
-		logger.debug(String.format("%s - %s wins, %s loses!", this, winner, loser));
-		
-		// ... and the match is destroyed!
-		Server server = player.getSession().getServer();
-		server.getMatchMgr().destroyMatch(this.matchId);
+		this.end(this.getOpponent(player));
 	}
 	
 	public boolean isEnded()
@@ -150,6 +175,11 @@ public class Match
 	public long getStartTime()
 	{
 		return this.startTime;
+	}
+	
+	public boolean isStarted()
+	{
+		return (this.startTime > 0);
 	}
 	
 	@Override

@@ -93,7 +93,7 @@ public class MatchManager extends Server.Referent
 		{
 			// Initialize a new match with given details and a fresh match ID
 			long matchId = this.matchCounter.incrementAndGet();
-			Match match = new Match(matchId, locale, playerOne, playerTwo);
+			Match match = new Match(matchId, locale, this, playerOne, playerTwo);
 			
 			// Add to map
 			logger.info(String.format("created %s", match));

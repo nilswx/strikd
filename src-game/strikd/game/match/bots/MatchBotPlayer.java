@@ -16,7 +16,7 @@ import strikd.net.codec.OutgoingMessage;
 
 public class MatchBotPlayer extends MatchPlayer implements Runnable
 {
-	private static ScheduledExecutorService sharedAiExecutor = Executors.newSingleThreadScheduledExecutor();
+	private static final ScheduledExecutorService sharedAiExecutor = Executors.newSingleThreadScheduledExecutor();
 	
 	private final User bot;
 	private final MatchBotAI ai;
