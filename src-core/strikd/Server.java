@@ -23,6 +23,7 @@ import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
 import strikd.sessions.SessionManager;
 import strikd.stats.MemoryWatchdog;
+import strikd.util.NamedThreadFactory;
 
 public class Server
 {
@@ -107,10 +108,10 @@ public class Server
 		// Print server info
 		logger.info(String.format("SERVER ONLINE %s", this.serverCluster.getSelf()));
 		
-		// Start statistics workers
-		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleWithFixedDelay(this.serverCluster, 0, 1, TimeUnit.SECONDS);
-		scheduler.scheduleWithFixedDelay(new MemoryWatchdog(), 0, 30, TimeUnit.SECONDS);
+		// Start cluster worker
+		ScheduledExecutorService statistics = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Cluster Sync"));
+		statistics.scheduleWithFixedDelay(this.serverCluster, 0, 1, TimeUnit.SECONDS);
+		statistics.scheduleWithFixedDelay(new MemoryWatchdog(), 0, 30, TimeUnit.SECONDS);
 	}
 
 	public void destroy()

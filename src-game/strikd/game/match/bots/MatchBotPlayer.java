@@ -13,10 +13,11 @@ import strikd.game.match.MatchPlayer;
 import strikd.game.match.bots.ai.BasicMatchBotAI;
 import strikd.game.user.User;
 import strikd.net.codec.OutgoingMessage;
+import strikd.util.NamedThreadFactory;
 
 public class MatchBotPlayer extends MatchPlayer implements Runnable
 {
-	private static final ScheduledExecutorService sharedAiExecutor = Executors.newSingleThreadScheduledExecutor();
+	private static final ScheduledExecutorService sharedAiExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("AI Processor"));
 	
 	private final User bot;
 	private final MatchBotAI ai;
