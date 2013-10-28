@@ -27,7 +27,6 @@ import strikd.util.NamedThreadFactory;
 
 public class Server
 {
-	private static final String version = "0.0.1-dev";
 	private static final Logger logger = Logger.getLogger(Server.class);
 	
 	private final Jongo dbCluster;
@@ -156,11 +155,6 @@ public class Server
 	public void shutdownNow()
 	{
 		this.destroy(true);
-	}
-	
-	public String getVersion()
-	{
-		return Server.version;
 	}
 	
 	public Jongo getDbCluster()
