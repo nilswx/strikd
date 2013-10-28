@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import strikd.game.board.Board;
 import strikd.game.board.Square;
+import strikd.game.board.StaticLocale;
 import strikd.util.NamedThreadFactory;
 import strikd.words.WordDictionary;
 
@@ -43,19 +44,20 @@ public class AgingGravityBoard extends GravityBoard implements Runnable
 	public void run()
 	{
 		// Age tiles and crush the ones that are too old
-		AgingSquare[][] squares = (AgingSquare[][])this.squares;
 		for(int x = 0; x < this.getWidth(); x++)
 		{
 			for(int y = 0; y < this.getHeight(); y++)
 			{
 				// Tile here, and too old now?
-				if(squares[x][y].isTile() && squares[x][y].age() >= this.maxAge)
+				AgingSquare square = (AgingSquare)this.squares[x][y];
+				if(square.isTile() && square.age() >= this.maxAge)
 				{
 					// Crush it
-					squares[x][y].clear();
+					square.clear();
 				}
 			}
 		}
+		System.out.println(this.toMatrixString());
 		
 		// Fill new gaps
 		this.update();
@@ -93,5 +95,11 @@ public class AgingGravityBoard extends GravityBoard implements Runnable
 			super.clear();
 			this.resetAge();
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		Board board = new AgingGravityBoard(5, 5, StaticLocale.getDictionary(), 0, 5);
+		board.rebuild();
 	}
 }

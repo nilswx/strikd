@@ -1,9 +1,8 @@
 package strikd.game.board.impl;
 
-import strikd.game.board.Board;
 import strikd.words.WordDictionary;
 
-public class GravityBoard extends Board
+public class GravityBoard extends BruteBoard
 {
 	public GravityBoard(int width, int height, WordDictionary dictionary)
 	{
@@ -33,16 +32,7 @@ public class GravityBoard extends Board
 			}
 		}
 		
-		// Start at lowest gaps, fill gaps with words (use the surrounding tiles)
-		for(int x = 0; x < width; x++)
-		{
-			for(int y = (height - 1); y >= 0; y--)
-			{
-				if(this.squares[x][y].isNull())
-				{
-					
-				}
-			}
-		}
+		// Fill the gaps
+		super.update();
 	}
 }
