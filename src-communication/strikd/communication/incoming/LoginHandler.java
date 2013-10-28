@@ -44,7 +44,7 @@ public class LoginHandler extends MessageHandler
 				
 				// Push user data
 				session.send(new UserInfoMessage(user));
-				session.send(new FacebookStatusMessage(user.isFacebookLinked()));
+				session.send(new FacebookStatusMessage(user.isFacebookLinked(), user.liked));
 				session.send(new CurrencyBalanceMessage(user.balance));
 				session.send(new ItemsMessage(user.items));
 			}

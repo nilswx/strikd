@@ -19,7 +19,6 @@ public class User
 	// Customization
 	public String name;
 	public Avatar avatar;
-	public String country;
 	public String language;
 	
 	public int currentServerId;
@@ -39,7 +38,10 @@ public class User
 	public int balance;
 	public List<Item> items = new ArrayList<Item>();
 	
+	// Personal
+	public String country;
 	public FacebookIdentity fbIdentity;
+	public boolean liked;
 	
 	public Date getJoinTime()
 	{

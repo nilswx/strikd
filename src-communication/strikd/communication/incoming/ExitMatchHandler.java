@@ -4,12 +4,12 @@ import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.net.codec.IncomingMessage;
 
-public class ExitMatchQueueHandler extends MessageHandler
+public class ExitMatchHandler extends MessageHandler
 {
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
-		return Opcodes.Incoming.EXIT_MATCH_QUEUE;
+		return Opcodes.Incoming.EXIT_MATCH;
 	}
 	
 	@Override
@@ -18,6 +18,10 @@ public class ExitMatchQueueHandler extends MessageHandler
 		if(session.isInQueue())
 		{
 			session.exitQueue();
+		}
+		else if(session.isInMatch())
+		{
+			session.exitMatch();
 		}
 	}
 }

@@ -39,6 +39,9 @@ public class FacebookLinkHandler extends MessageHandler
 				
 			// Rename user to user's first name
 			session.renameUser(profile.getFirstName());
+			
+			// TODO: Set country
+			//session.getUser().country = profile.getL
 		}
 		catch(Exception e)
 		{
@@ -51,7 +54,7 @@ public class FacebookLinkHandler extends MessageHandler
 		session.saveData();
 		
 		// Send current status
-		session.send(new FacebookStatusMessage(session.getUser().isFacebookLinked()));
+		session.send(new FacebookStatusMessage(session.getUser().isFacebookLinked(), session.getUser().liked));
 	}
 	
 	//logger.debug(String.format("FB #%s (\"%s %s\", %s) has %d FB friends", profile.getId(), profile.getFirstName(), profile.getLastName(), profile.getGender(), facebook.friendOperations().getFriendIds().size())); 
