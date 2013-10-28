@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import strikd.Server;
-import strikd.ServerDescriptor;
+import strikd.cluster.ServerDescriptor;
 import strikd.communication.Opcodes;
 import strikd.communication.incoming.MessageHandlers;
 import strikd.communication.outgoing.NameChangedMessage;
@@ -69,7 +69,7 @@ public class Session extends Server.Referent
 		this.handshakeOK = true;
 		
 		// Send session info
-		ServerDescriptor server = this.getServer().getDescriptor();
+		ServerDescriptor server = this.getServer().getServerCluster().getSelf();
 		this.send(new SessionInfoMessage(this.sessionId, server.name));
 	}
 	

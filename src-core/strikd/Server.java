@@ -14,6 +14,7 @@ import org.jongo.Jongo;
 import com.mongodb.CommandResult;
 import com.mongodb.MongoClient;
 
+import strikd.cluster.ServerCluster;
 import strikd.communication.incoming.MessageHandlers;
 import strikd.game.items.ItemShop;
 import strikd.game.match.MatchManager;
@@ -22,16 +23,15 @@ import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
 import strikd.sessions.SessionManager;
 import strikd.stats.MemoryWatchdog;
-import strikd.stats.StatsWorker;
 
 public class Server
 {
 	private static final String version = "0.0.1-dev";
 	private static final Logger logger = Logger.getLogger(Server.class);
 	
-	private final ServerDescriptor descriptor;
-	private final LocaleBundleManager localeMgr;
 	private final Jongo dbCluster;
+	private final ServerCluster serverCluster;
+	private final LocaleBundleManager localeMgr;
 	private final NetListener listener;
 	
 	private final SessionManager sessionMgr;
@@ -73,6 +73,9 @@ public class Server
 			throw new Exception(String.format("could not connect to db '%s'", props.getProperty("db.name")), e);
 		}
 		
+		// Setup server cluster
+		this.serverCluster = new ServerCluster(this, props);
+		
 		// Load locale
 		this.localeMgr = new LocaleBundleManager(new File(props.getProperty("locale.dir")));
 		this.localeMgr.reload();
@@ -101,13 +104,13 @@ public class Server
 		logger.info(String.format("listening on %s", this.listener.getLocalAddress()));
 		
 		// Print server info
-		this.descriptor = new ServerDescriptor(this, props.getProperty("instance.name"));
-		logger.info(String.format("SERVER ONLINE %s", this.descriptor));
+		logger.info(String.format("SERVER ONLINE %s", this.serverCluster.getSelf()));
 		
 		// Start statistics workers
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleWithFixedDelay(new StatsWorker(this), 0, 1, TimeUnit.SECONDS);
+		scheduler.scheduleWithFixedDelay(this.serverCluster, 0, 1, TimeUnit.SECONDS);
 		scheduler.scheduleWithFixedDelay(new MemoryWatchdog(), 0, 30, TimeUnit.SECONDS);
+		this.serverCluster.refresh();
 	}
 
 	public void destroy()
@@ -159,19 +162,19 @@ public class Server
 		return Server.version;
 	}
 	
-	public ServerDescriptor getDescriptor()
+	public Jongo getDbCluster()
 	{
-		return this.descriptor;
+		return this.dbCluster;
+	}
+	
+	public ServerCluster getServerCluster()
+	{
+		return this.serverCluster;
 	}
 	
 	public LocaleBundleManager getLocaleMgr()
 	{
 		return this.localeMgr;
-	}
-	
-	public Jongo getDbCluster()
-	{
-		return this.dbCluster;
 	}
 	
 	public SessionManager getSessionMgr()

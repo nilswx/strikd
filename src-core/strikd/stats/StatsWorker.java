@@ -3,7 +3,7 @@ package strikd.stats;
 import org.jongo.MongoCollection;
 
 import strikd.Server;
-import strikd.ServerDescriptor;
+import strikd.cluster.ServerDescriptor;
 
 public class StatsWorker implements Runnable
 {
@@ -12,7 +12,7 @@ public class StatsWorker implements Runnable
 	
 	public StatsWorker(Server server)
 	{
-		this.descriptor = server.getDescriptor();
+		this.descriptor = server.getServerCluster().getSelf();
 		this.dbServers = server.getDbCluster().getCollection("servers");
 		this.deleteOldDescriptor();
 	}
