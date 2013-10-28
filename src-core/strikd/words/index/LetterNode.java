@@ -3,6 +3,7 @@ package strikd.words.index;
 public class LetterNode
 {
 	private static final int ALPHABET_LENGTH = 26;
+	private static final char ALPHABET_OFFSET = 'A';
 	
 	private final char letter;
 	private final LetterNode[] letters;
@@ -69,6 +70,6 @@ public class LetterNode
 	
 	private static final int letterIndex(final char letter)
 	{
-		return (letter - 'A');
+		return (letter - ALPHABET_OFFSET);
 	}
 }
