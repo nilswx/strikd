@@ -114,7 +114,7 @@ public class IndexedWordFinder
 		{
 			// Okay, try continuing with this letter
 			progress.add(src);
-			if(currentLetter.isWord())
+			if(currentLetter.isWordEnd())
 			{
 				return true;
 			}
@@ -146,7 +146,7 @@ public class IndexedWordFinder
 		}
 		
 		// Got a word so far?
-		return letter.isWord();
+		return letter.isWordEnd();
 	}
 	
 	private static void printProgress(List<Square> progress)

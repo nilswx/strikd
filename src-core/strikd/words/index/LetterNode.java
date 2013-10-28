@@ -7,7 +7,7 @@ public class LetterNode
 	
 	private final char letter;
 	private final LetterNode[] letters;
-	private boolean isWord;
+	private boolean isWordEnd;
 	
 	public LetterNode(char letter)
 	{
@@ -23,7 +23,7 @@ public class LetterNode
 		}
 		else
 		{
-			this.isWord = true;
+			this.isWordEnd = true;
 		}
 	}
 	
@@ -43,23 +43,9 @@ public class LetterNode
 		return (this.letters[letterIndex(letter)]);
 	}
 	
-	protected boolean containsWord(char[] letters)
+	public boolean isWordEnd()
 	{
-		LetterNode cur = this;
-		for(int i = 0; i < letters.length; i++)
-		{
-			if((cur = cur.node(letters[i])) == null)
-			{
-				return false;
-			}
-		}
-		
-		return cur.isWord;
-	}
-	
-	public boolean isWord()
-	{
-		return this.isWord;
+		return this.isWordEnd;
 	}
 	
 	@Override
