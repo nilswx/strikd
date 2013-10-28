@@ -95,7 +95,8 @@ public class Server
 		// Start accepting connections
 		try
 		{
-			this.listener = new NetListener(13381, this.sessionMgr);
+			int port = Integer.parseInt(props.getProperty("server.port", "13381"));
+			this.listener = new NetListener(port, this.sessionMgr);
 		}
 		catch(IOException e)
 		{

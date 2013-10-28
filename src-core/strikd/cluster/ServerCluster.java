@@ -48,6 +48,8 @@ public class ServerCluster extends Server.Referent implements Runnable
 		{
 			this.self.serverId = Integer.parseInt(props.getProperty("server.id"));
 			this.self.name = props.getProperty("server.name");
+			this.self.host = props.getProperty("server.host");
+			this.self.port = Integer.parseInt(props.getProperty("server.port"));
 			this.self.version = server.getVersion();
 			this.self.started = new Date();
 		}

@@ -26,8 +26,8 @@ public class NetListener
 	public NetListener(int port, SessionManager sessionMgr) throws IOException
 	{
 		// Create thread pools
-		this.bossExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("NetServer/Boss #%d"));
-		this.workerExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("NetServer/Worker #%d"));
+		this.bossExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("Network/Boss #%d"));
+		this.workerExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("Network/Worker #%d"));
 		
 		// Create server boss and worker thread pools using defaults
 		ServerBootstrap bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(this.bossExecutor, this.workerExecutor));
@@ -50,11 +50,6 @@ public class NetListener
 	public SocketAddress getLocalAddress()
 	{
 		return this.listener.getLocalAddress();
-	}
-	
-	public SocketAddress getRemoteAddress()
-	{
-		return this.listener.getRemoteAddress();
 	}
 	
 	// Disable Netty's thread renaming, create executors
