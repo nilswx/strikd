@@ -26,7 +26,7 @@ public class IndexedWordFinder
 		
 		// The board
 		Board board = new BruteBoard(20, 20, dict);
-		board.regenerate();
+		board.rebuild();
 		
 		// The progress holders
 		List<Square> progress = Lists.newArrayList();

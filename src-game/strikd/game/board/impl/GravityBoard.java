@@ -11,7 +11,7 @@ public class GravityBoard extends Board
 	}
 	
 	@Override
-	public void fill()
+	public void update()
 	{
 		// Run through all tiles, start at the bottom left (0,0)
 		int width = this.getWidth(), height = this.getHeight();

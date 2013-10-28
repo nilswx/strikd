@@ -49,7 +49,7 @@ public class Match
 		this.playerTwo = playerTwo.setMatch(this, 2);
 		
 		// Generate board
-		this.board.regenerate();
+		this.board.rebuild();
 		System.out.println(this.board.toMatrixString());
 	}
 	

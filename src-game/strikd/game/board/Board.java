@@ -43,13 +43,13 @@ public abstract class Board
 		}
 	}
 
-	public void regenerate()
+	public void rebuild()
 	{
 		this.clear();
-		this.fill();
+		this.update();
 	}
 	
-	public abstract void fill();
+	public abstract void update();
 	
 	public void destroy()
 	{

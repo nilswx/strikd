@@ -11,7 +11,7 @@ public class IndexedBoard extends Board
 	}
 
 	@Override
-	public void fill()
+	public void update()
 	{
 		// TODO Auto-generated method stub
 	}

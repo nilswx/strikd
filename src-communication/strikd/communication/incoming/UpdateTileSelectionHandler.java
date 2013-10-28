@@ -106,7 +106,7 @@ public class UpdateTileSelectionHandler extends MessageHandler
 						{
 							tile.clear();
 						}
-						board.fill();
+						board.update();
 						
 						// Send updated letters
 						match.broadcast(board.getUpdateGenerator().generateUpdates());

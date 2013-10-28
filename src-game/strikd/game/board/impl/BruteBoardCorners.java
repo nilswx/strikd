@@ -20,7 +20,7 @@ public class BruteBoardCorners extends Board
 	}
 	
 	@Override
-	public void fill()
+	public void update()
 	{
 		// Reusable resources
 		Random rand = new Random();
@@ -138,7 +138,7 @@ public class BruteBoardCorners extends Board
 	{
 		long start = System.currentTimeMillis();
 		Board board = new BruteBoardCorners(5, 6, StaticLocale.getDictionary());
-		board.fill();
+		board.update();
 		long time = System.currentTimeMillis() - start;
 		
 		System.out.println(board.toString() + " => " + time + " ms");

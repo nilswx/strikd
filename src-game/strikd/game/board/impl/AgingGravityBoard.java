@@ -58,7 +58,7 @@ public class AgingGravityBoard extends GravityBoard implements Runnable
 		}
 		
 		// Fill new gaps
-		this.fill();
+		this.update();
 	}
 	
 	private static class AgingSquare extends Square
