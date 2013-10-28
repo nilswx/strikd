@@ -110,7 +110,6 @@ public class Server
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleWithFixedDelay(this.serverCluster, 0, 1, TimeUnit.SECONDS);
 		scheduler.scheduleWithFixedDelay(new MemoryWatchdog(), 0, 30, TimeUnit.SECONDS);
-		this.serverCluster.refresh();
 	}
 
 	public void destroy()

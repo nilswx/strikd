@@ -117,7 +117,7 @@ public class ServerCluster extends Server.Referent implements Runnable
 	
 	private void onUndiscover(ServerDescriptor server)
 	{
-		logger.info(String.format("server #%d ('%s') went away"));
+		logger.info(String.format("server #%d ('%s') went away", server.serverId, server.name));
 	}
 	
 	public ServerDescriptor getSelf()

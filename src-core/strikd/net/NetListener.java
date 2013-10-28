@@ -52,6 +52,11 @@ public class NetListener
 		return this.listener.getLocalAddress();
 	}
 	
+	public SocketAddress getRemoteAddress()
+	{
+		return this.listener.getRemoteAddress();
+	}
+	
 	// Disable Netty's thread renaming, create executors
 	static
 	{
