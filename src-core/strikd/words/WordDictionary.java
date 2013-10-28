@@ -21,10 +21,11 @@ public class WordDictionary
 	private final Set<String> check;
 	private final WordDictionaryIndex index;
 	
-	public WordDictionary(String locale, File file) throws IOException
+	public WordDictionary(String locale, File file, boolean useIndexes) throws IOException
 	{
+		// Determine whether to use indexes
 		this.locale = locale;
-		this.index = new WordDictionaryIndex();
+		this.index = useIndexes ? new WordDictionaryIndex() : null;
 		
 		// Load and normalize words, one word per line
 		String line;
@@ -36,7 +37,10 @@ public class WordDictionary
 			Word word = Word.parse(line);
 			select.add(word);
 			check.add(word.toString());
-			this.index.addWord(word.toString());
+			if(useIndexes)
+			{
+				this.index.addWord(word.toString());
+			}
 		}
 		
 		// Create immutable collections for all kinds of purposes
@@ -47,17 +51,6 @@ public class WordDictionary
 	public Word pickOne()
 	{
 		return RandomUtil.pickOne(this.select);
-	}
-	
-	public Word[] pick(int amount)
-	{
-		Word[] words = new Word[amount];
-		for(int i = 0; i < amount; i++)
-		{
-			words[i] = this.pickOne();
-		}
-		
-		return words;
 	}
 	
 	public boolean contains(Word word)
