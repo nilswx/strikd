@@ -22,7 +22,7 @@ public abstract class Board
 		this.dictionary = dictionary;
 		this.updates = new BoardUpdateGenerator(this);
 	}
-
+	
 	public final void clear()
 	{
 		for(int x = 0; x < this.getWidth(); x++)
@@ -48,7 +48,14 @@ public abstract class Board
 
 	public final Square getSquare(int x, int y)
 	{
-		return this.squares[x][y];
+		if(this.squareExists(x, y))
+		{
+			return this.squares[x][y];
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public final boolean squareExists(int x, int y)
@@ -115,7 +122,6 @@ public abstract class Board
 			sb.append(System.lineSeparator());
 		}
 		
-		sb.append(System.lineSeparator());
 		sb.append("   ");
 		for(int x = 0; x < this.getWidth(); x++)
 		{

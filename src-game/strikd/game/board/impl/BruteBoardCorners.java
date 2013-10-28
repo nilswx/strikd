@@ -70,11 +70,10 @@ public class BruteBoardCorners extends Board
 					}
 					
 					// 4. See if the word will fit into the grid starting from that cell and running in that direction.
-					Point diff = dir.getDiff();
 					char[] letters = word.letters();
 					for(int step = 0; step < letters.length; step++)
 					{
-						Point next = new Point(root.x + (step * diff.x), root.y + (step * diff.y));
+						Point next = new Point(root.x + (step * dir.x), root.y + (step * dir.y));
 						
 						// Square doesn't exist at all?
 						if(!this.squareExists(next.x, next.y)
@@ -90,7 +89,7 @@ public class BruteBoardCorners extends Board
 					// Put the letters
 					for(int step = 0; step < letters.length; step++)
 					{
-						Point next = new Point(root.x + (step * diff.x), root.y + (step * diff.y));
+						Point next = new Point(root.x + (step * dir.x), root.y + (step * dir.y));
 						this.squares[next.x][next.y].setLetter(letters[step]);
 					}
 					
@@ -123,8 +122,7 @@ public class BruteBoardCorners extends Board
 				{
 					for(Direction8 dir : GAP_LINK_DIRS)
 					{
-						Point diff = dir.getDiff();
-						if(this.squareExists(x + diff.x, y + diff.y) && this.squares[x + diff.x][y + diff.y].isNull())
+						if(this.squareExists(x + dir.x, y + dir.y) && this.squares[x + dir.x][y + dir.y].isNull())
 						{
 							return true;
 						}
@@ -139,7 +137,7 @@ public class BruteBoardCorners extends Board
 	public static void main(String[] args) throws IOException
 	{
 		long start = System.currentTimeMillis();
-		Board board = new BruteBoardCorners(5, 6, StaticLocale.dict);
+		Board board = new BruteBoardCorners(5, 6, StaticLocale.getDictionary());
 		board.fill();
 		long time = System.currentTimeMillis() - start;
 		

@@ -11,11 +11,16 @@ public class StaticLocale
 {
 	static
 	{
-		LocaleBundleManager locMgr = new LocaleBundleManager(new File("locale"));
+		LocaleBundleManager locMgr = new LocaleBundleManager(new File("locale.test"));
 		locMgr.reload();
 		LocaleBundle enUS = locMgr.getBundle("en_US");
 		dict = enUS.getDictionary(DictionaryType.GENERATOR);
 	}
 	
-	public static final WordDictionary dict;
+	private static final WordDictionary dict;
+	
+	public static final WordDictionary getDictionary()
+	{
+		return dict;
+	}
 }

@@ -60,11 +60,10 @@ public class GappieBoard extends Board
 			do
 			{
 				Direction8 next = Direction8.random();
-				Point diff = next.getDiff();
 
 				// Apply diff
-				int testX = (x + diff.x);
-				int testY = (y + diff.y);
+				int testX = (x + next.x);
+				int testY = (y + next.y);
 
 				if(this.squareExists(testX, testY) /* && this.squares[testX][testY].isNull()*/)
 				{
@@ -82,7 +81,7 @@ public class GappieBoard extends Board
 	public static void main(String[] args) throws IOException
 	{
 		long start = System.currentTimeMillis();
-		Board board = new GappieBoard(5, 6, StaticLocale.dict);
+		Board board = new GappieBoard(5, 6, StaticLocale.getDictionary());
 		board.regenerate();
 		long time = System.currentTimeMillis() - start;
 

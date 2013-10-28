@@ -1,20 +1,33 @@
 package strikd.game.board;
 
-import java.awt.Point;
 import java.util.Random;
 
 public enum Direction8
 {
-	North,
-	NorthEast,
-	East,
-	SouthEast,
-	South,
-	SouthWest,
-	West,
-	NorthWest;
+	North(0, +1),
+	NorthEast(+1, +1),
+	East(+1, 0),
+	SouthEast(+1, -1),
+	South(0, -1),
+	SouthWest(-1, -1),
+	West(-1, 0),
+	NorthWest(-1, +1);
+	
+	public final int x;
+	public final int y;
+	
+	private Direction8(int deltaX, int deltaY)
+	{
+		this.x = deltaX;
+		this.y = deltaY;
+	}
 	
 	private static final Direction8[] values = values();
+	
+	public static Direction8[] all()
+	{
+		return values;
+	}
 	
 	public final Direction8 invert()
 	{
@@ -35,22 +48,5 @@ public enum Direction8
 	{
 		Random rand = new Random();
 		return values[rand.nextInt(values.length)];
-	}
-	
-	public final Point getDiff()
-	{
-		switch(this)
-		{
-			case North: return new Point(0, +1);
-			case NorthEast: return new Point(+1, +1);
-			case East: return new Point(+1, 0);
-			case SouthEast: return new Point(+1, -1);
-			case South: return new Point(0, -1);
-			case SouthWest: return new Point(-1, -1);
-			case West: return new Point(-1, 0);
-			case NorthWest: return new Point(-1, +1);
-		}
-		
-		return new Point();
 	}
 }

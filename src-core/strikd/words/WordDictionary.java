@@ -8,8 +8,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
+
+import strikd.util.RandomUtil;
+import strikd.words.index.WordDictionaryIndex;
 
 public class WordDictionary
 {
@@ -17,10 +19,12 @@ public class WordDictionary
 	
 	private final Word[] select;
 	private final Set<String> check;
+	private final WordDictionaryIndex index;
 	
 	public WordDictionary(String locale, File file) throws IOException
 	{
 		this.locale = locale;
+		this.index = new WordDictionaryIndex();
 		
 		// Load and normalize words, one word per line
 		String line;
@@ -32,6 +36,7 @@ public class WordDictionary
 			Word word = Word.parse(line);
 			select.add(word);
 			check.add(word.toString());
+			this.index.addWord(word.toString());
 		}
 		
 		// Create immutable collections for all kinds of purposes
@@ -41,18 +46,15 @@ public class WordDictionary
 	
 	public Word pickOne()
 	{
-		Random rand = new Random();
-		return this.select[rand.nextInt(this.select.length)];
+		return RandomUtil.pickOne(this.select);
 	}
 	
 	public Word[] pick(int amount)
 	{
-		Random rand = new Random();
-		
 		Word[] words = new Word[amount];
 		for(int i = 0; i < amount; i++)
 		{
-			words[i] = this.select[rand.nextInt(this.select.length)];
+			words[i] = this.pickOne();
 		}
 		
 		return words;
@@ -66,6 +68,11 @@ public class WordDictionary
 	public String getLocale()
 	{
 		return this.locale;
+	}
+	
+	public WordDictionaryIndex getIndex()
+	{
+		return this.index;
 	}
 	
 	public int size()
