@@ -1,4 +1,4 @@
-package strikd.net;
+package strikd.util;
 
 import java.util.concurrent.ThreadFactory;
 

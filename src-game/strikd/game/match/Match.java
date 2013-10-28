@@ -103,6 +103,9 @@ public class Match
 		// Can be ended?
 		if(this.isStarted())
 		{
+			// Destroy the board
+			this.board.destroy();
+			
 			// Draw?
 			if(winner == null)
 			{

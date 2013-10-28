@@ -23,6 +23,11 @@ public abstract class Board
 		this.updates = new BoardUpdateGenerator(this);
 	}
 	
+	public Square newSquare(int x, int y)
+	{
+		return new Square(x, y, this);
+	}
+	
 	public final void clear()
 	{
 		for(int x = 0; x < this.getWidth(); x++)
@@ -31,7 +36,7 @@ public abstract class Board
 			{
 				if(this.squares[x][y] == null)
 				{
-					this.squares[x][y] = new Square(x, y, this);
+					this.squares[x][y] = this.newSquare(x, y);
 				}
 				this.squares[x][y].clear();
 			}
@@ -45,6 +50,11 @@ public abstract class Board
 	}
 	
 	public abstract void fill();
+	
+	public void destroy()
+	{
+		// Override me
+	}
 
 	public final Square getSquare(int x, int y)
 	{

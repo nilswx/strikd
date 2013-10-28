@@ -33,7 +33,7 @@ public class BoardUpdateGenerator
 		{
 			for(int y = 0; y < this.board.getHeight(); y++)
 			{
-				Square sq = (Square)this.board.squares[x][y];
+				Square sq = this.board.squares[x][y];
 				if(sq.needsUpdate())
 				{
 					msg.appendUpdate(sq);

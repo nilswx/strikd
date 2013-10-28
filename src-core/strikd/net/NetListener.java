@@ -15,6 +15,7 @@ import org.jboss.netty.util.ThreadNameDeterminer;
 import org.jboss.netty.util.ThreadRenamingRunnable;
 
 import strikd.sessions.SessionManager;
+import strikd.util.NamedThreadFactory;
 
 public class NetListener
 {

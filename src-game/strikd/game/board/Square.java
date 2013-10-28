@@ -4,8 +4,6 @@ import strikd.game.board.triggers.Trigger;
 
 public class Square
 {
-	public static int count;
-	
 	public final int x;
 	public final int y;
 	private final Board board;
