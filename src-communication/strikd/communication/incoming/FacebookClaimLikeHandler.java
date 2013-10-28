@@ -12,16 +12,16 @@ import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.game.user.User;
 import strikd.net.codec.IncomingMessage;
 
-public class FacebookLikeCheckHandler extends MessageHandler
+public class FacebookClaimLikeHandler extends MessageHandler
 {
 	public static final String pageId = "";
 	
-	private static final Logger logger = Logger.getLogger(FacebookLikeCheckHandler.class);
+	private static final Logger logger = Logger.getLogger(FacebookClaimLikeHandler.class);
 	
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
-		return Opcodes.Incoming.FACEBOOK_LIKE;
+		return Opcodes.Incoming.FACEBOOK_CLAIM_LIKE;
 	}
 	
 	@Override
@@ -57,7 +57,7 @@ public class FacebookLikeCheckHandler extends MessageHandler
 			for(Page page : likedPages)
 			{
 				// User likes Strik?
-				if(page.getId().equals(FacebookLikeCheckHandler.pageId))
+				if(page.getId().equals(FacebookClaimLikeHandler.pageId))
 				{
 					return true;
 				}

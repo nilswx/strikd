@@ -11,7 +11,7 @@ public interface Opcodes
 	    LOGIN,
 	    FACEBOOK_LINK,
 	    FACEBOOK_UNLINK,
-	    FACEBOOK_LIKE,
+	    FACEBOOK_CLAIM_LIKE,
 	    CHANGE_NAME,
 	    REQUEST_MATCH,
 	    EXIT_MATCH,
