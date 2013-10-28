@@ -19,43 +19,6 @@ public class IndexedWordFinder
 {
 	private static Direction8[] SEARCH_DIRECTIONS = Direction8.all();
 	
-	public static void main2(String[] args)
-	{
-		// The dictionary
-		WordDictionary dict = StaticLocale.getDictionary();
-		
-		// The board
-		Board board = new BruteBoard(5, 5, dict);
-		board.regenerate();
-		
-		// The random start tile
-		Random rand = new Random();
-		Square root = board.getSquare(rand.nextInt(board.getWidth()), rand.nextInt(board.getHeight()));
-		
-		// Ready...
-		Stopwatch sw = new Stopwatch();
-		List<Square> progress = Lists.newArrayList();
-		
-		// Go!
-		sw.start();
-		boolean found = findWord(root, null, dict.getIndex(), progress);
-		sw.stop();
-		
-		// Success?
-		if(found)
-		{
-			System.out.println(board.toMatrixString());
-			printProgress(progress);
-		}
-		else
-		{
-			System.out.println("nothing found, start somewhere else");
-		}
-		
-		// Print time taken
-		System.out.println(String.format("%d ms (%d microseconds)", sw.elapsedMillis(), sw.elapsedTime(TimeUnit.MICROSECONDS)));
-	}
-	
 	public static void main(String[] args)
 	{
 		// The dictionary
@@ -87,7 +50,7 @@ public class IndexedWordFinder
 				// Run new search
 				sw.reset();
 				sw.start();
-				boolean found = findWord(root, null, dict.getIndex(), progress);
+				boolean found = findFirstWholeWord(root, null, dict.getIndex(), progress);
 				sw.stop();
 				
 				// Success?
@@ -106,7 +69,7 @@ public class IndexedWordFinder
 		}
 	}
 	
-	private static boolean findWord(Square src, Direction8 origin, LetterNode letter, List<Square> progress)
+	private static boolean findFirstWholeWord(Square src, Direction8 origin, LetterNode letter, List<Square> progress)
 	{
 		// This link is in the dictionary?
 		LetterNode currentLetter = letter.node(src.getLetter());
@@ -131,7 +94,7 @@ public class IndexedWordFinder
 						if(toTry != null && toTry.isTile())
 						{
 							// Try it, stop on success
-							boolean wordComplete = findWord(src.getBoard().getSquare(src.x + dir.x, src.y + dir.y), dir.invert(), currentLetter, progress);
+							boolean wordComplete = findFirstWholeWord(toTry, dir.invert(), currentLetter, progress);
 							if(wordComplete)
 							{
 								return true;
