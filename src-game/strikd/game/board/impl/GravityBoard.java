@@ -23,7 +23,7 @@ public class GravityBoard extends BruteBoard
 	{
 		// Run through all tiles, start at the bottom left (0,0)
 		int width = this.getWidth(), height = this.getHeight();
-		for(int x = 0; x < width; x++)
+		/*for(int x = 0; x < width; x++)
 		{
 			for(int y = 0; y < height; y++)
 			{
@@ -39,7 +39,7 @@ public class GravityBoard extends BruteBoard
 					}
 				}
 			}
-		}
+		}*/
 		
 		// Fill the gaps
 		super.update();
