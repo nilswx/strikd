@@ -9,16 +9,17 @@ public interface Opcodes
 		CLIENT_CRYPTO,
 	    CREATE_USER,
 	    LOGIN,
-	    FACEBOOK_LINK,
-	    FACEBOOK_UNLINK,
-	    FACEBOOK_CLAIM_LIKE,
 	    CHANGE_NAME,
 	    REQUEST_MATCH,
 	    EXIT_MATCH,
 	    PLAYER_READY,
 	    UPDATE_TILE_SELECTION,
 	    PURCHASE_ITEM,
-	    ACTIVATE_ITEM;
+	    ACTIVATE_ITEM,
+	    FACEBOOK_LINK,
+	    FACEBOOK_UNLINK,
+	    FACEBOOK_CLAIM_LIKE,
+	    FACEBOOK_REGISTER_INVITES;
 		
 		private static final Opcodes.Incoming[] values = values();
 		

@@ -43,7 +43,7 @@ public class FacebookLinkHandler extends MessageHandler
 			
 			// Process pending invites
 			InviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
-			inviteMgr.processInvites(newIdentity);
+			inviteMgr.processInvites(newIdentity.userId);
 		}
 		catch(Exception e)
 		{

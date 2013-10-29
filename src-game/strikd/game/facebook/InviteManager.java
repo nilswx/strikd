@@ -4,30 +4,29 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
+
 import org.jongo.MongoCollection;
 import org.jongo.marshall.jackson.oid.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 
-import strikd.facebook.FacebookIdentity;
-import strikd.facebook.FacebookManager;
+import strikd.Server;
 import strikd.game.user.User;
 import strikd.game.user.UserRegister;
 
-public class InviteManager
+public class InviteManager extends Server.Referent
 {
 	private static final Logger logger = Logger.getLogger(InviteManager.class);
 	
-	private final FacebookManager facebookMgr;
 	private final MongoCollection inviteStore;
 	
-	public InviteManager(FacebookManager facebookMgr)
+	public InviteManager(Server server)
 	{
-		this.facebookMgr = facebookMgr;
-		this.inviteStore = facebookMgr.getServer().getDbCluster().getCollection("invites");
+		super(server);
+		this.inviteStore = server.getDbCluster().getCollection("invites");
 		
-		logger.info(String.format("pending: %d persons", this.inviteStore.count()));
+		logger.info(String.format("pending invites for %d persons", this.inviteStore.count()));
 	}
 	
 	private InvitedByList getList(long personId)
@@ -35,10 +34,10 @@ public class InviteManager
 		return this.inviteStore.findOne("{_id:#}", personId).as(InvitedByList.class);
 	}
 	
-	public boolean issueInvite(long personId, User inviter)
+	public boolean registerInvite(long personId, User inviter)
 	{
 		// Inviter is FB linked?
-		if(inviter.isFacebookLinked())
+		if(!inviter.isFacebookLinked())
 		{
 			return false;
 		}
@@ -47,42 +46,37 @@ public class InviteManager
 		InvitedByList list = this.getList(personId);
 		if(list == null)
 		{
-			list = new InvitedByList();
-			list.personId = personId;
-			list.userIds = Lists.newArrayListWithExpectedSize(1);
+			list = new InvitedByList(personId);
 		}
-		else
+		else if(list.userIds.contains(inviter.id))
 		{
-			// Already invited by this user?
-			if(list.userIds.contains(inviter.id))
-			{
-				return false;
-			}
+			return false;
 		}
 		
-		// TODO: send invite through Facebook
-		this.facebookMgr.toString();
-		logger.info(String.format("inviting person #%d on behalf of %s", personId, inviter));
+		// Done!
+		list.userIds.add(inviter.id);
+		logger.info(String.format("%s invited person #%d!", inviter, personId));
 		
 		// Save list
 		this.inviteStore.save(list);
 		return true;
 	}
 	
-	public void processInvites(FacebookIdentity fbIdentity)
+	public void processInvites(long personId)
 	{
 		// Was this FB user invited by existing players?
-		InvitedByList list = this.getList(fbIdentity.userId);
+		InvitedByList list = this.getList(personId);
 		if(list != null)
 		{
 			// Give rewards for these users
-			UserRegister userRegister = this.facebookMgr.getServer().getUserRegister();
+			UserRegister userRegister = this.getServer().getUserRegister();
 			for(ObjectId userId : list.userIds)
 			{
+				// User _should_ still exist...
 				User user = userRegister.findUser(userId);
 				if(user != null)
 				{
-					logger.info(String.format("FB user #%d linked, rewarding %s for invite", fbIdentity.userId, user));
+					logger.info(String.format("FB user #%d linked, rewarding %s for invite", personId, user));
 				}
 			}
 			
@@ -98,5 +92,11 @@ public class InviteManager
 		
 		@JsonProperty("by")
 		public List<ObjectId> userIds;
+		
+		public InvitedByList(long personId)
+		{
+			this.personId = personId;
+			this.userIds = Lists.newArrayListWithExpectedSize(1);
+		}
 	}
 }

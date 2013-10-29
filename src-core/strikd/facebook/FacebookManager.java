@@ -35,8 +35,8 @@ public class FacebookManager extends Server.Referent
 				appNamespace,
 				appAccessToken.substring(0, appAccessToken.indexOf('|') + 1) + "<SECRET>"));
 		
-		// Setup invite manager
-		this.inviteMgr = new InviteManager(this);
+		// Create nested invite manager
+		this.inviteMgr = new InviteManager(server);
 		
 		// Create background threadpool for publishing actions
 		this.publisher = Executors.newCachedThreadPool(new NamedThreadFactory("Facebook Publisher #%d"));
