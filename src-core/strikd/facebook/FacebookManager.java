@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
 
 import strikd.Server;
-import strikd.game.facebook.InviteManager;
+import strikd.game.facebook.FacebookInviteManager;
 import strikd.util.NamedThreadFactory;
 
 public class FacebookManager extends Server.Referent
@@ -17,7 +17,7 @@ public class FacebookManager extends Server.Referent
 	private final String appNamespace;
 	private final String appAccessToken;
 	
-	private final InviteManager inviteMgr;
+	private final FacebookInviteManager inviteMgr;
 	
 	private final ExecutorService publisher;
 	
@@ -36,7 +36,7 @@ public class FacebookManager extends Server.Referent
 				appAccessToken.substring(0, appAccessToken.indexOf('|') + 1) + "<SECRET>"));
 		
 		// Create nested invite manager
-		this.inviteMgr = new InviteManager(server);
+		this.inviteMgr = new FacebookInviteManager(server);
 		
 		// Create background threadpool for publishing actions
 		this.publisher = Executors.newCachedThreadPool(new NamedThreadFactory("Facebook Publisher #%d"));
@@ -64,7 +64,7 @@ public class FacebookManager extends Server.Referent
 		return this.appAccessToken;
 	}
 	
-	public InviteManager getInviteMgr()
+	public FacebookInviteManager getInviteMgr()
 	{
 		return this.inviteMgr;
 	}

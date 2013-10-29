@@ -7,7 +7,7 @@ import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.facebook.FacebookIdentity;
-import strikd.game.facebook.InviteManager;
+import strikd.game.facebook.FacebookInviteManager;
 import strikd.net.codec.IncomingMessage;
 
 public class FacebookLinkHandler extends MessageHandler
@@ -42,7 +42,7 @@ public class FacebookLinkHandler extends MessageHandler
 			//session.getUser().country = profile.getL
 			
 			// Process pending invites
-			InviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
+			FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
 			inviteMgr.processInvites(newIdentity.userId);
 		}
 		catch(Exception e)

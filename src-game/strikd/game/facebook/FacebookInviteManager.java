@@ -15,13 +15,13 @@ import strikd.Server;
 import strikd.game.user.User;
 import strikd.game.user.UserRegister;
 
-public class InviteManager extends Server.Referent
+public class FacebookInviteManager extends Server.Referent
 {
-	private static final Logger logger = Logger.getLogger(InviteManager.class);
+	private static final Logger logger = Logger.getLogger(FacebookInviteManager.class);
 	
 	private final MongoCollection inviteStore;
 	
-	public InviteManager(Server server)
+	public FacebookInviteManager(Server server)
 	{
 		super(server);
 		this.inviteStore = server.getDbCluster().getCollection("invites");
