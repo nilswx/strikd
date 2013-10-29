@@ -31,16 +31,17 @@ public class ServerCluster extends Server.Referent implements Runnable
 	
 	private void updateSelf(Properties props)
 	{
-		// Retrieve/create descriptor
+		// Boot?
 		if(this.self == null)
 		{
+			// Retrieve/create descriptor
 			int serverId = Integer.parseInt(props.getProperty("server.id"));
 			this.self = this.dbServers.findOne("{_id:#}", serverId).as(ServerDescriptor.class);
 			if(this.self == null)
 			{
-				logger.info(String.format("setting up new server #%d ('%s')", serverId, props.get("server.name")));
 				this.self = new ServerDescriptor();
 			}
+			logger.info(String.format("joining as #%d ('%s')", serverId, props.get("server.name")));
 		}
 		Server server = this.getServer();
 		
@@ -110,6 +111,7 @@ public class ServerCluster extends Server.Referent implements Runnable
 		}
 		
 		// Done!
+		this.servers.clear();
 		this.servers = newMap;
 	}
 	

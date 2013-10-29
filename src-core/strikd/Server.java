@@ -117,10 +117,10 @@ public class Server
 		// Print server info
 		logger.info(String.format("SERVER ONLINE %s", this.serverCluster.getSelf()));
 		
-		// Start cluster worker
-		ScheduledExecutorService statistics = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Cluster Sync"));
-		statistics.scheduleWithFixedDelay(this.serverCluster, 0, 1, TimeUnit.SECONDS);
-		statistics.scheduleWithFixedDelay(new MemoryWatchdog(), 0, 30, TimeUnit.SECONDS);
+		// Start sync worker
+		ScheduledExecutorService sync = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Cluster Sync"));
+		sync.scheduleWithFixedDelay(this.serverCluster, 0, Integer.parseInt(props.getProperty("cluster.sync.interval", "5")), TimeUnit.SECONDS);
+		sync.scheduleWithFixedDelay(new MemoryWatchdog(), 0, 30, TimeUnit.SECONDS);
 	}
 
 	public void destroy()
