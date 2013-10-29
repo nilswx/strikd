@@ -104,7 +104,7 @@ public class UpdateTileSelectionHandler extends MessageHandler
 						// Clear the 'used' tiles, fill gaps with new letters
 						for(Square tile : player.getSelection())
 						{
-							tile.clear();
+							//tile.clear();
 						}
 						board.update();
 						
