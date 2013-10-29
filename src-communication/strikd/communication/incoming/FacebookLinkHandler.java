@@ -1,13 +1,12 @@
 package strikd.communication.incoming;
 
 import org.apache.log4j.Logger;
-import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookProfile;
 
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookStatusMessage;
-import strikd.game.user.FacebookIdentity;
+import strikd.facebook.FacebookIdentity;
 import strikd.net.codec.IncomingMessage;
 
 public class FacebookLinkHandler extends MessageHandler
@@ -23,16 +22,14 @@ public class FacebookLinkHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// Receive latest Facebook link credentials
+		// Constructor new identity with latest token
 		FacebookIdentity newIdentity = new FacebookIdentity();
 		newIdentity.token = request.readStr();
 		
-		// Validate token (perform on a background worker system?)
-		Facebook facebook = newIdentity.getAPI();
 		try
 		{
 			// If this operation succeeds, then the token is valid
-			FacebookProfile profile = facebook.userOperations().getUserProfile();
+			FacebookProfile profile = newIdentity.getAPI().userOperations().getUserProfile();
 			
 			// Set user ID for quick lookups later
 			newIdentity.userId = Long.parseLong(profile.getId());

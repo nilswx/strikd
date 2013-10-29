@@ -1,10 +1,10 @@
 package strikd.game.facebook;
 
-import org.springframework.social.facebook.api.Facebook;
+import strikd.facebook.FacebookIdentity;
 
 public class ProfileBeatedStory extends StrikStory
 {
-	public ProfileBeatedStory(String profileId, Facebook identity)
+	public ProfileBeatedStory(String profileId, FacebookIdentity identity)
 	{
 		super(profileId, identity);
 	}

@@ -16,7 +16,7 @@ import com.mongodb.MongoClient;
 
 import strikd.cluster.ServerCluster;
 import strikd.communication.incoming.MessageHandlers;
-import strikd.facebook.FacebookPublisher;
+import strikd.facebook.FacebookManager;
 import strikd.game.items.ItemShop;
 import strikd.game.match.MatchManager;
 import strikd.game.user.UserRegister;
@@ -39,7 +39,7 @@ public class Server
 	private final UserRegister playerRegister;
 	private final MatchManager matchMgr;
 	private final ItemShop shop;
-	private final FacebookPublisher publisher;
+	private final FacebookManager facebook;
 	
 	private boolean isShutdownMode;
 	private String shutdownMessage;
@@ -91,8 +91,13 @@ public class Server
 		this.shop = new ItemShop(this);
 		this.shop.reload();
 		
-		// Create FB publisher
-		this.publisher = new FacebookPublisher(props.getProperty("facebook.app.ns"), props.getProperty("facebook.app.token"));
+		// Create FB manager, share global config with the rest
+		this.facebook = new FacebookManager(
+				props.getProperty("facebook.page.id"),
+				props.getProperty("facebook.app.ns"),
+				props.getProperty("facebook.app.token"));
+		FacebookManager.setSharedAppNamespace(this.facebook.getAppNamespace());
+		FacebookManager.setSharedAppAccessToken(this.facebook.getAppAccessToken());
 		
 		// Force message registry loading
 		MessageHandlers.get(null);
@@ -197,9 +202,9 @@ public class Server
 		return this.shop;
 	}
 	
-	public FacebookPublisher getPublisher()
+	public FacebookManager getFacebook()
 	{
-		return this.publisher;
+		return this.facebook;
 	}
 	
 	public boolean isShutdownMode()

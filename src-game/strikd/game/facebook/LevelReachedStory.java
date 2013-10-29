@@ -1,10 +1,10 @@
 package strikd.game.facebook;
 
-import org.springframework.social.facebook.api.Facebook;
+import strikd.facebook.FacebookIdentity;
 
 public class LevelReachedStory extends StrikStory
 {
-	public LevelReachedStory(int level, Facebook identity)
+	public LevelReachedStory(int level, FacebookIdentity identity)
 	{
 		super(level, identity);
 	}

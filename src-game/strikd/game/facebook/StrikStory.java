@@ -1,7 +1,6 @@
 package strikd.game.facebook;
 
-import org.springframework.social.facebook.api.Facebook;
-
+import strikd.facebook.FacebookIdentity;
 import strikd.facebook.FacebookStory;
 
 public abstract class StrikStory extends FacebookStory
@@ -11,7 +10,7 @@ public abstract class StrikStory extends FacebookStory
 	
 	private final Object objectParam;
 	
-	public StrikStory(Object objectParam, Facebook identity)
+	public StrikStory(Object objectParam, FacebookIdentity identity)
 	{
 		super(identity);
 		this.objectParam = null;

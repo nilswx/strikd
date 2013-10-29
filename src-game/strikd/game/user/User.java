@@ -7,6 +7,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.jongo.marshall.jackson.oid.Id;
 
+import strikd.facebook.FacebookIdentity;
 import strikd.game.items.Item;
 
 public class User

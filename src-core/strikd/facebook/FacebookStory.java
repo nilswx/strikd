@@ -5,13 +5,14 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+
 public abstract class FacebookStory implements Runnable
 {
 	private static final Logger logger = Logger.getLogger(FacebookStory.class);
 	
-	private final Facebook identity;
+	private final FacebookIdentity identity;
 	
-	public FacebookStory(Facebook identity)
+	public FacebookStory(FacebookIdentity identity)
 	{
 		this.identity = identity;
 	}
@@ -21,17 +22,20 @@ public abstract class FacebookStory implements Runnable
 	{
 		try
 		{
-			// Build data for the request (access_token = server's)
+			// Retrieve Facebook API
+			Facebook facebook = this.identity.getAPI();
+			
+			// Build data for the request (access_token = app access token)
 			MultiValueMap<String, Object> data = new LinkedMultiValueMap<String, Object>();
 			data.set(this.getObjectType(), this.getObjectUrl());
-			data.set("access_token", "");
+			data.set("access_token", this.getPublisherAccessToken());
 			
 			// Make the request
-			this.identity.publish("me", (this.identity.getApplicationNamespace() + ':' + this.getAction()), data);
+			facebook.publish(Long.toString(this.identity.userId), (facebook.getApplicationNamespace() + ':' + this.getAction()), data);
 		}
 		catch(Exception e)
 		{
-			logger.warn(String.format("error publishing a new %s story", this.getAction()), e);
+			logger.warn(String.format("error publishing a new %s story for #%d", this.getAction(), this.identity.userId), e);
 		}
 	}
 	
@@ -40,4 +44,10 @@ public abstract class FacebookStory implements Runnable
 	protected abstract String getObjectType();
 	
 	protected abstract String getObjectUrl();
+	
+	protected String getPublisherAccessToken()
+	{
+		// No reference to Server's instance available
+		return FacebookManager.getSharedAppAccessToken();
+	}
 }

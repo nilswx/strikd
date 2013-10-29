@@ -9,6 +9,7 @@ import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
+import strikd.facebook.FacebookIdentity;
 import strikd.game.user.User;
 import strikd.net.codec.IncomingMessage;
 
@@ -32,7 +33,7 @@ public class FacebookClaimLikeHandler extends MessageHandler
 		if(user.isFacebookLinked() && !user.liked)
 		{
 			// THANKS!
-			user.liked = checkUserLikesPage(user);
+			user.liked = checkUserLikesPage(user.fbIdentity, session.getServer().getFacebook().getPageId());
 			if(user.liked)
 			{
 				// TODO: give item
@@ -48,16 +49,16 @@ public class FacebookClaimLikeHandler extends MessageHandler
 		session.send(new FacebookStatusMessage(user.isFacebookLinked(), user.liked));
 	}
 	
-	private static boolean checkUserLikesPage(User user)
+	private static boolean checkUserLikesPage(FacebookIdentity identity, String pageId)
 	{
 		try
 		{
 			// Get list of liked pages
-			List<Page> likedPages = user.fbIdentity.getAPI().likeOperations().getPagesLiked();
+			List<Page> likedPages = identity.getAPI().likeOperations().getPagesLiked();
 			for(Page page : likedPages)
 			{
 				// User likes Strik?
-				if(page.getId().equals(FacebookClaimLikeHandler.pageId))
+				if(page.getId().equals(pageId))
 				{
 					return true;
 				}
@@ -65,7 +66,7 @@ public class FacebookClaimLikeHandler extends MessageHandler
 		}
 		catch(Exception e)
 		{
-			logger.warn(String.format("could not verify like status for %s", user), e);
+			logger.warn(String.format("could not verify like status for %s", identity.userId), e);
 		}
 		
 		// Not among the liked pages

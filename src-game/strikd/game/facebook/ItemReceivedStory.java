@@ -1,10 +1,10 @@
 package strikd.game.facebook;
 
-import org.springframework.social.facebook.api.Facebook;
+import strikd.facebook.FacebookIdentity;
 
 public class ItemReceivedStory extends StrikStory
 {
-	public ItemReceivedStory(int itemId, Facebook identity)
+	public ItemReceivedStory(int itemId, FacebookIdentity identity)
 	{
 		super(itemId, identity);
 	}
