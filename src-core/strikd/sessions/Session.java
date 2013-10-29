@@ -114,7 +114,7 @@ public class Session extends Server.Referent
 	
 	public void onNetMessage(IncomingMessage msg)
 	{
-		logger.debug("received " + msg);
+		logger.debug(msg);
 		
 		if(this.handshakeOK || (msg.op == Opcodes.Incoming.CLIENT_CRYPTO))
 		{
@@ -128,7 +128,7 @@ public class Session extends Server.Referent
 	
 	public void send(OutgoingMessage msg)
 	{
-		logger.debug("send " + msg);
+		logger.debug(msg);
 		
 		this.connection.send(msg);
 	}

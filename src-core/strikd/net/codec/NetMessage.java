@@ -29,11 +29,33 @@ public abstract class NetMessage<T extends Enum<?>>
 	@Override
 	public final String toString()
 	{
-		String buf = this.buf.toString(UTF_8);
-		for(int i = 0; i <= 13; i++)
+		StringBuilder sb = new StringBuilder();
+		
+		// Message type
+		sb.append((this instanceof IncomingMessage) ? '<' : '>');
+		sb.append(' ');
+		sb.append(this.op.name());
+		sb.append(' ');
+		
+		// Buffer wrapped between [ ]
+		sb.append('[');
+		byte[] array = this.buf.array();
+		for(int i = this.buf.arrayOffset(); i < this.length() + 2; i++)
 		{
-			buf = buf.replace(Character.toString((char)i), "[" + i + "]");
+			// Printable?
+			if(array[i] > 31 && array[i] < 127)
+			{
+				sb.append((char)array[i]);
+			}
+			else
+			{
+				sb.append('[');
+				sb.append(array[i]);
+				sb.append(']');
+			}
 		}
-		return String.format("%s [%s]", this.op.name(), buf);
+		sb.append(']');
+		
+		return sb.toString();
 	}
 }
