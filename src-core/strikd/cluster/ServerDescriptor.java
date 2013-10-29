@@ -12,8 +12,8 @@ public class ServerDescriptor
 	public String host;
 	public int port;
 	
-	public boolean online;
 	public Date started;
+	public Date lastUpdate;
 	public float memoryUsage;
 	
 	public int onlineUsers;
@@ -27,6 +27,6 @@ public class ServerDescriptor
 	@Override
 	public String toString()
 	{
-		return String.format("'%s' @ v%s (u=%d, m=%d, mem=%.2f MiB)", this.name, this.version, this.onlineUsers, this.activeMatches, this.memoryUsage);
+		return String.format("#%d '%s' @ v%s (u=%d, m=%d, mem=%.2f MiB)", this.serverId, this.name, this.version, this.onlineUsers, this.activeMatches, this.memoryUsage);
 	}
 }

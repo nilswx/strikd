@@ -75,9 +75,6 @@ public class Server
 			throw new Exception(String.format("could not connect to db '%s'", props.getProperty("db.name")), e);
 		}
 		
-		// Setup server cluster
-		this.serverCluster = new ServerCluster(this, props);
-		
 		// Load locale
 		this.localeMgr = new LocaleBundleManager(new File(props.getProperty("locale.dir")));
 		this.localeMgr.reload();
@@ -99,6 +96,9 @@ public class Server
 		FacebookManager.setSharedAppNamespace(this.facebook.getAppNamespace());
 		FacebookManager.setSharedAppAccessToken(this.facebook.getAppAccessToken());
 		
+		// Setup server cluster
+		this.serverCluster = new ServerCluster(this, props);
+		
 		// Force message registry loading
 		MessageHandlers.get(null);
 		
@@ -119,8 +119,8 @@ public class Server
 		
 		// Start sync worker
 		ScheduledExecutorService sync = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Cluster Sync"));
-		sync.scheduleWithFixedDelay(this.serverCluster, 0, Integer.parseInt(props.getProperty("cluster.sync.interval", "5")), TimeUnit.SECONDS);
-		sync.scheduleWithFixedDelay(new MemoryWatchdog(), 0, 30, TimeUnit.SECONDS);
+		sync.scheduleAtFixedRate(this.serverCluster, 0, Integer.parseInt(props.getProperty("cluster.sync.interval", "5")), TimeUnit.SECONDS);
+		sync.scheduleAtFixedRate(new MemoryWatchdog(), 30, 30, TimeUnit.SECONDS);
 	}
 
 	public void destroy()

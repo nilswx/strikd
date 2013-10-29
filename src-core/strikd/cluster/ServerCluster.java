@@ -57,17 +57,14 @@ public class ServerCluster extends Server.Referent implements Runnable
 		}
 		
 		// This data is updated periodically
-		else
-		{
-			Runtime vm = Runtime.getRuntime();
-			this.self.memoryUsage = ((vm.totalMemory() - vm.freeMemory()) / 1024f / 1024f);
-			this.self.onlineUsers = server.getSessionMgr().sessions();
-			this.self.totalLogins = server.getSessionMgr().totalLogins();
-			this.self.activeMatches = server.getMatchMgr().active();
-			this.self.totalMatches = server.getMatchMgr().matchCounter();
-			this.self.avgWaitingTime = 12;
-			this.self.online = true;
-		}
+		Runtime vm = Runtime.getRuntime();
+		this.self.memoryUsage = ((vm.totalMemory() - vm.freeMemory()) / 1024f / 1024f);
+		this.self.onlineUsers = server.getSessionMgr().sessions();
+		this.self.totalLogins = server.getSessionMgr().totalLogins();
+		this.self.activeMatches = server.getMatchMgr().active();
+		this.self.totalMatches = server.getMatchMgr().matchCounter();
+		this.self.avgWaitingTime = 12;
+		this.self.lastUpdate = new Date();
 		
 		// Flush to database
 		this.dbServers.save(this.self);
