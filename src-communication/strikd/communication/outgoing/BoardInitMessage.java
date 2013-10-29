@@ -12,13 +12,14 @@ public class BoardInitMessage extends OutgoingMessage
 		super(Opcodes.Outgoing.BOARD_INIT);
 		
 		// Dimensions
-		super.writeByte((byte)board.getWidth());
-		super.writeByte((byte)board.getHeight());
+		int width = board.getWidth(), height = board.getHeight();
+		super.writeByte((byte)width);
+		super.writeByte((byte)height);
 		
 		// All tiles
-		for(int x = 0; x < board.getWidth(); x++)
+		for(int x = 0; x < width; x++)
 		{
-			for(int y = 0; y < board.getHeight(); y++)
+			for(int y = 0; y < height; y++)
 			{
 				Square square = board.getSquareUnchecked(x, y);
 				if(square.isNull())
@@ -27,7 +28,8 @@ public class BoardInitMessage extends OutgoingMessage
 				}
 				else
 				{
-					super.writeByte((byte) (square.getLetter() << 5)); // TODO: store trigger info in remaining 3 bits
+					// TODO: store trigger info in remaining 3 bits (square.getLetter() << 5))
+					super.writeByte((byte)square.getLetter());
 				}
 			}
 		}
