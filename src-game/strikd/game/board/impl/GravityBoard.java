@@ -1,9 +1,18 @@
 package strikd.game.board.impl;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import strikd.communication.outgoing.BoardUpdateMessage;
+import strikd.game.board.Square;
 import strikd.words.WordDictionary;
 
 public class GravityBoard extends BruteBoard
 {
+	protected final List<Square> removed = Lists.newArrayList();
+	protected final List<Square> added = Lists.newArrayList();
+	
 	public GravityBoard(int width, int height, WordDictionary dictionary)
 	{
 		super(width, height, dictionary);
@@ -25,8 +34,8 @@ public class GravityBoard extends BruteBoard
 					if(y < (height - 1) && this.squares[x][y + 1].isTile())
 					{
 						// Fall down!
-						this.squares[x][y].setLetter(this.squares[x][y + 1].getLetter());
 						this.squares[x][y + 1].clear();
+						this.squares[x][y].setLetter(this.squares[x][y + 1].getLetter());
 					}
 				}
 			}
@@ -34,5 +43,18 @@ public class GravityBoard extends BruteBoard
 		
 		// Fill the gaps
 		super.update();
+	}
+	
+	public BoardUpdateMessage generateUpdateMessage()
+	{
+		// Generate update message
+		BoardUpdateMessage msg = new BoardUpdateMessage(this.removed, this.added);
+		
+		// Clear updates
+		this.removed.clear();
+		this.added.clear();
+		
+		// Broadcast material!
+		return msg;
 	}
 }
