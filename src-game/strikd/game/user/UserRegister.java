@@ -1,6 +1,5 @@
 package strikd.game.user;
 
-import java.util.Random;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -9,6 +8,7 @@ import org.jongo.MongoCollection;
 
 import strikd.Server;
 import strikd.sessions.Session;
+import strikd.util.RandomUtil;
 
 public class UserRegister extends Server.Referent
 {
@@ -58,8 +58,6 @@ public class UserRegister extends Server.Referent
 	
 	public String generateDefaultName()
 	{
-		Random rand = new Random();
-		
-		return String.format("Player-%d", (rand.nextInt(99999 - 100 + 1) + 100));
+		return String.format("Player-%d", RandomUtil.pickInt(100000, 999999));
 	}
 }
