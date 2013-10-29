@@ -38,7 +38,7 @@ public final class MessageHandlers
 	
 	static
 	{
-		Reflections ref = new Reflections("strikd.communication.incoming");
+		Reflections ref = new Reflections(MessageHandler.class.getPackage().getName());
 		for(Class<? extends MessageHandler> clazz : ref.getSubTypesOf(MessageHandler.class))
 		{
 			register(clazz);
