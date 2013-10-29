@@ -36,12 +36,6 @@ public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 		return this.matchMgr;
 	}
 	
-	@Override
-	public String toString()
-	{
-		return String.format("%s (%s)", this.getClass().getSimpleName(), this.locale);
-	}
-	
 	public static abstract class Entry
 	{
 		private final Session session;

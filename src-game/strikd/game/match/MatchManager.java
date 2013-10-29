@@ -31,7 +31,7 @@ public class MatchManager extends Server.Referent
 			PlayerQueue queue = new SimpleBotQueue(locale, this);//SimplePlayerQueue(this);
 			this.queues.put(locale.getLocale(), queue);
 			
-			logger.debug(String.format("opened %s", queue));
+			logger.info(String.format("%s: created %s", locale, queue.getClass().getName()));
 		}
 	}
 	
