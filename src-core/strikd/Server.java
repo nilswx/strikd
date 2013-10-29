@@ -84,6 +84,9 @@ public class Server
 		this.userRegister = new UserRegister(this);
 		this.matchMgr = new MatchManager(this);
 		
+		// Join server cluster
+		this.serverCluster = new ServerCluster(this, props);
+		
 		// Load shop assortment
 		this.shop = new ItemShop(this);
 		this.shop.reload();
@@ -92,12 +95,9 @@ public class Server
 		this.facebook = new FacebookManager(
 				props.getProperty("facebook.page.id"),
 				props.getProperty("facebook.app.ns"),
-				props.getProperty("facebook.app.token"));
+				props.getProperty("facebook.app.token"), this);
 		FacebookManager.setSharedAppNamespace(this.facebook.getAppNamespace());
 		FacebookManager.setSharedAppAccessToken(this.facebook.getAppAccessToken());
-		
-		// Setup server cluster
-		this.serverCluster = new ServerCluster(this, props);
 		
 		// Force message registry loading
 		MessageHandlers.get(null);

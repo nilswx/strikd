@@ -7,6 +7,7 @@ import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.facebook.FacebookIdentity;
+import strikd.game.facebook.InviteManager;
 import strikd.net.codec.IncomingMessage;
 
 public class FacebookLinkHandler extends MessageHandler
@@ -33,12 +34,16 @@ public class FacebookLinkHandler extends MessageHandler
 			
 			// Set user ID for quick lookups later
 			newIdentity.userId = Long.parseLong(profile.getId());
-				
+			
 			// Rename user to user's first name
 			session.renameUser(profile.getFirstName());
 			
 			// TODO: Set country
 			//session.getUser().country = profile.getL
+			
+			// Process pending invites
+			InviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
+			inviteMgr.processInvites(newIdentity);
 		}
 		catch(Exception e)
 		{

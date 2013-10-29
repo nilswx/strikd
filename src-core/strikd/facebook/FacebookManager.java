@@ -5,9 +5,11 @@ import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 
+import strikd.Server;
+import strikd.game.facebook.InviteManager;
 import strikd.util.NamedThreadFactory;
 
-public class FacebookManager
+public class FacebookManager extends Server.Referent
 {
 	private static final Logger logger = Logger.getLogger(FacebookManager.class);
 	
@@ -15,23 +17,29 @@ public class FacebookManager
 	private final String appNamespace;
 	private final String appAccessToken;
 	
+	private final InviteManager inviteMgr;
+	
 	private final ExecutorService publisher;
 	
-	public FacebookManager(String pageId, String appNamespace, String appAccessToken)
+	public FacebookManager(String pageId, String appNamespace, String appAccessToken, Server server)
 	{
-		// Set config data
+		// Initialize static data
+		super(server);
 		this.pageId = pageId;
 		this.appNamespace = appNamespace;
 		this.appAccessToken = appAccessToken;
-		
-		// Create background threadpool for publishing actions
-		this.publisher = Executors.newCachedThreadPool(new NamedThreadFactory("Facebook Publisher #%d"));
 		
 		// Log namespace and a masked copy of the token
 		logger.info(String.format("pageId='%s' [og:namespace='%s', access_token=%s]",
 				pageId,
 				appNamespace,
 				appAccessToken.substring(0, appAccessToken.indexOf('|') + 1) + "<SECRET>"));
+		
+		// Setup invite manager
+		this.inviteMgr = new InviteManager(this);
+		
+		// Create background threadpool for publishing actions
+		this.publisher = Executors.newCachedThreadPool(new NamedThreadFactory("Facebook Publisher #%d"));
 	}
 	
 	public void publish(FacebookStory story)
@@ -54,6 +62,11 @@ public class FacebookManager
 		// This token is derived from app ID + app secret, and is used to authorize the server to post stories
 		// https://graph.facebook.com/oauth/access_token?client_id=APP_ID&client_secret=APP_SECRET&grant_type=client_credentials
 		return this.appAccessToken;
+	}
+	
+	public InviteManager getInviteMgr()
+	{
+		return this.inviteMgr;
 	}
 	
 	private static String sharedAppNamespace, sharedAppAccessToken;
