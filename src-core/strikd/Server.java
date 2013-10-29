@@ -36,7 +36,7 @@ public class Server
 	private final NetListener listener;
 	
 	private final SessionManager sessionMgr;
-	private final UserRegister playerRegister;
+	private final UserRegister userRegister;
 	private final MatchManager matchMgr;
 	private final ItemShop shop;
 	private final FacebookManager facebook;
@@ -81,7 +81,7 @@ public class Server
 		
 		// Setup registers and managers
 		this.sessionMgr = new SessionManager(this);
-		this.playerRegister = new UserRegister(this);
+		this.userRegister = new UserRegister(this);
 		this.matchMgr = new MatchManager(this);
 		
 		// Load shop assortment
@@ -118,8 +118,9 @@ public class Server
 		logger.info(String.format("SERVER ONLINE %s", this.serverCluster.getSelf()));
 		
 		// Start sync worker
+		int syncInterval = Integer.parseInt(props.getProperty("cluster.sync.interval", "5"));
 		ScheduledExecutorService sync = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Cluster Sync"));
-		sync.scheduleAtFixedRate(this.serverCluster, 0, Integer.parseInt(props.getProperty("cluster.sync.interval", "5")), TimeUnit.SECONDS);
+		sync.scheduleAtFixedRate(this.serverCluster, syncInterval, syncInterval, TimeUnit.SECONDS);
 		sync.scheduleAtFixedRate(new MemoryWatchdog(), 30, 30, TimeUnit.SECONDS);
 	}
 
@@ -189,7 +190,7 @@ public class Server
 	
 	public UserRegister getUserRegister()
 	{
-		return this.playerRegister;
+		return this.userRegister;
 	}
 
 	public MatchManager getMatchMgr()

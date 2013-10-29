@@ -26,37 +26,36 @@ public class ServerCluster extends Server.Referent implements Runnable
 		super(server);
 		this.servers = Collections.emptyMap();
 		this.dbServers = server.getDbCluster().getCollection("servers");
-		this.updateSelf(props);
+		this.joinCluster(props);
 	}
 	
-	private void updateSelf(Properties props)
+	private void joinCluster(Properties props)
 	{
-		// Boot?
+		// Retrieve/create descriptor
+		int serverId = Integer.parseInt(props.getProperty("server.id"));
+		this.self = this.dbServers.findOne("{_id:#}", serverId).as(ServerDescriptor.class);
 		if(this.self == null)
 		{
-			// Retrieve/create descriptor
-			int serverId = Integer.parseInt(props.getProperty("server.id"));
-			this.self = this.dbServers.findOne("{_id:#}", serverId).as(ServerDescriptor.class);
-			if(this.self == null)
-			{
-				this.self = new ServerDescriptor();
-			}
-			logger.info(String.format("joining as #%d ('%s')", serverId, props.get("server.name")));
-		}
-		Server server = this.getServer();
-		
-		// This data is only updated at startup
-		if(props != null)
-		{
-			this.self.serverId = Integer.parseInt(props.getProperty("server.id"));
-			this.self.name = props.getProperty("server.name");
-			this.self.host = props.getProperty("server.host");
-			this.self.port = Integer.parseInt(props.getProperty("server.port"));
-			this.self.version = Version.getVersion();
-			this.self.started = new Date();
+			this.self = new ServerDescriptor();
 		}
 		
+		// Update with latest startup data
+		this.self.serverId = serverId;
+		this.self.name = props.getProperty("server.name");
+		this.self.host = props.getProperty("server.host");
+		this.self.port = Integer.parseInt(props.getProperty("server.port"));
+		this.self.version = Version.getVersion();
+		this.self.started = new Date();
+		this.syncSelf();
+		
+		// Output to logs
+		logger.info(String.format("joining as server #%d (%s:%d)", serverId, this.self.host, this.self.port));
+	}
+	
+	private void syncSelf()
+	{
 		// This data is updated periodically
+		Server server = this.getServer();
 		Runtime vm = Runtime.getRuntime();
 		this.self.memoryUsage = ((vm.totalMemory() - vm.freeMemory()) / 1024f / 1024f);
 		this.self.onlineUsers = server.getSessionMgr().sessions();
@@ -78,15 +77,12 @@ public class ServerCluster extends Server.Referent implements Runnable
 	
 	public void refresh()
 	{
-		this.updateSelf(null);
+		this.syncSelf();
 		this.rediscover();
 	}
 	
 	private void rediscover()
 	{
-		// Update self
-		this.updateSelf(null);
-		
 		// Refresh data and detect new servers
 		Map<Integer, ServerDescriptor> newMap = new HashMap<Integer, ServerDescriptor>();
 		for(ServerDescriptor server : this.dbServers.find("{_id:{$ne:#}}", this.self.serverId).as(ServerDescriptor.class))
