@@ -43,6 +43,18 @@ public class GravityBoard extends BruteBoard
 		
 		// Fill the gaps
 		super.update();
+		
+		// Plug the remaining holes
+		for(int x = 0; x < width; x++)
+		{
+			for(int y = 0; y < width; y++)
+			{
+				if(this.squares[x][y].isNull())
+				{
+					this.squares[x][y].setLetter('A'); // TODO: random
+				}
+			}
+		}
 	}
 	
 	public BoardUpdateMessage generateUpdateMessage()
