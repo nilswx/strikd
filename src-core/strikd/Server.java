@@ -16,6 +16,7 @@ import com.mongodb.MongoClient;
 
 import strikd.cluster.ServerCluster;
 import strikd.communication.incoming.MessageHandlers;
+import strikd.facebook.FacebookPublisher;
 import strikd.game.items.ItemShop;
 import strikd.game.match.MatchManager;
 import strikd.game.user.UserRegister;
@@ -38,6 +39,7 @@ public class Server
 	private final UserRegister playerRegister;
 	private final MatchManager matchMgr;
 	private final ItemShop shop;
+	private final FacebookPublisher publisher;
 	
 	private boolean isShutdownMode;
 	private String shutdownMessage;
@@ -88,6 +90,9 @@ public class Server
 		// Load shop assortment
 		this.shop = new ItemShop(this);
 		this.shop.reload();
+		
+		// Create FB publisher
+		this.publisher = new FacebookPublisher(props.getProperty("facebook.app.ns"), props.getProperty("facebook.app.secret"));
 		
 		// Force message registry loading
 		MessageHandlers.get(null);
@@ -190,6 +195,11 @@ public class Server
 	public ItemShop getShop()
 	{
 		return this.shop;
+	}
+	
+	public FacebookPublisher getPublisher()
+	{
+		return this.publisher;
 	}
 	
 	public boolean isShutdownMode()

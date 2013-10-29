@@ -10,7 +10,7 @@ public class FacebookIdentity
 	
 	public Facebook getAPI()
 	{
-		return new FacebookTemplate(this.token);
+		return new FacebookTemplate(this.token, "strik-fb");
 	}
 	
 	@Override
