@@ -92,7 +92,7 @@ public class Server
 		this.shop.reload();
 		
 		// Create FB publisher
-		this.publisher = new FacebookPublisher(props.getProperty("facebook.app.ns"), props.getProperty("facebook.app.secret"));
+		this.publisher = new FacebookPublisher(props.getProperty("facebook.app.ns"), props.getProperty("facebook.app.token"));
 		
 		// Force message registry loading
 		MessageHandlers.get(null);

@@ -2,6 +2,8 @@ package strikd.facebook;
 
 import org.apache.log4j.Logger;
 import org.springframework.social.facebook.api.Facebook;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 public abstract class FacebookStory implements Runnable
 {
@@ -19,7 +21,13 @@ public abstract class FacebookStory implements Runnable
 	{
 		try
 		{
-			this.identity.openGraphOperations().publishAction(this.getAction(), this.getObjectType(), this.getObjectUrl());
+			// Build data for the request (access_token = server's)
+			MultiValueMap<String, Object> data = new LinkedMultiValueMap<String, Object>();
+			data.set(this.getObjectType(), this.getObjectUrl());
+			data.set("access_token", "");
+			
+			// Make the request
+			this.identity.publish("me", (this.identity.getApplicationNamespace() + ':' + this.getAction()), data);
 		}
 		catch(Exception e)
 		{
