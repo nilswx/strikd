@@ -14,13 +14,10 @@ public abstract class Board
 	protected final Square[][] squares;
 	protected final WordDictionary dictionary;
 	
-	private final BoardUpdateGenerator updates;
-	
 	protected Board(int width, int height, WordDictionary dictionary)
 	{
 		this.squares = new Square[width][height];
 		this.dictionary = dictionary;
-		this.updates = new BoardUpdateGenerator(this);
 	}
 	
 	public Square newSquare(int x, int y)
@@ -55,7 +52,7 @@ public abstract class Board
 	{
 		// Override me
 	}
-
+	
 	public final Square getSquare(int x, int y)
 	{
 		if(this.squareExists(x, y))
@@ -66,6 +63,11 @@ public abstract class Board
 		{
 			return null;
 		}
+	}
+	
+	public final Square getSquareUnchecked(int x, int y)
+	{
+		return this.squares[x][y];
 	}
 	
 	public final boolean squareExists(int x, int y)
@@ -81,11 +83,6 @@ public abstract class Board
 	public final int getHeight()
 	{
 		return this.squares[0].length;
-	}
-	
-	public BoardUpdateGenerator getUpdateGenerator()
-	{
-		return this.updates;
 	}
 	
 	@Override

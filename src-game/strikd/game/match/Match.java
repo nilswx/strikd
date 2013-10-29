@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 
 import strikd.communication.outgoing.AnnounceMatchMessage;
+import strikd.communication.outgoing.BoardInitMessage;
 import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Board;
@@ -87,7 +88,7 @@ public class Match
 		if(!this.isStarted())
 		{
 			// Initial board!
-			this.broadcast(this.board.getUpdateGenerator().generateUpdates());
+			this.broadcast(new BoardInitMessage(this.board));
 			
 			// Start the timers at the clients etc, the game is ON!
 			this.broadcast(new MatchStartedMessage());

@@ -109,7 +109,7 @@ public class UpdateTileSelectionHandler extends MessageHandler
 						board.update();
 						
 						// Send updated letters
-						match.broadcast(board.getUpdateGenerator().generateUpdates());
+						//match.broadcast(board.getUpdateGenerator().generateUpdates());
 					}
 				}
 				

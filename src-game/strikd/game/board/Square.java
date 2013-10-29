@@ -37,7 +37,7 @@ public class Square
 		if(!this.needsUpdate)
 		{
 			this.needsUpdate = true;
-			this.board.getUpdateGenerator().registerUpdate();
+			//this.board.getUpdateGenerator().registerUpdate();
 		}
 	}
 	
