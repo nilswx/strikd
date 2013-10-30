@@ -16,7 +16,7 @@ public class ServerDescriptor
 	public Date lastUpdate;
 	public float memoryUsage;
 	
-	public int onlineUsers;
+	public int onlinePlayers;
 	public long totalLogins;
 	public int activeMatches;
 	public long totalMatches;
@@ -27,6 +27,6 @@ public class ServerDescriptor
 	@Override
 	public String toString()
 	{
-		return String.format("#%d '%s' @ v%s (u=%d, m=%d, mem=%.2f MiB)", this.serverId, this.name, this.version, this.onlineUsers, this.activeMatches, this.memoryUsage);
+		return String.format("#%d '%s' @ v%s (u=%d, m=%d, mem=%.2f MiB)", this.serverId, this.name, this.version, this.onlinePlayers, this.activeMatches, this.memoryUsage);
 	}
 }

@@ -9,7 +9,7 @@ import org.bson.types.ObjectId;
 
 import strikd.Server;
 import strikd.game.facebook.PersonBeatedStory;
-import strikd.game.user.User;
+import strikd.game.player.Player;
 import strikd.net.NetConnection;
 
 public class SessionManager extends Server.Referent
@@ -20,7 +20,7 @@ public class SessionManager extends Server.Referent
 	private final Map<Long, Session> sessions = new ConcurrentHashMap<Long, Session>();
 	
 	private final AtomicLong loginCounter = new AtomicLong();
-	private final Map<ObjectId, Session> userSessions = new ConcurrentHashMap<ObjectId, Session>();
+	private final Map<ObjectId, Session> playerSessions = new ConcurrentHashMap<ObjectId, Session>();
 	
 	public SessionManager(Server server)
 	{
@@ -54,15 +54,15 @@ public class SessionManager extends Server.Referent
 		Session session = this.sessions.remove(sessionId);
 		if(session != null)
 		{
-			User user = session.getUser();
-			if(user == null)
+			Player player = session.getPlayer();
+			if(player == null)
 			{
 				logger.warn(String.format("session #%d (%s) ended early (%s)", sessionId, session.getConnection().getIpAddress(), reason));
 			}
 			else
 			{
-				this.userSessions.remove(user.id);
-				logger.debug(String.format("%s logged out (%s)", user, reason));
+				this.playerSessions.remove(player.id);
+				logger.debug(String.format("%s logged out (%s)", player, reason));
 			}
 			session.onEnd();
 		}
@@ -71,28 +71,28 @@ public class SessionManager extends Server.Referent
 	public void completeLogin(Session session)
 	{
 		// Given session is indeed logged in?
-		User user = session.getUser();
-		if(user != null)
+		Player player = session.getPlayer();
+		if(player != null)
 		{
 			// Disconnect old login (if online)
-			Session concurrent = this.getUserSession(user.id);
+			Session concurrent = this.getPlayerSession(player.id);
 			if(concurrent != null)
 			{
 				this.endSession(concurrent.getSessionId(), "concurrent login");
 			}
 			
-			// Add to user map and increment logins
-			this.userSessions.put(user.id, session);
+			// Add to player map and increment logins
+			this.playerSessions.put(player.id, session);
 			this.loginCounter.incrementAndGet();
-			user.logins++;
+			player.logins++;
 			
 			// Post story
-			if(user.isFacebookLinked())
+			if(player.isFacebookLinked())
 			{
-				this.getServer().getFacebook().publish(new PersonBeatedStory(user.fbIdentity, "100000541030001"));
+				this.getServer().getFacebook().publish(new PersonBeatedStory(player.fbIdentity, "100000541030001"));
 			}
 			
-			logger.info(String.format("%s logged in (#%d) in from %s (%s)", user, user.logins, session.getConnection().getIpAddress(), user.platform));
+			logger.info(String.format("%s logged in (#%d) in from %s (%s)", player, player.logins, session.getConnection().getIpAddress(), player.platform));
 		}
 	}
 	
@@ -101,9 +101,9 @@ public class SessionManager extends Server.Referent
 		return this.sessions.get(sessionId);
 	}
 	
-	public Session getUserSession(ObjectId userId)
+	public Session getPlayerSession(ObjectId playerId)
 	{
-		return this.userSessions.get(userId);
+		return this.playerSessions.get(playerId);
 	}
 	
 	public int sessions()
@@ -116,9 +116,9 @@ public class SessionManager extends Server.Referent
 		return this.sessionCounter.get();
 	}
 	
-	public int users()
+	public int players()
 	{
-		return this.userSessions.size();
+		return this.playerSessions.size();
 	}
 	
 	public long totalLogins()

@@ -1,4 +1,4 @@
-package strikd.game.user;
+package strikd.game.player;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,7 +10,7 @@ import org.jongo.marshall.jackson.oid.Id;
 import strikd.facebook.FacebookIdentity;
 import strikd.game.items.Item;
 
-public class User
+public class Player
 {
 	@Id
 	public ObjectId id;

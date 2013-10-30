@@ -10,7 +10,7 @@ import strikd.communication.Opcodes;
 import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.facebook.FacebookIdentity;
-import strikd.game.user.User;
+import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 
 public class FacebookClaimLikeHandler extends MessageHandler
@@ -29,24 +29,24 @@ public class FacebookClaimLikeHandler extends MessageHandler
 	public void handle(Session session, IncomingMessage request)
 	{
 		// Allowed to claim reward?
-		User user = session.getUser();
-		if(user.isFacebookLinked() && !user.liked)
+		Player player = session.getPlayer();
+		if(player.isFacebookLinked() && !player.liked)
 		{
 			// THANKS!
-			user.liked = checkUserLikesPage(user.fbIdentity, session.getServer().getFacebook().getPageId());
-			if(user.liked)
+			player.liked = checkUserLikesPage(player.fbIdentity, session.getServer().getFacebook().getPageId());
+			if(player.liked)
 			{
 				// TODO: give item
 				session.send(new AlertMessage("Thanks for liking Strik, here's your crappy item!"));
 				
 				// Save data
-				user.liked = true;
+				player.liked = true;
 				session.saveData();
 			}
 		}
 		
 		// Refresh status
-		session.send(new FacebookStatusMessage(user.isFacebookLinked(), user.liked));
+		session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.liked));
 	}
 	
 	private static boolean checkUserLikesPage(FacebookIdentity identity, String pageId)

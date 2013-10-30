@@ -28,7 +28,7 @@ public class ChangeNameHandler extends MessageHandler
 		}
 		else
 		{
-			session.renameUser(newName);
+			session.renamePlayer(newName);
 		}
 	}
 }

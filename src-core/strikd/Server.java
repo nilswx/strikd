@@ -19,7 +19,7 @@ import strikd.communication.incoming.MessageHandlers;
 import strikd.facebook.FacebookManager;
 import strikd.game.items.ItemShop;
 import strikd.game.match.MatchManager;
-import strikd.game.user.UserRegister;
+import strikd.game.player.PlayerRegister;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
 import strikd.sessions.SessionManager;
@@ -36,7 +36,7 @@ public class Server
 	private final NetListener listener;
 	
 	private final SessionManager sessionMgr;
-	private final UserRegister userRegister;
+	private final PlayerRegister playerRegister;
 	private final MatchManager matchMgr;
 	private final ItemShop shop;
 	private final FacebookManager facebook;
@@ -81,7 +81,7 @@ public class Server
 		
 		// Setup registers and managers
 		this.sessionMgr = new SessionManager(this);
-		this.userRegister = new UserRegister(this);
+		this.playerRegister = new PlayerRegister(this);
 		this.matchMgr = new MatchManager(this);
 		
 		// Join server cluster
@@ -188,9 +188,9 @@ public class Server
 		return this.sessionMgr;
 	}
 	
-	public UserRegister getUserRegister()
+	public PlayerRegister getPlayerRegister()
 	{
-		return this.userRegister;
+		return this.playerRegister;
 	}
 
 	public MatchManager getMatchMgr()

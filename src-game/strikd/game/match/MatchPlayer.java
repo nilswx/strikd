@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import strikd.game.board.Square;
-import strikd.game.user.User;
+import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
 
@@ -51,9 +51,9 @@ public class MatchPlayer
 		return this.session;
 	}
 	
-	public User getInfo()
+	public Player getInfo()
 	{
-		return this.session.getUser();
+		return this.session.getPlayer();
 	}
 	
 	public Match getMatch()

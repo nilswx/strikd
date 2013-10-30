@@ -7,10 +7,10 @@ import strikd.net.codec.OutgoingMessage;
 
 public class CredentialsMessage extends OutgoingMessage
 {
-	public CredentialsMessage(ObjectId userId, String token)
+	public CredentialsMessage(ObjectId playerId, String token)
 	{
 		super(Opcodes.Outgoing.CREDENTIALS);
-		super.writeStr(userId.toString());
+		super.writeStr(playerId.toString());
 		super.writeStr(token);
 	}
 }
