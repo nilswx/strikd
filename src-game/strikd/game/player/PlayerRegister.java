@@ -20,6 +20,8 @@ public class PlayerRegister extends Server.Referent
 	{
 		super(server);
 		this.dbPlayers = this.getServer().getDbCluster().getCollection("players");
+		
+		logger.info(String.format("%d players", this.dbPlayers.count()));
 	}
 	
 	public Player newPlayer()
