@@ -27,18 +27,10 @@ public class FacebookInviteManager extends Server.Referent
 		logger.info(String.format("pending invites for %d persons", this.dbInvites.count()));
 	}
 	
-	public boolean registerInvite(long personId, Player inviter)
+	public void registerInvite(long personId, Player inviter)
 	{
-		if(true || inviter.isFacebookLinked())
-		{
-			this.dbInvites.update("{_id:#}", personId).upsert().with("{$addToSet:{by:#}}", inviter.id);	
-			logger.info(String.format("%s invited person #%d!", inviter, personId));
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		this.dbInvites.update("{_id:#}", personId).upsert().with("{$addToSet:{by:#}}", inviter.id);	
+		logger.info(String.format("%s invited person #%d!", inviter, personId));
 	}
 	
 	public void processInvites(long personId)
