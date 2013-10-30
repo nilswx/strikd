@@ -2,7 +2,7 @@ package strikd.game.facebook;
 
 import strikd.facebook.FacebookIdentity;
 
-public class LevelReachedStory extends StrikStory
+public class LevelReachedStory extends StrikHostedObjectStory
 {
 	public LevelReachedStory(FacebookIdentity identity, int level)
 	{

@@ -1,8 +1,9 @@
 package strikd.game.facebook;
 
 import strikd.facebook.FacebookIdentity;
+import strikd.facebook.FacebookStory;
 
-public class PersonBeatedStory extends StrikStory
+public class PersonBeatedStory extends FacebookStory
 {
 	public PersonBeatedStory(FacebookIdentity identity, String profileId)
 	{
@@ -19,11 +20,5 @@ public class PersonBeatedStory extends StrikStory
 	protected String getObjectType()
 	{
 		return "profile";
-	}
-	
-	@Override
-	protected String getObjectString()
-	{
-		return String.valueOf(this.getObject());
 	}
 }

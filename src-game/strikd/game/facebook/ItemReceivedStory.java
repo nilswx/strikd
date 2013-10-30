@@ -2,7 +2,7 @@ package strikd.game.facebook;
 
 import strikd.facebook.FacebookIdentity;
 
-public class ItemReceivedStory extends StrikStory
+public class ItemReceivedStory extends StrikHostedObjectStory
 {
 	public ItemReceivedStory(FacebookIdentity identity, int itemId)
 	{

@@ -5,7 +5,6 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-
 public abstract class FacebookStory implements Runnable
 {
 	private static final Logger logger = Logger.getLogger(FacebookStory.class);
@@ -29,7 +28,7 @@ public abstract class FacebookStory implements Runnable
 			
 			// Build data for the request (access_token = app access token)
 			MultiValueMap<String, Object> data = new LinkedMultiValueMap<String, Object>();
-			data.set(this.getObjectType(), this.getObjectString());
+			data.set(this.getObjectType(), this.getObject());
 			data.set("access_token", this.getPublisherAccessToken());
 			
 			// Make the request
@@ -46,14 +45,9 @@ public abstract class FacebookStory implements Runnable
 	
 	protected abstract String getObjectType();
 	
-	protected final Object getObject()
+	protected Object getObject()
 	{
 		return this.object;
-	}
-	
-	protected String getObjectString()
-	{
-		return String.valueOf(this.object);
 	}
 	
 	protected String getPublisherAccessToken()
