@@ -22,7 +22,8 @@ public class User
 	public Avatar avatar;
 	public String language;
 	
-	public int currentServerId;
+	// Clustering
+	public int serverId;
 	
 	// Ranking
 	public int xp;
@@ -61,7 +62,7 @@ public class User
 	
 	public boolean isOnline()
 	{
-		return (this.currentServerId > 0);
+		return (this.serverId > 0);
 	}
 	
 	@Override

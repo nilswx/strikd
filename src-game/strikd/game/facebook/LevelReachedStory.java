@@ -4,9 +4,9 @@ import strikd.facebook.FacebookIdentity;
 
 public class LevelReachedStory extends StrikStory
 {
-	public LevelReachedStory(int level, FacebookIdentity identity)
+	public LevelReachedStory(FacebookIdentity identity, int level)
 	{
-		super(level, identity);
+		super(identity, level);
 	}
 
 	@Override

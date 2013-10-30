@@ -4,9 +4,9 @@ import strikd.facebook.FacebookIdentity;
 
 public class ItemReceivedStory extends StrikStory
 {
-	public ItemReceivedStory(int itemId, FacebookIdentity identity)
+	public ItemReceivedStory(FacebookIdentity identity, int itemId)
 	{
-		super(itemId, identity);
+		super(identity, itemId);
 	}
 
 	@Override
