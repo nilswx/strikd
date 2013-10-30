@@ -27,6 +27,6 @@ public class ServerDescriptor
 	@Override
 	public String toString()
 	{
-		return String.format("#%d '%s' @ v%s (u=%d, m=%d, mem=%.2f MiB)", this.serverId, this.name, this.version, this.onlinePlayers, this.activeMatches, this.memoryUsage);
+		return String.format("#%d '%s' @ v%s (p=%d m=%d mem=%.2f MiB)", this.serverId, this.name, this.version, this.onlinePlayers, this.activeMatches, this.memoryUsage);
 	}
 }
