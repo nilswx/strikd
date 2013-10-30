@@ -29,7 +29,7 @@ public class FacebookInviteManager extends Server.Referent
 	
 	public boolean registerInvite(long personId, Player inviter)
 	{
-		if(inviter.isFacebookLinked())
+		if(true || inviter.isFacebookLinked())
 		{
 			this.dbInvites.update("{_id:#}", personId).upsert().with("{$addToSet:{by:#}}", inviter.id);	
 			logger.info(String.format("%s invited person #%d!", inviter, personId));
@@ -44,12 +44,12 @@ public class FacebookInviteManager extends Server.Referent
 	public void processInvites(long personId)
 	{
 		// Was this FB user invited by existing players?
-		InvitedByList list = this.dbInvites.findAndModify("{_id:#}", personId).remove().projection("{by:1}").as(InvitedByList.class);
-		if(list != null)
+		InvitedByList invites = this.dbInvites.findAndModify("{_id:#}", personId).remove().as(InvitedByList.class);
+		if(invites != null)
 		{
 			// Reward these guys
 			PlayerRegister register = this.getServer().getPlayerRegister();
-			for(ObjectId playerId : list.playerIds)
+			for(ObjectId playerId : invites.playerIds)
 			{
 				// Player _should_ still exist
 				Player player = register.findPlayer(playerId);
