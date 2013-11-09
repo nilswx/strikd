@@ -3,7 +3,7 @@ package strikd.game.items;
 import org.apache.log4j.Logger;
 
 import strikd.Server;
-import strikd.game.user.User;
+import strikd.game.player.Player;
 
 public class ItemShop extends Server.Referent
 {
@@ -19,11 +19,11 @@ public class ItemShop extends Server.Referent
 		logger.info("reloaded available items");
 	}
 	
-	public Item purchaseItem(int typeId, User user)
+	public Item purchaseItem(int typeId, Player player)
 	{
-		// TODO: validate item type and user currency balance
+		// TODO: validate item type and player currency balance
 		
-		// TODO: write transaction log for user (and statistics)
+		// TODO: write transaction log for player (and statistics)
 		
 		// TODO: create and return item
 		

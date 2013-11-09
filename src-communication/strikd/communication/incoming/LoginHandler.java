@@ -6,8 +6,8 @@ import strikd.communication.Opcodes;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.ItemsMessage;
-import strikd.communication.outgoing.UserInfoMessage;
-import strikd.game.user.User;
+import strikd.communication.outgoing.PlayerInfoMessage;
+import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
 
@@ -26,27 +26,27 @@ public class LoginHandler extends MessageHandler
 		if(!session.isLoggedIn())
 		{
 			// Read login info
-			ObjectId userId = new ObjectId(request.readStr());
+			ObjectId playerId = new ObjectId(request.readStr());
 			String token = request.readStr();
 			String hardware = request.readStr();
 			String systemVersion = request.readStr();
 			
 			// Correct account and password?
-			User user = session.getServer().getUserRegister().findUser(userId);
-			if(user == null || !token.equals(user.token))
+			Player player = session.getServer().getPlayerRegister().findPlayer(playerId);
+			if(player == null || !token.equals(player.token))
 			{
 				session.end("bad login");
 			}
 			else
 			{
 				// Login OK!
-				session.setUser(user, String.format("%s @ %s", hardware, systemVersion));
+				session.setPlayer(player, String.format("%s @ %s", hardware, systemVersion));
 				
-				// Push user data
-				session.send(new UserInfoMessage(user));
-				session.send(new FacebookStatusMessage(user.isFacebookLinked(), user.liked));
-				session.send(new CurrencyBalanceMessage(user.balance));
-				session.send(new ItemsMessage(user.items));
+				// Push player data
+				session.send(new PlayerInfoMessage(player));
+				session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.liked));
+				session.send(new CurrencyBalanceMessage(player.balance));
+				session.send(new ItemsMessage(player.items));
 			}
 		}
 	}

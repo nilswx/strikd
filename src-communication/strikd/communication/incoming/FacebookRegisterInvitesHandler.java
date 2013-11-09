@@ -3,7 +3,7 @@ package strikd.communication.incoming;
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.game.facebook.FacebookInviteManager;
-import strikd.game.user.User;
+import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 
 public class FacebookRegisterInvitesHandler extends MessageHandler
@@ -18,8 +18,8 @@ public class FacebookRegisterInvitesHandler extends MessageHandler
 	public void handle(Session session, IncomingMessage request)
 	{
 		// Allowed to invite users?
-		User user = session.getUser();
-		if(user.isFacebookLinked())
+		Player player = session.getPlayer();
+		if(player.isFacebookLinked())
 		{
 			// Get invite manager
 			FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
@@ -28,7 +28,7 @@ public class FacebookRegisterInvitesHandler extends MessageHandler
 			int amount = request.readInt();
 			for(int i = 0; i < amount; i++)
 			{
-				inviteMgr.registerInvite(request.readLong(), user);
+				inviteMgr.registerInvite(request.readLong(), player);
 			}
 		}
 	}

@@ -24,7 +24,7 @@ public class PurchaseItemHandler extends MessageHandler
 		
 		// Attempt to purchase the item
 		ItemShop shop = session.getServer().getShop();
-		Item item = shop.purchaseItem(typeId, session.getUser());
+		Item item = shop.purchaseItem(typeId, session.getPlayer());
 		
 		// Purchased successfully?
 		if(item == null)
@@ -33,7 +33,7 @@ public class PurchaseItemHandler extends MessageHandler
 		}
 		else
 		{
-			session.getUser().items.add(item);
+			session.getPlayer().items.add(item);
 			session.send(new ItemAddedMessage(item));
 		}
 	}

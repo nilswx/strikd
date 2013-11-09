@@ -1,4 +1,4 @@
-package strikd.game.user;
+package strikd.game.player;
 
 import strikd.sessions.Session;
 
@@ -76,51 +76,51 @@ public class Experience
 	public static void addExperience(Session session, int points)
 	{
 		// Add points and calculate new level
-		User user = session.getUser();
-		user.xp += points;
-		int newLevel = calculateLevel(user.xp);
+		Player player = session.getPlayer();
+		player.xp += points;
+		int newLevel = calculateLevel(player.xp);
 		
 		// Handle level ups
-		if(newLevel != user.level)
+		if(newLevel != player.level)
 		{
 			// Process all new levels
-			for(int level = user.level; level <= newLevel; level++)
+			for(int level = player.level; level <= newLevel; level++)
 			{
 				onLevelUp(session, level);
 			}
-			user.level = newLevel;
+			player.level = newLevel;
 		}
 		
 		// Save this stuff immediately
 		session.saveData();
 	}
 	
-	public static void addExp(User user, int points)
+	public static void addExp(Player player, int points)
 	{
 		// Limit reached?
-		if(user.level >= MAX_LEVEL)
+		if(player.level >= MAX_LEVEL)
 		{
 			return;
 		}
 		
 		// Calculate goal
-		//User user = session.getUser();
+		//Player player = session.getPlayer();
 		
 		// Add all the experience points
 		int pointsLeft = points;
 		while(pointsLeft > 0)
 		{
 			// Add XP, but within the current level
-			int endXP = getLevelEnd(user.level);
-			int pointsToNext = (endXP - user.xp);
-			int pointsToAdd = (pointsLeft < pointsToNext || user.level == MAX_LEVEL) ? pointsLeft : pointsToNext;
-			user.xp += pointsToAdd;
+			int endXP = getLevelEnd(player.level);
+			int pointsToNext = (endXP - player.xp);
+			int pointsToAdd = (pointsLeft < pointsToNext || player.level == MAX_LEVEL) ? pointsLeft : pointsToNext;
+			player.xp += pointsToAdd;
 			
 			// Level up?
-			if(user.xp == endXP)
+			if(player.xp == endXP)
 			{
-				user.level++;
-				onLevelUp(null, user.level);
+				player.level++;
+				onLevelUp(null, player.level);
 			}
 			
 			// Added some points!
@@ -141,7 +141,7 @@ public class Experience
 	
 	public static void main(String[] args)
 	{
-		User john = new User();
+		Player john = new Player();
 		john.xp = 0;
 		john.level = 0;
 		addExp(john, Integer.MAX_VALUE);

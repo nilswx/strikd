@@ -35,11 +35,11 @@ public class FacebookLinkHandler extends MessageHandler
 			// Set user ID for quick lookups later
 			newIdentity.userId = Long.parseLong(profile.getId());
 			
-			// Rename user to user's first name
-			session.renameUser(profile.getFirstName());
+			// Rename player to person's first name
+			session.renamePlayer(profile.getFirstName());
 			
 			// TODO: Set country
-			//session.getUser().country = profile.getL
+			//session.getPlayer().country = profile.getL
 			
 			// Process pending invites
 			FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
@@ -47,16 +47,16 @@ public class FacebookLinkHandler extends MessageHandler
 		}
 		catch(Exception e)
 		{
-			logger.warn(String.format("Facebook link failed!", e));
+			logger.warn(String.format("Facebook link for %s failed!", session.getPlayer()), e);
 			newIdentity = null;
 		}
 		
 		// Save current link status
-		session.getUser().fbIdentity = newIdentity;
+		session.getPlayer().fbIdentity = newIdentity;
 		session.saveData();
 		
 		// Send current status
-		session.send(new FacebookStatusMessage(session.getUser().isFacebookLinked(), session.getUser().liked));
+		session.send(new FacebookStatusMessage(session.getPlayer().isFacebookLinked(), session.getPlayer().liked));
 	}
 	
 	//logger.debug(String.format("FB #%s (\"%s %s\", %s) has %d FB friends", profile.getId(), profile.getFirstName(), profile.getLastName(), profile.getGender(), facebook.friendOperations().getFriendIds().size())); 

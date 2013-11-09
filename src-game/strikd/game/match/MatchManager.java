@@ -59,7 +59,7 @@ public class MatchManager extends Server.Referent
 	{
 		if(session.isLoggedIn())
 		{
-			return this.queues.get(session.getUser().language);
+			return this.queues.get(session.getPlayer().language);
 		}
 		else
 		{

@@ -7,7 +7,7 @@ public interface Opcodes
 	public enum Incoming implements Opcode
 	{
 		CLIENT_CRYPTO,
-	    CREATE_USER,
+	    CREATE_PLAYER,
 	    LOGIN,
 	    CHANGE_NAME,
 	    REQUEST_MATCH,
@@ -35,7 +35,7 @@ public interface Opcodes
 		SERVER_CRYPTO,
 		SESSION_INFO,
 		CREDENTIALS,
-		USER_INFO,
+		PLAYER_INFO,
 		CURRENCY_BALANCE,
 		ITEMS,
 		ITEM_ADDED,

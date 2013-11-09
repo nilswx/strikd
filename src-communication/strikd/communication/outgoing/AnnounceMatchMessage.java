@@ -15,7 +15,7 @@ public class AnnounceMatchMessage extends OutgoingMessage
 		super.writeInt(match.getTimer().getTimeLeft());
 		super.writeByte((byte)player.getPlayerId());
 		super.writeByte((byte)opponent.getPlayerId());
-		UserInfoMessage.serializeUser(opponent.getInfo(), this);
+		PlayerInfoMessage.serializePlayer(opponent.getInfo(), this);
 		super.writeByte(match.getLoadingTime()); // "Loading..." time in seconds
 	}
 }

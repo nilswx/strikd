@@ -11,7 +11,7 @@ import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Square;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.bots.ai.BasicMatchBotAI;
-import strikd.game.user.User;
+import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 import strikd.util.NamedThreadFactory;
 
@@ -19,11 +19,11 @@ public class MatchBotPlayer extends MatchPlayer implements Runnable
 {
 	private static final ScheduledExecutorService sharedAiExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("AI Processor"));
 	
-	private final User bot;
+	private final Player bot;
 	private final MatchBotAI ai;
 	private ScheduledFuture<?> pendingAiTask;
 	
-	public MatchBotPlayer(User bot)
+	public MatchBotPlayer(Player bot)
 	{
 		// Setup player
 		super(null);
@@ -89,7 +89,7 @@ public class MatchBotPlayer extends MatchPlayer implements Runnable
 	}
 	
 	@Override
-	public User getInfo()
+	public Player getInfo()
 	{
 		return this.bot;
 	}

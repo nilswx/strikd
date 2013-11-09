@@ -15,7 +15,7 @@ import strikd.communication.outgoing.VersionCheckMessage;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
-import strikd.game.user.User;
+import strikd.game.player.Player;
 import strikd.net.NetConnection;
 import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.OutgoingMessage;
@@ -31,7 +31,7 @@ public class Session extends Server.Referent
 	private boolean isEnded;
 	
 	private boolean handshakeOK;
-	private User user;
+	private Player player;
 	private MatchPlayer matchPlayer;
 	private PlayerQueue.Entry queueEntry;
 	
@@ -108,8 +108,8 @@ public class Session extends Server.Referent
 			this.exitMatch();
 		}
 		
-		// Save complete user object
-		this.getServer().getUserRegister().saveUser(this.user);
+		// Save complete player object
+		this.getServer().getPlayerRegister().savePlayer(this.player);
 	}
 	
 	public void onNetMessage(IncomingMessage msg)
@@ -150,20 +150,20 @@ public class Session extends Server.Referent
 	
 	public boolean isLoggedIn()
 	{
-		return (this.user != null);
+		return (this.player != null);
 	}
 	
-	public User getUser()
+	public Player getPlayer()
 	{
-		return this.user;
+		return this.player;
 	}
 	
-	public void setUser(User user, String platform)
+	public void setPlayer(Player player, String platform)
 	{
-		if(this.user == null)
+		if(this.player == null)
 		{
-			this.user = user;
-			this.user.platform = platform;
+			this.player = player;
+			this.player.platform = platform;
 			this.getServer().getSessionMgr().completeLogin(this);
 		}
 	}
@@ -172,7 +172,7 @@ public class Session extends Server.Referent
 	{
 		if(this.isLoggedIn())
 		{
-			this.getServer().getUserRegister().saveUser(this.user);
+			this.getServer().getPlayerRegister().savePlayer(this.player);
 		}
 	}
 	
@@ -233,12 +233,12 @@ public class Session extends Server.Referent
 		this.queueEntry = entry;
 	}
 	
-	public void renameUser(String name)
+	public void renamePlayer(String newName)
 	{
 		if(this.isLoggedIn())
 		{
-			this.user.name = name;
-			this.send(new NameChangedMessage(name));
+			this.player.name = newName;
+			this.send(new NameChangedMessage(newName));
 		}
 	}
 }

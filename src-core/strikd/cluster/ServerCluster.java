@@ -58,7 +58,7 @@ public class ServerCluster extends Server.Referent implements Runnable
 		Server server = this.getServer();
 		Runtime vm = Runtime.getRuntime();
 		this.self.memoryUsage = ((vm.totalMemory() - vm.freeMemory()) / 1024f / 1024f);
-		this.self.onlineUsers = server.getSessionMgr().sessions();
+		this.self.onlinePlayers = server.getSessionMgr().players();
 		this.self.totalLogins = server.getSessionMgr().totalLogins();
 		this.self.activeMatches = server.getMatchMgr().active();
 		this.self.totalMatches = server.getMatchMgr().matchCounter();

@@ -4,8 +4,8 @@ import java.util.Random;
 
 import org.bson.types.ObjectId;
 
-import strikd.game.user.Avatar;
-import strikd.game.user.User;
+import strikd.game.player.Avatar;
+import strikd.game.player.Player;
 
 public class MatchBotFactory
 {
@@ -13,7 +13,7 @@ public class MatchBotFactory
 	{
 		Random rand = new Random();
 		
-		User bot = new User();
+		Player bot = new Player();
 		bot.id = ObjectId.get();
 		bot.name = String.format("Bot-%d", rand.nextInt(1000));
 		bot.avatar = new Avatar();

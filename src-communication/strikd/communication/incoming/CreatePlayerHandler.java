@@ -3,15 +3,15 @@ package strikd.communication.incoming;
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.CredentialsMessage;
-import strikd.game.user.User;
+import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 
-public class CreateUserHandler extends MessageHandler
+public class CreatePlayerHandler extends MessageHandler
 {
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
-		return Opcodes.Incoming.CREATE_USER;
+		return Opcodes.Incoming.CREATE_PLAYER;
 	}
 	
 	@Override
@@ -19,8 +19,8 @@ public class CreateUserHandler extends MessageHandler
 	{
 		if(!session.isLoggedIn())
 		{
-			User user = session.getServer().getUserRegister().newUser();
-			session.send(new CredentialsMessage(user.id, user.token));
+			Player player = session.getServer().getPlayerRegister().newPlayer();
+			session.send(new CredentialsMessage(player.id, player.token));
 		}
 	}
 }

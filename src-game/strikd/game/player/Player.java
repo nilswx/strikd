@@ -1,4 +1,4 @@
-package strikd.game.user;
+package strikd.game.player;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,10 +7,12 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.jongo.marshall.jackson.oid.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import strikd.facebook.FacebookIdentity;
 import strikd.game.items.Item;
 
-public class User
+public class Player
 {
 	@Id
 	public ObjectId id;
@@ -24,6 +26,7 @@ public class User
 	
 	// Clustering
 	public int serverId;
+	public ObjectId opponentId;
 	
 	// Ranking
 	public int xp;
@@ -55,14 +58,22 @@ public class User
 		return (this.matches - (this.wins - this.losses));
 	}
 	
+	@JsonIgnore
 	public boolean isFacebookLinked()
 	{
 		return (this.fbIdentity != null);
 	}
 	
+	@JsonIgnore
 	public boolean isOnline()
 	{
 		return (this.serverId > 0);
+	}
+	
+	@JsonIgnore
+	public boolean isInMatch()
+	{
+		return (this.serverId > 0 && this.opponentId != null);
 	}
 	
 	@Override
