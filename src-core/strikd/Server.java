@@ -23,7 +23,7 @@ import strikd.game.player.PlayerRegister;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
 import strikd.sessions.SessionManager;
-import strikd.stats.MemoryWatchdog;
+import strikd.util.MemoryWatchdog;
 import strikd.util.NamedThreadFactory;
 
 public class Server
