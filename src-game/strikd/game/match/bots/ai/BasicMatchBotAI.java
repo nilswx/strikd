@@ -22,7 +22,7 @@ public class BasicMatchBotAI extends MatchBotAI
 	public int getNextMoveDelay()
 	{
 		int delay = new Random().nextInt(10*1000);
-		logger.debug(String.format("%s: I'M BREAKING A SWEAT (%d ms)", this.getPlayer(), delay));
+//		logger.debug(String.format("%s: I'M BREAKING A SWEAT (%d ms)", this.getPlayer(), delay));
 		
 		return delay;
 	}
@@ -30,7 +30,7 @@ public class BasicMatchBotAI extends MatchBotAI
 	@Override
 	public List<Square> nextMove()
 	{
-		logger.debug(String.format("%s: IT'S ALRIGHT", this.getPlayer()));
+//		logger.debug(String.format("%s: IT'S ALRIGHT", this.getPlayer()));
 		return null;
 	}
 }

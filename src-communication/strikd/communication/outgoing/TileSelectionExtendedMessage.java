@@ -16,7 +16,7 @@ public class TileSelectionExtendedMessage extends OutgoingMessage
 		super.writeByte((byte)tiles.size());
 		for(Square tile : tiles)
 		{
-			super.writeByte((byte)(tile.x << 4 | tile.y));
+			super.writeByte((byte)(tile.getColumn() << 4 | tile.getRow()));
 		}
 	}
 }

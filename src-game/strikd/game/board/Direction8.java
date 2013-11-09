@@ -49,4 +49,18 @@ public enum Direction8
 		Random rand = new Random();
 		return values[rand.nextInt(values.length)];
 	}
+
+    public static final Direction8 directionFromDelta(int deltaX, int deltaY)
+    {
+        Direction8[] directions = Direction8.all();
+        for(int i = 0; i < directions.length; i++)
+        {
+            Direction8 direction = directions[i];
+            if(direction.x == deltaX && direction.y == deltaY)
+            {
+                return direction;
+            }
+        }
+        return null;
+    }
 }

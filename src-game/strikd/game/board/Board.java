@@ -2,6 +2,9 @@ package strikd.game.board;
 
 import strikd.words.WordDictionary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A rectangular space of squares. A square can hold a {@link Square} or <code>null</code>.
@@ -11,14 +14,30 @@ import strikd.words.WordDictionary;
  */
 public abstract class Board
 {
-	protected final Square[][] squares;
+    protected int height;
+    protected int width;
+
+    protected final ArrayList<Square>[] squares;
 	protected final WordDictionary dictionary;
 	
 	protected Board(int width, int height, WordDictionary dictionary)
 	{
-		this.squares = new Square[width][height];
+        this.width = width;
+        this.height = height;
+
+        this.squares = new ArrayList[width];
+        for(int x = 0; x < this.getWidth(); x++)
+        {
+            this.squares[x] = new ArrayList<>();
+        }
+
 		this.dictionary = dictionary;
 	}
+
+    public ArrayList<Square> getColumn(int index)
+    {
+        return this.squares[index];
+    }
 	
 	public Square newSquare(int x, int y)
 	{
@@ -29,16 +48,19 @@ public abstract class Board
 	{
 		for(int x = 0; x < this.getWidth(); x++)
 		{
-			for(int y = 0; y < this.getHeight(); y++)
-			{
-				if(this.squares[x][y] == null)
-				{
-					this.squares[x][y] = this.newSquare(x, y);
-				}
-				this.squares[x][y].clear();
-			}
+            ArrayList<Square> column = squares[x];
+            column.clear();
 		}
 	}
+
+    public final void clearSquares(List<Square> squares)
+    {
+        for(Square square : squares)
+        {
+            ArrayList<Square> column = this.squares[square.getColumn()];
+            column.remove(square.getRow());
+        }
+    }
 
 	public void rebuild()
 	{
@@ -46,7 +68,7 @@ public abstract class Board
 		this.update();
 	}
 	
-	public abstract void update();
+	public abstract List<Square> update();
 	
 	public void destroy()
 	{
@@ -55,36 +77,32 @@ public abstract class Board
 	
 	public final Square getSquare(int x, int y)
 	{
-		if(this.squareExists(x, y))
-		{
-			return this.squares[x][y];
+		try
+        {
+            ArrayList<Square> column = this.squares[x];
+            return column.get(y);
 		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	public final Square getSquareUnchecked(int x, int y)
-	{
-		return this.squares[x][y];
-	}
-	
-	public final boolean squareExists(int x, int y)
-	{
-		return (x >= 0 && x < this.getWidth() && y >= 0 && y < this.getWidth());
+        catch (IndexOutOfBoundsException e)
+        {
+            return null;
+        }
 	}
 	
 	public final int getWidth()
 	{
-		return this.squares.length;
+		return this.width;
 	}
 
 	public final int getHeight()
 	{
-		return this.squares[0].length;
+		return this.height;
 	}
-	
+
+    public WordDictionary getDictionary()
+    {
+        return this.dictionary;
+    }
+
 	@Override
 	public final String toString()
 	{
@@ -102,9 +120,9 @@ public abstract class Board
 			for(int x = 0; x < this.getWidth(); x++)
 			{
 				sb.append('[');
-				
-				Square square = this.squares[x][y];
-				if(square.isNull())
+
+				Square square = this.getSquare(x, y);
+				if(square == null)
 				{
 					sb.append("   ");
 				}
@@ -139,4 +157,6 @@ public abstract class Board
 		
 		return sb.toString();
 	}
+
+
 }

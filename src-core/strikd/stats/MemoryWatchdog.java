@@ -16,6 +16,6 @@ public final class MemoryWatchdog implements Runnable
 	@Override
 	public void run()
 	{
-		logger.info(String.format("%.2f MiB", (this.vm.totalMemory() - this.vm.freeMemory()) / 1024f / 1024f));
+//		logger.info(String.format("%.2f MiB", (this.vm.totalMemory() - this.vm.freeMemory()) / 1024f / 1024f));
 	}
 }

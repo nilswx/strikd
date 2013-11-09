@@ -58,4 +58,31 @@ public class RandomUtil
 		List<T> list = new ArrayList<T>(elements);
 		return pickOne(list);
 	}
+
+    public static String randomizeString(String string)
+    {
+        StringBuilder randomStringBuilder = new StringBuilder();
+        StringBuilder originalString = new StringBuilder(string);
+
+        while(originalString.length() > 0)
+        {
+            // Get a random char from source
+            int randomIndex = RandomUtil.pickInt(0, originalString.length() - 1);
+            char randomChar = originalString.charAt(randomIndex);
+
+            // Add it to the builder
+            randomStringBuilder.append(randomChar);
+
+            // Remove from source
+            originalString.deleteCharAt(randomIndex);
+        }
+
+        return randomStringBuilder.toString();
+    }
+
+    public static char randomCharFromString(String string)
+    {
+        int randomIndex = RandomUtil.pickInt(0, string.length() - 1);
+        return string.charAt(randomIndex);
+    }
 }

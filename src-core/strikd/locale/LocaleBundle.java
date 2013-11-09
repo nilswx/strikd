@@ -28,7 +28,7 @@ public class LocaleBundle
 			try
 			{
 				String path = dictDir + File.separator + String.format(DICTIONARY_PATH, type.toString().toLowerCase());
-				dicts.put(type, new WordDictionary(locale, new File(path), (type == DictionaryType.GENERATOR)));
+				dicts.put(type, new WordDictionary(locale, new File(path), true));
 			}
 			catch(Exception ex)
 			{

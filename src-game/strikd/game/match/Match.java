@@ -9,7 +9,8 @@ import strikd.communication.outgoing.BoardInitMessage;
 import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Board;
-import strikd.game.board.impl.GravityBoard;
+import strikd.game.board.impl.AwesomeBoard;
+//import strikd.game.board.impl.GravityBoard;
 import strikd.locale.LocaleBundle;
 import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.OutgoingMessage;
@@ -43,8 +44,9 @@ public class Match
 		this.timer = new MatchTimer((int)TimeUnit.MINUTES.toSeconds(2));
 		
 		// Install the board implementation
-		this.board = new GravityBoard(6, 6, locale.getDictionary(DictionaryType.GENERATOR));
-		
+//		this.board = new GravityBoard(6, 6, locale.getDictionary(DictionaryType.GENERATOR));
+        this.board = new AwesomeBoard(6, 6, locale.getDictionary(DictionaryType.GENERATOR));
+
 		// Link the players to this match with a personal ID
 		this.playerOne = playerOne.setMatch(this, 1);
 		this.playerTwo = playerTwo.setMatch(this, 2);

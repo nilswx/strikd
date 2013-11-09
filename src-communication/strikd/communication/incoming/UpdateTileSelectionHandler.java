@@ -3,6 +3,7 @@ package strikd.communication.incoming;
 import java.util.ArrayList;
 import java.util.List;
 
+import strikd.communication.outgoing.BoardUpdateMessage;
 import strikd.sessions.Session;
 import strikd.words.Word;
 import strikd.communication.Opcodes;
@@ -44,17 +45,13 @@ public class UpdateTileSelectionHandler extends MessageHandler
 				byte pos = request.readByte();
 				int x = pos >> 4;
 				int y = pos & 0x0F;
-						
-				// In range?
-				if(board.squareExists(x, y))
+
+                // Valid addition?
+                Square square = board.getSquare(x, y);
+				if(square != null)
 				{
-					// Valid addition?
-					Square square = board.getSquare(x, y);
-					if(square.isTile())
-					{
-						player.selectTile(board.getSquare(x, y));
-						newSelected.add(square);
-					}
+                    player.selectTile(board.getSquare(x, y));
+                    newSelected.add(square);
 				}
 			}
 			
@@ -76,7 +73,7 @@ public class UpdateTileSelectionHandler extends MessageHandler
 				for(Square square : player.getSelection())
 				{
 					// Check tile + distance (anti-cheat)
-					if(square.isTile() && (previous == null || (Math.abs(square.x - previous.x) <= 1 && Math.abs(square.y - previous.y) <= 1)))
+					if(square.isTile() && (previous == null || (Math.abs(square.getColumn() - previous.getColumn()) <= 1 && Math.abs(square.getRow() - previous.getRow()) <= 1)))
 					{
 						letters.append(square.getLetter());
 						previous = square;
@@ -100,16 +97,25 @@ public class UpdateTileSelectionHandler extends MessageHandler
 						int points = word.length();
 						session.getMatchPlayer().modScore(+points);
 						match.broadcast(new WordFoundMessage(session.getMatchPlayer(), word, +points));
-						
-						// Clear the 'used' tiles, fill gaps with new letters
-						for(Square tile : player.getSelection())
-						{
-							//tile.clear();
-						}
-						board.update();
-						
-						// Send updated letters
-						//match.broadcast(board.getUpdateGenerator().generateUpdates());
+
+                        List<Square> selectedTiles = player.getSelection();
+
+                        // First freeze the current positions of the tiles so we can sent the correct over the network
+                        for(Square square : selectedTiles)
+                        {
+                            square.freeze();
+                        }
+
+						// Clear the 'used' tiles
+                        board.clearSquares(selectedTiles);
+
+                        // Get the new tiles
+						List<Square> newSquares = board.update();
+
+                        // Send the cleared and new tiles
+                        match.broadcast(new BoardUpdateMessage(selectedTiles, newSquares));
+
+                        System.out.println(board.toMatrixString());
 					}
 				}
 				

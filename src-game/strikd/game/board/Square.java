@@ -2,21 +2,25 @@ package strikd.game.board;
 
 import strikd.game.board.triggers.Trigger;
 
+import java.util.List;
+
 public class Square
 {
-	public final int x;
-	public final int y;
+	private final int x;
+    protected int y = Integer.MIN_VALUE;
+
 	private final Board board;
 	
-	private char letter;
+	protected char letter;
 	private Trigger trigger;
 	
 	private boolean needsUpdate;
-	
+
+    public final static char WILDCARD_CHARACTER = '?';
+
 	public Square(int x, int y, Board board)
 	{
 		this.x = x;
-		this.y = y;
 		this.board = board;
 	}
 	
@@ -51,23 +55,8 @@ public class Square
 		return this.board;
 	}
 	
-	public boolean isNull()
-	{
-		return (this.letter == 0);
-	}
-	
-	public boolean isTile()
-	{
-		return !this.isNull();
-	}
-	
 	public char getLetter()
 	{
-		if(this.isNull())
-		{
-			throw new IllegalStateException("has no letter");
-		}
-	
 		return this.letter;
 	}
 	
@@ -92,24 +81,43 @@ public class Square
 	{
 		return this.trigger;
 	}
-	
+
+    public boolean isTile()
+    {
+        return (this == this.board.getSquare(this.getColumn(), this.getRow()));
+    }
+
+    public int getColumn()
+    {
+        return this.x;
+    }
+
+    public int getRow()
+    {
+        List<Square> column = this.board.getColumn(x);
+        return column.indexOf(this);
+    }
+
+    public void freeze()
+    {
+        this.y = this.getRow();
+    }
+
+    public int getFrozenRow()
+    {
+        return this.y;
+    }
+
 	@Override
 	public String toString()
 	{
-		if(this.isNull())
-		{
-			return String.format("[%d,%d] = NULL", this.x, this.y);
-		}
-		else
-		{
-			if(this.hasTrigger())
-			{
-				return String.format("[%d,%d] = '%s' + %s", this.x, this.y, Character.toString(this.letter), this.trigger.getTypeName());
-			}
-			else
-			{
-				return String.format("[%d,%d] = '%s'", this.x, this.y, Character.toString(this.letter));
-			}
-		}
+        if(this.hasTrigger())
+        {
+            return String.format("[%d,%d] = '%s' + %s", this.getColumn(), this.getRow(), Character.toString(this.letter), this.trigger.getTypeName());
+        }
+        else
+        {
+            return String.format("[%d,%d] = '%s'", this.getColumn(), this.getRow(), Character.toString(this.letter));
+        }
 	}
 }

@@ -21,8 +21,8 @@ public class BoardInitMessage extends OutgoingMessage
 		{
 			for(int y = 0; y < height; y++)
 			{
-				Square square = board.getSquareUnchecked(x, y);
-				if(square.isNull())
+				Square square = board.getSquare(x, y);
+				if(square == null)
 				{
 					super.writeByte((byte)0);
 				}
