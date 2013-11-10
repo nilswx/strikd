@@ -1,6 +1,6 @@
 package strikd.game.board;
 
-public class WildCardSquare extends Square {
+public class WildCardSquare extends Tile {
 
     public WildCardSquare(int x, int y, Board board) {
         super(x, y, board);

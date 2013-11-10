@@ -20,7 +20,7 @@ public class MatchManager extends Server.Referent
 	private static final Logger logger = Logger.getLogger(MatchManager.class);
 	
 	private final AtomicLong matchCounter = new AtomicLong();
-	private final Map<Long, Match> active = new ConcurrentHashMap<Long, Match>(16, 0.75f, 8);
+	private final Map<Long, Match> active = new ConcurrentHashMap<Long, Match>();
 	private final Map<String, PlayerQueue> queues = new HashMap<String, PlayerQueue>(); 
 	
 	public MatchManager(Server server)

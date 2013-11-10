@@ -3,7 +3,7 @@ package strikd.game.match.bots;
 import java.util.List;
 
 import strikd.game.board.Board;
-import strikd.game.board.Square;
+import strikd.game.board.Tile;
 import strikd.game.match.Match;
 
 public abstract class MatchBotAI
@@ -15,7 +15,7 @@ public abstract class MatchBotAI
 		this.bot = player;
 	}
 	
-	public abstract List<Square> nextMove();
+	public abstract List<Tile> nextMove();
 	
 	public abstract int getNextMoveDelay();
 	

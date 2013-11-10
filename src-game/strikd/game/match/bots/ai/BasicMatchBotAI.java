@@ -5,7 +5,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import strikd.game.board.Square;
+import strikd.game.board.Tile;
 import strikd.game.match.bots.MatchBotAI;
 import strikd.game.match.bots.MatchBotPlayer;
 
@@ -28,7 +28,7 @@ public class BasicMatchBotAI extends MatchBotAI
 	}
 	
 	@Override
-	public List<Square> nextMove()
+	public List<Tile> nextMove()
 	{
 //		logger.debug(String.format("%s: IT'S ALRIGHT", this.getPlayer()));
 		return null;

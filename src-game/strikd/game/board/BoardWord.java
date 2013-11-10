@@ -2,8 +2,8 @@ package strikd.game.board;
 
 import java.util.ArrayList;
 
-public class BoardWord implements Comparable {
-
+public class BoardWord implements Comparable<BoardWord>
+{
     private static final int LENGTH_SCORE = -5;
     private static final int WILDCARD_SCORE = 0;
 
@@ -14,11 +14,11 @@ public class BoardWord implements Comparable {
 
     private static final int SAME_DIRECTION_SCORE = 4;
 
-    private ArrayList<Square> squares;
+    private final ArrayList<Tile> tiles;
 
-    public BoardWord(ArrayList<Square> squares)
+    public BoardWord(ArrayList<Tile> tiles)
     {
-        this.squares = squares;
+        this.tiles = tiles;
     }
 
     private int score = Integer.MIN_VALUE;
@@ -26,16 +26,16 @@ public class BoardWord implements Comparable {
     public String toString()
     {
         StringBuilder wordBuilder = new StringBuilder();
-        for(Square square : squares)
+        for(Tile tile : tiles)
         {
-            wordBuilder.append(square.getLetter());
+            wordBuilder.append(tile.getLetter());
         }
         return "Word: " + wordBuilder.toString() + " VALUE " + this.getScore();
     }
 
-    public ArrayList<Square> getSquares()
+    public ArrayList<Tile> getTiles()
     {
-        return this.squares;
+        return this.tiles;
     }
 
     public int getScore()
@@ -44,12 +44,12 @@ public class BoardWord implements Comparable {
         if(this.score == Integer.MIN_VALUE)
         {
             // Score for lengths
-            int currentScore = this.squares.size() * LENGTH_SCORE;
-            for(int i = 0; i < this.squares.size(); i++)
+            int currentScore = this.tiles.size() * LENGTH_SCORE;
+            for(int i = 0; i < this.tiles.size(); i++)
             {
-                Square square = this.squares.get(i);
+                Tile tile = this.tiles.get(i);
                 // Score for wildcard
-                if(square.getClass() == WildCardSquare.class)
+                if(tile.getClass() == WildCardSquare.class)
                 {
                     currentScore += WILDCARD_SCORE;
                 }
@@ -58,9 +58,9 @@ public class BoardWord implements Comparable {
                 if(i > 0)
                 {
                     // Points for delta
-                    Square lastSquare = this.squares.get(i - 1);
-                    int deltaX = square.getColumn() - lastSquare.getColumn();
-                    int deltaY = square.getRow() - lastSquare.getRow();
+                    Tile lastSquare = this.tiles.get(i - 1);
+                    int deltaX = tile.getColumn() - lastSquare.getColumn();
+                    int deltaY = tile.getRow() - lastSquare.getRow();
 
                     // Todo: Improve this
                     Direction8 direction = Direction8.directionFromDelta(deltaX, deltaY);
@@ -84,8 +84,8 @@ public class BoardWord implements Comparable {
                     // Points for keeping in the same direction
                     if(i > 1)
                     {
-                        Square beforeLastSquare = this.squares.get(i - 2);
-                        if((square.getColumn() == lastSquare.getColumn() && lastSquare.getColumn() == beforeLastSquare.getColumn()) || (square.getRow() == lastSquare.getRow() && lastSquare.getRow() == beforeLastSquare.getRow()))
+                        Tile beforeLastSquare = this.tiles.get(i - 2);
+                        if((tile.getColumn() == lastSquare.getColumn() && lastSquare.getColumn() == beforeLastSquare.getColumn()) || (tile.getRow() == lastSquare.getRow() && lastSquare.getRow() == beforeLastSquare.getRow()))
                         {
                             currentScore += SAME_DIRECTION_SCORE;
                         }
@@ -100,9 +100,9 @@ public class BoardWord implements Comparable {
 
     public boolean containsWildCards()
     {
-        for(Square square : this.squares)
+        for(Tile tile : this.tiles)
         {
-            if(square.getClass() == WildCardSquare.class)
+            if(tile.getClass() == WildCardSquare.class)
             {
                 return true;
             }
@@ -111,13 +111,8 @@ public class BoardWord implements Comparable {
     }
 
     @Override
-    public int compareTo(Object object) {
-        if(object.getClass() == BoardWord.class)
-        {
-            BoardWord compareWord = (BoardWord)object;
-            return compareWord.getScore() - this.getScore();
-        }
-        // At default it sorts higher than non BoardWord objects
-        return 1;
+    public int compareTo(BoardWord other)
+    {
+    	return other.getScore() - this.getScore();
     }
 }

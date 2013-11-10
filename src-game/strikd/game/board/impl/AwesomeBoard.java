@@ -12,146 +12,150 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class AwesomeBoard extends Board {
+public class AwesomeBoard extends Board
+{
+	private boolean isInitialUpdate = true;
 
-    private boolean isInitialUpdate = true;
+	private static Logger logger = Logger.getLogger(AwesomeBoard.class);
 
-    private static Logger logger = Logger.getLogger(AwesomeBoard.class);
+	public AwesomeBoard(int width, int height, WordDictionary dictionary)
+	{
+		super(width, height, dictionary);
+	}
 
-    public AwesomeBoard(int width, int height, WordDictionary dictionary) {
-        super(width, height, dictionary);
-    }
+	@Override
+	public List<Tile> update()
+	{
 
-    @Override
-    public List<Square> update() {
+		Stopwatch stopwatch = new Stopwatch();
+		stopwatch.reset();
+		stopwatch.start();
 
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.reset();
-        stopwatch.start();
+		if(this.isInitialUpdate)
+		{
+			this.clear();
+		}
 
-        if(this.isInitialUpdate)
-        {
-            this.clear();
-        }
+		// The letters who'm have been removed are made wildcard letters
+		this.createWildCards();
 
-        // The letters who'm have been removed are made wildcard letters
-        this.createWildCards();
+		// Keep track of the tiles which will be filled
+		List<Tile> newTiles = this.wildCardsOnBoard();
 
-        // Keep track of the tiles which will be filled
-        List<Square> newTiles = this.wildCardsOnBoard();
+		// While there are gaps, fill it with the best word found
+		Tile tile;
+		while((tile = this.getRandomWildCard()) != null)
+		{
+			this.addWordOnSquare(tile);
+		}
 
-        // While there are gaps, fill it with the best word found
-        Square square;
-        while((square = this.getRandomWildCard()) != null)
-        {
-            this.addWordOnSquare(square);
-        }
+		stopwatch.stop();
 
-        stopwatch.stop();
+		System.out.println(String.format("Time taken to fill board: %d ms (%d microseconds)", stopwatch.elapsedMillis(), stopwatch.elapsedTime(TimeUnit.MICROSECONDS)));
 
-        System.out.println(String.format("Time taken to fill board: %d ms (%d microseconds)", stopwatch.elapsedMillis(), stopwatch.elapsedTime(TimeUnit.MICROSECONDS)));
+		this.isInitialUpdate = false;
 
-        this.isInitialUpdate = false;
+		return newTiles;
+	}
 
-        return newTiles;
-    }
+	private void createWildCards()
+	{
+		for(int x = 0; x < this.getWidth(); x++)
+		{
+			List<Tile> column = this.columns[x];
+			for(int y = column.size(); y < this.getHeight(); y++)
+			{
+				Tile tile = this.newTile(x, y);
+				tile.setLetter(Tile.WILDCARD_CHARACTER);
+				column.add(tile);
+			}
+		}
+	}
 
-    private void createWildCards()
-    {
-        for(int x = 0; x < this.getWidth(); x++)
-        {
-            ArrayList<Square> column = this.squares[x];
-            for(int y = column.size(); y < this.getHeight(); y++)
-            {
-                Square square = this.newSquare(x, y);
-                square.setLetter(Square.WILDCARD_CHARACTER);
-                column.add(square);
-            }
-        }
-    }
+	private Tile getRandomWildCard()
+	{
+		ArrayList<Tile> wildCards = this.wildCardsOnBoard();
+		return RandomUtil.pickOne(wildCards);
+	}
 
-    private Square getRandomWildCard()
-    {
-        ArrayList<Square> wildCards = this.wildCardsOnBoard();
-        return RandomUtil.pickOne(wildCards);
-    }
+	private ArrayList<Tile> wildCardsOnBoard()
+	{
+		ArrayList<Tile> tiles = new ArrayList<>();
 
-    private ArrayList<Square>wildCardsOnBoard()
-    {
-        ArrayList<Square> squares = new ArrayList<>();
+		// Find all wildcards on board
+		for(int x = 0; x < this.getWidth(); x++)
+		{
+			for(int y = 0; y < this.getHeight(); y++)
+			{
+				Tile tile = this.getTile(x, y);
+				if(tile.getLetter() == Tile.WILDCARD_CHARACTER)
+				{
+					tiles.add(tile);
+				}
+			}
+		}
 
-        // Find all wildcards on board
-        for(int x = 0; x < this.getWidth(); x++)
-        {
-            for(int y = 0; y < this.getHeight(); y++)
-            {
-                Square square = this.getSquare(x, y);
-                if(square.getLetter() == Square.WILDCARD_CHARACTER)
-                {
-                    squares.add(square);
-                }
-            }
-        }
+		return tiles;
+	}
 
-        return squares;
-    }
+	private void addWordOnSquare(Tile tile)
+	{
+		IndexedWordSearch indexedWordSearch = new IndexedWordSearch(this);
+		indexedWordSearch.setRequireWildCards(true);
 
-    private void addWordOnSquare(Square square)
-    {
-        IndexedWordSearch indexedWordSearch = new IndexedWordSearch(this);
-        indexedWordSearch.setRequireWildCards(true);
+		List<BoardWord> results = indexedWordSearch.findWordsForSquare(tile);
+		if(results != null && results.size() > 0)
+		{
+			// It is sorted already on score, so get the highest scoring one
+			this.placeWord(results.get(0));
+		}
+		else
+		{
+			// Can't seem to fill anymore, doubt it will ever happen, fill it
+			// with random letters
+			this.forceFillEmptySpaces();
+		}
+	}
 
-        List<BoardWord> results = indexedWordSearch.findWordsForSquare(square);
-        if(results != null && results.size() > 0)
-        {
-            // It is sorted already on score, so get the highest scoring one
-            this.placeWord(results.get(0));
-        }
-        else
-        {
-            // Can't seem to fill anymore, doubt it will ever happen, fill it with random letters
-            this.forceFillEmptySpaces();
-        }
-    }
+	private void placeWord(BoardWord word)
+	{
+		logger.debug("Placing word: " + word);
 
-    private void placeWord(BoardWord word)
-    {
-        logger.debug("Placing word: " + word);
+		ArrayList<Tile> tiles = word.getTiles();
+		for(Tile tile : tiles)
+		{
+			Tile currentSquare = this.getTile(tile.getColumn(), tile.getRow());
+			// Make sure we don't override existing squares
+			if(currentSquare.getLetter() != tile.getLetter())
+			{
+				if(currentSquare.getLetter() != Tile.WILDCARD_CHARACTER)
+				{
+					logger.error("Error, overwriting existing tile.");
+				}
 
-        ArrayList<Square> squares = word.getSquares();
-        for(Square square : squares)
-        {
-            Square currentSquare = this.getSquare(square.getColumn(), square.getRow());
-            // Make sure we don't override existing squares
-            if(currentSquare.getLetter() != square.getLetter())
-            {
-                if(currentSquare.getLetter() != Square.WILDCARD_CHARACTER)
-                {
-                    logger.error("Error, overwriting existing tile.");
-                }
+				// Place the correct letter on the correct position
+				currentSquare.setLetter(tile.getLetter());
 
-                // Place the correct letter on the correct position
-                currentSquare.setLetter(square.getLetter());
+				// Todo: Here we should determine if this letter should have a
+				// bomb or something
+			}
+		}
+	}
 
-                // Todo: Here we should determine if this letter should have a bomb or something
-            }
-        }
-    }
-
-    private void forceFillEmptySpaces()
-    {
-        for(int x = 0; x < this.getWidth(); x++)
-        {
-            for(int y = 0; y < this.getHeight(); y++)
-            {
-                Square square = this.getSquare(x, y);
-                if(square.getLetter() == Square.WILDCARD_CHARACTER)
-                {
-                    char randomLetter = RandomUtil.randomCharFromString(IndexedWordSearch.ALPHABET);
-                    square.setLetter(randomLetter);
-                }
-            }
-        }
-    }
+	private void forceFillEmptySpaces()
+	{
+		for(int x = 0; x < this.getWidth(); x++)
+		{
+			for(int y = 0; y < this.getHeight(); y++)
+			{
+				Tile tile = this.getTile(x, y);
+				if(tile.getLetter() == Tile.WILDCARD_CHARACTER)
+				{
+					char randomLetter = RandomUtil.randomCharFromString(IndexedWordSearch.ALPHABET);
+					tile.setLetter(randomLetter);
+				}
+			}
+		}
+	}
 
 }

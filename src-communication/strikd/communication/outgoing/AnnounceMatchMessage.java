@@ -12,7 +12,7 @@ public class AnnounceMatchMessage extends OutgoingMessage
 		super(Opcodes.Outgoing.ANNOUNCE_MATCH);
 		super.writeLong(match.getMatchId());
 		super.writeStr(match.getLocale().getLocale());
-		super.writeInt(match.getTimer().getTimeLeft());
+		super.writeInt(match.getTimer().getDuration());
 		super.writeByte((byte)player.getPlayerId());
 		super.writeByte((byte)opponent.getPlayerId());
 		PlayerInfoMessage.serializePlayer(opponent.getInfo(), this);

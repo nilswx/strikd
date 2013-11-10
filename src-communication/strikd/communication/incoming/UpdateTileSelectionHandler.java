@@ -11,7 +11,7 @@ import strikd.communication.outgoing.TileSelectionClearedMessage;
 import strikd.communication.outgoing.TileSelectionExtendedMessage;
 import strikd.communication.outgoing.WordFoundMessage;
 import strikd.game.board.Board;
-import strikd.game.board.Square;
+import strikd.game.board.Tile;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.locale.LocaleBundle.DictionaryType;
@@ -38,7 +38,7 @@ public class UpdateTileSelectionHandler extends MessageHandler
 			
 			// Select all specified tiles
 			int amount = request.readByte();
-			List<Square> newSelected = new ArrayList<Square>();
+			List<Tile> newSelected = new ArrayList<Tile>();
 			for(int i = 0; i < amount; i++)
 			{
 				// Unpack position
@@ -47,11 +47,11 @@ public class UpdateTileSelectionHandler extends MessageHandler
 				int y = pos & 0x0F;
 
                 // Valid addition?
-                Square square = board.getSquare(x, y);
-				if(square != null)
+                Tile tile = board.getTile(x, y);
+				if(tile != null)
 				{
-                    player.selectTile(board.getSquare(x, y));
-                    newSelected.add(square);
+                    player.selectTile(board.getTile(x, y));
+                    newSelected.add(tile);
 				}
 			}
 			
@@ -69,14 +69,14 @@ public class UpdateTileSelectionHandler extends MessageHandler
 			{
 				// Validate selection and concat letters
 				StringBuilder letters = new StringBuilder(player.getSelection().size());
-				Square previous = null;
-				for(Square square : player.getSelection())
+				Tile previous = null;
+				for(Tile tile : player.getSelection())
 				{
 					// Check tile + distance (anti-cheat)
-					if(square.isTile() && (previous == null || (Math.abs(square.getColumn() - previous.getColumn()) <= 1 && Math.abs(square.getRow() - previous.getRow()) <= 1)))
+					if(tile.isTile() && (previous == null || (Math.abs(tile.getColumn() - previous.getColumn()) <= 1 && Math.abs(tile.getRow() - previous.getRow()) <= 1)))
 					{
-						letters.append(square.getLetter());
-						previous = square;
+						letters.append(tile.getLetter());
+						previous = tile;
 					}
 					else
 					{
@@ -98,19 +98,19 @@ public class UpdateTileSelectionHandler extends MessageHandler
 						session.getMatchPlayer().modScore(+points);
 						match.broadcast(new WordFoundMessage(session.getMatchPlayer(), word, +points));
 
-                        List<Square> selectedTiles = player.getSelection();
+                        List<Tile> selectedTiles = player.getSelection();
 
                         // First freeze the current positions of the tiles so we can sent the correct over the network
-                        for(Square square : selectedTiles)
+                        for(Tile tile : selectedTiles)
                         {
-                            square.freeze();
+                            tile.freeze();
                         }
 
 						// Clear the 'used' tiles
-                        board.clearSquares(selectedTiles);
+                        board.clearTiles(selectedTiles);
 
                         // Get the new tiles
-						List<Square> newSquares = board.update();
+						List<Tile> newSquares = board.update();
 
                         // Send the cleared and new tiles
                         match.broadcast(new BoardUpdateMessage(selectedTiles, newSquares));

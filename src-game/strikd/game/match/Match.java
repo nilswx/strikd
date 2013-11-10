@@ -30,7 +30,7 @@ public class Match
 	private final Board board;
 	
 	private final byte loadingTime;
-	private long startTime;
+	private boolean isEnded;
 	
 	public Match(long matchId, LocaleBundle locale, MatchManager matchMgr, MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
@@ -41,7 +41,7 @@ public class Match
 		
 		// Setup timer
 		this.loadingTime = 0;
-		this.timer = new MatchTimer((int)TimeUnit.MINUTES.toSeconds(2));
+		this.timer = new MatchTimer(this, (int)TimeUnit.MINUTES.toSeconds(2));
 		
 		// Install the board implementation
 //		this.board = new GravityBoard(6, 6, locale.getDictionary(DictionaryType.GENERATOR));
@@ -87,7 +87,7 @@ public class Match
 	private void start()
 	{
 		// Not already started?
-		if(!this.isStarted())
+		if(!this.timer.isRunning() && !this.isEnded)
 		{
 			// Initial board!
 			this.broadcast(new BoardInitMessage(this.board));
@@ -95,17 +95,23 @@ public class Match
 			// Start the timers at the clients etc, the game is ON!
 			this.broadcast(new MatchStartedMessage());
 			
-			// Record start time
-			this.startTime = System.currentTimeMillis();
+			// Go!
+			this.timer.start();
 		}
 	}
-
 
 	public void end(MatchPlayer winner)
 	{
 		// Can be ended?
-		if(this.isStarted())
+		if(!this.isEnded)
 		{
+			// Stop timer
+			this.isEnded = true;
+			if(this.timer.isRunning())
+			{
+				this.timer.stop();
+			}
+			
 			// Destroy the board
 			this.board.destroy();
 			
@@ -123,10 +129,10 @@ public class Match
 				winner.getInfo().wins++;
 				loser.getInfo().losses++;
 				logger.debug(String.format("%s: %s wins, %s loses!", this, winner, loser));
-				
-				// Broadcast event
-				this.broadcast(new MatchEndedMessage());
 			}
+			
+			// Broadcast event
+			this.broadcast(new MatchEndedMessage());
 			
 			// Request match to be destroyed
 			this.matchMgr.destroyMatch(this.matchId);
@@ -137,10 +143,21 @@ public class Match
 	{
 		this.end(this.getOpponent(player));
 	}
-	
-	public boolean isEnded()
+
+	public void timerEnded()
 	{
-		return this.timer.isDone();
+		if(this.playerOne.getScore() > this.playerTwo.getScore())
+		{
+			this.end(this.playerOne);
+		}
+		else if(this.playerTwo.getScore() > this.playerOne.getScore())
+		{
+			this.end(this.playerTwo);
+		}
+		else
+		{
+			this.end(null);
+		}
 	}
 	
 	public long getMatchId()
@@ -176,16 +193,6 @@ public class Match
 	public byte getLoadingTime()
 	{
 		return this.loadingTime;
-	}
-	
-	public long getStartTime()
-	{
-		return this.startTime;
-	}
-	
-	public boolean isStarted()
-	{
-		return (this.startTime > 0);
 	}
 	
 	@Override

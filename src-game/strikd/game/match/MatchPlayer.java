@@ -3,7 +3,7 @@ package strikd.game.match;
 import java.util.ArrayList;
 import java.util.List;
 
-import strikd.game.board.Square;
+import strikd.game.board.Tile;
 import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
@@ -17,7 +17,7 @@ public class MatchPlayer
 	private boolean ready;
 	private int score;
 	
-	private List<Square> selected = new ArrayList<Square>();
+	private List<Tile> selected = new ArrayList<Tile>();
 	
 	public MatchPlayer(Session session)
 	{
@@ -95,12 +95,12 @@ public class MatchPlayer
 		this.score += points;
 	}
 	
-	public void selectTile(Square square)
+	public void selectTile(Tile tile)
 	{
-		this.selected.add(square);
+		this.selected.add(tile);
 	}
 	
-	public List<Square> getSelection()
+	public List<Tile> getSelection()
 	{
 		return this.selected;
 	}

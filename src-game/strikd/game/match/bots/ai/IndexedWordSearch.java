@@ -29,14 +29,14 @@ public class IndexedWordSearch {
     }
 
     // The actual searching
-    public List<BoardWord> findWordsForSquare(Square square)
+    public List<BoardWord> findWordsForSquare(Tile tile)
     {
         WordDictionaryIndex wordDictionaryIndex = this.board.getDictionary().getIndex();
         this.boardWords = new HashMap<>();
 
         // Find a neat list of words for this square
-        Stack<Square> progressStack = new Stack<>();
-        this.findWordsWithStartingSquare(square, wordDictionaryIndex, null, progressStack);
+        Stack<Tile> progressStack = new Stack<>();
+        this.findWordsWithStartingSquare(tile, wordDictionaryIndex, null, progressStack);
 
         // Sort the result
         List<BoardWord> sortedList = new ArrayList<BoardWord>(this.boardWords.values());
@@ -44,7 +44,7 @@ public class IndexedWordSearch {
         return sortedList;
     }
 
-    private void findWordsWithStartingSquare(Square currentSquare, LetterNode branch, Direction8 origin, Stack<Square> progressStack)
+    private void findWordsWithStartingSquare(Tile currentSquare, LetterNode branch, Direction8 origin, Stack<Tile> progressStack)
     {
         // Keep track of the max amount of words to search for (they are unique words)
         if(this.boardWords.size() >= this.wordLimit)
@@ -53,7 +53,7 @@ public class IndexedWordSearch {
         }
 
         // The questionmarks are used as wildcards while finding words
-        if(currentSquare.getLetter() == Square.WILDCARD_CHARACTER && currentSquare.getClass() != WildCardSquare.class)
+        if(currentSquare.getLetter() == Tile.WILDCARD_CHARACTER && currentSquare.getClass() != WildCardSquare.class)
         {
             // When wildcards are allow we create WildCardSquares for each letter in the alphabet!
             if(this.allowWildcards == true)
@@ -94,7 +94,7 @@ public class IndexedWordSearch {
                             if(direction != Direction8.NorthEast && direction != Direction8.SouthEast && direction != Direction8.NorthWest && direction != Direction8.SouthWest)
                             {
                                 // Try to get next tile at new direction
-                                Square nextSquare = this.board.getSquare(currentSquare.getColumn() + direction.x, currentSquare.getRow() + direction.y);
+                                Tile nextSquare = this.board.getTile(currentSquare.getColumn() + direction.x, currentSquare.getRow() + direction.y);
                                 if(nextSquare != null && nextSquare.isTile() && !this.visitedSquarePosition(nextSquare, progressStack))
                                 {
                                     this.findWordsWithStartingSquare(nextSquare, currentLetterBranch, direction.invert(), progressStack);
@@ -108,26 +108,26 @@ public class IndexedWordSearch {
         }
     }
 
-    private void foundWord(Stack<Square> progressStack)
+    private void foundWord(Stack<Tile> progressStack)
     {
-        ArrayList<Square> squares = new ArrayList<>();
-        for(Square square : progressStack)
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for(Tile tile : progressStack)
         {
-            squares.add(square);
+            tiles.add(tile);
         }
 
-        BoardWord boardWord = new BoardWord(squares);
+        BoardWord boardWord = new BoardWord(tiles);
         if(this.requireWildCards && boardWord.containsWildCards())
         {
             this.boardWords.put(boardWord.toString().hashCode(), boardWord);
         }
     }
 
-    private boolean visitedSquarePosition(Square square, Stack<Square> progessStack)
+    private boolean visitedSquarePosition(Tile tile, Stack<Tile> progessStack)
     {
-        for(Square matchSquare : progessStack)
+        for(Tile matchSquare : progessStack)
         {
-            if(square.getColumn() == matchSquare.getColumn() && square.getRow() == matchSquare.getRow())
+            if(tile.getColumn() == matchSquare.getColumn() && tile.getRow() == matchSquare.getRow())
             {
                 return true;
             }

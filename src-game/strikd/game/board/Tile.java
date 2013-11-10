@@ -4,7 +4,7 @@ import strikd.game.board.triggers.Trigger;
 
 import java.util.List;
 
-public class Square
+public class Tile
 {
 	private final int x;
     protected int y = Integer.MIN_VALUE;
@@ -18,7 +18,7 @@ public class Square
 
     public final static char WILDCARD_CHARACTER = '?';
 
-	public Square(int x, int y, Board board)
+	public Tile(int x, int y, Board board)
 	{
 		this.x = x;
 		this.board = board;
@@ -84,7 +84,7 @@ public class Square
 
     public boolean isTile()
     {
-        return (this == this.board.getSquare(this.getColumn(), this.getRow()));
+        return (this == this.board.getTile(this.getColumn(), this.getRow()));
     }
 
     public int getColumn()
@@ -94,7 +94,7 @@ public class Square
 
     public int getRow()
     {
-        List<Square> column = this.board.getColumn(x);
+        List<Tile> column = this.board.getColumn(x);
         return column.indexOf(this);
     }
 

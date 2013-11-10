@@ -3,25 +3,25 @@ package strikd.communication.outgoing;
 import java.util.List;
 
 import strikd.communication.Opcodes;
-import strikd.game.board.Square;
+import strikd.game.board.Tile;
 import strikd.net.codec.OutgoingMessage;
 
 public class BoardUpdateMessage extends OutgoingMessage
 {
-	public BoardUpdateMessage(List<Square> removed, List<Square> added)
+	public BoardUpdateMessage(List<Tile> removed, List<Tile> added)
 	{
 		super(Opcodes.Outgoing.BOARD_UPDATE);
 		
 		// Removed tiles
 		super.writeByte((byte)removed.size());
-		for(Square tile : removed)
+		for(Tile tile : removed)
 		{
 			super.writeByte((byte)(tile.getColumn() << 4 | tile.getFrozenRow()));
 		}
 		
 		// New tiles (spawn at the top y and fall down till they hit something)
 		super.writeByte((byte)added.size());
-		for(Square tile : added)
+		for(Tile tile : added)
 		{
 			super.writeByte((byte)tile.getColumn());
 			super.writeByte((byte)tile.getLetter());

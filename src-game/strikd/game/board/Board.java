@@ -5,60 +5,54 @@ import strikd.words.WordDictionary;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * A rectangular space of squares. A square can hold a {@link Square} or <code>null</code>.
- * 
- * @author nilsw
- * 
- */
 public abstract class Board
 {
-    protected int height;
-    protected int width;
+    protected final int width;
+    protected final int height;
 
-    protected final ArrayList<Square>[] squares;
+    protected final List<Tile>[] columns;
 	protected final WordDictionary dictionary;
 	
+	@SuppressWarnings("unchecked")
 	protected Board(int width, int height, WordDictionary dictionary)
 	{
         this.width = width;
         this.height = height;
 
-        this.squares = new ArrayList[width];
-        for(int x = 0; x < this.getWidth(); x++)
+        this.columns = new List[width];
+        for(int x = 0; x < width; x++)
         {
-            this.squares[x] = new ArrayList<>();
+            this.columns[x] = new ArrayList<Tile>();
         }
 
 		this.dictionary = dictionary;
 	}
 
-    public ArrayList<Square> getColumn(int index)
+    public List<Tile> getColumn(int x)
     {
-        return this.squares[index];
+        return this.columns[x];
     }
 	
-	public Square newSquare(int x, int y)
+	public Tile newTile
+	(int x, int y)
 	{
-		return new Square(x, y, this);
+		return new Tile(x, y, this);
 	}
 	
 	public final void clear()
 	{
-		for(int x = 0; x < this.getWidth(); x++)
+		for(List<Tile> column : this.columns)
 		{
-            ArrayList<Square> column = squares[x];
-            column.clear();
+			column.clear();
 		}
 	}
 
-    public final void clearSquares(List<Square> squares)
+    public final void clearTiles(List<Tile> tiles)
     {
-        for(Square square : squares)
+        for(Tile tile : tiles)
         {
-            ArrayList<Square> column = this.squares[square.getColumn()];
-            column.remove(square.getRow());
+            List<Tile> column = this.columns[tile.getColumn()];
+            column.remove(tile.getRow());
         }
     }
 
@@ -68,24 +62,24 @@ public abstract class Board
 		this.update();
 	}
 	
-	public abstract List<Square> update();
+	public abstract List<Tile> update();
 	
 	public void destroy()
 	{
 		// Override me
 	}
 	
-	public final Square getSquare(int x, int y)
+	public final Tile getTile(int x, int y)
 	{
-		try
-        {
-            ArrayList<Square> column = this.squares[x];
-            return column.get(y);
+		if(x >= 0 && x < this.columns.length)
+		{
+			if(y >= 0 && y < this.columns[x].size())
+			{
+				return this.columns[x].get(y);
+			}
 		}
-        catch (IndexOutOfBoundsException e)
-        {
-            return null;
-        }
+		
+		return null;
 	}
 	
 	public final int getWidth()
@@ -121,24 +115,24 @@ public abstract class Board
 			{
 				sb.append('[');
 
-				Square square = this.getSquare(x, y);
-				if(square == null)
+				Tile tile = this.getTile(x, y);
+				if(tile == null)
 				{
 					sb.append("   ");
 				}
 				else
 				{
-					if(!square.hasTrigger())
+					if(!tile.hasTrigger())
 					{
 						sb.append(' ');
-						sb.append(square.getLetter());
+						sb.append(tile.getLetter());
 						sb.append(' ');
 					}
 					else
 					{
-						sb.append(square.getLetter());
+						sb.append(tile.getLetter());
 						sb.append(':');
-						sb.append(Character.toUpperCase(square.getTrigger().getTypeName().charAt(0)));
+						sb.append(Character.toUpperCase(tile.getTrigger().getTypeName().charAt(0)));
 					}
 				}
 				

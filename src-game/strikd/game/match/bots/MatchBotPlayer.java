@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
-import strikd.game.board.Square;
+import strikd.game.board.Tile;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.bots.ai.BasicMatchBotAI;
 import strikd.game.player.Player;
@@ -54,11 +54,11 @@ public class MatchBotPlayer extends MatchPlayer implements Runnable
 	public void run()
 	{
 		// New move available?
-		List<Square> tiles = this.ai.nextMove();
+		List<Tile> tiles = this.ai.nextMove();
 		if(tiles != null && tiles.size() > 0)
 		{
 			// Select these tiles
-			for(Square tile : tiles)
+			for(Tile tile : tiles)
 			{
 				this.selectTile(tile);
 			}

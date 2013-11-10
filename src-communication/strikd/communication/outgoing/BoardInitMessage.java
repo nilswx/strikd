@@ -2,7 +2,7 @@ package strikd.communication.outgoing;
 
 import strikd.communication.Opcodes;
 import strikd.game.board.Board;
-import strikd.game.board.Square;
+import strikd.game.board.Tile;
 import strikd.net.codec.OutgoingMessage;
 
 public class BoardInitMessage extends OutgoingMessage
@@ -21,15 +21,15 @@ public class BoardInitMessage extends OutgoingMessage
 		{
 			for(int y = 0; y < height; y++)
 			{
-				Square square = board.getSquare(x, y);
-				if(square == null)
+				Tile tile = board.getTile(x, y);
+				if(tile == null)
 				{
 					super.writeByte((byte)0);
 				}
 				else
 				{
 					// TODO: store trigger info in remaining 3 bits (square.getLetter() << 5))
-					super.writeByte((byte)square.getLetter());
+					super.writeByte((byte)tile.getLetter());
 				}
 			}
 		}
