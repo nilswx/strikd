@@ -1,7 +1,6 @@
 package strikd.locale;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,22 +20,19 @@ public class LocaleBundle
 	{
 		this.locale = locale;
 		
-		// Load dictionaries
-		Map<DictionaryType, WordDictionary> dicts = new HashMap<DictionaryType, WordDictionary>();
+		this.dicts = new HashMap<DictionaryType, WordDictionary>();
 		for(DictionaryType type : DictionaryType.values())
 		{
 			try
 			{
 				String path = dictDir + File.separator + String.format(DICTIONARY_PATH, type.toString().toLowerCase());
-				dicts.put(type, new WordDictionary(locale, new File(path), true));
+				this.dicts.put(type, new WordDictionary(locale, new File(path), true));
 			}
 			catch(Exception ex)
 			{
 				logger.debug(String.format("%s: could not load dict for %s", locale, type));
 			}
 		}
-		
-		this.dicts = Collections.unmodifiableMap(dicts);
 	}
 	
 	public String getLocale()
