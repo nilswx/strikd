@@ -10,7 +10,7 @@ import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Tile;
 import strikd.game.match.MatchPlayer;
-import strikd.game.match.bots.ai.BasicMatchBotAI;
+import strikd.game.match.bots.ai.SimpleMatchBotAI;
 import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 import strikd.util.NamedThreadFactory;
@@ -30,7 +30,7 @@ public class MatchBotPlayer extends MatchPlayer implements Runnable
 		this.bot = bot;
 		
 		// Install default AI implementation
-		this.ai = new BasicMatchBotAI(this);
+		this.ai = new SimpleMatchBotAI(this);
 		
 		// "Ready whenever you are"
 		this.setReady();
