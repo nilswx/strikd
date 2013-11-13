@@ -88,7 +88,10 @@ public abstract class Board
 		return this.tileIdAllocator;
 	}
 
-	protected abstract Tile newTile(byte tileId, int column, char letter, Trigger trigger);
+	protected Tile newTile(byte tileId, int column, char letter, Trigger trigger)
+	{
+		return new Tile(tileId, column, letter, trigger, this);
+	}
 
 	public void removeTile(Tile tile)
 	{

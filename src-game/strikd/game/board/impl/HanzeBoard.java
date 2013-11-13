@@ -173,10 +173,4 @@ public class HanzeBoard extends Board
 
 	private static final Direction8[] SEARCH_DIRECTIONS =
 	{ Direction8.North, Direction8.East, Direction8.South, Direction8.West };
-
-	@Override
-	protected Tile newTile(byte tileId, int column, char letter, Trigger trigger)
-	{
-		return new Tile(tileId, column, letter, trigger, this);
-	}
 }
