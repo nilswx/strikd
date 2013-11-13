@@ -33,6 +33,7 @@ public abstract class Board
         this.width = width;
         this.height = height;
 
+        // Create index and grid
         this.tiles = Maps.newHashMapWithExpectedSize(width * height);
         this.columns = new List[width];
         for(int x = 0; x < width; x++)
@@ -42,6 +43,7 @@ public abstract class Board
 
 		this.dictionary = dictionary;
 		
+		// Reusable collections for generating update messages
 		this.addedTiles = Lists.newArrayList();
 		this.removedTiles = Lists.newArrayList();
 	}
@@ -51,16 +53,23 @@ public abstract class Board
         return this.columns[x];
     }
 	
-	public Tile createTile(int column, char letter)
+	public Tile addTile(int column, char letter)
 	{
-		return this.createTile(column, letter, null);
+		return this.addTile(column, letter, null);
 	}
 	
-	public Tile createTile(int column, char letter, Trigger trigger)
+	public Tile addTile(int column, char letter, Trigger trigger)
 	{
-		Tile tile = new Tile(this.allocateId(), letter, trigger, this);
+		// Factory method for creating Tiles
+		Tile tile = this.newTile(this.allocateId(), column, letter, trigger);
+		
+		// Add to index and grid
 		this.tiles.put(tile.getTileId(), tile);
 		this.columns[column].add(tile);
+		
+		// For update message
+		this.addedTiles.add(tile);
+		System.out.println("added " + tile);
 		
 		return tile;
 	}
@@ -81,12 +90,22 @@ public abstract class Board
 		return this.idAllocator;
 	}
 	
-	public void remove(Tile tile)
+	public void removeTile(Tile tile)
 	{
+		// Known tile?
 		if(this.tiles.containsKey(tile.getTileId()))
 		{
+			// Woo
+			System.out.println("removed " + tile);
+			
+			// Cancel selections etc
 			tile.remove();
+			
+			// Remove from index and grid
 			this.tiles.remove(tile);
+			this.columns[tile.getColumn()].remove(tile);
+			
+			// For update message
 			this.removedTiles.add(tile);
 		}
 	}

@@ -20,13 +20,13 @@ public class Tile
 
 	public final static char WILDCARD_CHARACTER = '?';
 
-	public Tile(byte tileId, char letter, Trigger trigger, Board board)
+	public Tile(byte tileId, int column, char letter, Trigger trigger, Board board)
 	{
 		this.tileId = tileId;
+		this.column = column;
 		this.letter = letter;
 		this.trigger = trigger;
 		this.board = board;
-		this.column = 0;
 	}
 
 	public void remove()

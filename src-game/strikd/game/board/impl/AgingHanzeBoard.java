@@ -38,7 +38,7 @@ public class AgingHanzeBoard extends HanzeBoard implements Runnable
 	@Override
 	protected Tile newTile(byte tileId, int column, char letter, Trigger trigger)
 	{
-		return new AgingTile(tileId, letter, trigger, this);
+		return new AgingTile(tileId, column, letter, trigger, this);
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class AgingHanzeBoard extends HanzeBoard implements Runnable
 			if(((AgingTile)tile).age() >= this.maxAge)
 			{
 				expired++;
-				this.remove(tile);
+				this.removeTile(tile);
 			}
 		}
 		
@@ -67,9 +67,9 @@ public class AgingHanzeBoard extends HanzeBoard implements Runnable
 	{
 		private int age;
 		
-		public AgingTile(byte tileId, char letter, Trigger trigger, Board board)
+		public AgingTile(byte tileId, int column, char letter, Trigger trigger, Board board)
 		{
-			super(tileId, letter, trigger, board);
+			super(tileId, column, letter, trigger, board);
 		}
 		
 		public int age()

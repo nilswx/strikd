@@ -54,6 +54,7 @@ public class Match
 		// Generate board
 		this.board.rebuild();
 		System.out.println(this.board.toMatrixString());
+		this.board.generateUpdateMessage();
 	}
 	
 	public void destroy()

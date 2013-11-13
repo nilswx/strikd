@@ -29,18 +29,25 @@ public class HanzeBoard extends Board
 	public HanzeBoard(int width, int height, WordDictionary dictionary)
 	{
 		super(width, height, dictionary);
-
-		// Fill all squares in first update()
+	}
+	
+	private void findEmptySquares()
+	{
 		List<Square> empty = Lists.newArrayList();
 		for(int column = 0; column < width; column++)
 		{
 			for(int row = 0; row < height; row++)
 			{
-				empty.add(new Square(column, row));
+				if(this.getTile(column, row) == null)
+				{
+					empty.add(new Square(column, row));
+				}
 			}
 		}
 		Collections.shuffle(empty);
 		this.emptySquares = Lists.newLinkedList(empty);
+		
+		logger.debug("empty=" + this.emptySquares.size());
 	}
 
 	@Override
@@ -49,25 +56,29 @@ public class HanzeBoard extends Board
 		// Entering!
 		logger.debug("begin update()");
 
+		// Find empty stuff (ugh!)
+		this.findEmptySquares();
+		
 		// Anything to fill?
 		Square start;
 		while((start = this.emptySquares.poll()) != null)
 		{
 			// Determine the best placement
-			WordPlacement bestPlacement = Ordering.natural().max(this.generatePlacements(start, 10));
+			WordPlacement bestPlacement = null;//Ordering.natural().max(this.generatePlacements(start, 10));
 			if(bestPlacement == null)
 			{
-				this.createTile(start.column, RandomUtil.generateRandomLetter());
+				this.addTile(start.column, RandomUtil.generateRandomLetter());
 			}
 			else
 			{
 				// Place the tiles in these squares
 				for(FutureTile tile : bestPlacement)
 				{
-					this.createTile(tile.column, tile.letter);
+					this.addTile(tile.column, tile.letter);
 				}
 				
 				System.out.println(this.toMatrixString());
+				break;
 			}
 		}
 	}
@@ -161,6 +172,6 @@ public class HanzeBoard extends Board
 	@Override
 	protected Tile newTile(byte tileId, int column, char letter, Trigger trigger)
 	{
-		return new Tile(tileId, letter, trigger, this);
+		return new Tile(tileId, column, letter, trigger, this);
 	}
 }

@@ -99,7 +99,7 @@ public class UpdateTileSelectionHandler extends MessageHandler
 							{
 								tile.getTrigger().execute(player);
 							}
-							board.remove(tile);
+							board.removeTile(tile);
 						}
 
                         // Generate updates
