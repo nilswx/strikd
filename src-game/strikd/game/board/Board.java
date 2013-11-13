@@ -55,7 +55,8 @@ public abstract class Board
 	
 	public Tile addTile(int column, char letter)
 	{
-		return this.addTile(column, letter, null);
+		Trigger trigger = null; // TODO: randomly generate triggers
+		return this.addTile(column, letter, trigger);
 	}
 
 	public Tile addTile(int column, char letter, Trigger trigger)

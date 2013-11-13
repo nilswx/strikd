@@ -15,7 +15,6 @@ import strikd.game.board.Direction8;
 import strikd.game.board.FutureTile;
 import strikd.game.board.Square;
 import strikd.game.board.Tile;
-import strikd.game.board.triggers.Trigger;
 import strikd.util.RandomUtil;
 import strikd.words.WordDictionary;
 import strikd.words.index.LetterNode;

@@ -3,22 +3,17 @@ package strikd.game.board;
 import strikd.game.board.triggers.Trigger;
 import strikd.game.match.MatchPlayer;
 
-import java.util.List;
-
 public class Tile
 {
 	private byte tileId;
 	private final int column;
-
 	private final Board board;
 
-	protected char letter;
+	private char letter;
 	private Trigger trigger;
 
 	private MatchPlayer firstSelector;
 	private MatchPlayer secondSelector;
-
-	public final static char WILDCARD_CHARACTER = '?';
 
 	public Tile(byte tileId, int column, char letter, Trigger trigger, Board board)
 	{
@@ -42,12 +37,19 @@ public class Tile
 		}
 	}
 	
-	public void select(MatchPlayer player)
+	public void onSelect(MatchPlayer player)
 	{
-		
+		if(this.firstSelector == null)
+		{
+			this.firstSelector = player;
+		}
+		else if(this.secondSelector == null)
+		{
+			this.secondSelector = player;
+		}
 	}
 	
-	public void deselect(MatchPlayer player)
+	public void onDeselect(MatchPlayer player)
 	{
 		if(player == this.firstSelector)
 		{
@@ -96,8 +98,7 @@ public class Tile
 
 	public int getRow()
 	{
-		List<Tile> column = this.board.getColumn(this.column);
-		return column.indexOf(this);
+		return this.board.getColumn(this.column).indexOf(this);
 	}
 
 	public boolean isSelected()
