@@ -19,6 +19,7 @@ public class TimedPlayerQueue extends PlayerQueue
 	
 	private final Queue<TimedPlayerQueue.Entry> players = Queues.newConcurrentLinkedQueue();
 	private final ScheduledFuture<?> schedulerTask;
+	
 	private final int maxWaitingSeconds;
 	private final MatchBotFactory botFactory;
 	

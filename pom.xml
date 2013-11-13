@@ -75,6 +75,12 @@
         <artifactId>spring-social-facebook</artifactId>
         <version>1.1.0.M4</version>
     </dependency>
+
+<dependency>
+    <groupId>com.esotericsoftware.kryo</groupId>
+    <artifactId>kryo</artifactId>
+    <version>2.22</version>
+</dependency>
 	</dependencies>
 	
 	    
@@ -88,5 +94,14 @@
             <enabled>false</enabled>
         </snapshots>
     </repository>
+    
+        <repository>
+    <snapshots>
+        <enabled>false</enabled>
+    </snapshots>
+    <id>central</id>
+    <name>Maven Central Repository</name>
+    <url>http://repo1.maven.org/maven2</url>
+</repository>
 </repositories>
 </project>

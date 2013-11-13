@@ -1,7 +1,11 @@
 package strikd.words.index;
 
-public class LetterNode
+import java.io.Serializable;
+
+public class LetterNode implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private static final int ALPHABET_LENGTH = 26;
 	private static final char ALPHABET_OFFSET = 'A';
 	

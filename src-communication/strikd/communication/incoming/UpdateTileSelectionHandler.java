@@ -3,7 +3,6 @@ package strikd.communication.incoming;
 import java.util.ArrayList;
 import java.util.List;
 
-import strikd.communication.outgoing.BoardUpdateMessage;
 import strikd.sessions.Session;
 import strikd.words.Word;
 import strikd.communication.Opcodes;
@@ -41,16 +40,10 @@ public class UpdateTileSelectionHandler extends MessageHandler
 			List<Tile> newSelected = new ArrayList<Tile>();
 			for(int i = 0; i < amount; i++)
 			{
-				// Unpack position
-				byte pos = request.readByte();
-				int x = pos >> 4;
-				int y = pos & 0x0F;
-
-                // Valid addition?
-                Tile tile = board.getTile(x, y);
+                Tile tile = board.getTile(request.readByte());
 				if(tile != null)
 				{
-                    player.selectTile(board.getTile(x, y));
+                    player.selectTile(tile);
                     newSelected.add(tile);
 				}
 			}
@@ -73,7 +66,7 @@ public class UpdateTileSelectionHandler extends MessageHandler
 				for(Tile tile : player.getSelection())
 				{
 					// Check tile + distance (anti-cheat)
-					if(tile.isTile() && (previous == null || (Math.abs(tile.getColumn() - previous.getColumn()) <= 1 && Math.abs(tile.getRow() - previous.getRow()) <= 1)))
+					if(previous == null || (Math.abs(tile.getColumn() - previous.getColumn()) <= 1 && Math.abs(tile.getRow() - previous.getRow()) <= 1))
 					{
 						letters.append(tile.getLetter());
 						previous = tile;
@@ -98,23 +91,22 @@ public class UpdateTileSelectionHandler extends MessageHandler
 						session.getMatchPlayer().modScore(+points);
 						match.broadcast(new WordFoundMessage(session.getMatchPlayer(), word, +points));
 
-                        List<Tile> selectedTiles = player.getSelection();
+						// Expend the 'used' tiles
+						for(Tile tile : player.getSelection())
+						{
+							// Fire trigger!
+							if(tile.hasTrigger())
+							{
+								tile.getTrigger().execute(player);
+							}
+							board.remove(tile);
+						}
 
-                        // First freeze the current positions of the tiles so we can sent the correct over the network
-                        for(Tile tile : selectedTiles)
-                        {
-                            tile.freeze();
-                        }
+                        // Generate updates
+						board.update();
+                        match.broadcast(board.generateUpdateMessage());
 
-						// Clear the 'used' tiles
-                        board.clearTiles(selectedTiles);
-
-                        // Get the new tiles
-						List<Tile> newSquares = board.update();
-
-                        // Send the cleared and new tiles
-                        match.broadcast(new BoardUpdateMessage(selectedTiles, newSquares));
-
+                        // Kiekeboe!
                         System.out.println(board.toMatrixString());
 					}
 				}

@@ -1,7 +1,11 @@
 package strikd.words.index;
 
-public class WordDictionaryIndex extends LetterNode
+import java.io.Serializable;
+
+public class WordDictionaryIndex extends LetterNode implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	public WordDictionaryIndex()
 	{
 		super('*');

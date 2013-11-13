@@ -1,17 +1,31 @@
 package strikd.game.board;
 
+import strikd.communication.outgoing.BoardUpdateMessage;
+import strikd.game.board.triggers.Trigger;
 import strikd.words.WordDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public abstract class Board
 {
     protected final int width;
     protected final int height;
-
+    
     protected final List<Tile>[] columns;
+    
 	protected final WordDictionary dictionary;
+	
+	private byte idAllocator;
+	private final Map<Byte, Tile> tiles;
+	
+	
+	private List<Tile> addedTiles;
+	private List<Tile> removedTiles;
 	
 	@SuppressWarnings("unchecked")
 	protected Board(int width, int height, WordDictionary dictionary)
@@ -19,6 +33,7 @@ public abstract class Board
         this.width = width;
         this.height = height;
 
+        this.tiles = Maps.newHashMapWithExpectedSize(width * height);
         this.columns = new List[width];
         for(int x = 0; x < width; x++)
         {
@@ -26,6 +41,9 @@ public abstract class Board
         }
 
 		this.dictionary = dictionary;
+		
+		this.addedTiles = Lists.newArrayList();
+		this.removedTiles = Lists.newArrayList();
 	}
 
     public List<Tile> getColumn(int x)
@@ -33,10 +51,39 @@ public abstract class Board
         return this.columns[x];
     }
 	
-	public Tile newTile
-	(int x, int y)
+	public Tile createTile(int column, char letter)
 	{
-		return new Tile(x, y, this);
+		return this.createTile(column, letter, null);
+	}
+	
+	public Tile createTile(int column, char letter, Trigger trigger)
+	{
+		Tile tile = new Tile(this.allocateId(), letter, trigger, this);
+		this.tiles.put(tile.getTileId(), tile);
+		
+		return tile;
+	}
+	
+	private synchronized byte allocateId()
+	{
+		do
+		{
+			if(this.idAllocator++ > Byte.MAX_VALUE)
+			{
+				this.idAllocator = 1;
+			}
+		}
+		while(this.tiles.containsKey(this.idAllocator));
+		
+		return this.idAllocator;
+	}
+	
+	public void remove(Tile tile)
+	{
+		if(this.tiles.containsKey(tile.getTileId()))
+		{
+			tile.remove();
+		}
 	}
 	
 	public final void clear()
@@ -62,11 +109,20 @@ public abstract class Board
 		this.update();
 	}
 	
-	public abstract List<Tile> update();
+	public abstract void update();
 	
 	public void destroy()
 	{
 		// Override me
+	}
+	
+	public BoardUpdateMessage generateUpdateMessage()
+	{
+		BoardUpdateMessage update = new BoardUpdateMessage(this.removedTiles, this.addedTiles);
+		this.removedTiles.clear();
+		this.addedTiles.clear();
+		
+		return update;
 	}
 	
 	public final Tile getTile(int x, int y)
@@ -80,6 +136,11 @@ public abstract class Board
 		}
 		
 		return null;
+	}
+	
+	public Tile getTile(byte tileId)
+	{
+		return this.tiles.get(tileId);
 	}
 	
 	public final int getWidth()
@@ -151,6 +212,4 @@ public abstract class Board
 		
 		return sb.toString();
 	}
-
-
 }

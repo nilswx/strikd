@@ -48,11 +48,13 @@ public class BoardWord implements Comparable<BoardWord>
             for(int i = 0; i < this.tiles.size(); i++)
             {
                 Tile tile = this.tiles.get(i);
+                
                 // Score for wildcard
+                /*
                 if(tile.getClass() == WildCardSquare.class)
                 {
                     currentScore += WILDCARD_SCORE;
-                }
+                }*/
 
                 // Detect the changes in direction
                 if(i > 0)
@@ -100,13 +102,13 @@ public class BoardWord implements Comparable<BoardWord>
 
     public boolean containsWildCards()
     {
-        for(Tile tile : this.tiles)
+        /*for(Tile tile : this.tiles)
         {
-            if(tile.getClass() == WildCardSquare.class)
+            if(tileWildCardSquare.class)
             {
                 return true;
             }
-        }
+        }*/
         return false;
     }
 

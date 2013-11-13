@@ -21,13 +21,17 @@ public class BoardInitMessage extends OutgoingMessage
 		{
 			for(int y = 0; y < height; y++)
 			{
+				// Something here?
 				Tile tile = board.getTile(x, y);
 				if(tile == null)
 				{
+					// Nothing 'ere!
+					super.writeByte((byte)0);
 					super.writeByte((byte)0);
 				}
 				else
 				{
+					super.writeByte(tile.getTileId());
 					// TODO: store trigger info in remaining 3 bits (square.getLetter() << 5))
 					super.writeByte((byte)tile.getLetter());
 				}

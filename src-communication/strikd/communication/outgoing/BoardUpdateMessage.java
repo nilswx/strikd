@@ -16,13 +16,14 @@ public class BoardUpdateMessage extends OutgoingMessage
 		super.writeByte((byte)removed.size());
 		for(Tile tile : removed)
 		{
-			super.writeByte((byte)(tile.getColumn() << 4 | tile.getFrozenRow()));
+			super.writeByte(tile.getTileId());
 		}
 		
 		// New tiles (spawn at the top y and fall down till they hit something)
 		super.writeByte((byte)added.size());
 		for(Tile tile : added)
 		{
+			super.writeByte((byte)tile.getTileId());
 			super.writeByte((byte)tile.getColumn());
 			super.writeByte((byte)tile.getLetter());
 			
