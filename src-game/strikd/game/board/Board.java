@@ -5,6 +5,7 @@ import strikd.game.board.triggers.Trigger;
 import strikd.words.WordDictionary;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,6 @@ public abstract class Board
 	
 	private byte idAllocator;
 	private final Map<Byte, Tile> tiles;
-	
 	
 	private List<Tile> addedTiles;
 	private List<Tile> removedTiles;
@@ -60,9 +60,12 @@ public abstract class Board
 	{
 		Tile tile = new Tile(this.allocateId(), letter, trigger, this);
 		this.tiles.put(tile.getTileId(), tile);
+		this.columns[column].add(tile);
 		
 		return tile;
 	}
+	
+	protected abstract Tile newTile(byte tileId, int column, char letter, Trigger trigger);
 	
 	private synchronized byte allocateId()
 	{
@@ -138,6 +141,11 @@ public abstract class Board
 		}
 		
 		return null;
+	}
+	
+	public Collection<Tile> getTiles()
+	{
+		return this.tiles.values();
 	}
 	
 	public Tile getTile(byte tileId)

@@ -58,8 +58,20 @@ public class RandomUtil
 		List<T> list = new ArrayList<T>(elements);
 		return pickOne(list);
 	}
+	
+	public static int nextInt(int n)
+	{
+		return getRng().nextInt(n);
+	}
+	
+	private static final char[] RANDOM_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+	
+	public static final char generateRandomLetter()
+	{
+		return RANDOM_LETTERS[RandomUtil.nextInt(RANDOM_LETTERS.length)];
+	}
 
-    public static String randomizeString(String string)
+    public static char[] randomizeString(String string)
     {
         StringBuilder randomStringBuilder = new StringBuilder();
         StringBuilder originalString = new StringBuilder(string);
@@ -77,7 +89,7 @@ public class RandomUtil
             originalString.deleteCharAt(randomIndex);
         }
 
-        return randomStringBuilder.toString();
+        return randomStringBuilder.toString().toCharArray();
     }
 
     public static char randomCharFromString(String string)

@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 public final class Word
 {
 	private final String string;
+	private final char[] letters;
 	
 	private Word(String value)
 	{
@@ -14,16 +15,17 @@ public final class Word
 		}
 		
 		this.string = value;
+		this.letters = value.toCharArray();
 	}
 	
 	public int length()
 	{
-		return this.string.length();
+		return this.letters.length;
 	}
 	
 	public char[] letters()
 	{
-		return this.string.toCharArray();
+		return this.letters;
 	}
 	
 	public boolean isPalindrome()
