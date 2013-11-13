@@ -83,6 +83,8 @@ public abstract class Board
 		if(this.tiles.containsKey(tile.getTileId()))
 		{
 			tile.remove();
+			this.tiles.remove(tile);
+			this.removedTiles.add(tile);
 		}
 	}
 	
