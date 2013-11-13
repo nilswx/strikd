@@ -1,11 +1,10 @@
-package strikd.game.board;
+package strikd.words;
 
 import java.io.File;
 
 import strikd.locale.LocaleBundle;
 import strikd.locale.LocaleBundleManager;
 import strikd.locale.LocaleBundle.DictionaryType;
-import strikd.words.WordDictionary;
 
 public class StaticLocale
 {

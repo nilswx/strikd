@@ -6,11 +6,11 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import strikd.game.board.Board;
-import strikd.game.board.StaticLocale;
 import strikd.game.board.Tile;
 import strikd.game.board.triggers.Trigger;
 import strikd.game.match.Match;
 import strikd.util.NamedThreadFactory;
+import strikd.words.StaticLocale;
 import strikd.words.WordDictionary;
 
 public final class AgingHanzeBoard extends HanzeBoard implements Runnable
