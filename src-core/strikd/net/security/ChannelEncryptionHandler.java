@@ -1,24 +1,27 @@
 package strikd.net.security;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.MessageEvent;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOutboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
 
-public class ChannelEncryptionHandler extends ChannelCryptoHandler
+public class ChannelEncryptionHandler extends ChannelOutboundHandlerAdapter
 {
+	private final FastRC4 crypto;
+	
 	public ChannelEncryptionHandler(byte[] key)
 	{
-		super(key);
+		this.crypto = new FastRC4(key);
 	}
 
 	@Override
-	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception
+	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception
 	{
-		if(e.getMessage() instanceof ChannelBuffer)
+		if(msg instanceof ByteBuf)
 		{
-			ChannelBuffer buffer = (ChannelBuffer)e.getMessage();
+			ByteBuf buffer = (ByteBuf)msg;
 			this.crypto.cipherDirect(buffer.array(), buffer.arrayOffset(), buffer.readableBytes());
 		}
-		super.writeRequested(ctx, e);
+		super.write(ctx, msg, promise);
 	}
 }

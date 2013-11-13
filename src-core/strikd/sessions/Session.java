@@ -22,7 +22,7 @@ import strikd.net.codec.OutgoingMessage;
 
 public class Session extends Server.Referent
 {
-	private static final boolean USE_CRYPTO = true;
+	private static final boolean USE_CRYPTO = false;
 	
 	private static final Logger logger = Logger.getLogger(Session.class);
 	

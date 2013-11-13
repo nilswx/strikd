@@ -1,8 +1,8 @@
 package strikd.net.codec;
 
-import java.nio.charset.Charset;
+import io.netty.buffer.ByteBuf;
 
-import org.jboss.netty.buffer.ChannelBuffer;
+import java.nio.charset.Charset;
 
 import com.google.common.base.Charsets;
 
@@ -11,9 +11,9 @@ public abstract class NetMessage<T extends Enum<?>>
 	protected static final Charset UTF_8 = Charsets.UTF_8;
 	
 	public final T op;
-	protected final ChannelBuffer buf;
+	protected final ByteBuf buf;
 	
-	protected NetMessage(T op, ChannelBuffer data)
+	protected NetMessage(T op, ByteBuf data)
 	{
 		this.op = op;
 		this.buf = data;

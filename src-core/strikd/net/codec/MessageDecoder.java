@@ -1,34 +1,33 @@
 package strikd.net.codec;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
+import java.util.List;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 import strikd.communication.Opcodes;
 
-public class MessageDecoder extends FrameDecoder
+public class MessageDecoder extends ByteToMessageDecoder
 {
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buffer) throws Exception
+	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception
 	{
 		// Mark reader index
 		buffer.markReaderIndex();
-		
+
 		// Read message length
 		short length = buffer.readShort();
-		
+
 		// Valid length and all data arrived?
 		if(length > 0 && buffer.readableBytes() >= length)
 		{
 			Opcodes.Incoming op = Opcodes.Incoming.valueOf(buffer.readByte());
-			return new IncomingMessage(op, buffer.readBytes(length - 1)); // -1 because opcode byte already read
+			out.add(new IncomingMessage(op, buffer.readBytes(length - 1)));
 		}
 		else
 		{
 			// Try again when there's more data
 			buffer.resetReaderIndex();
-			return null;
 		}
 	}
 }

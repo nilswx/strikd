@@ -1,15 +1,14 @@
 package strikd.net.codec;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import strikd.communication.Opcodes;
 
 public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 {
 	protected OutgoingMessage(Opcodes.Outgoing op)
 	{
-		super(op, ChannelBuffers.dynamicBuffer());
+		super(op, Unpooled.buffer());
 		this.buf.writeShort(0); // Length placeholder
 		this.buf.writeByte(op.ordinal()); // Opcode placeholder
 	}
@@ -50,7 +49,7 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 		return this.buf.writerIndex() - 2;
 	}
 	
-	public ChannelBuffer getBuffer()
+	public ByteBuf getBuffer()
 	{
 		this.buf.setShort(0, this.length());
 		return this.buf;

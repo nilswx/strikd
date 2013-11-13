@@ -1,17 +1,15 @@
 package strikd.net;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPipeline;
+
 import java.net.InetSocketAddress;
 
 import org.apache.log4j.Logger;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFutureListener;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelHandler;
 
 import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.MessageDecoder;
@@ -21,7 +19,7 @@ import strikd.net.security.ChannelDecryptionHandler;
 import strikd.net.security.ChannelEncryptionHandler;
 import strikd.sessions.Session;
 
-public class NetConnection extends SimpleChannelHandler
+public class NetConnection extends ChannelInboundHandlerAdapter
 {
 	private static final Logger logger = Logger.getLogger(NetConnection.class);
 	
@@ -36,19 +34,19 @@ public class NetConnection extends SimpleChannelHandler
 	{
 		this.channel = channel;
 		
-		this.ipAddress = ((InetSocketAddress)channel.getRemoteAddress()).getAddress().getHostAddress();
+		this.ipAddress = ((InetSocketAddress)channel.remoteAddress()).getAddress().getHostAddress();
 		this.startTime = System.currentTimeMillis();
 		
-		this.channel.getPipeline().addFirst("encoder", new MessageEncoder());
-		this.channel.getPipeline().addFirst("decoder", new MessageDecoder());
-		this.channel.getPipeline().addLast("connection", this);
+		this.channel.pipeline().addFirst("encoder", new MessageEncoder());
+		this.channel.pipeline().addFirst("decoder", new MessageDecoder());
+		this.channel.pipeline().addLast("connection", this);
 	}
 	
 	public void close()
 	{
 		if(this.channel.isOpen())
 		{
-			this.channel.write(ChannelBuffers.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+			this.channel.close();
 		}
 	}
 	
@@ -63,30 +61,24 @@ public class NetConnection extends SimpleChannelHandler
 	}
 	
 	@Override
-	public void disconnectRequested(ChannelHandlerContext ctx, ChannelStateEvent e)
+	public void channelInactive(ChannelHandlerContext cxt)
 	{
 		this.requestClose("disconnected by user");
 	}
 	
 	@Override
-	public void channelDisconnected(ChannelHandlerContext cxt, ChannelStateEvent e)
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
 	{
-		this.requestClose("disconnected by user");
-	}
-	
-	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
-	{
-		if(e.getMessage() instanceof IncomingMessage)
+		if(msg instanceof IncomingMessage)
 		{
-			this.session.onNetMessage((IncomingMessage) e.getMessage());
+			this.session.onNetMessage((IncomingMessage)msg);
 		}
 	}
 	
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception
 	{
-		logger.error("caught exception", e.getCause());
+		logger.error("caught exception", cause);
 		this.requestClose("disconnected by error");
 	}
 	
@@ -94,18 +86,25 @@ public class NetConnection extends SimpleChannelHandler
 	{
 		if(this.channel.isOpen())
 		{
-			this.channel.write(msg);
+			this.channel.writeAndFlush(msg).addListener(new ChannelFutureListener()
+			{
+				@Override
+				public void operationComplete(ChannelFuture future) throws Exception
+				{
+					System.out.println("DONE");
+				}
+			});
 		}
 	}
 	
 	public void setServerCrypto(byte[] key)
 	{
-		this.channel.getPipeline().addBefore("encoder", "encryption", new ChannelEncryptionHandler(key));
+		this.channel.pipeline().addBefore("encoder", "encryption", new ChannelEncryptionHandler(key));
 	}
 	
 	public void setClientCrypto(byte[] key)
 	{
-		this.channel.getPipeline().addBefore("decoder", "decryption", new ChannelDecryptionHandler(key));
+		this.channel.pipeline().addBefore("decoder", "decryption", new ChannelDecryptionHandler(key));
 	}
 	
 	public boolean isOpen()
@@ -138,7 +137,7 @@ public class NetConnection extends SimpleChannelHandler
 	
 	public boolean isSecure()
 	{
-		ChannelPipeline pipeline = this.channel.getPipeline();
+		ChannelPipeline pipeline = this.channel.pipeline();
 		return (pipeline.get(ChannelEncryptionHandler.class) != null && pipeline.get(ChannelDecryptionHandler.class) != null);
 	}
 }

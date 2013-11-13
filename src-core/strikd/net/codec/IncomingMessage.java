@@ -1,12 +1,12 @@
 package strikd.net.codec;
 
-import org.jboss.netty.buffer.ChannelBuffer;
+import io.netty.buffer.ByteBuf;
 
 import strikd.communication.Opcodes;
 
 public final class IncomingMessage extends NetMessage<Opcodes.Incoming>
 {
-	protected IncomingMessage(Opcodes.Incoming op, ChannelBuffer buf)
+	protected IncomingMessage(Opcodes.Incoming op, ByteBuf buf)
 	{
 		super(op, buf);
 	}

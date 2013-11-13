@@ -1,45 +1,52 @@
 package strikd.net;
 
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelException;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelException;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.util.ThreadNameDeterminer;
-import org.jboss.netty.util.ThreadRenamingRunnable;
 
 import strikd.sessions.SessionManager;
-import strikd.util.NamedThreadFactory;
 
 public class NetListener
 {
 	private Channel listener;
-	private ExecutorService bossExecutor;
-	private ExecutorService workerExecutor;
 	
-	public NetListener(int port, SessionManager sessionMgr) throws IOException
+	public NetListener(int port, final SessionManager sessionMgr) throws IOException
 	{
-		// Create thread pools
-		this.bossExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("Network/Boss #%d"));
-		this.workerExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("Network/Worker #%d"));
+		// Setup a server socket
+		ServerBootstrap bootstrap = new ServerBootstrap();
+		bootstrap.channel(NioServerSocketChannel.class);
 		
-		// Create server boss and worker thread pools using defaults
-		ServerBootstrap bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(this.bossExecutor, this.workerExecutor));
+		// Configure event loop
+		bootstrap.group(new NioEventLoopGroup(), new NioEventLoopGroup());
 		
-		// Add a 'connection management handler' to ALL accepted channels
-		ConnectionManagementHandler mgmt = ConnectionManagementHandler.getInstance(sessionMgr);
-		bootstrap.setPipeline(Channels.pipeline(mgmt));
+		// Handle new connections
+		bootstrap.childHandler(new ChannelInitializer<SocketChannel>()
+		{
+			private final ConnectionManagementHandler handler = ConnectionManagementHandler.getInstance(sessionMgr);
+			
+			@Override
+			protected void initChannel(SocketChannel ch) throws Exception
+			{
+				ch.pipeline().addLast(this.handler);
+			}
+		});
 		
-		// Bind listener
+		// Options
+		bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
+		
+		// Wait for listener to bind
 		try
 		{
-			this.listener = bootstrap.bind(new InetSocketAddress(port));
+			this.listener = bootstrap.bind(new InetSocketAddress(port)).syncUninterruptibly().channel();
 		}
 		catch(ChannelException ex)
 		{
@@ -49,12 +56,12 @@ public class NetListener
 	
 	public SocketAddress getLocalAddress()
 	{
-		return this.listener.getLocalAddress();
+		return this.listener.localAddress();
 	}
 	
 	// Disable Netty's thread renaming, create executors
 	static
 	{
-		ThreadRenamingRunnable.setThreadNameDeterminer(ThreadNameDeterminer.CURRENT);
+		//ThreadRenamingRunnable.setThreadNameDeterminer(ThreadNameDeterminer.CURRENT);
 	}
 }

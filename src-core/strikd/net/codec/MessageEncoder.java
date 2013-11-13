@@ -1,26 +1,14 @@
 package strikd.net.codec;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 
-public class MessageEncoder extends OneToOneEncoder
+public class MessageEncoder extends MessageToByteEncoder<OutgoingMessage>
 {
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel channel, Object obj) throws Exception
+	protected void encode(ChannelHandlerContext ctx, OutgoingMessage msg, ByteBuf out) throws Exception
 	{
-		if(obj instanceof OutgoingMessage)
-		{
-			OutgoingMessage msg = (OutgoingMessage)obj;
-			
-			ChannelBuffer buf = msg.getBuffer();
-			
-			return buf;
-		}
-		else
-		{
-			return obj;
-		}
+		out.writeBytes(msg.getBuffer());
 	}
 }

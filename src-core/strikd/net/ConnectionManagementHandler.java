@@ -1,19 +1,19 @@
 package strikd.net;
 
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.SimpleChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import strikd.sessions.SessionManager;
 
-public class ConnectionManagementHandler extends SimpleChannelHandler
+@ChannelInboundHandlerAdapter.Sharable
+public class ConnectionManagementHandler extends ChannelInboundHandlerAdapter
 {
 	private final SessionManager sessionMgr;
 	
 	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception
+	public void channelActive(ChannelHandlerContext ctx)
 	{
-		NetConnection conn = new NetConnection(ctx.getChannel());
+		NetConnection conn = new NetConnection(ctx.channel());
 		this.sessionMgr.newSession(conn);
 	}
 	
