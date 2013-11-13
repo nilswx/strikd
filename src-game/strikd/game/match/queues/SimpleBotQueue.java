@@ -22,7 +22,7 @@ public class SimpleBotQueue extends PlayerQueue
 	public PlayerQueue.Entry enqueue(Session session)
 	{
 		MatchPlayer player = new MatchPlayer(session);
-		MatchPlayer bot = this.botFactory.newBot();
+		MatchPlayer bot = this.botFactory.newBotForOpponent(player);
 		this.newMatch(player, bot);
 		
 		// Doesn't return entries, creates matches straight away
@@ -39,5 +39,12 @@ public class SimpleBotQueue extends PlayerQueue
 	public Iterator<PlayerQueue.Entry> iterator()
 	{
 		return Collections.emptyListIterator();
+	}
+
+	@Override
+	public int getAvgWaitingTime()
+	{
+		// No waiting!
+		return 0;
 	}
 }

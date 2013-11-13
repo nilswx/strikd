@@ -11,6 +11,7 @@ public class SimplePlayerQueue extends PlayerQueue
 {
 	private final Object waitLock = new Object();
 	private SimplePlayerQueue.Entry waiting;
+	private int lastWaitingTime;
 	
 	public SimplePlayerQueue(LocaleBundle locale, MatchManager matchMgr)
 	{
@@ -25,7 +26,7 @@ public class SimplePlayerQueue extends PlayerQueue
 		{
 			if(this.waiting == null)
 			{
-				SimplePlayerQueue.Entry entry = new SimplePlayerQueue.Entry(session, this);
+				PlayerQueue.Entry entry = new PlayerQueue.Entry(session, this);
 				this.waiting = entry;
 				
 				return entry;
@@ -33,6 +34,7 @@ public class SimplePlayerQueue extends PlayerQueue
 			else
 			{
 				opponent = this.waiting.getSession();
+				this.lastWaitingTime = this.waiting.getWaitingSeconds();
 				this.waiting = null;
 			}
 		}
@@ -56,6 +58,12 @@ public class SimplePlayerQueue extends PlayerQueue
 				this.waiting = null;
 			}
 		}
+	}
+	
+	@Override
+	public int getAvgWaitingTime()
+	{
+		return this.lastWaitingTime;
 	}
 	
 	@Override
@@ -84,13 +92,5 @@ public class SimplePlayerQueue extends PlayerQueue
 				}
 			}
 		};
-	}
-	
-	private static class Entry extends PlayerQueue.Entry
-	{
-		public Entry(Session session, PlayerQueue queue)
-		{
-			super(session, queue);
-		}
 	}
 }

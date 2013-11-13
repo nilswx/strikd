@@ -3,17 +3,18 @@ package strikd.game.match;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 
 import strikd.Server;
-import strikd.communication.outgoing.ServerShuttingDownMessage;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.match.queues.SimpleBotQueue;
 import strikd.locale.LocaleBundle;
-import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
+import strikd.util.NamedThreadFactory;
 
 public class MatchManager extends Server.Referent
 {
@@ -22,6 +23,9 @@ public class MatchManager extends Server.Referent
 	private final AtomicLong matchCounter = new AtomicLong();
 	private final Map<Long, Match> active = new ConcurrentHashMap<Long, Match>();
 	private final Map<String, PlayerQueue> queues = new HashMap<String, PlayerQueue>(); 
+	
+	private final ScheduledExecutorService scheduler = 
+			Executors.newScheduledThreadPool(1, new NamedThreadFactory("MatchManager Scheduler #%d"));
 	
 	public MatchManager(Server server)
 	{
@@ -110,14 +114,9 @@ public class MatchManager extends Server.Referent
 	{
 		logger.debug("shutting down queues");
 		
-		OutgoingMessage msg = new ServerShuttingDownMessage(message);
 		for(PlayerQueue queue : this.queues.values())
 		{
-			for(PlayerQueue.Entry player : queue)
-			{
-				player.getSession().send(msg);
-				player.exit();
-			}
+			queue.close();
 		}
 		this.queues.clear();
 	}
@@ -142,5 +141,10 @@ public class MatchManager extends Server.Referent
 	public long matchCounter()
 	{
 		return this.matchCounter.longValue();
+	}
+	
+	public ScheduledExecutorService getScheduler()
+	{
+		return this.scheduler;
 	}
 }

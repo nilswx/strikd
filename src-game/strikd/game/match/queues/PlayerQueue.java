@@ -1,5 +1,9 @@
 package strikd.game.match.queues;
 
+import java.util.concurrent.TimeUnit;
+
+import strikd.communication.outgoing.QueueEnteredMessage;
+import strikd.communication.outgoing.QueueExitedMessage;
 import strikd.game.match.Match;
 import strikd.game.match.MatchManager;
 import strikd.game.match.MatchPlayer;
@@ -26,6 +30,14 @@ public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 		return this.matchMgr.newMatch(this.locale, playerOne, playerTwo);
 	}
 	
+	public void close()
+	{
+		for(PlayerQueue.Entry player : this)
+		{
+			player.exit();
+		}
+	}
+	
 	public LocaleBundle getLocale()
 	{
 		return this.locale;
@@ -36,25 +48,53 @@ public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 		return this.matchMgr;
 	}
 	
-	public static abstract class Entry
+	public String getName()
+	{
+		return this.locale.getLocale();
+	}
+	
+	public abstract int getAvgWaitingTime();
+	
+	public static class Entry
 	{
 		private final Session session;
 		private final PlayerQueue queue;
+		private final long timestamp;
 		
 		public Entry(Session session, PlayerQueue queue)
 		{
 			this.session = session;
 			this.queue = queue;
+			this.timestamp = System.currentTimeMillis();
+			
+			session.send(new QueueEnteredMessage(queue));
 		}
 		
 		public void exit()
 		{
 			this.queue.dequeue(this);
+			
+			this.session.send(new QueueExitedMessage());
+		}
+		
+		public long getTimestamp()
+		{
+			return this.timestamp;
+		}
+		
+		public int getWaitingSeconds()
+		{
+			return (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - this.timestamp);
 		}
 		
 		public Session getSession()
 		{
 			return this.session;
+		}
+		
+		public MatchPlayer toMatchPlayer()
+		{
+			return new MatchPlayer(this.session);
 		}
 	}
 }

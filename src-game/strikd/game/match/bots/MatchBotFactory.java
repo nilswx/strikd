@@ -4,12 +4,13 @@ import java.util.Random;
 
 import org.bson.types.ObjectId;
 
+import strikd.game.match.MatchPlayer;
 import strikd.game.player.Avatar;
 import strikd.game.player.Player;
 
 public class MatchBotFactory
 {
-	public MatchBotPlayer newBot()
+	public MatchBotPlayer newBotForOpponent(MatchPlayer opponent)
 	{
 		Random rand = new Random();
 		
