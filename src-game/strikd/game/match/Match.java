@@ -50,11 +50,6 @@ public class Match
 		// Link the players to this match with a personal ID
 		this.playerOne = playerOne.setMatch(this, 1);
 		this.playerTwo = playerTwo.setMatch(this, 2);
-		
-		// Generate board
-		this.board.rebuild();
-		System.out.println(this.board.toMatrixString());
-		this.board.generateUpdateMessage();
 	}
 	
 	public void destroy()
@@ -67,6 +62,13 @@ public class Match
 		// Send personal ANNOUNCE messages to both players
 		this.playerOne.send(new AnnounceMatchMessage(this, this.playerOne, this.playerTwo));
 		this.playerTwo.send(new AnnounceMatchMessage(this, this.playerTwo, this.playerOne));
+	}
+	
+	public void prepareBoard()
+	{
+		// Generate board and discard updates
+		this.board.rebuild();
+		this.board.clearUpdates();
 	}
 	
 	public void broadcast(OutgoingMessage msg)

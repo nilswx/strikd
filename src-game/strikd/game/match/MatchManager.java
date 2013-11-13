@@ -104,8 +104,9 @@ public class MatchManager extends Server.Referent
 			logger.info(String.format("created %s", match));
 			this.active.put(matchId, match);
 			
-			// Notify players of match data
+			// Notify players of the new match and start preparing the board after that
 			match.announce();
+			match.prepareBoard();
 			
 			return match;
 		}
