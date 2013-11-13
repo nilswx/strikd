@@ -1,4 +1,6 @@
-package strikd.game.board;
+package strikd.game.board.impl;
+
+import strikd.game.board.Square;
 
 public class FutureTile extends Square
 {

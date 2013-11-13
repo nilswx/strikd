@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import strikd.game.board.Direction8;
-import strikd.game.board.FutureTile;
 
 @SuppressWarnings("serial")
 public class WordPlacement extends ArrayList<FutureTile> implements Comparable<WordPlacement>

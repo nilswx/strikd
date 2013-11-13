@@ -12,7 +12,6 @@ import com.google.common.collect.Ordering;
 
 import strikd.game.board.Board;
 import strikd.game.board.Direction8;
-import strikd.game.board.FutureTile;
 import strikd.game.board.Square;
 import strikd.game.board.Tile;
 import strikd.util.RandomUtil;
