@@ -17,6 +17,6 @@ public class HanzeBoard extends Board
 	@Override
 	public void update()
 	{
-		logger.debug("Hanzeboard is gehandicapt!");
+		logger.debug("HanzeBoard is heel erg gehandicapt!");
 	}
 }
