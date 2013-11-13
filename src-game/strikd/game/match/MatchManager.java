@@ -10,8 +10,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.log4j.Logger;
 
 import strikd.Server;
+import strikd.game.match.bots.MatchBotFactory;
 import strikd.game.match.queues.PlayerQueue;
-import strikd.game.match.queues.SimpleBotQueue;
+import strikd.game.match.queues.TimedPlayerQueue;
 import strikd.locale.LocaleBundle;
 import strikd.sessions.Session;
 import strikd.util.NamedThreadFactory;
@@ -32,7 +33,7 @@ public class MatchManager extends Server.Referent
 		super(server);
 		for(LocaleBundle locale : this.getServer().getLocaleMgr().getBundles())
 		{
-			PlayerQueue queue = new SimpleBotQueue(locale, this);//SimplePlayerQueue(this);
+			PlayerQueue queue = new TimedPlayerQueue(locale, this, 2, new MatchBotFactory());
 			this.queues.put(locale.getLocale(), queue);
 			
 			logger.info(String.format("%s: created %s", locale, queue.getClass().getName()));
