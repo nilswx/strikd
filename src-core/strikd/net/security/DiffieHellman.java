@@ -75,4 +75,10 @@ public class DiffieHellman
 			return null;
 		}
 	}
+	
+	public static void testGenerator()
+	{
+		DiffieHellman dh = createKeyExchange();
+		logger.info(String.format("key exchange generator OK (%d bits)", dh.getPublicKey().bitLength()));
+	}
 }

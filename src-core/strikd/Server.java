@@ -22,6 +22,7 @@ import strikd.game.match.MatchManager;
 import strikd.game.player.PlayerRegister;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetListener;
+import strikd.net.security.DiffieHellman;
 import strikd.sessions.SessionManager;
 import strikd.util.MemoryWatchdog;
 import strikd.util.NamedThreadFactory;
@@ -58,6 +59,9 @@ public class Server
 		}
 		logger.info(String.format("loaded %d entries from %s", props.size(), propsFile));
 
+		// Test crypto
+		DiffieHellman.testGenerator();
+		
 		// Setup database
 		try
 		{
