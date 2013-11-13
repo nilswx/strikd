@@ -9,19 +9,22 @@ import strikd.game.board.Board;
 import strikd.game.board.StaticLocale;
 import strikd.game.board.Tile;
 import strikd.game.board.triggers.Trigger;
+import strikd.game.match.Match;
 import strikd.util.NamedThreadFactory;
 import strikd.words.WordDictionary;
 
-public class AgingHanzeBoard extends HanzeBoard implements Runnable
+public final class AgingHanzeBoard extends HanzeBoard implements Runnable
 {
 	private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("AgingThread"));
 
+	private final Match match;
 	private final ScheduledFuture<?> aging;
 	private final int maxAge;
 	
-	public AgingHanzeBoard(int width, int height, WordDictionary dictionary, int agingDelaySeconds, int maxAge)
+	public AgingHanzeBoard(int width, int height, WordDictionary dictionary, Match match, int agingDelaySeconds, int maxAge)
 	{
 		super(width, height, dictionary);
+		this.match = match;
 		this.maxAge = maxAge;
 		this.aging = scheduler.scheduleAtFixedRate(this, agingDelaySeconds, 1, TimeUnit.SECONDS);
 	}
@@ -38,6 +41,7 @@ public class AgingHanzeBoard extends HanzeBoard implements Runnable
 	@Override
 	protected Tile newTile(byte tileId, int column, char letter, Trigger trigger)
 	{
+		// Special type of Tile is used in this board
 		return new AgingTile(tileId, column, letter, trigger, this);
 	}
 	
@@ -55,11 +59,19 @@ public class AgingHanzeBoard extends HanzeBoard implements Runnable
 			}
 		}
 		
-		// Fill new gaps
+		// Board needs updating?
 		if(expired > 0)
 		{
+			// Broadcast the updates?
 			this.update();
-			// TODO: broadcast updates
+			if(this.match == null)
+			{
+				this.clearUpdates();
+			}
+			else
+			{
+				this.match.broadcast(this.generateUpdateMessage());
+			}
 		}
 	}
 	
@@ -80,7 +92,7 @@ public class AgingHanzeBoard extends HanzeBoard implements Runnable
 	
 	public static void main(String[] args)
 	{
-		Board board = new AgingHanzeBoard(5, 5, StaticLocale.getDictionary(), 0, 5);
+		Board board = new AgingHanzeBoard(5, 5, StaticLocale.getDictionary(), null, 0, 5);
 		board.rebuild();
 	}
 }

@@ -20,6 +20,11 @@ import strikd.util.RandomUtil;
 import strikd.words.WordDictionary;
 import strikd.words.index.LetterNode;
 
+/**
+ * The most shitty, messy and inefficient Strik {@link Board} known to mankind. Sigh.
+ * @author nilsw
+ *
+ */
 public class HanzeBoard extends Board
 {
 	private static final Logger logger = Logger.getLogger(HanzeBoard.class);
