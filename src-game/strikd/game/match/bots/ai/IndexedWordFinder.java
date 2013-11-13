@@ -11,7 +11,7 @@ import strikd.game.board.Board;
 import strikd.game.board.Direction8;
 import strikd.game.board.Tile;
 import strikd.game.board.impl.HanzeBoard;
-import strikd.words.StaticLocale;
+import strikd.locale.StaticLocale;
 import strikd.words.WordDictionary;
 import strikd.words.index.LetterNode;
 

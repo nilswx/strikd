@@ -9,8 +9,8 @@ import strikd.game.board.Board;
 import strikd.game.board.Tile;
 import strikd.game.board.triggers.Trigger;
 import strikd.game.match.Match;
+import strikd.locale.StaticLocale;
 import strikd.util.NamedThreadFactory;
-import strikd.words.StaticLocale;
 import strikd.words.WordDictionary;
 
 public final class AgingHanzeBoard extends HanzeBoard implements Runnable
