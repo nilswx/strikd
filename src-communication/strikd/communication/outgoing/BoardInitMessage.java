@@ -27,7 +27,6 @@ public class BoardInitMessage extends OutgoingMessage
 				{
 					// Nothing 'ere!
 					super.writeByte((byte)0);
-					super.writeByte((byte)0);
 				}
 				else
 				{
