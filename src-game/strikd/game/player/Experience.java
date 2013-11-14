@@ -2,6 +2,7 @@ package strikd.game.player;
 
 import strikd.sessions.Session;
 
+@SuppressWarnings("unused")
 public class Experience
 {
 	public static final int MAX_LEVEL = 45;
@@ -26,7 +27,7 @@ public class Experience
 			int levelBegin = getLevelBegin(level);
 			int levelEnd = getLevelEnd(level);
 			int levelNeed = (levelEnd - levelBegin);
-			System.out.println(String.format("Level %d: %d-%d (%d needed, %d more)", level, levelBegin, levelEnd, levelNeed, (levelNeed - prevNeed)));
+			//System.out.println(String.format("Level %d: %d-%d (%d needed, %d more)", level, levelBegin, levelEnd, levelNeed, (levelNeed - prevNeed)));
 			
 			// Save for next
 			prevNeed = levelNeed;

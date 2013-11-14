@@ -42,7 +42,7 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 		this.channel.pipeline().addLast(NetRequestHandler.getEventExecutorGroup(),
 				NetRequestHandler.getRequestHandler(this.session));
 		
-		// Connection state events and misc stuff
+		// Connection state events and misc stuff (exception handling)
 		this.channel.pipeline().addLast(this);
 	}
 	

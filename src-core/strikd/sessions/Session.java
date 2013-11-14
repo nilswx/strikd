@@ -15,6 +15,7 @@ import strikd.communication.outgoing.VersionCheckMessage;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
+import strikd.game.player.Experience;
 import strikd.game.player.Player;
 import strikd.net.NetConnection;
 import strikd.net.codec.IncomingMessage;
@@ -96,6 +97,13 @@ public class Session extends Server.Referent
 		this.end(reason);
 	}
 	
+	private void onLogin()
+	{
+		// Re-calculate level (XP zones could have changed)
+		this.player.level = Experience.calculateLevel(this.player.level);
+		logger.debug(String.format("%s is level %d (%d XP)", this.player, this.player.level, this.player.xp));
+	}
+	
 	private void onLogout()
 	{
 		// Exit queue or match
@@ -165,6 +173,7 @@ public class Session extends Server.Referent
 			this.player = player;
 			this.player.platform = platform;
 			this.getServer().getSessionMgr().completeLogin(this);
+			this.onLogin();
 		}
 	}
 	
