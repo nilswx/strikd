@@ -10,7 +10,7 @@ import org.jongo.marshall.jackson.oid.Id;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import strikd.facebook.FacebookIdentity;
-import strikd.game.items.Item;
+import strikd.game.items.ItemInstance;
 
 public class Player
 {
@@ -41,7 +41,7 @@ public class Player
 	
 	// Inventory
 	public int balance;
-	public List<Item> items = new ArrayList<Item>();
+	public List<ItemInstance> items = new ArrayList<ItemInstance>();
 	
 	// Personal
 	public String country;

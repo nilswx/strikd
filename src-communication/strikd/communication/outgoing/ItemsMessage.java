@@ -3,21 +3,25 @@ package strikd.communication.outgoing;
 import java.util.List;
 
 import strikd.communication.Opcodes;
-import strikd.game.items.Item;
+import strikd.game.items.ItemInstance;
 import strikd.net.codec.OutgoingMessage;
 
 public class ItemsMessage extends OutgoingMessage
 {
-	public ItemsMessage(List<Item> items)
+	public ItemsMessage(List<ItemInstance> items)
 	{
 		super(Opcodes.Outgoing.ITEMS);
 		super.writeInt(items.size());
-		for(Item item : items)
+		for(ItemInstance item : items)
 		{
-			super.writeInt(item.id);
-			super.writeInt(item.typeId);
-			super.writeLong(item.timestamp.getTime());
-			super.writeStr(item.data);
+			serializeItem(item, this);
 		}
+	}
+	
+	public static void serializeItem(ItemInstance item, OutgoingMessage msg)
+	{
+		msg.writeInt(item.id);
+		msg.writeInt(item.typeId);
+		msg.writeLong(item.timestamp.getTime());
 	}
 }

@@ -1,11 +1,13 @@
 package strikd.communication.incoming;
 
+import java.util.List;
+
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.AlertMessage;
-import strikd.communication.outgoing.ItemAddedMessage;
-import strikd.game.items.Item;
-import strikd.game.items.ItemShop;
+import strikd.communication.outgoing.ItemsAddedMessage;
+import strikd.game.items.ItemInstance;
+import strikd.game.items.shop.Shop;
 import strikd.net.codec.IncomingMessage;
 
 public class PurchaseItemHandler extends MessageHandler
@@ -19,22 +21,29 @@ public class PurchaseItemHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// Determine what item type to purchase
-		int typeId = request.readInt();
+		// Determine what offer to purchase
+		int offerId = request.readInt();
 		
-		// Attempt to purchase the item
-		ItemShop shop = session.getServer().getShop();
-		Item item = shop.purchaseItem(typeId, session.getPlayer());
+		// Attempt to purchase the offer
+		Shop shop = session.getServer().getShop();
+		List<ItemInstance> items = shop.purchaseOffer(offerId, session.getPlayer());
 		
 		// Purchased successfully?
-		if(item == null)
+		if(items == null)
 		{
 			session.send(new AlertMessage("Purchase failed! You have not been charged."));
 		}
 		else
 		{
-			session.getPlayer().items.add(item);
-			session.send(new ItemAddedMessage(item));
+			// Add items
+			for(ItemInstance item : items)
+			{
+				session.getPlayer().items.add(item);
+			}
+			session.saveData();
+			
+			// Notify player
+			session.send(new ItemsAddedMessage(items));
 		}
 	}
 }
