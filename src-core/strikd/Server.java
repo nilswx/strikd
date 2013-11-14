@@ -21,6 +21,7 @@ import strikd.game.items.ItemType;
 import strikd.game.items.shop.Shop;
 import strikd.game.match.MatchManager;
 import strikd.game.player.PlayerRegister;
+import strikd.game.stream.EventStreamManager;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetServer;
 import strikd.net.security.DiffieHellman;
@@ -42,6 +43,7 @@ public class Server
 	private final MatchManager matchMgr;
 	private final Shop shop;
 	private final FacebookManager facebook;
+	private final EventStreamManager eventStreamMgr;
 	
 	private boolean isShutdownMode;
 	private String shutdownMessage;
@@ -97,6 +99,9 @@ public class Server
 		
 		// Load shop assortment
 		this.shop = new Shop(this);
+		
+		// Setup event manager
+		this.eventStreamMgr = new EventStreamManager(this);
 		
 		// Create FB manager, share global config with the rest
 		this.facebook = new FacebookManager(
@@ -208,6 +213,11 @@ public class Server
 	public Shop getShop()
 	{
 		return this.shop;
+	}
+	
+	public EventStreamManager getEventStreamMgr()
+	{
+		return this.eventStreamMgr;
 	}
 	
 	public FacebookManager getFacebook()
