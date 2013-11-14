@@ -1,19 +1,19 @@
 package strikd.game.player;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
-public class Avatar
+import strikd.game.player.Avatar.PartType;
+
+@SuppressWarnings("serial")
+public class Avatar extends HashMap<PartType, String>
 {
-	private Map<PartType, String> parts = new HashMap<PartType, String>();
-	
 	@Override
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
 		
-		for(Entry<PartType, String> part : this.parts.entrySet())
+		for(Entry<PartType, String> part : this.entrySet())
 		{
 			sb.append(part.getKey());
 			sb.append(':');
