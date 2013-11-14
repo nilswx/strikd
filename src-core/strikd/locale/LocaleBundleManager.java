@@ -54,16 +54,13 @@ public class LocaleBundleManager
 		}
 		
 		// Found bundles?
-		if(!bundles.isEmpty())
+		if(bundles.isEmpty())
 		{
-			this.bundles = Collections.unmodifiableMap(bundles);
+			logger.warn(String.format("no locale bundles at all, reload aborted"));
 		}
-		
-		// Has bundles at all?
-		if(this.bundles.isEmpty())
+		else
 		{
-			logger.fatal(String.format("no locale bundles at all!"));
-			System.exit(0);
+			this.bundles = bundles;
 		}
 	}
 	
@@ -74,6 +71,6 @@ public class LocaleBundleManager
 
 	public Collection<LocaleBundle> getBundles()
 	{
-		return this.bundles.values();
+		return Collections.unmodifiableCollection(this.bundles.values());
 	}
 }
