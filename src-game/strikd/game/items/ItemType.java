@@ -26,6 +26,14 @@ public enum ItemType
 	 * Also receives 50% of the opponent's score for x seconds.
 	 */
 	COPYCAT(ItemKind.POWERUP),
+	/**
+	 * Select and destroy 3 arbitrary tiles.
+	 */
+	HAMMER_3(ItemKind.POWERUP),
+	/**
+	 * Select and destroy 5 arbitrary tiles.
+	 */
+	HAMMER_5(ItemKind.POWERUP),
 	
 	/**
 	 * Received when the user logs in on his/her Facebook birthday.
