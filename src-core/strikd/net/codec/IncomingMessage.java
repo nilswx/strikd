@@ -11,6 +11,11 @@ public final class IncomingMessage extends NetMessage<Opcodes.Incoming>
 		super(op, buf);
 	}
 	
+	public void release()
+	{
+		this.buf.release();
+	}
+	
 	public final boolean readBool()
 	{
 		return (this.buf.readByte() == 1);

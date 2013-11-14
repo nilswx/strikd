@@ -29,10 +29,9 @@ public class MessageDecoder extends ByteToMessageDecoder
 				// Parse opcode
 				Opcodes.Incoming op = Opcodes.Incoming.valueOf(buffer.readByte());
 				
-				// Copy bytes to an IncomingMessage (heapbuffer) and export this as a decoded message
-				out.add(new IncomingMessage(op, buffer.readBytes(length - 1)));
-				
-				// TODO: investigate usage of ByteBuf#slice(length) after retaining it, to avoid making a heapbuffer copy
+				// Retain buffer (NEVER FORGET TO RELEASE AFTER HANDLING THE MESSAGE!) and use it
+				buffer.retain();
+				out.add(new IncomingMessage(op, buffer.readSlice(length)));
 			}
 			else
 			{

@@ -20,11 +20,19 @@ public class NetRequestHandler extends ChannelInboundHandlerAdapter
 	}
 	
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
+	public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception
 	{
-		if(msg instanceof IncomingMessage)
+		if(obj instanceof IncomingMessage)
 		{
-			this.session.onNetMessage((IncomingMessage)msg);
+			IncomingMessage msg = (IncomingMessage)obj;
+			try
+			{
+				this.session.onNetMessage(msg);
+			}
+			finally
+			{
+				msg.release(); // DON'T FORGET THIS
+			}
 		}
 	}
 	
