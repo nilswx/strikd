@@ -65,6 +65,11 @@ public class PlayerRegister extends Server.Referent
 		return Collections.emptyList();
 	}
 	
+	public PlayerProfile getProfile(ObjectId playerId)
+	{
+		return null;
+	}
+	
 	public String generateDefaultName()
 	{
 		return String.format("Player-%d", RandomUtil.pickInt(100000, 999999));
