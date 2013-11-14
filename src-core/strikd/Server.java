@@ -21,7 +21,7 @@ import strikd.game.items.ItemShop;
 import strikd.game.match.MatchManager;
 import strikd.game.player.PlayerRegister;
 import strikd.locale.LocaleBundleManager;
-import strikd.net.NetListener;
+import strikd.net.NetServer;
 import strikd.net.security.DiffieHellman;
 import strikd.sessions.SessionManager;
 import strikd.util.MemoryWatchdog;
@@ -34,7 +34,7 @@ public class Server
 	private final Jongo dbCluster;
 	private final ServerCluster serverCluster;
 	private final LocaleBundleManager localeMgr;
-	private final NetListener listener;
+	private final NetServer netServer;
 	
 	private final SessionManager sessionMgr;
 	private final PlayerRegister playerRegister;
@@ -110,13 +110,13 @@ public class Server
 		try
 		{
 			int port = Integer.parseInt(props.getProperty("server.port", "13381"));
-			this.listener = new NetListener(port, this.sessionMgr);
+			this.netServer = new NetServer(port, this.sessionMgr);
 		}
 		catch(IOException e)
 		{
 			throw new Exception("could not start network server", e);
 		}
-		logger.info(String.format("listening on %s", this.listener.getLocalAddress()));
+		logger.info(String.format("listening on %s", this.netServer.getLocalAddress()));
 		
 		// Print server info
 		logger.info(String.format("SERVER ONLINE %s", this.serverCluster.getSelf()));

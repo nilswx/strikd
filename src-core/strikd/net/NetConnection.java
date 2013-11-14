@@ -9,7 +9,6 @@ import java.net.InetSocketAddress;
 
 import org.apache.log4j.Logger;
 
-import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.MessageDecoder;
 import strikd.net.codec.OutgoingMessage;
 import strikd.net.security.ChannelDecryptionHandler;
@@ -30,12 +29,21 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 	public NetConnection(Channel channel)
 	{
 		this.channel = channel;
-		
 		this.ipAddress = ((InetSocketAddress)channel.remoteAddress()).getAddress().getHostAddress();
 		this.startTime = System.currentTimeMillis();
+	}
+	
+	private void configurePipeline()
+	{
+		// Split messages etc
+		this.channel.pipeline().addLast(new MessageDecoder());
 		
-		this.channel.pipeline().addFirst("decoder", new MessageDecoder());
-		this.channel.pipeline().addLast("connection", this);
+		// Handle incoming messages outside of IO loop
+		this.channel.pipeline().addLast(NetRequestHandler.getEventExecutorGroup(),
+				NetRequestHandler.getRequestHandler(this.session));
+		
+		// Connection state events and misc stuff
+		this.channel.pipeline().addLast(this);
 	}
 	
 	public void close()
@@ -60,15 +68,6 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 	public void channelInactive(ChannelHandlerContext cxt)
 	{
 		this.requestClose("disconnected by user");
-	}
-	
-	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
-	{
-		if(msg instanceof IncomingMessage)
-		{
-			this.session.onNetMessage((IncomingMessage)msg);
-		}
 	}
 	
 	@Override
@@ -121,6 +120,7 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 		if(this.session == null)
 		{
 			this.session = session;
+			this.configurePipeline();
 		}
 	}
 	
