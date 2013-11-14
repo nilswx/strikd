@@ -15,6 +15,6 @@ public class ActivateItemHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		int itemId = request.readInt();
+		
 	}
 }

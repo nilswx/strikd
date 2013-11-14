@@ -21,6 +21,7 @@ public class ObjectSerializer
 	public static <T> T load(File file) throws Exception
 	{
 		Input input = new Input(new FileInputStream(file));
+		@SuppressWarnings("unchecked")
 		T obj = (T) new Kryo().readClassAndObject(input);
 		input.close();
 		
