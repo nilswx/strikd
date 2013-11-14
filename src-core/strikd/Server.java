@@ -102,6 +102,7 @@ public class Server
 		
 		// Setup event manager
 		this.eventStreamMgr = new EventStreamManager(this);
+		this.eventStreamMgr.reloadNews();
 		
 		// Create FB manager, share global config with the rest
 		this.facebook = new FacebookManager(

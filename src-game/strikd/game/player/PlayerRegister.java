@@ -1,5 +1,7 @@
 package strikd.game.player;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -56,6 +58,11 @@ public class PlayerRegister extends Server.Referent
 		{
 			return this.dbPlayers.findOne(playerId).as(Player.class);
 		}
+	}
+	
+	public List<ObjectId> findDirectFriendsOf(ObjectId playerId)
+	{
+		return Collections.emptyList();
 	}
 	
 	public String generateDefaultName()

@@ -1,9 +1,12 @@
 package strikd.game.stream.items;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import strikd.game.stream.StreamPlayer;
 
 public class FriendMatchResultStreamItem extends PlayerStreamItem
 {
+	@JsonProperty("l")
 	public StreamPlayer loser;
 	
 	public String getSummary()
