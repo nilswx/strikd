@@ -19,9 +19,12 @@ public class MessageDecoder extends ByteToMessageDecoder
 		short length = buffer.readShort();
 
 		// Valid length and all data arrived?
-		if(length > 0 && buffer.readableBytes() >= length)
+		if(length > 0 && buffer.isReadable(length))
 		{
+			// Parse opcode
 			Opcodes.Incoming op = Opcodes.Incoming.valueOf(buffer.readByte());
+			
+			// Copy bytes to an IncomingMessage (heapbuffer) and export this as a decoded message
 			out.add(new IncomingMessage(op, buffer.readBytes(length - 1)));
 		}
 		else
