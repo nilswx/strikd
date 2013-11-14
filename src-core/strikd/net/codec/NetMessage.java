@@ -39,18 +39,18 @@ public abstract class NetMessage<T extends Enum<?>>
 		
 		// Buffer wrapped between [ ]
 		sb.append('[');
-		byte[] array = this.buf.array();
-		for(int i = this.buf.arrayOffset(); i < this.length() + 2; i++)
+		for(int i = (this.buf.readerIndex() + ((this instanceof OutgoingMessage) ? 2+1 : 0)); i < this.buf.readableBytes(); i++)
 		{
 			// Printable?
-			if(array[i] > 31 && array[i] < 127)
+			byte b = this.buf.getByte(i);
+			if(b > 31 && b < 127)
 			{
-				sb.append((char)array[i]);
+				sb.append((char)b);
 			}
 			else
 			{
 				sb.append('[');
-				sb.append(array[i]);
+				sb.append(b);
 				sb.append(']');
 			}
 		}
