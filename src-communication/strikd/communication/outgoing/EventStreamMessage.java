@@ -28,7 +28,7 @@ public class EventStreamMessage extends OutgoingMessage
 		{
 			if(item instanceof NewsStreamItem)
 			{
-				this.writeNewsItem((NewsStreamItem)item);
+				this.writeNews((NewsStreamItem)item);
 			}
 			else if(item instanceof LevelUpStreamItem)
 			{
@@ -46,7 +46,7 @@ public class EventStreamMessage extends OutgoingMessage
 		}
 	}
 	
-	private void writeNewsItem(NewsStreamItem news)
+	private void writeNews(NewsStreamItem news)
 	{
 		super.writeByte(TYPE_NEWS);
 		super.writeStr(news.headline);
@@ -64,6 +64,7 @@ public class EventStreamMessage extends OutgoingMessage
 	private void writeItemReceived(ItemReceivedStreamItem itemReceived)
 	{
 		this.writeByte(TYPE_ITEM_RECEIVED);
+		this.writePlayer(itemReceived.player);
 		this.writeStr(itemReceived.item.name());
 	}
 	
