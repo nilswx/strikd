@@ -16,6 +16,6 @@ public class PlayerProfileMessage extends OutgoingMessage
 		super.writeInt(profile.wins);
 		super.writeInt(profile.losses);
 		super.writeLong(profile.playerId.getTime());
-		super.writeLong(profile.lastOnline.getTime());
+		super.writeLong(profile.lastOnline);
 	}
 }

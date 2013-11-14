@@ -49,11 +49,6 @@ public class Player
 	public FacebookIdentity fbIdentity;
 	public boolean liked;
 	
-	public Date getJoinTime()
-	{
-		return new Date(this.id.getTime());
-	}
-	
 	public int getDraws()
 	{
 		return (this.matches - (this.wins - this.losses));

@@ -42,7 +42,7 @@ public class EventStreamMessage extends OutgoingMessage
 			{
 				this.writeFriendMatchResult((FriendMatchResultStreamItem)item);
 			}
-			super.writeLong(item.timestamp.getTime());
+			super.writeLong(item.timestamp);
 		}
 	}
 	

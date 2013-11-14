@@ -1,5 +1,7 @@
 package strikd.net.codec;
 
+import java.util.Date;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -45,9 +47,14 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 		this.buf.writeBytes(bytes);
 	}
 	
-	public final void writeStr(Object obj)
+	public final void writeLong(Date d)
 	{
-		this.writeStr(String.valueOf(obj));
+		this.writeLong(d != null ? d.getTime() : 0);
+	}
+	
+	public final void writeStr(Object o)
+	{
+		this.writeStr(o != null ? o.toString() : "");
 	}
 	
 	@Override
