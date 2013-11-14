@@ -1,11 +1,19 @@
 package strikd.game.stream.items;
 
-import org.bson.types.ObjectId;
-
 import strikd.game.stream.EventStreamItem;
+import strikd.game.stream.StreamPlayer;
 
 public abstract class PlayerStreamItem extends EventStreamItem
 {
-	public ObjectId playerId;
-	public String playerName;
+	public StreamPlayer player;
+	
+	public boolean isAboutSelf()
+	{
+		return (this.player == StreamPlayer.SELF);
+	}
+	
+	public boolean isAboutFriend()
+	{
+		return !this.isAboutSelf();
+	}
 }

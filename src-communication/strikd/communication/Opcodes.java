@@ -54,6 +54,7 @@ public interface Opcodes
 		WORD_FOUND,
 		ALERT,
 		SERVER_SHUTTING_DOWN,
-		SERVER_REDIRECT
+		SERVER_REDIRECT,
+		EVENT_STREAM,
 	}
 }
