@@ -19,7 +19,8 @@ public interface Opcodes
 	    FACEBOOK_LINK,
 	    FACEBOOK_UNLINK,
 	    FACEBOOK_CLAIM_LIKE,
-	    FACEBOOK_REGISTER_INVITES;
+	    FACEBOOK_REGISTER_INVITES,
+	    GET_EVENT_STREAM_PERIOD;
 		
 		private static final Opcodes.Incoming[] values = values();
 		
