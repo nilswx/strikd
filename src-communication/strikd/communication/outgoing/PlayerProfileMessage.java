@@ -12,6 +12,10 @@ public class PlayerProfileMessage extends OutgoingMessage
 		super.writeStr(profile.playerId.toString());
 		super.writeStr(profile.playerName);
 		super.writeStr(profile.avatar.toString());
+		super.writeInt(profile.matches);
+		super.writeInt(profile.wins);
+		super.writeInt(profile.losses);
 		super.writeLong(profile.playerId.getTime());
+		super.writeLong(profile.lastOnline.getTime());
 	}
 }
