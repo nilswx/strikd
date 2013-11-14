@@ -87,12 +87,12 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 	
 	public void setServerCrypto(byte[] key)
 	{
-		this.channel.pipeline().addBefore("encoder", "encryption", new ChannelEncryptionHandler(key));
+		this.channel.pipeline().addFirst(new ChannelEncryptionHandler(key));
 	}
 	
 	public void setClientCrypto(byte[] key)
 	{
-		this.channel.pipeline().addBefore("decoder", "decryption", new ChannelDecryptionHandler(key));
+		this.channel.pipeline().addFirst(new ChannelDecryptionHandler(key));
 	}
 	
 	public boolean isOpen()
