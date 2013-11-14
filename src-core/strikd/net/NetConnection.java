@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.MessageDecoder;
-import strikd.net.codec.MessageEncoder;
 import strikd.net.codec.OutgoingMessage;
 import strikd.net.security.ChannelDecryptionHandler;
 import strikd.net.security.ChannelEncryptionHandler;
@@ -37,7 +36,6 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 		this.ipAddress = ((InetSocketAddress)channel.remoteAddress()).getAddress().getHostAddress();
 		this.startTime = System.currentTimeMillis();
 		
-		this.channel.pipeline().addFirst("encoder", new MessageEncoder());
 		this.channel.pipeline().addFirst("decoder", new MessageDecoder());
 		this.channel.pipeline().addLast("connection", this);
 	}
@@ -86,7 +84,7 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 	{
 		if(this.channel.isOpen())
 		{
-			this.channel.writeAndFlush(msg).addListener(new ChannelFutureListener()
+			this.channel.writeAndFlush(msg.getBuffer()).addListener(new ChannelFutureListener()
 			{
 				@Override
 				public void operationComplete(ChannelFuture future) throws Exception
