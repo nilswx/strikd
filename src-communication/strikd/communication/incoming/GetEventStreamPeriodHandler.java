@@ -32,7 +32,7 @@ public class GetEventStreamPeriodHandler extends MessageHandler
 		if(stream != null)
 		{
 			// Send all items in this period
-			List<EventStreamItem> items = stream.getPlayerStream(playerId, session.getPlayer());
+			List<EventStreamItem> items = stream.getPlayerStream(playerId, begin, end, session.getPlayer());
 			session.send(new EventStreamMessage(begin, end, items));
 		}
 	}
