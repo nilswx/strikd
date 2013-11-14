@@ -116,8 +116,11 @@ public class Session extends Server.Referent
 			this.exitMatch();
 		}
 		
+		// Update last online time
+		this.player.updateLastOnline();
+		
 		// Save complete player object
-		this.getServer().getPlayerRegister().savePlayer(this.player);
+		this.saveData();
 	}
 	
 	public void onNetMessage(IncomingMessage msg)

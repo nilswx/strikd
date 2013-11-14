@@ -38,6 +38,7 @@ public class Player
 	public int wins;
 	public int losses;
 	public String platform;
+	public Date lastOnline;
 	
 	// Inventory
 	public int balance;
@@ -80,5 +81,10 @@ public class Player
 	public String toString()
 	{
 		return String.format("#%s ('%s')", this.id, this.name);
+	}
+
+	public void updateLastOnline()
+	{
+		this.lastOnline = new Date();
 	}
 }
