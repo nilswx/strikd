@@ -90,9 +90,7 @@ public final class RC4
 		
 		// Enc & dec
 		String plain = "mama appelsap";
-		String ed = new String(enc.cipher(plain.getBytes()));
-		String dd = new String(dec.cipher(ed.getBytes()));
-		
+
 		// Brute for holes
 		for(int i = 0; i < 10000; i++)
 		{
