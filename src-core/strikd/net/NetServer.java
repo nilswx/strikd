@@ -3,9 +3,6 @@ package strikd.net;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -21,10 +18,10 @@ import strikd.util.NamedThreadFactory;
 
 public class NetServer
 {
-	private ServerBootstrap bootstrap;
-	private Channel listener;
+	private final ServerBootstrap bootstrap;
+	private final Channel listener;
 	
-	public NetServer(int port, SessionManager sessionMgr) throws IOException
+	public NetServer(int port, final SessionManager sessionMgr) throws IOException
 	{
 		// Setup a server socket
 		this.bootstrap = new ServerBootstrap();
@@ -35,13 +32,12 @@ public class NetServer
 						new NioEventLoopGroup(0, new NamedThreadFactory("Network/IO #%d")));
 		
 		// Handle new connections to become sessions in the session manager
-		final NewConnectionHandler handler = new NewConnectionHandler(sessionMgr);
 		this.bootstrap.childHandler(new ChannelInitializer<SocketChannel>()
 		{
 			@Override
-			protected void initChannel(SocketChannel ch) throws Exception
+			protected void initChannel(SocketChannel channel) throws Exception
 			{
-				ch.pipeline().addLast(handler);
+				sessionMgr.newSession(new NetConnection(channel));
 			}
 		});
 		
@@ -66,23 +62,5 @@ public class NetServer
 	public SocketAddress getLocalAddress()
 	{
 		return this.listener.localAddress();
-	}
-	
-	@Sharable
-	private class NewConnectionHandler extends ChannelInboundHandlerAdapter
-	{
-		private final SessionManager sessionMgr;
-		
-		public NewConnectionHandler(SessionManager sessionMgr)
-		{
-			this.sessionMgr = sessionMgr;
-		}
-
-		@Override
-		public void channelActive(ChannelHandlerContext ctx)
-		{
-			NetConnection conn = new NetConnection(ctx.channel());
-			this.sessionMgr.newSession(conn);
-		}
 	}
 }

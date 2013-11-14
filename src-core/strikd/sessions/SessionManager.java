@@ -27,11 +27,6 @@ public class SessionManager extends Server.Referent
 		super(server);
 	}
 
-	/**
-	 * Called once when a connection has performed crypto handshake.
-	 * @param connection
-	 * @return
-	 */
 	public Session newSession(NetConnection connection)
 	{
 		// Create a session with a new ID
