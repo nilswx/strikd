@@ -17,7 +17,7 @@ import com.mongodb.MongoClient;
 import strikd.cluster.ServerCluster;
 import strikd.communication.incoming.MessageHandlers;
 import strikd.facebook.FacebookManager;
-import strikd.game.items.ItemManager;
+import strikd.game.items.ItemType;
 import strikd.game.items.shop.Shop;
 import strikd.game.match.MatchManager;
 import strikd.game.player.PlayerRegister;
@@ -40,7 +40,6 @@ public class Server
 	private final SessionManager sessionMgr;
 	private final PlayerRegister playerRegister;
 	private final MatchManager matchMgr;
-	private final ItemManager itemMgr;
 	private final Shop shop;
 	private final FacebookManager facebook;
 	
@@ -93,11 +92,11 @@ public class Server
 		// Join server cluster
 		this.serverCluster = new ServerCluster(this, props);
 		
-		// Load item types
-		this.itemMgr = new ItemManager(this);
+		// Print item types
+		ItemType.debugTypes();
 		
 		// Load shop assortment
-		this.shop = new Shop(this, this.itemMgr);
+		this.shop = new Shop(this);
 		
 		// Create FB manager, share global config with the rest
 		this.facebook = new FacebookManager(

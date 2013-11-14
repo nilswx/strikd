@@ -21,7 +21,7 @@ public class ItemsMessage extends OutgoingMessage
 	public static void serializeItem(ItemInstance item, OutgoingMessage msg)
 	{
 		msg.writeInt(item.id);
-		msg.writeInt(item.typeId);
+		msg.writeStr(item.type.name());
 		msg.writeLong(item.timestamp.getTime());
 	}
 }

@@ -2,10 +2,19 @@ package strikd.game.items;
 
 import java.util.Date;
 
-public class ItemType
+import org.apache.log4j.Logger;
+
+public enum ItemType
 {
-	public int typeId;
-	public ItemKind kind;
+	// Powerups
+	FREEZE(ItemKind.POWERUP),
+	JUNIOR_ASIAN(ItemKind.POWERUP),
+	INTERMEDIATE_ASIAN(ItemKind.POWERUP),
+	ARTISAN_ASIAN(ItemKind.POWERUP),
+	
+	// Avatar parts
+	BDAYHAT(ItemKind.AVATAR_PART);
+	
 	
 	public enum ItemKind
 	{
@@ -14,12 +23,29 @@ public class ItemType
 		TROPHY
 	}
 	
+	public final ItemKind kind;
+	
+	ItemType(ItemKind kind)
+	{
+		this.kind = kind;
+	}
+	
 	public ItemInstance newInstance()
 	{
-		ItemInstance instance = new ItemInstance();
-		instance.typeId = this.typeId;
-		instance.timestamp = new Date();
+		ItemInstance item = new ItemInstance();
+		item.type = this;
+		item.timestamp = new Date();
 		
-		return instance;
+		return item;
+	}
+	
+	private static final Logger logger = Logger.getLogger(ItemType.class);
+	
+	public static void debugTypes()
+	{
+		for(ItemType type : ItemType.values())
+		{
+			logger.debug(String.format("registered %s (type=%s)", type, type.kind));
+		}
 	}
 }

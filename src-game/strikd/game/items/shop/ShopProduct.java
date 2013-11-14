@@ -1,7 +1,9 @@
 package strikd.game.items.shop;
 
+import strikd.game.items.ItemType;
+
 public class ShopProduct
 {
-	public int itemTypeId;
+	public ItemType type;
 	public int quantity;
 }

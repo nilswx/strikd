@@ -5,6 +5,6 @@ import java.util.Date;
 public class ItemInstance
 {
 	public int id;
-	public int typeId;
+	public ItemType type;
 	public Date timestamp;
 }

@@ -10,21 +10,17 @@ import com.google.common.collect.Maps;
 
 import strikd.Server;
 import strikd.game.items.ItemInstance;
-import strikd.game.items.ItemManager;
-import strikd.game.items.ItemType;
 import strikd.game.player.Player;
 
 public class Shop extends Server.Referent
 {
 	private static final Logger logger = Logger.getLogger(Shop.class);
 	
-	private final ItemManager itemMgr;
 	private final Map<Integer, ShopOffer> offers = Maps.newHashMap();
 	
-	public Shop(Server server, ItemManager itemMgr)
+	public Shop(Server server)
 	{
 		super(server);
-		this.itemMgr = itemMgr;
 		
 		// Load offers
 		for(ShopOffer offer : server.getDbCluster().getCollection("shop").find().as(ShopOffer.class))
@@ -55,10 +51,9 @@ public class Shop extends Server.Referent
 		List<ItemInstance> items = Lists.newArrayList();
 		for(ShopProduct product : offer.products)
 		{
-			ItemType type = this.itemMgr.getItemType(product.itemTypeId);
 			for(int i = 0; i < product.quantity; i++)
 			{
-				items.add(type.newInstance());
+				items.add(product.type.newInstance());
 			}
 		}
 		
