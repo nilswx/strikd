@@ -31,6 +31,8 @@ public class MessageDecoder extends ByteToMessageDecoder
 				
 				// Copy bytes to an IncomingMessage (heapbuffer) and export this as a decoded message
 				out.add(new IncomingMessage(op, buffer.readBytes(length - 1)));
+				
+				// TODO: investigate usage of ByteBuf#slice(length) after retaining it, to avoid making a heapbuffer copy
 			}
 			else
 			{
