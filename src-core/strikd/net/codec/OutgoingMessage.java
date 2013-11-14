@@ -11,7 +11,7 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 	
 	protected OutgoingMessage(Opcodes.Outgoing op)
 	{
-		super(op, Unpooled.buffer(BUFFER_ALLOC_BYTES));
+		super(op, Unpooled.buffer(BUFFER_ALLOC_BYTES)); // TODO: investigate pooled (and direct) buffers
 		this.buf.writeShort(0); // Length placeholder
 		this.buf.writeByte(op.ordinal()); // Opcode placeholder
 	}
