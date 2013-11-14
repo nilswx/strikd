@@ -6,15 +6,48 @@ import org.apache.log4j.Logger;
 
 public enum ItemType
 {
-	// Powerups
+	/**
+	 * Freezes the opponent for x seconds.
+	 */
 	FREEZE(ItemKind.POWERUP),
+	/**
+	 * Auto-solver AI for x seconds.
+	 */
 	JUNIOR_ASIAN(ItemKind.POWERUP),
+	/**
+	 * Better and longer lasting auto-solver AI.
+	 */
 	INTERMEDIATE_ASIAN(ItemKind.POWERUP),
+	/**
+	 * Best auto-solver AI.
+	 */
 	ARTISAN_ASIAN(ItemKind.POWERUP),
+	/**
+	 * Also receives 50% of the opponent's score for x seconds.
+	 */
+	COPYCAT(ItemKind.POWERUP),
 	
-	// Avatar parts
-	BDAYHAT(ItemKind.AVATAR_PART);
+	/**
+	 * Received when the user logs in on his/her Facebook birthday.
+	 */
+	BDAYHAT(ItemKind.AVATAR_PART),
 	
+	/**
+	 * Received after 5 matches are won.
+	 */
+	WINS_5(ItemKind.TROPHY),
+	/**
+	 * Received after 15 matches are won.
+	 */
+	WINS_10(ItemKind.TROPHY),
+	/**
+	 * Received after one friend is beaten. 
+	 */
+	FRIEND_BEAT(ItemKind.TROPHY),
+	/**
+	 * Received after liking Strik on Facebook. Thanks!
+	 */
+	LIKED(ItemKind.TROPHY);
 	
 	public enum ItemKind
 	{
