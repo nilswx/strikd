@@ -1,9 +1,12 @@
 package strikd.game.stream;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
 import strikd.Server;
+import strikd.game.player.Player;
 
 public class EventStreamManager extends Server.Referent
 {
@@ -15,7 +18,7 @@ public class EventStreamManager extends Server.Referent
 		logger.info("initialized!");
 	}
 	
-	public EventStream getPlayerStream(ObjectId playerId)
+	public List<EventStreamItem> getPlayerStream(ObjectId playerId, Player forPlayer)
 	{
 		return null;
 	}
