@@ -1,5 +1,7 @@
 package strikd.net.security;
 
+import io.netty.buffer.ByteBuf;
+
 public final class FastRC4
 {
 	private static final int TABLE_SIZE = 256;
@@ -62,6 +64,22 @@ public final class FastRC4
 			this.table[this.j] = swap;
 			
 			data[a] ^= this.table[(this.table[this.i] + this.table[this.j]) % TABLE_SIZE];
+		}
+	}
+	
+	public final void cipherBuffer(ByteBuf buf, int offset, int length)
+	{
+		short swap;
+		for(int a = offset; a < length; a++)
+		{
+			this.i = ((this.i + 1) % TABLE_SIZE);
+			this.j = ((this.j + this.table[this.i]) % TABLE_SIZE);
+			
+			swap = this.table[this.i];
+			this.table[this.i] = this.table[this.j];
+			this.table[this.j] = swap;
+			
+			buf.setByte(a, buf.getByte(a) ^ (this.table[(this.table[this.i] + this.table[this.j]) % TABLE_SIZE]));
 		}
 	}
 }

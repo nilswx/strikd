@@ -20,7 +20,7 @@ public class ChannelEncryptionHandler extends ChannelOutboundHandlerAdapter
 		if(msg instanceof ByteBuf)
 		{
 			ByteBuf buffer = (ByteBuf)msg;
-			this.crypto.cipherDirect(buffer.array(), buffer.arrayOffset(), buffer.readableBytes());
+			this.crypto.cipherBuffer(buffer, buffer.readerIndex(), buffer.readableBytes());
 		}
 		super.write(ctx, msg, promise);
 	}

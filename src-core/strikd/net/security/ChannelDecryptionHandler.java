@@ -19,7 +19,7 @@ public class ChannelDecryptionHandler extends ChannelInboundHandlerAdapter
 		if(msg instanceof ByteBuf)
 		{
 			ByteBuf buffer = (ByteBuf)msg;
-			this.crypto.cipherDirect(buffer.array(), buffer.arrayOffset(), buffer.readableBytes());
+			this.crypto.cipherBuffer(buffer, buffer.readerIndex(), buffer.readableBytes());
 		}
 		super.channelRead(ctx, msg);
 	}
