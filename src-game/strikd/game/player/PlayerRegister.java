@@ -67,7 +67,9 @@ public class PlayerRegister extends Server.Referent
 	
 	public PlayerProfile getProfile(ObjectId playerId)
 	{
-		return null;
+		return this.dbPlayers.findOne(playerId)
+				//.projection(...)
+				.as(PlayerProfile.class);
 	}
 	
 	public String generateDefaultName()

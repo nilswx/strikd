@@ -45,6 +45,11 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 		this.buf.writeBytes(bytes);
 	}
 	
+	public final void writeStr(Object obj)
+	{
+		this.writeStr(String.valueOf(obj));
+	}
+	
 	@Override
 	public final int length()
 	{

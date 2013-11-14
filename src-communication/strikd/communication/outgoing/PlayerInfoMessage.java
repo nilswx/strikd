@@ -14,9 +14,9 @@ public class PlayerInfoMessage extends OutgoingMessage
 	
 	public static void serializePlayer(Player player, OutgoingMessage msg)
 	{
-		msg.writeStr(player.id.toString());
+		msg.writeStr(player.id);
 		msg.writeStr(player.name);
-		msg.writeStr(player.avatar != null ? player.avatar.toString() : "");
+		msg.writeStr(player.avatar);
 		msg.writeStr(player.country);
 		msg.writeInt(player.xp);
 		msg.writeInt(player.matches);

@@ -83,9 +83,9 @@ public class EventStreamMessage extends OutgoingMessage
 		}
 		else
 		{
-			super.writeStr(player.playerId.toString());
+			super.writeStr(player.playerId);
 			super.writeStr(player.realName);
-			super.writeStr(player.avatar.toString());
+			super.writeStr(player.avatar);
 		}
 	}
 }

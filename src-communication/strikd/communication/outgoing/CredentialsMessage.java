@@ -10,7 +10,7 @@ public class CredentialsMessage extends OutgoingMessage
 	public CredentialsMessage(ObjectId playerId, String token)
 	{
 		super(Opcodes.Outgoing.CREDENTIALS);
-		super.writeStr(playerId.toString());
+		super.writeStr(playerId);
 		super.writeStr(token);
 	}
 }
