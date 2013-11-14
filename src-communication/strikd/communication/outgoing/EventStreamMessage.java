@@ -40,7 +40,7 @@ public class EventStreamMessage extends OutgoingMessage
 			}
 			else if(item instanceof FriendMatchResultStreamItem)
 			{
-				this.writeFriendMatchResultStreamItem((FriendMatchResultStreamItem)item);
+				this.writeFriendMatchResult((FriendMatchResultStreamItem)item);
 			}
 			super.writeLong(item.timestamp.getTime());
 		}
@@ -68,7 +68,7 @@ public class EventStreamMessage extends OutgoingMessage
 		this.writeStr(itemReceived.item.name());
 	}
 	
-	private void writeFriendMatchResultStreamItem(FriendMatchResultStreamItem result)
+	private void writeFriendMatchResult(FriendMatchResultStreamItem result)
 	{
 		this.writeByte(TYPE_FRIEND_BEATED);
 		this.writePlayer(result.player);
