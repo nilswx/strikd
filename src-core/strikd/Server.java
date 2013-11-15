@@ -26,6 +26,7 @@ import strikd.locale.LocaleBundleManager;
 import strikd.net.NetServer;
 import strikd.net.security.DiffieHellman;
 import strikd.sessions.SessionManager;
+import strikd.storage.DataMapper;
 import strikd.util.MemoryWatchdog;
 import strikd.util.NamedThreadFactory;
 
@@ -68,7 +69,8 @@ public class Server
 		// Setup database
 		try
 		{
-			Jongo cluster = new Jongo(new MongoClient(props.getProperty("db.server")).getDB(props.getProperty("db.name")));
+			Jongo cluster = new Jongo(new MongoClient(props.getProperty("db.server")).getDB(props.getProperty("db.name")),
+					DataMapper.getMapper());
 			CommandResult stats = cluster.getDatabase().getStats();
 			logger.info(String.format("db '%s' @ %s, col=%d, size=%f MiB",
 							stats.get("db"),
