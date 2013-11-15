@@ -13,9 +13,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import strikd.Server;
-import strikd.game.player.Avatar;
 import strikd.game.player.Player;
-import strikd.game.stream.items.LevelUpStreamItem;
 import strikd.game.stream.items.NewsStreamItem;
 
 public class EventStreamManager extends Server.Referent
@@ -32,15 +30,6 @@ public class EventStreamManager extends Server.Referent
 		this.dbNews = server.getDbCluster().getCollection("news");
 		
 		logger.info(String.format("%d events", this.dbStream.count()));
-		
-		LevelUpStreamItem received = new LevelUpStreamItem();
-		received.level = 55;
-		received.timestamp = new Date();
-		received.player = new StreamPlayer();
-		received.player.playerId = ObjectId.get();
-		received.player.realName = "Nils Wiersema";
-		received.player.avatar = new Avatar();
-		this.dbStream.insert(received);
 	}
 	
 	public void reloadNews()
