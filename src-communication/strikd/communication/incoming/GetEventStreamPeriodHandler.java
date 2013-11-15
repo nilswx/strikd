@@ -23,15 +23,15 @@ public class GetEventStreamPeriodHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// Determine the criteria
-		ObjectId playerId = new ObjectId(request.readStr());
-		Date begin = new Date(request.readLong());
-		Date end = new Date(request.readLong());
-		
 		// Stream available?
 		EventStreamManager stream = session.getServer().getEventStreamMgr();
 		if(stream != null)
 		{
+			// Determine the criteria
+			ObjectId playerId = new ObjectId(request.readStr());
+			Date begin = new Date(request.readLong());
+			Date end = new Date(request.readLong());
+			
 			// Send all items in this period
 			List<EventStreamItem> items = stream.getPlayerStream(playerId, begin, end, session.getPlayer());
 			session.send(new EventStreamMessage(begin, end, items));
