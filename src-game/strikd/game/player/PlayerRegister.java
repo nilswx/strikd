@@ -84,7 +84,7 @@ public class PlayerRegister extends Server.Referent
 				List<String> userIds = identity.getAPI().friendOperations().getFriendIds();
 			
 				// Find all players
-				friendIds = Lists.newArrayList(this.dbPlayers.find("{fb.userId: $in(#)}", userIds).as(ObjectId.class));
+				friendIds = Lists.newArrayList(this.dbPlayers.find("{'fb.userId':{$in:#}}", userIds).as(ObjectId.class));
 				if(!friendIds.isEmpty())
 				{
 					this.friendListCache.put(identity.userId, friendIds);
