@@ -7,29 +7,45 @@ import org.apache.log4j.Logger;
 public enum ItemType
 {
 	/**
-	 * Freezes the opponent for x seconds.
+	 * Freezes the opponent's screen with removable for x seconds.
 	 */
 	FREEZE(ItemKind.POWERUP),
+	
+	/**
+	 * Fills the opponent's screen with pourable water for x seconds.
+	 */
+	WATER(ItemKind.POWERUP),
+	
+	/**
+	 * Fills the opponent's screen with removable sand for x seconds.
+	 */
+	SAND(ItemKind.POWERUP),
+	
 	/**
 	 * Auto-solver AI for x seconds.
 	 */
 	JUNIOR_ASIAN(ItemKind.POWERUP),
+	
 	/**
 	 * Better and longer lasting auto-solver AI.
 	 */
 	INTERMEDIATE_ASIAN(ItemKind.POWERUP),
+	
 	/**
 	 * Best auto-solver AI.
 	 */
 	ARTISAN_ASIAN(ItemKind.POWERUP),
+	
 	/**
 	 * Also receives 50% of the opponent's score for x seconds.
 	 */
-	COPYCAT(ItemKind.POWERUP),
+	SNITCH(ItemKind.POWERUP),
+	
 	/**
 	 * Select and destroy 3 arbitrary tiles.
 	 */
 	HAMMER_3(ItemKind.POWERUP),
+	
 	/**
 	 * Select and destroy 5 arbitrary tiles.
 	 */
@@ -44,14 +60,17 @@ public enum ItemType
 	 * Received after 5 matches are won.
 	 */
 	WINS_5(ItemKind.TROPHY),
+	
 	/**
 	 * Received after 15 matches are won.
 	 */
 	WINS_10(ItemKind.TROPHY),
+	
 	/**
 	 * Received after one friend is beaten. 
 	 */
 	FRIEND_BEAT(ItemKind.TROPHY),
+	
 	/**
 	 * Received after liking Strik on Facebook. Thanks!
 	 */

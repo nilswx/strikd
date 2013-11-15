@@ -3,6 +3,7 @@ package strikd.communication.incoming;
 import org.bson.types.ObjectId;
 
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.ItemsMessage;
@@ -47,6 +48,9 @@ public class LoginHandler extends MessageHandler
 				session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.liked));
 				session.send(new CurrencyBalanceMessage(player.balance));
 				session.send(new ItemsMessage(player.items));
+				
+				// Welcome!
+				session.send(new AlertMessage(String.format("Welcome aboard Strik (server %s), bier en tieten ad infinitum!\r\rLogins: %d\rPlatform: %s\r\rThanks for staying with us!", session.getServer().getServerCluster().getSelf(), player.logins, player.platform)));
 			}
 		}
 	}
