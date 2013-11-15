@@ -1,6 +1,7 @@
 package strikd.game.stream;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -8,10 +9,13 @@ import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import strikd.Server;
+import strikd.game.player.Avatar;
 import strikd.game.player.Player;
+import strikd.game.stream.items.LevelUpStreamItem;
 import strikd.game.stream.items.NewsStreamItem;
 
 public class EventStreamManager extends Server.Referent
@@ -28,6 +32,15 @@ public class EventStreamManager extends Server.Referent
 		this.dbNews = server.getDbCluster().getCollection("news");
 		
 		logger.info(String.format("%d events", this.dbStream.count()));
+		
+		LevelUpStreamItem received = new LevelUpStreamItem();
+		received.level = 55;
+		received.timestamp = new Date();
+		received.player = new StreamPlayer();
+		received.player.playerId = ObjectId.get();
+		received.player.realName = "Nils Wiersema";
+		received.player.avatar = new Avatar();
+		this.dbStream.insert(received);
 	}
 	
 	public void reloadNews()
@@ -61,15 +74,25 @@ public class EventStreamManager extends Server.Referent
 		// A list that will be sorted later
 		List<EventStreamItem> result = Lists.newArrayList();
 		
-		// TODO: add the own items
+		// Add the own items
+		Iterables.addAll(result, this.dbStream.find("{p:#,t:{$gte:#,$lt:#}", playerId, new Date(periodBegin), new Date(periodEnd)).as(EventStreamItem.class));
 		
 		// TODO: add direct friend's items
 		
 		// Add the news items that are within range
 		result.addAll(this.news);
 		
-		// TODO: sort on timestamp
-		
+		// Sort on timestamp
+		Collections.sort(result, TIMESTAMP_SORTER);
 		return result;
 	}
+	
+	private static final Comparator<EventStreamItem> TIMESTAMP_SORTER = new Comparator<EventStreamItem>()
+	{
+		@Override
+		public int compare(EventStreamItem a, EventStreamItem b)
+		{
+			return a.timestamp.compareTo(b.timestamp);
+		}
+	};
 }

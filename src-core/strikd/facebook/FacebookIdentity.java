@@ -3,14 +3,11 @@ package strikd.facebook;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class FacebookIdentity
 {
 	public long userId;
 	public String token;
 	
-	@JsonIgnore
 	private Facebook api;
 	
 	public Facebook getAPI()

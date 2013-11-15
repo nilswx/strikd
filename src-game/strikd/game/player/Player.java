@@ -7,8 +7,6 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.jongo.marshall.jackson.oid.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import strikd.facebook.FacebookIdentity;
 import strikd.game.items.ItemInstance;
 
@@ -49,24 +47,26 @@ public class Player
 	public FacebookIdentity fbIdentity;
 	public boolean liked;
 	
+	public void updateLastOnline()
+	{
+		this.lastOnline = new Date();
+	}
+	
 	public int getDraws()
 	{
 		return (this.matches - (this.wins - this.losses));
 	}
 	
-	@JsonIgnore
 	public boolean isFacebookLinked()
 	{
 		return (this.fbIdentity != null);
 	}
 	
-	@JsonIgnore
 	public boolean isOnline()
 	{
 		return (this.serverId > 0);
 	}
 	
-	@JsonIgnore
 	public boolean isInMatch()
 	{
 		return (this.serverId > 0 && this.opponentId != null);
@@ -76,10 +76,5 @@ public class Player
 	public String toString()
 	{
 		return String.format("#%s ('%s')", this.id, this.name);
-	}
-
-	public void updateLastOnline()
-	{
-		this.lastOnline = new Date();
 	}
 }
