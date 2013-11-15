@@ -103,7 +103,7 @@ public abstract class Board
 			System.out.println("removed " + tile);
 
 			// Cancel selections etc
-			tile.remove();
+			//tile.remove();
 
 			// Remove from index and grid
 			this.tiles.remove(tile);

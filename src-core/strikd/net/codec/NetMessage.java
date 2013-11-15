@@ -19,6 +19,16 @@ public abstract class NetMessage<T extends Enum<?>>
 		this.buf = data;
 	}
 	
+	public void retain()
+	{
+		this.buf.retain();
+	}
+	
+	public void release()
+	{
+		this.buf.release();
+	}
+	
 	protected final String name()
 	{
 		return this.op.toString();

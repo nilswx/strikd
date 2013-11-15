@@ -63,12 +63,17 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 		return this.buf.writerIndex() - 2;
 	}
 	
-	public ByteBuf getBuffer()
+	private boolean finalized;
+	
+	public ByteBuf finalizeBuffer()
 	{
-		this.buf.setShort(0, this.length());
+		if(!this.finalized)
+		{
+			this.buf.setShort(0, this.length());
+			MessageAllocatorExpert.reportSize(super.op, super.buf.readableBytes());
+			finalized = true;
+		}
 		
-		MessageAllocatorExpert.reportSize(super.op, super.buf.readableBytes());
-		
-		return this.buf;
+		return this.buf.copy();
 	}
 }

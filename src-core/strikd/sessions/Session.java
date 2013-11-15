@@ -99,6 +99,9 @@ public class Session extends Server.Referent
 	
 	private void onLogin()
 	{
+		// Add xp!
+		this.player.xp += 5;
+		
 		// Re-calculate level (XP zones could have changed)
 		this.player.level = Experience.calculateLevel(this.player.level);
 		logger.debug(String.format("%s is level %d (%d XP)", this.player, this.player.level, this.player.xp));

@@ -1,5 +1,6 @@
 package strikd.net;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -81,7 +82,8 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 	{
 		if(this.channel.isOpen())
 		{
-			this.channel.writeAndFlush(msg.getBuffer());
+			ByteBuf buf = msg.finalizeBuffer().retain();
+			this.channel.writeAndFlush(buf);
 		}
 	}
 	

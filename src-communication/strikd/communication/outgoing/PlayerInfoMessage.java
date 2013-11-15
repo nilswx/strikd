@@ -20,7 +20,9 @@ public class PlayerInfoMessage extends OutgoingMessage
 		msg.writeStr(player.avatar);
 		msg.writeStr(player.country);
 		msg.writeInt(player.xp);
+		msg.writeInt(player.level);
 		msg.writeInt(player.matches);
 		msg.writeInt(player.wins);
+		msg.writeInt(player.losses);
 	}
 }

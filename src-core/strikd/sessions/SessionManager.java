@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
 import strikd.Server;
-import strikd.game.facebook.PersonBeatedStory;
 import strikd.game.player.Player;
 import strikd.net.NetConnection;
 
@@ -82,10 +81,10 @@ public class SessionManager extends Server.Referent
 			player.logins++;
 			
 			// Post story
-			if(player.isFacebookLinked())
+			/*if(player.isFacebookLinked())
 			{
 				this.getServer().getFacebook().publish(new PersonBeatedStory(player.fbIdentity, "100000541030001"));
-			}
+			}*/
 			
 			logger.info(String.format("%s logged in (#%d) in from %s (%s)", player, player.logins, session.getConnection().getIpAddress(), player.platform));
 		}
