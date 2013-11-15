@@ -56,6 +56,12 @@ public class EventStreamManager extends Server.Referent
 		}
 	}
 	
+	public void postItem(EventStreamItem item)
+	{
+		item.timestamp = new Date();
+		this.dbStream.save(item);
+	}
+	
 	public List<EventStreamItem> getPlayerStream(ObjectId playerId, Date periodBegin, Date periodEnd, Player requester)
 	{
 		//this.dbStream.find("{t:{$gte:#,$lt:#}}", periodBegin, periodEnd);
