@@ -115,7 +115,7 @@ public class Server
 		FacebookManager.setSharedAppAccessToken(this.facebook.getAppAccessToken());
 		
 		// Force message registry loading
-		MessageHandlers.get(null);
+		MessageHandlers.load();
 		
 		// Start accepting connections
 		try

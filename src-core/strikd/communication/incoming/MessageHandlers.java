@@ -1,7 +1,5 @@
 package strikd.communication.incoming;
 
-import java.util.EnumMap;
-
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 
@@ -10,16 +8,18 @@ import strikd.communication.Opcodes;
 public final class MessageHandlers
 {
 	private static final Logger logger = Logger.getLogger(MessageHandlers.class);
-	private static final EnumMap<Opcodes.Incoming, MessageHandler> handlers = new EnumMap<Opcodes.Incoming, MessageHandler>(Opcodes.Incoming.class);
+	private static final MessageHandler[] handlers = new MessageHandler[Opcodes.Outgoing.values().length];
 	
-	private MessageHandlers()
+	private MessageHandlers() { }
+	
+	public static void load()
 	{
-		
+		// Triggers static constructor
 	}
 	
 	public static final MessageHandler get(Opcodes.Incoming op)
 	{
-		return handlers.get(op);
+		return handlers[op.ordinal()];
 	}
 	
 	private static final void register(Class<? extends MessageHandler> clazz)
@@ -27,7 +27,7 @@ public final class MessageHandlers
 		try
 		{
 			MessageHandler handler = clazz.newInstance();
-			handlers.put(handler.getOpcode(), handler);
+			handlers[handler.getOpcode().ordinal()] = handler;
 			logger.debug(String.format("%s > %s", handler.getOpcode(), clazz.getName()));
 		}
 		catch(InstantiationException | IllegalAccessException e)

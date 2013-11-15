@@ -9,11 +9,10 @@ import strikd.communication.Opcodes;
 
 public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 {
-	private static int BUFFER_ALLOC_BYTES = 64;
-	
 	protected OutgoingMessage(Opcodes.Outgoing op)
 	{
-		super(op, Unpooled.buffer(BUFFER_ALLOC_BYTES)); // TODO: investigate pooled (and direct) buffers
+		 // TODO: investigate pooled (and direct) buffers
+		super(op, Unpooled.buffer(MessageAllocatorExpert.getBestSize(op)));
 		this.buf.writeShort(0); // Length placeholder
 		this.buf.writeByte(op.ordinal()); // Opcode placeholder
 	}
@@ -67,18 +66,9 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 	public ByteBuf getBuffer()
 	{
 		this.buf.setShort(0, this.length());
-		adjustBufferAllocator(this.buf.readableBytes());
+		
+		MessageAllocatorExpert.reportSize(super.op, super.buf.readableBytes());
 		
 		return this.buf;
-	}
-	
-	private static final void adjustBufferAllocator(final int length)
-	{
-		// Message is bigger than ever seen before?
-		if(length > BUFFER_ALLOC_BYTES)
-		{
-			// Future messages will have this capacity to avoid resizing buffers (RAM = cheap, CPU = not)
-			BUFFER_ALLOC_BYTES = length;
-		}
 	}
 }
