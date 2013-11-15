@@ -56,7 +56,7 @@ public class EventStreamManager extends Server.Referent
 		}
 	}
 	
-	public List<EventStreamItem> getPlayerStream(ObjectId playerId, long periodBegin, long periodEnd, Player requester)
+	public List<EventStreamItem> getPlayerStream(ObjectId playerId, Date periodBegin, Date periodEnd, Player requester)
 	{
 		//this.dbStream.find("{t:{$gte:#,$lt:#}}", periodBegin, periodEnd);
 		
@@ -64,9 +64,11 @@ public class EventStreamManager extends Server.Referent
 		List<EventStreamItem> result = Lists.newArrayList();
 		
 		// Add the own items
-		Iterables.addAll(result, this.dbStream.find("{p:#,t:{$gte:#,$lt:#}", playerId, new Date(periodBegin), new Date(periodEnd)).as(EventStreamItem.class));
+		Iterables.addAll(result, this.dbStream.find("{p:#,t:{$gte:#,$lt:#}", playerId, periodBegin, periodEnd).as(EventStreamItem.class));
 		
-		// TODO: add direct friend's items
+		// Add items of direct Facebook friends who are also players
+		List<ObjectId> friendIds = this.getServer().getPlayerRegister().findDirectFriendsOf(playerId);
+		Iterables.addAll(result, this.dbStream.find("{p:{$in:#},t:{$gte:#,$lt:#}", friendIds, periodBegin, periodEnd).as(EventStreamItem.class));
 		
 		// Add the news items that are within range
 		result.addAll(this.news);

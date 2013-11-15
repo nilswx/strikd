@@ -1,5 +1,6 @@
 package strikd.communication.outgoing;
 
+import java.util.Date;
 import java.util.List;
 
 import strikd.communication.Opcodes;
@@ -18,11 +19,11 @@ public class EventStreamMessage extends OutgoingMessage
 	private static final byte TYPE_ITEM_RECEIVED = 3;
 	private static final byte TYPE_FRIEND_BEATED = 4;
 	
-	public EventStreamMessage(long periodBegin, long periodEnd, List<EventStreamItem> items)
+	public EventStreamMessage(Date begin, Date end, List<EventStreamItem> items)
 	{
 		super(Opcodes.Outgoing.EVENT_STREAM);
-		super.writeLong(periodBegin);
-		super.writeLong(periodEnd);
+		super.writeLong(begin);
+		super.writeLong(end);
 		super.writeInt(items.size());
 		for(EventStreamItem item : items)
 		{

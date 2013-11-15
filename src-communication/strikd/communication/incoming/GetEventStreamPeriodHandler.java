@@ -1,5 +1,6 @@
 package strikd.communication.incoming;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -24,8 +25,8 @@ public class GetEventStreamPeriodHandler extends MessageHandler
 	{
 		// Determine the criteria
 		ObjectId playerId = new ObjectId(request.readStr());
-		long begin = request.readLong();
-		long end = request.readLong();
+		Date begin = new Date(request.readLong());
+		Date end = new Date(request.readLong());
 		
 		// Stream available?
 		EventStreamManager stream = session.getServer().getEventStreamMgr();
