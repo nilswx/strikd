@@ -3,20 +3,32 @@ package strikd.game.player;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jongo.MongoCollection;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
+
 import strikd.Server;
+import strikd.facebook.FacebookIdentity;
 import strikd.sessions.Session;
 import strikd.util.RandomUtil;
 
 public class PlayerRegister extends Server.Referent
 {
+	private static final int FRIENDLIST_CACHE_EXPIRE_MINUTES = 15;
+	
 	private static final Logger logger = Logger.getLogger(PlayerRegister.class);
 	
 	private final MongoCollection dbPlayers;
+	
+	private final Cache<Long, List<ObjectId>> friendListCache =
+			CacheBuilder.newBuilder()
+			.expireAfterAccess(FRIENDLIST_CACHE_EXPIRE_MINUTES, TimeUnit.MINUTES).build();
 	
 	public PlayerRegister(Server server)
 	{
@@ -60,9 +72,32 @@ public class PlayerRegister extends Server.Referent
 		}
 	}
 	
-	public List<ObjectId> findDirectFriendsOf(ObjectId playerId)
+	public List<ObjectId> getFriends(FacebookIdentity identity)
 	{
-		return Collections.emptyList();
+		// In cache already?
+		List<ObjectId> friendIds = this.friendListCache.getIfPresent(identity.userId);
+		if(friendIds == null)
+		{
+			try
+			{
+				// Get all friendID's
+				List<String> userIds = identity.getAPI().friendOperations().getFriendIds();
+			
+				// Find all players
+				friendIds = Lists.newArrayList(this.dbPlayers.find("{fb.userId: $in(#)}", userIds).as(ObjectId.class));
+				if(!friendIds.isEmpty())
+				{
+					this.friendListCache.put(identity.userId, friendIds);
+				}
+			}
+			catch(Exception e)
+			{
+				logger.error(String.format("could not retrieve friend players for %s", identity), e);
+				friendIds = Collections.emptyList();
+			}
+		}
+		
+		return friendIds;
 	}
 	
 	public PlayerProfile getProfile(ObjectId playerId)

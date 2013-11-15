@@ -1,5 +1,8 @@
 package strikd.facebook;
 
+import java.util.List;
+
+import org.bson.types.ObjectId;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 
@@ -7,6 +10,9 @@ public class FacebookIdentity
 {
 	public long userId;
 	public String token;
+	
+	public String realName;
+	public List<ObjectId> friends;
 	
 	private Facebook api;
 	

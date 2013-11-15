@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.EventStreamMessage;
+import strikd.game.player.Player;
 import strikd.game.stream.EventStreamItem;
 import strikd.game.stream.EventStreamManager;
 import strikd.net.codec.IncomingMessage;
@@ -27,14 +28,19 @@ public class GetEventStreamPeriodHandler extends MessageHandler
 		EventStreamManager stream = session.getServer().getEventStreamMgr();
 		if(stream != null)
 		{
-			// Determine the criteria
+			// Resolve player
 			ObjectId playerId = new ObjectId(request.readStr());
-			Date begin = new Date(request.readLong());
-			Date end = new Date(request.readLong());
-			
-			// Send all items in this period
-			List<EventStreamItem> items = stream.getPlayerStream(playerId, begin, end, session.getPlayer());
-			session.send(new EventStreamMessage(begin, end, items));
+			Player player = session.getServer().getPlayerRegister().findPlayer(playerId);
+			if(player != null)
+			{
+				// Determine period
+				Date begin = new Date(request.readLong());
+				Date end = new Date(request.readLong());
+				
+				// Send all items in this period
+				List<EventStreamItem> items = stream.getPlayerStream(player, begin, end, session.getPlayer());
+				session.send(new EventStreamMessage(begin, end, items));
+			}
 		}
 	}
 }

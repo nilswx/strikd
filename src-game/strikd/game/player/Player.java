@@ -7,6 +7,8 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.jongo.marshall.jackson.oid.Id;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import strikd.facebook.FacebookIdentity;
 import strikd.game.items.ItemInstance;
 
@@ -44,6 +46,7 @@ public class Player
 	
 	// Personal
 	public String country;
+	@JsonProperty("fb")
 	public FacebookIdentity fbIdentity;
 	public boolean liked;
 	
