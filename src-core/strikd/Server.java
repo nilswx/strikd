@@ -140,11 +140,11 @@ public class Server
 		ds.setUrl(props.getProperty("db.url"));
 		ds.setDriver(props.getProperty("db.driver"));  
 		ds.setHeartbeatSql("select 1");
-		if(props.contains("db.pool.min"))
+		if(props.containsKey("db.pool.min"))
 		{
 			ds.setMinConnections(Integer.parseInt(props.getProperty("db.pool.min")));
 		}
-		if(props.contains("db.pool.max"))
+		if(props.containsKey("db.pool.max"))
 		{
 			ds.setMaxConnections(Integer.parseInt(props.getProperty("db.pool.max")));
 		}
