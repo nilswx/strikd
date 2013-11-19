@@ -133,16 +133,26 @@ public class Server
 		conf.setRegister(false);  
 		conf.setDefaultServer(false); 
 		
-		// Define DataSource
+		// Configure data source
 		DataSourceConfig ds = new DataSourceConfig();  
-		ds.setDriver(props.getProperty("db.driver"));  
 		ds.setUsername(props.getProperty("db.user"));  
 		ds.setPassword(props.getProperty("db.password"));  
-		ds.setUrl(props.getProperty("db.url"));  
+		ds.setUrl(props.getProperty("db.url"));
+		ds.setDriver(props.getProperty("db.driver"));  
 		ds.setHeartbeatSql("select 1");
+		if(props.contains("db.pool.min"))
+		{
+			ds.setMinConnections(Integer.parseInt(props.getProperty("db.pool.min")));
+		}
+		if(props.contains("db.pool.max"))
+		{
+			ds.setMaxConnections(Integer.parseInt(props.getProperty("db.pool.max")));
+		}
 		conf.setDataSourceConfig(ds);
 		
-		// Developer options  
+		// Logging
+		
+		// DDL options  
 		conf.setDdlGenerate(true);  
 		conf.setDdlRun(true);  
 		
