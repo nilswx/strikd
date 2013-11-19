@@ -80,12 +80,6 @@ public class SessionManager extends Server.Referent
 			this.loginCounter.incrementAndGet();
 			player.setLogins(player.getLogins() + 1);
 			
-			// Post story
-			/*if(player.isFacebookLinked())
-			{
-				this.getServer().getFacebook().publish(new PersonBeatedStory(player.fbIdentity, "100000541030001"));
-			}*/
-			
 			logger.info(String.format("%s logged in (#%d) in from %s (%s)", player, player.getLogins(), session.getConnection().getIpAddress(), player.getPlatform()));
 		}
 	}

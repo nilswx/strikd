@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.social.facebook.api.Page;
+
+import com.restfb.json.JsonObject;
 
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
@@ -34,7 +35,7 @@ public class FacebookClaimLikeHandler extends MessageHandler
 		if(player.isFacebookLinked() && !player.isLiked())
 		{
 			// THANKS!
-			player.setLiked(checkUserLikesPage(player.getFacebookIdentity(), session.getServer().getFacebook().getPageId()));
+			player.setLiked(this.checkUserLikesPage(player.getFacebook(), session.getServer().getFacebook().getPageId()));
 			if(player.isLiked())
 			{
 				// TODO: give item
@@ -50,20 +51,13 @@ public class FacebookClaimLikeHandler extends MessageHandler
 		session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
 	}
 	
-	private static boolean checkUserLikesPage(FacebookIdentity identity, String pageId)
+	private boolean checkUserLikesPage(FacebookIdentity identity, String pageId)
 	{
 		try
 		{
-			// Get list of liked pages
-			List<Page> likedPages = identity.getAPI().likeOperations().getPagesLiked();
-			for(Page page : likedPages)
-			{
-				// User likes Strik?
-				if(page.getId().equals(pageId))
-				{
-					return true;
-				}
-			}
+			// Test whether this user likes the page
+			List<JsonObject> results = identity.getAPI().executeFqlQuery("SELECT 1 FROM page_fan WHERE uid=me() AND page_id=" + pageId, JsonObject.class);
+			return (results.size() == 1);
 		}
 		catch(Exception e)
 		{

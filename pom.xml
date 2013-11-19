@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -7,35 +8,63 @@
 	<name>strikd</name>
 	<description>Game server for the smartphone game 'Strik'.</description>
 
-	<dependencies>
-	<dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-api</artifactId>
-	<version>1.7.5</version>
-</dependency>
-            
-            <dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-log4j12</artifactId>
-	<version>1.7.5</version>
-</dependency>
-            
-        
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-ebean-enhancement</id>
+						<phase>process-classes</phase>
+						<configuration>
+							<tasks>
+								<property name="compile_classpath" refid="maven.compile.classpath" />
+								<taskdef name="ebeanEnhance"
+									classname="com.avaje.ebean.enhance.ant.AntEnhanceTask"
+									classpath="${compile_classpath}" />
+								<ebeanEnhance classSource="${project.build.outputDirectory}"
+									packages="strikd.**" transformArgs="debug=1" />
+							</tasks>
+							<encoding>UTF-8</encoding>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-		
+	<dependencies>
+
 		<dependency>
-		<groupId>org.avaje.ebeanorm</groupId>  
-  <artifactId>avaje-ebeanorm</artifactId>  
-  <version>3.2.4</version>  
-</dependency>
-            
-            <dependency>
-	<groupId>mysql</groupId>
-	<artifactId>mysql-connector-java</artifactId>
-	<version>5.1.27</version>
-</dependency>
-            
-            
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.avaje.ebeanorm</groupId>
+			<artifactId>avaje-ebeanorm</artifactId>
+			<version>3.2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.avaje.ebeanorm</groupId>
+			<artifactId>avaje-ebeanorm-agent</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
+
+
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.27</version>
+		</dependency>
 
 		<dependency>
 			<groupId>io.netty</groupId>
@@ -48,60 +77,23 @@
 			<artifactId>reflections</artifactId>
 			<version>0.9.9-RC1</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-facebook</artifactId>
-			<version>1.1.0.M4</version>
-		</dependency>
+		
+<dependency>
+	<groupId>com.restfb</groupId>
+	<artifactId>restfb</artifactId>
+	<version>1.6.12</version>
+</dependency>
+            
 	</dependencies>
-	
-	    
-<repositories>
 
-    <repository>
-        <id>spring-milestones</id>
-        <name>Spring Milestones</name>
-        <url>http://repo.spring.io/milestone</url>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-    </repository>
-    
-        <repository>
-    <snapshots>
-        <enabled>false</enabled>
-    </snapshots>
-    <id>central</id>
-    <name>Maven Central Repository</name>
-    <url>http://repo1.maven.org/maven2</url>
-</repository>
-   
-</repositories>
-
-
-<!--<build>
-    <plugins>
-      <plugin>
-        <groupId>org.avaje.ebeanorm</groupId>
-        <artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
-        <version>3.2.1</version>
-        <executions>
-          <execution>
-            <id>main</id>
-            <phase>process-classes</phase>
-            <configuration>
-              <classSource>target/classes</classSource>
-              <packages>strikd.**</packages>
-              <transformArgs>debug=9</transformArgs>
-            </configuration>
-            <goals>
-              <goal>enhance</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>-->
-  
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>Maven Central Repository</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+	</repositories>
 </project>

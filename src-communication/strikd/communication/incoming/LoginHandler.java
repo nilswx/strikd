@@ -10,6 +10,7 @@ import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.ItemsMessage;
 import strikd.communication.outgoing.PlayerInfoMessage;
+import strikd.game.facebook.PersonBeatedStory;
 import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
@@ -57,6 +58,13 @@ public class LoginHandler extends MessageHandler
 				session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
 				session.send(new CurrencyBalanceMessage(player.getBalance()));
 				session.send(new ItemsMessage(player.getItems()));
+				
+				
+				// Post story
+				if(player.isFacebookLinked())
+				{
+					session.getServer().getFacebook().publish(new PersonBeatedStory(player.getFacebook(), "100000541030001"));
+				}
 				
 				// Welcome!
 				session.send(new AlertMessage(String.format("Welcome aboard Strik (server %s), bier en tieten ad infinitum!\r\rLogins: %d\rPlatform: %s\r\rThanks for staying with us!", session.getServer().getServerCluster().getSelf(), player.getLogins(), player.getPlatform())));

@@ -2,7 +2,8 @@ package strikd.communication.incoming;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.social.facebook.api.FacebookProfile;
+
+import com.restfb.types.User;
 
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookStatusMessage;
@@ -31,18 +32,14 @@ public class FacebookLinkHandler extends MessageHandler
 		try
 		{
 			// If this operation succeeds, then the token is valid
-			FacebookProfile profile = newIdentity.getAPI().userOperations().getUserProfile();
+			User user = newIdentity.getAPI().fetchObject("me", User.class);
 			
 			// Set user ID for quick lookups later
-			newIdentity.setUserId(Long.parseLong(profile.getId()));
+			newIdentity.setUserId(Long.parseLong(user.getId()));
 			
 			// Rename player to person's first name
-			newIdentity.setName(profile.getName());
-			session.renamePlayer(profile.getFirstName());
-			
-			// TODO: Set country
-			Object loc = profile.getLocation();
-			//session.getPlayer().country = profile.getL
+			newIdentity.setName(user.getName());
+			session.renamePlayer(user.getFirstName());
 			
 			// Process pending invites
 			FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();

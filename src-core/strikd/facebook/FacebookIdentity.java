@@ -4,8 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.api.impl.FacebookTemplate;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
 
 @Embeddable
 public class FacebookIdentity
@@ -18,14 +18,14 @@ public class FacebookIdentity
 	private String name;
 	
 	@Transient
-	private Facebook api;
+	private FacebookClient api;
 	
-	public long getUserId()
+	public Long getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(long userId)
+	public void setUserId(Long userId)
 	{
 		this.userId = userId;
 	}
@@ -50,12 +50,11 @@ public class FacebookIdentity
 		this.name = name;
 	}
 
-	public Facebook getAPI()
+	public FacebookClient getAPI()
 	{
 		if(this.api == null)
 		{
-			// No reference to Server's instance available
-			this.api = new FacebookTemplate(this.token, FacebookManager.getSharedAppNamespace());
+			this.api = new DefaultFacebookClient(this.token);
 		}
 		return this.api;
 	}

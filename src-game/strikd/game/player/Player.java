@@ -249,17 +249,7 @@ public class Player
 	{
 		this.country = country;
 	}
-
-	public FacebookIdentity getFacebookIdentity()
-	{
-		return getFacebook();
-	}
-
-	public void getFacebookIdentity(FacebookIdentity fbIdentity)
-	{
-		this.setFacebook(fbIdentity);
-	}
-
+	
 	public boolean isLiked()
 	{
 		return liked;
