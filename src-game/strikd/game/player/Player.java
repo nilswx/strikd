@@ -70,9 +70,7 @@ public class Player
 	
 	private String country;
 	
-	//@Embedded
-	@Transient
-	//@EmbeddedColumns(columns="userId=fb_uid,token=fb_token,name=fb_name") 
+	@Embedded
 	private FacebookIdentity facebook;
 	
 	@Column(nullable=false)

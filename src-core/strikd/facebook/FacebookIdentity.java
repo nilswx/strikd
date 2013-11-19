@@ -11,7 +11,7 @@ import org.springframework.social.facebook.api.impl.FacebookTemplate;
 public class FacebookIdentity
 {
 	@Column(name="fb_uid")
-	private long userId;
+	private Long userId;
 	@Column(name="fb_token")
 	private String token;
 	@Column(name="fb_name")
