@@ -5,12 +5,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
-import org.jongo.MongoCollection;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.game.player.Player;
@@ -18,23 +14,19 @@ import strikd.game.stream.items.NewsStreamItem;
 
 public class EventStreamManager extends Server.Referent
 {
-	private static final Logger logger = Logger.getLogger(EventStreamManager.class);
-	
-	private final MongoCollection dbNews, dbStream;
+	private static final Logger logger = LoggerFactory.getLogger(EventStreamManager.class);
 	private List<NewsStreamItem> news = Collections.emptyList();
 	
 	public EventStreamManager(Server server)
 	{
 		super(server);
-		this.dbStream = server.getDbCluster().getCollection("stream");
-		this.dbNews = server.getDbCluster().getCollection("news");
-		
-		logger.info(String.format("%d events", this.dbStream.count()));
+		logger.info(String.format("%d events", 0));
 	}
 	
 	public void reloadNews()
 	{
 		// Sample news item
+		/*
 		if(this.dbNews.count() == 0)
 		{
 			NewsStreamItem welcome = new NewsStreamItem();
@@ -53,17 +45,20 @@ public class EventStreamManager extends Server.Referent
 		for(NewsStreamItem news : this.news)
 		{
 			logger.debug(String.format("\"%s\" published on %s", news.headline, news.timestamp));
-		}
+		}*/
 	}
 	
 	public void postItem(EventStreamItem item)
 	{
+		/*
 		item.timestamp = new Date();
-		this.dbStream.save(item);
+		this.dbStream.save(item);*/
 	}
 	
 	public List<EventStreamItem> getPlayerStream(Player player, Date periodBegin, Date periodEnd, Player requester)
 	{
+		return Collections.emptyList();
+		/*
 		//this.dbStream.find("{t:{$gte:#,$lt:#}}", periodBegin, periodEnd);
 		
 		// A list that will be sorted later
@@ -75,7 +70,7 @@ public class EventStreamManager extends Server.Referent
 		// Add items of direct Facebook friends who are also players
 		if(player.isFacebookLinked())
 		{
-			List<ObjectId> friendIds = this.getServer().getPlayerRegister().getFriends(player.fbIdentity);
+			List<Long> friendIds = this.getServer().getPlayerRegister().getFriends(player.fbIdentity);
 			Iterables.addAll(result, this.dbStream.find("{p:{$in:#},t:{$gte:#,$lt:#}}", friendIds, periodBegin, periodEnd).as(EventStreamItem.class));
 		}
 		
@@ -84,7 +79,7 @@ public class EventStreamManager extends Server.Referent
 		
 		// Sort on timestamp
 		Collections.sort(result, TIMESTAMP_SORTER);
-		return result;
+		return result;*/
 	}
 	
 	private static final Comparator<EventStreamItem> TIMESTAMP_SORTER = new Comparator<EventStreamItem>()

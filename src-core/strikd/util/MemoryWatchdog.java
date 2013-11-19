@@ -1,10 +1,11 @@
 package strikd.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class MemoryWatchdog implements Runnable
 {
-	private static final Logger logger = Logger.getLogger(MemoryWatchdog.class);
+	private static final Logger logger = LoggerFactory.getLogger(MemoryWatchdog.class);
 	
 	private final Runtime vm;
 	

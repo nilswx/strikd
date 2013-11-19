@@ -1,21 +1,55 @@
 package strikd.facebook;
 
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
-import org.bson.types.ObjectId;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 
+@Embeddable
 public class FacebookIdentity
 {
-	public long userId;
-	public String token;
+	@Column(name="fb_uid")
+	private long userId;
+	@Column(name="fb_token")
+	private String token;
+	@Column(name="fb_name")
+	private String name;
 	
-	public String realName;
-	public List<ObjectId> friends;
-	
+	@Transient
 	private Facebook api;
 	
+	public long getUserId()
+	{
+		return userId;
+	}
+
+	public void setUserId(long userId)
+	{
+		this.userId = userId;
+	}
+
+	public String getToken()
+	{
+		return token;
+	}
+
+	public void setToken(String token)
+	{
+		this.token = token;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
 	public Facebook getAPI()
 	{
 		if(this.api == null)

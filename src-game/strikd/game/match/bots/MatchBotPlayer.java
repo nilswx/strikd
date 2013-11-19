@@ -71,11 +71,20 @@ public class MatchBotPlayer extends MatchPlayer implements Runnable
 		this.scheduleNextMove();
 	}
 	
-	
 	@Override
 	public void send(OutgoingMessage msg)
 	{
-		// Handle on special events
+		this.handleEvents(msg);
+	}
+	
+	@Override
+	public void sendDuplicate(OutgoingMessage msg)
+	{
+		this.handleEvents(msg);
+	}
+	
+	private void handleEvents(OutgoingMessage msg)
+	{
 		if(msg instanceof MatchStartedMessage)
 		{
 			this.scheduleNextMove();
@@ -83,9 +92,7 @@ public class MatchBotPlayer extends MatchPlayer implements Runnable
 		else if(msg instanceof MatchEndedMessage)
 		{
 			this.cancelAI();
-		}
-		
-		// No backing session, send to -> /dev/null
+		}	
 	}
 	
 	@Override

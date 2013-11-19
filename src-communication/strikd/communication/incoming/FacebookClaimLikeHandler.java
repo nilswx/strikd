@@ -2,7 +2,8 @@ package strikd.communication.incoming;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.facebook.api.Page;
 
 import strikd.sessions.Session;
@@ -17,7 +18,7 @@ public class FacebookClaimLikeHandler extends MessageHandler
 {
 	public static final String pageId = "";
 	
-	private static final Logger logger = Logger.getLogger(FacebookClaimLikeHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(FacebookClaimLikeHandler.class);
 	
 	@Override
 	public Opcodes.Incoming getOpcode()
@@ -30,23 +31,23 @@ public class FacebookClaimLikeHandler extends MessageHandler
 	{
 		// Allowed to claim reward?
 		Player player = session.getPlayer();
-		if(player.isFacebookLinked() && !player.liked)
+		if(player.isFacebookLinked() && !player.isLiked())
 		{
 			// THANKS!
-			player.liked = checkUserLikesPage(player.fbIdentity, session.getServer().getFacebook().getPageId());
-			if(player.liked)
+			player.setLiked(checkUserLikesPage(player.getFacebookIdentity(), session.getServer().getFacebook().getPageId()));
+			if(player.isLiked())
 			{
 				// TODO: give item
 				session.send(new AlertMessage("Thanks for liking Strik, here's your crappy item!"));
 				
 				// Save data
-				player.liked = true;
+				player.setLiked(true);
 				session.saveData();
 			}
 		}
 		
 		// Refresh status
-		session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.liked));
+		session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
 	}
 	
 	private static boolean checkUserLikesPage(FacebookIdentity identity, String pageId)
@@ -66,7 +67,7 @@ public class FacebookClaimLikeHandler extends MessageHandler
 		}
 		catch(Exception e)
 		{
-			logger.warn(String.format("could not verify like status for %s", identity.userId), e);
+			logger.warn("could not verify like status for {}", identity, e);
 		}
 		
 		// Not among the liked pages

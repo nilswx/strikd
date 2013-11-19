@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.game.board.Board;
 import strikd.game.board.Direction8;
@@ -18,6 +16,8 @@ import strikd.util.RandomUtil;
 import strikd.words.WordDictionary;
 import strikd.words.index.LetterNode;
 
+import com.google.common.collect.Lists;
+
 /**
  * The most shitty, messy and inefficient Strik {@link Board} known to mankind. Sigh.
  * @author nilsw
@@ -25,7 +25,7 @@ import strikd.words.index.LetterNode;
  */
 public class HanzeBoard extends Board
 {
-	private static final Logger logger = Logger.getLogger(HanzeBoard.class);
+	private static final Logger logger = LoggerFactory.getLogger(HanzeBoard.class);
 
 	private Queue<Square> emptySquares;
 

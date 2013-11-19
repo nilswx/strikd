@@ -1,6 +1,5 @@
 package strikd.net;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -8,7 +7,8 @@ import io.netty.channel.ChannelPipeline;
 
 import java.net.InetSocketAddress;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.net.codec.MessageDecoder;
 import strikd.net.codec.OutgoingMessage;
@@ -18,7 +18,7 @@ import strikd.sessions.Session;
 
 public class NetConnection extends ChannelInboundHandlerAdapter
 {
-	private static final Logger logger = Logger.getLogger(NetConnection.class);
+	private static final Logger logger = LoggerFactory.getLogger(NetConnection.class);
 	
 	private final Channel channel;
 	private final String ipAddress;
@@ -82,8 +82,15 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 	{
 		if(this.channel.isOpen())
 		{
-			ByteBuf buf = msg.finalizeBuffer().retain();
-			this.channel.writeAndFlush(buf);
+			this.channel.writeAndFlush(msg.getBuffer());
+		}
+	}
+	
+	public void sendDuplicate(OutgoingMessage msg)
+	{
+		if(this.channel.isOpen())
+		{
+			this.channel.writeAndFlush(msg.getBuffer().duplicate());
 		}
 	}
 	

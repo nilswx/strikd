@@ -2,13 +2,13 @@ package strikd.game.match;
 
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.communication.outgoing.AnnounceMatchMessage;
 import strikd.communication.outgoing.BoardInitMessage;
 import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
-
 import strikd.game.board.Board;
 import strikd.game.board.impl.HanzeBoard;
 import strikd.locale.LocaleBundle;
@@ -17,7 +17,7 @@ import strikd.net.codec.OutgoingMessage;
 
 public class Match
 {
-	private static final Logger logger = Logger.getLogger(Match.class);
+	private static final Logger logger = LoggerFactory.getLogger(Match.class);
 	
 	private final long matchId;
 	private final LocaleBundle locale;
@@ -73,8 +73,10 @@ public class Match
 	
 	public void broadcast(OutgoingMessage msg)
 	{
-		// Send to both players
-		this.playerOne.send(msg);
+		// First receiver gets a duplicate
+		this.playerOne.sendDuplicate(msg);
+		
+		// Second receiver can keep and modify the real one
 		this.playerTwo.send(msg);
 	}
 	
@@ -129,8 +131,8 @@ public class Match
 				MatchPlayer loser = this.getOpponent(winner);
 				
 				// Update stats
-				winner.getInfo().wins++;
-				loser.getInfo().losses++;
+				winner.getInfo().setWins(winner.getInfo().getWins() + 1);
+				loser.getInfo().setLosses(loser.getInfo().getLosses() + 1);
 				logger.debug(String.format("%s: %s wins, %s loses!", this, winner, loser));
 			}
 			

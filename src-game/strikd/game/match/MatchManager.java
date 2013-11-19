@@ -7,7 +7,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.game.match.bots.MatchBotFactory;
@@ -19,7 +20,7 @@ import strikd.util.NamedThreadFactory;
 
 public class MatchManager extends Server.Referent
 {
-	private static final Logger logger = Logger.getLogger(MatchManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(MatchManager.class);
 	
 	private final AtomicLong matchCounter = new AtomicLong();
 	private final Map<Long, Match> active = new ConcurrentHashMap<Long, Match>();
@@ -64,7 +65,7 @@ public class MatchManager extends Server.Referent
 	{
 		if(session.isLoggedIn())
 		{
-			return this.queues.get(session.getPlayer().language);
+			return this.queues.get(session.getPlayer().getLanguage());
 		}
 		else
 		{

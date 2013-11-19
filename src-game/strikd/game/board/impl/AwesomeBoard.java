@@ -1,7 +1,7 @@
 package strikd.game.board.impl;
 
 import com.google.common.base.Stopwatch;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import strikd.game.board.*;
 
 import strikd.game.match.bots.ai.IndexedWordSearch;
@@ -16,7 +16,7 @@ public class AwesomeBoard extends Board
 {
 	private boolean isInitialUpdate = true;
 
-	private static Logger logger = Logger.getLogger(AwesomeBoard.class);
+	private static Logger logger = LoggerFactory.getLogger(AwesomeBoard.class);
 
 	public AwesomeBoard(int width, int height, WordDictionary dictionary)
 	{

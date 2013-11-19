@@ -38,7 +38,7 @@ public class PurchaseItemHandler extends MessageHandler
 			// Add items
 			for(ItemInstance item : items)
 			{
-				session.getPlayer().items.add(item);
+				session.getPlayer().getItems().add(item);
 			}
 			session.saveData();
 			

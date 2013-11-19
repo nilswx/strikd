@@ -1,18 +1,19 @@
 package strikd.communication.incoming;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.facebook.api.FacebookProfile;
 
-import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.facebook.FacebookIdentity;
 import strikd.game.facebook.FacebookInviteManager;
 import strikd.net.codec.IncomingMessage;
+import strikd.sessions.Session;
 
 public class FacebookLinkHandler extends MessageHandler
 {
-	private static final Logger logger = Logger.getLogger(FacebookLinkHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(FacebookLinkHandler.class);
 	
 	@Override
 	public Opcodes.Incoming getOpcode()
@@ -25,7 +26,7 @@ public class FacebookLinkHandler extends MessageHandler
 	{
 		// Constructor new identity with latest token
 		FacebookIdentity newIdentity = new FacebookIdentity();
-		newIdentity.token = request.readStr();
+		newIdentity.setToken(request.readStr());
 		
 		try
 		{
@@ -33,17 +34,19 @@ public class FacebookLinkHandler extends MessageHandler
 			FacebookProfile profile = newIdentity.getAPI().userOperations().getUserProfile();
 			
 			// Set user ID for quick lookups later
-			newIdentity.userId = Long.parseLong(profile.getId());
+			newIdentity.setUserId(Long.parseLong(profile.getId()));
 			
 			// Rename player to person's first name
+			newIdentity.setName(profile.getName());
 			session.renamePlayer(profile.getFirstName());
 			
 			// TODO: Set country
+			Object loc = profile.getLocation();
 			//session.getPlayer().country = profile.getL
 			
 			// Process pending invites
 			FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
-			inviteMgr.processInvites(newIdentity.userId);
+			inviteMgr.processInvites(newIdentity.getUserId());
 		}
 		catch(Exception e)
 		{
@@ -52,11 +55,11 @@ public class FacebookLinkHandler extends MessageHandler
 		}
 		
 		// Save current link status
-		session.getPlayer().fbIdentity = newIdentity;
+		session.getPlayer().setFacebook(newIdentity);
 		session.saveData();
 		
 		// Send current status
-		session.send(new FacebookStatusMessage(session.getPlayer().isFacebookLinked(), session.getPlayer().liked));
+		session.send(new FacebookStatusMessage(session.getPlayer().isFacebookLinked(), session.getPlayer().isLiked()));
 	}
 	
 	//logger.debug(String.format("FB #%s (\"%s %s\", %s) has %d FB friends", profile.getId(), profile.getFirstName(), profile.getLastName(), profile.getGender(), facebook.friendOperations().getFriendIds().size())); 

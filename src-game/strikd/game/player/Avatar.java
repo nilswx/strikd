@@ -1,13 +1,11 @@
 package strikd.game.player;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
+import javax.persistence.Embeddable;
 
-import strikd.game.player.Avatar.PartType;
-
-@SuppressWarnings("serial")
-public class Avatar extends HashMap<PartType, String>
+@Embeddable
+public class Avatar /*extends HashMap<PartType, String>*/
 {
+	/*
 	@Override
 	public String toString()
 	{
@@ -31,5 +29,5 @@ public class Avatar extends HashMap<PartType, String>
 		Eyes,
 		Mouth,
 		Shirt
-	}
+	}*/
 }

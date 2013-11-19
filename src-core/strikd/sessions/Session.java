@@ -2,7 +2,8 @@ package strikd.sessions;
 
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.cluster.ServerDescriptor;
@@ -17,6 +18,7 @@ import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.player.Experience;
 import strikd.game.player.Player;
+import strikd.game.player.PlayerRegister;
 import strikd.net.NetConnection;
 import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.OutgoingMessage;
@@ -25,7 +27,7 @@ public class Session extends Server.Referent
 {
 	private static final boolean USE_CRYPTO = true;
 
-	private static final Logger logger = Logger.getLogger(Session.class);
+	private static final Logger logger = LoggerFactory.getLogger(Session.class);
 
 	private final long sessionId;
 	private final NetConnection connection;
@@ -71,7 +73,7 @@ public class Session extends Server.Referent
 
 		// Send session info
 		ServerDescriptor server = this.getServer().getServerCluster().getSelf();
-		this.send(new SessionInfoMessage(this.sessionId, server.name));
+		this.send(new SessionInfoMessage(this.sessionId, server.getName()));
 	}
 
 	public void end(String reason)
@@ -100,11 +102,23 @@ public class Session extends Server.Referent
 	private void onLogin()
 	{
 		// Add xp!
-		this.player.xp += 5;
+		this.player.setXp(player.getXp() + 5);
 
 		// Re-calculate level (XP zones could have changed)
-		this.player.level = Experience.calculateLevel(this.player.level);
-		logger.debug(String.format("%s is level %d (%d XP)", this.player, this.player.level, this.player.xp));
+		this.player.setLevel(Experience.calculateLevel(this.player.getLevel()));
+		logger.debug(String.format("%s is level %d (%d XP)", this.player, this.player.getLevel(), this.player.getXp()));
+		
+		// Facebook?!
+		if(this.player.isFacebookLinked())
+		{
+			// Find all friends
+			PlayerRegister register = this.getServer().getPlayerRegister();
+			for(long playerId : register.getFriends(this.player.getFacebook()))
+			{
+				logger.debug(String.format("%s is a friend of %s", register.findPlayer(playerId), this.player));
+			}
+		}
+		
 	}
 
 	private void onLogout()
@@ -119,16 +133,13 @@ public class Session extends Server.Referent
 			this.exitMatch();
 		}
 
-		// Update last online time
-		this.player.updateLastOnline();
-
 		// Save complete player object
 		this.saveData();
 	}
 
 	public void onNetMessage(IncomingMessage msg)
 	{
-		logger.debug(msg);
+		logger.debug("< {}", msg);
 
 		if(this.handshakeOK || (msg.op == Opcodes.Incoming.CLIENT_CRYPTO))
 		{
@@ -142,11 +153,16 @@ public class Session extends Server.Referent
 
 	public void send(OutgoingMessage msg)
 	{
-		logger.debug(msg);
+		logger.debug("> {}", msg);
 
 		this.connection.send(msg);
 	}
-
+	
+	public void sendDuplicate(OutgoingMessage msg)
+	{
+		this.connection.sendDuplicate(msg);
+	}
+	
 	public long getSessionId()
 	{
 		return this.sessionId;
@@ -177,7 +193,7 @@ public class Session extends Server.Referent
 		if(this.player == null)
 		{
 			this.player = player;
-			this.player.platform = platform;
+			this.player.setPlatform(platform);
 			this.getServer().getSessionMgr().completeLogin(this);
 			this.onLogin();
 		}
@@ -252,7 +268,7 @@ public class Session extends Server.Referent
 	{
 		if(this.isLoggedIn())
 		{
-			this.player.name = newName;
+			this.player.setName(newName);
 			this.send(new NameChangedMessage(newName));
 		}
 	}

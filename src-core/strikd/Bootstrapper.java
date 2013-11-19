@@ -3,11 +3,12 @@ package strikd;
 import java.io.File;
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Bootstrapper
 {
-	private static final Logger logger = Logger.getLogger(Bootstrapper.class);
+	private static final Logger logger = LoggerFactory.getLogger(Bootstrapper.class);
 	
 	public static void main(String[] args)
 	{

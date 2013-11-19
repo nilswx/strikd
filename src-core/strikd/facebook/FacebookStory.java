@@ -1,13 +1,14 @@
 package strikd.facebook;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 public abstract class FacebookStory implements Runnable
 {
-	private static final Logger logger = Logger.getLogger(FacebookStory.class);
+	private static final Logger logger = LoggerFactory.getLogger(FacebookStory.class);
 	
 	private final FacebookIdentity identity;
 	private final Object object;
@@ -33,7 +34,7 @@ public abstract class FacebookStory implements Runnable
 			
 			// Make the request
 			logger.debug(String.format("publishing a new %s", this));
-			facebook.publish(Long.toString(this.identity.userId), (facebook.getApplicationNamespace() + ':' + this.getAction()), data);
+			facebook.publish(Long.toString(this.identity.getUserId()), (facebook.getApplicationNamespace() + ':' + this.getAction()), data);
 		}
 		catch(Exception e)
 		{
@@ -59,6 +60,6 @@ public abstract class FacebookStory implements Runnable
 	@Override
 	public String toString()
 	{
-		return String.format("%s [uid=%d]", this.getClass().getSimpleName(), this.identity.userId);
+		return String.format("%s [uid=%d]", this.getClass().getSimpleName(), this.identity.getUserId());
 	}
 }

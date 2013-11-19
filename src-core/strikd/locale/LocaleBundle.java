@@ -4,14 +4,15 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.words.WordDictionary;
 
 public class LocaleBundle
 {
 	private static final String DICTIONARY_PATH = "%s.txt";
-	private static final Logger logger = Logger.getLogger(LocaleBundle.class);
+	private static final Logger logger = LoggerFactory.getLogger(LocaleBundle.class);
 	
 	private final String locale;
 	private final Map<DictionaryType, WordDictionary> dicts;

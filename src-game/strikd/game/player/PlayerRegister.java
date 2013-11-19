@@ -1,54 +1,54 @@
 package strikd.game.player;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
-import org.jongo.MongoCollection;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.facebook.FacebookIdentity;
 import strikd.sessions.Session;
 import strikd.util.RandomUtil;
 
+import com.google.common.base.Function;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
+
 public class PlayerRegister extends Server.Referent
 {
 	private static final int FRIENDLIST_CACHE_EXPIRE_MINUTES = 15;
 	
-	private static final Logger logger = Logger.getLogger(PlayerRegister.class);
+	private static final Logger logger = LoggerFactory.getLogger(PlayerRegister.class);
 	
-	private final MongoCollection dbPlayers;
-	
-	private final Cache<Long, List<ObjectId>> friendListCache =
+	private final Cache<Long, List<Long>> friendListCache =
 			CacheBuilder.newBuilder()
 			.expireAfterAccess(FRIENDLIST_CACHE_EXPIRE_MINUTES, TimeUnit.MINUTES).build();
 	
 	public PlayerRegister(Server server)
 	{
 		super(server);
-		this.dbPlayers = this.getServer().getDbCluster().getCollection("players");
 		
-		logger.info(String.format("%d players", this.dbPlayers.count()));
+		logger.info(String.format("%d players", this.getDatabase().find(Player.class).findRowCount()));
 	}
 	
 	public Player newPlayer()
 	{
 		// Create new player with default data
-		Player player = new Player();
-		player.token = UUID.randomUUID().toString();
-		player.name = this.generateDefaultName();
-		player.language = "en_US";
-		player.country = "nl"; // From FB
-		player.balance = 5;
-		this.dbPlayers.save(player);
+		Player player = this.getDatabase().createEntityBean(Player.class);
+		player.setToken(UUID.randomUUID().toString());
+		player.setJoined(new Date());
+		player.setName(this.generateDefaultName());
+		player.setLanguage("en_US");
+		player.setCountry("nl"); // From FB
+		player.setBalance(5);
 		
+		// Save to database
+		this.getDatabase().save(player);
 		logger.debug(String.format("created player %s", player));
 		
 		return player;
@@ -56,10 +56,10 @@ public class PlayerRegister extends Server.Referent
 	
 	public void savePlayer(Player player)
 	{
-		this.dbPlayers.save(player);
+		this.getDatabase().update(player);
 	}
 	
-	public Player findPlayer(ObjectId playerId)
+	public Player findPlayer(long playerId)
 	{
 		Session session = this.getServer().getSessionMgr().getPlayerSession(playerId);
 		if(session != null)
@@ -68,26 +68,34 @@ public class PlayerRegister extends Server.Referent
 		}
 		else
 		{
-			return this.dbPlayers.findOne(playerId).as(Player.class);
+			return this.getDatabase().find(Player.class, playerId);
 		}
 	}
 	
-	public List<ObjectId> getFriends(FacebookIdentity identity)
+	public List<Long> getFriends(FacebookIdentity identity)
 	{
 		// In cache already?
-		List<ObjectId> friendIds = this.friendListCache.getIfPresent(identity.userId);
+		List<Long> friendIds = this.friendListCache.getIfPresent(identity.getUserId());
 		if(friendIds == null)
 		{
 			try
 			{
-				// Get all friendID's
-				List<String> userIds = identity.getAPI().friendOperations().getFriendIds();
-			
+				// Get and parse all friend IDs (these are stupid strings!)
+				List<String> userStrIds = Collections.emptyList();//identity.getAPI().friendOperations().getFriendIds();
+				List<Long> userIds = Lists.transform(userStrIds, new Function<String, Long>()
+				{
+					public Long apply(String e)
+					{
+						return Long.parseLong(e);
+					}
+				});
+				userStrIds = null;
+				
 				// Find all players
-				friendIds = Lists.newArrayList(this.dbPlayers.find("{'fb.userId':{$in:#}}", userIds).as(ObjectId.class));
+				friendIds = Lists.newArrayList();//this.dbPlayers.find("{'fb.userId':{$in:#}}", userIds).projection("{_id:1}").as(ObjectId.class));
 				if(!friendIds.isEmpty())
 				{
-					this.friendListCache.put(identity.userId, friendIds);
+					this.friendListCache.put(identity.getUserId(), friendIds);
 				}
 			}
 			catch(Exception e)
@@ -100,11 +108,11 @@ public class PlayerRegister extends Server.Referent
 		return friendIds;
 	}
 	
-	public PlayerProfile getProfile(ObjectId playerId)
+	public PlayerProfile getProfile(long playerId)
 	{
-		return this.dbPlayers.findOne(playerId)
+		return null;/*this.dbPlayers.findOne(playerId)
 				//.projection(...)
-				.as(PlayerProfile.class);
+				.as(PlayerProfile.class);*/
 	}
 	
 	public String generateDefaultName()

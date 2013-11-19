@@ -8,11 +8,12 @@ import java.security.spec.InvalidParameterSpecException;
 
 import javax.crypto.spec.DHParameterSpec;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DiffieHellman
 {
-	private static final Logger logger = Logger.getLogger(DiffieHellman.class);
+	private static final Logger logger = LoggerFactory.getLogger(DiffieHellman.class);
 	
 	private DHParameterSpec params;
 	private BigInteger privateKey;

@@ -28,6 +28,11 @@ public class MatchPlayer
 	{
 		this.session.send(msg);
 	}
+	
+	public void sendDuplicate(OutgoingMessage msg)
+	{
+		this.session.sendDuplicate(msg);
+	}
 		
 	public MatchPlayer setMatch(Match match, int playerId)
 	{
@@ -118,6 +123,6 @@ public class MatchPlayer
 	@Override
 	public String toString()
 	{
-		return this.getInfo().name;
+		return this.getInfo().getName();
 	}
 }

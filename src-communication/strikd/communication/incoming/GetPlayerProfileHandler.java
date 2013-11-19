@@ -1,7 +1,5 @@
 package strikd.communication.incoming;
 
-import org.bson.types.ObjectId;
-
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.PlayerProfileMessage;
@@ -22,7 +20,7 @@ public class GetPlayerProfileHandler extends MessageHandler
 	{
 		// Lookup profile
 		PlayerRegister register = session.getServer().getPlayerRegister();
-		PlayerProfile profile = register.getProfile(new ObjectId(request.readStr()));
+		PlayerProfile profile = register.getProfile(request.readLong());
 		
 		// Profile exists?
 		if(profile != null)

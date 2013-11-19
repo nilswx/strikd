@@ -6,13 +6,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.locale.LocaleBundle.DictionaryType;
 
 public class LocaleBundleManager
 {
-	private static final Logger logger = Logger.getLogger(LocaleBundleManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(LocaleBundleManager.class);
 	
 	private final File bundleDir;
 	private Map<String, LocaleBundle> bundles = Collections.emptyMap();

@@ -6,26 +6,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-import org.jongo.MongoCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.Version;
 
 public class ServerCluster extends Server.Referent implements Runnable
 {
-	private static final Logger logger = Logger.getLogger(ServerCluster.class);
+	private static final Logger logger = LoggerFactory.getLogger(ServerCluster.class);
 	
 	private ServerDescriptor self;
 	private Map<Integer, ServerDescriptor> servers;
-	
-	private final MongoCollection dbServers;
 	
 	public ServerCluster(Server server, Properties props)
 	{
 		super(server);
 		this.servers = Collections.emptyMap();
-		this.dbServers = server.getDbCluster().getCollection("servers");
 		this.joinCluster(props);
 	}
 	
@@ -33,23 +30,23 @@ public class ServerCluster extends Server.Referent implements Runnable
 	{
 		// Retrieve/create descriptor
 		int serverId = Integer.parseInt(props.getProperty("server.id"));
-		this.self = this.dbServers.findOne("{_id:#}", serverId).as(ServerDescriptor.class);
+		this.self = this.getDatabase().find(ServerDescriptor.class, serverId);
 		if(this.self == null)
 		{
-			this.self = new ServerDescriptor();
+			this.self = this.getDatabase().createEntityBean(ServerDescriptor.class);//new ServerDescriptor();
 		}
 		
 		// Update with latest startup data
-		this.self.serverId = serverId;
-		this.self.name = props.getProperty("server.name");
-		this.self.host = props.getProperty("server.host");
-		this.self.port = Integer.parseInt(props.getProperty("server.port"));
-		this.self.version = Version.getVersion();
-		this.self.started = new Date();
+		this.self.setId(serverId);
+		this.self.setName(props.getProperty("server.name"));
+		this.self.setHost(props.getProperty("server.host"));
+		this.self.setPort(Integer.parseInt(props.getProperty("server.port")));
+		this.self.setVersion(Version.getVersion());
+		this.self.setStarted(new Date());
 		this.syncSelf();
 		
 		// Output to logs
-		logger.info(String.format("joining as server #%d (%s:%d)", serverId, this.self.host, this.self.port));
+		logger.info(String.format("joining as server #%d (%s:%d)", serverId, this.self.getHost(), this.self.getPort()));
 	}
 	
 	private void syncSelf()
@@ -57,25 +54,31 @@ public class ServerCluster extends Server.Referent implements Runnable
 		// This data is updated periodically
 		Server server = this.getServer();
 		Runtime vm = Runtime.getRuntime();
-		this.self.memoryUsage = ((vm.totalMemory() - vm.freeMemory()) / 1024f / 1024f);
-		this.self.onlinePlayers = server.getSessionMgr().players();
-		this.self.totalLogins = server.getSessionMgr().totalLogins();
-		this.self.activeMatches = server.getMatchMgr().active();
-		this.self.totalMatches = server.getMatchMgr().matchCounter();
-		this.self.avgWaitingTime = 12;
-		this.self.lastUpdate = new Date();
+		this.self.setMemoryUsage((vm.totalMemory() - vm.freeMemory()) / 1024f / 1024f);
+		this.self.setOnlinePlayers(server.getSessionMgr().players());
+		this.self.setTotalLogins(server.getSessionMgr().totalLogins());
+		this.self.setActiveMatches(server.getMatchMgr().active());
+		this.self.setTotalMatches(server.getMatchMgr().matchCounter());
+		this.self.setAvgWaitingTime(12);
 		
 		// Flush to database
-		this.dbServers.save(this.self);
+		this.getDatabase().save(this.self);
 	}
 	
 	@Override
 	public void run()
 	{
-		this.refresh();
+		try
+		{
+			this.refresh();
+		}
+		catch(Exception ex)
+		{
+			logger.error(String.format("error refreshing server #%d", this.self.getId()), ex);
+		}
 	}
 	
-	public void refresh()
+	private void refresh()
 	{
 		this.syncSelf();
 		this.rediscover();
@@ -85,19 +88,23 @@ public class ServerCluster extends Server.Referent implements Runnable
 	{
 		// Refresh data and detect new servers
 		Map<Integer, ServerDescriptor> newMap = new HashMap<Integer, ServerDescriptor>();
-		for(ServerDescriptor server : this.dbServers.find("{_id:{$ne:#}}", this.self.serverId).as(ServerDescriptor.class))
+		for(ServerDescriptor server : this.getDatabase().find(ServerDescriptor.class).findList())
 		{
-			newMap.put(server.serverId, server);
-			if(!this.servers.containsKey(server.serverId))
+			// Not self?
+			if(server.getId() != this.self.getId())
 			{
-				this.onDiscover(server);
+				newMap.put(server.getId(), server);
+				if(!this.servers.containsKey(server.getId()))
+				{
+					this.onDiscover(server);
+				}
 			}
 		}
 		
 		// Detect removed servers
 		for(ServerDescriptor server : this.servers.values())
 		{
-			if(!newMap.containsKey(server.serverId))
+			if(!newMap.containsKey(server.getId()))
 			{
 				this.onUndiscover(server);
 			}
@@ -110,12 +117,12 @@ public class ServerCluster extends Server.Referent implements Runnable
 	
 	private void onDiscover(ServerDescriptor server)
 	{
-		logger.info(String.format("discovered server #%d ('%s') -> %s:%d", server.serverId, server.name, server.host, server.port));
+		logger.info(String.format("discovered server #%d ('%s') -> %s:%d", server.getId(), server.getName(), server.getHost(), server.getPort()));
 	}
 	
 	private void onUndiscover(ServerDescriptor server)
 	{
-		logger.info(String.format("server #%d ('%s') went away", server.serverId, server.name));
+		logger.info(String.format("server #%d ('%s') went away", server.getId(), server.getName()));
 	}
 	
 	public ServerDescriptor getSelf()

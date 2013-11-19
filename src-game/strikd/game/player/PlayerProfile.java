@@ -2,13 +2,9 @@ package strikd.game.player;
 
 import java.util.Date;
 
-import org.bson.types.ObjectId;
-import org.jongo.marshall.jackson.oid.Id;
-
 public class PlayerProfile
 {
-	@Id
-	public ObjectId playerId;
+	public long playerId;
 	public String name;
 	public Avatar avatar;
 	

@@ -3,7 +3,8 @@ package strikd.game.match.bots.ai;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.game.board.Tile;
 import strikd.game.match.bots.MatchBotAI;
@@ -11,7 +12,7 @@ import strikd.game.match.bots.MatchBotPlayer;
 
 public class SimpleMatchBotAI extends MatchBotAI
 {
-	private static final Logger logger = Logger.getLogger(SimpleMatchBotAI.class);
+	private static final Logger logger = LoggerFactory.getLogger(SimpleMatchBotAI.class);
 	
 	public SimpleMatchBotAI(MatchBotPlayer player)
 	{

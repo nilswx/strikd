@@ -1,12 +1,13 @@
 package strikd.game.board.triggers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.game.match.MatchPlayer;
 
 public class BombTrigger extends Trigger
 {
-	private static final Logger logger = Logger.getLogger(BombTrigger.class);
+	private static final Logger logger = LoggerFactory.getLogger(BombTrigger.class);
 	
 	@Override
 	public String getTypeName()

@@ -3,7 +3,8 @@ package strikd.facebook;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.game.facebook.FacebookInviteManager;
@@ -11,7 +12,7 @@ import strikd.util.NamedThreadFactory;
 
 public class FacebookManager extends Server.Referent
 {
-	private static final Logger logger = Logger.getLogger(FacebookManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(FacebookManager.class);
 	
 	private final String pageId;
 	private final String appNamespace;

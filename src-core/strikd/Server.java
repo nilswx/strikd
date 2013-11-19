@@ -8,11 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
-import org.jongo.Jongo;
-
-import com.mongodb.CommandResult;
-import com.mongodb.MongoClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.cluster.ServerCluster;
 import strikd.communication.incoming.MessageHandlers;
@@ -26,15 +23,19 @@ import strikd.locale.LocaleBundleManager;
 import strikd.net.NetServer;
 import strikd.net.security.DiffieHellman;
 import strikd.sessions.SessionManager;
-import strikd.storage.DataMapper;
 import strikd.util.MemoryWatchdog;
 import strikd.util.NamedThreadFactory;
 
+import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.EbeanServerFactory;
+import com.avaje.ebean.config.DataSourceConfig;
+import com.avaje.ebean.config.ServerConfig;
+
 public class Server
 {
-	private static final Logger logger = Logger.getLogger(Server.class);
+	private static final Logger logger = LoggerFactory.getLogger(Server.class);
 	
-	private final Jongo dbCluster;
+	private final EbeanServer db;
 	private final ServerCluster serverCluster;
 	private final LocaleBundleManager localeMgr;
 	private final NetServer netServer;
@@ -66,23 +67,8 @@ public class Server
 		// Test crypto
 		DiffieHellman.testGenerator();
 		
-		// Setup database
-		try
-		{
-			Jongo cluster = new Jongo(new MongoClient(props.getProperty("db.server")).getDB(props.getProperty("db.name")),
-					DataMapper.getMapper());
-			CommandResult stats = cluster.getDatabase().getStats();
-			logger.info(String.format("db '%s' @ %s, col=%d, size=%f MiB",
-							stats.get("db"),
-							stats.get("serverUsed"),
-							stats.getInt("collections"),
-							((float)stats.getInt("dataSize") / 1024f / 1024f)));
-			this.dbCluster = cluster;
-		}
-		catch(Exception e)
-		{
-			throw new Exception(String.format("could not connect to db '%s'", props.getProperty("db.name")), e);
-		}
+		// Setup persistence layer (thanks Ebean!)
+		this.db = this.setupDb(props);
 		
 		// Load locale
 		this.localeMgr = new LocaleBundleManager(new File(props.getProperty("locale.dir")));
@@ -135,8 +121,32 @@ public class Server
 		// Start sync worker
 		int syncInterval = Integer.parseInt(props.getProperty("cluster.sync.interval", "5"));
 		ScheduledExecutorService sync = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Cluster Sync"));
-		sync.scheduleAtFixedRate(this.serverCluster, syncInterval, syncInterval, TimeUnit.SECONDS);
-		sync.scheduleAtFixedRate(new MemoryWatchdog(), 30, 30, TimeUnit.SECONDS);
+		sync.scheduleWithFixedDelay(this.serverCluster, syncInterval, syncInterval, TimeUnit.SECONDS);
+		sync.scheduleWithFixedDelay(new MemoryWatchdog(), 30, 30, TimeUnit.SECONDS);
+	}
+	
+	private EbeanServer setupDb(Properties props)
+	{
+		// Don't use Ebean singleton
+		ServerConfig conf = new ServerConfig();
+		conf.setName("db");
+		conf.setRegister(false);  
+		conf.setDefaultServer(false); 
+		
+		// Define DataSource
+		DataSourceConfig ds = new DataSourceConfig();  
+		ds.setDriver(props.getProperty("db.driver"));  
+		ds.setUsername(props.getProperty("db.user"));  
+		ds.setPassword(props.getProperty("db.password"));  
+		ds.setUrl(props.getProperty("db.url"));  
+		ds.setHeartbeatSql("select 1");
+		conf.setDataSourceConfig(ds);
+		
+		// Developer options  
+		conf.setDdlGenerate(true);  
+		conf.setDdlRun(true);  
+		
+		return EbeanServerFactory.create(conf);
 	}
 
 	public void destroy()
@@ -183,9 +193,9 @@ public class Server
 		this.destroy(true);
 	}
 	
-	public Jongo getDbCluster()
+	public EbeanServer getDatabase()
 	{
-		return this.dbCluster;
+		return this.db;
 	}
 	
 	public ServerCluster getServerCluster()
@@ -250,6 +260,11 @@ public class Server
 		public final Server getServer()
 		{
 			return this.server;
+		}
+		
+		public final EbeanServer getDatabase()
+		{
+			return this.server.getDatabase();
 		}
 	}
 }

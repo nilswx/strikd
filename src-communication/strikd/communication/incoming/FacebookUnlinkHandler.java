@@ -3,7 +3,6 @@ package strikd.communication.incoming;
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookStatusMessage;
-import strikd.communication.outgoing.NameChangedMessage;
 import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 
@@ -23,12 +22,12 @@ public class FacebookUnlinkHandler extends MessageHandler
 		if(player.isFacebookLinked())
 		{
 			// Remove Facebook data
-			player.fbIdentity = null;
-			session.send(new FacebookStatusMessage(false, player.liked));
+			player.setFacebook(null);
+			session.send(new FacebookStatusMessage(false, player.isLiked()));
 			
 			// Restore name to a random name
-			session.getPlayer().name = session.getServer().getPlayerRegister().generateDefaultName();
-			session.send(new NameChangedMessage(session.getPlayer().name));
+			String newName = session.getServer().getPlayerRegister().generateDefaultName();
+			session.renamePlayer(newName);
 			
 			// Save immediately
 			session.saveData();

@@ -3,18 +3,19 @@ package strikd.game.items.shop;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.game.items.ItemInstance;
 import strikd.game.player.Player;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 public class Shop extends Server.Referent
 {
-	private static final Logger logger = Logger.getLogger(Shop.class);
+	private static final Logger logger = LoggerFactory.getLogger(Shop.class);
 	
 	private final Map<Integer, ShopOffer> offers = Maps.newHashMap();
 	
@@ -23,11 +24,12 @@ public class Shop extends Server.Referent
 		super(server);
 		
 		// Load offers
+		/*
 		for(ShopOffer offer : server.getDbCluster().getCollection("shop").find().as(ShopOffer.class))
 		{
 			this.offers.put(offer.offerId, offer);
 		}
-		logger.info(String.format("%d available offers", this.offers.size()));
+		logger.info(String.format("%d available offers", this.offers.size()));*/
 	}
 	
 	public List<ItemInstance> purchaseOffer(int offerId, Player player)
@@ -41,7 +43,7 @@ public class Shop extends Server.Referent
 		}
 		
 		// Enough coins?
-		if(player.balance < offer.price)
+		if(player.getBalance() < offer.price)
 		{
 			logger.warn(String.format("%s tried to purchase too expensive offer #%d", player, offerId));
 			return null;

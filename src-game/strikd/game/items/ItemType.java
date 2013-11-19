@@ -2,7 +2,8 @@ package strikd.game.items;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public enum ItemType
 {
@@ -99,7 +100,7 @@ public enum ItemType
 		return item;
 	}
 	
-	private static final Logger logger = Logger.getLogger(ItemType.class);
+	private static final Logger logger = LoggerFactory.getLogger(ItemType.class);
 	
 	public static void debugTypes()
 	{

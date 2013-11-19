@@ -10,19 +10,19 @@ public class PlayerInfoMessage extends OutgoingMessage
 	{
 		super(Opcodes.Outgoing.PLAYER_INFO);
 		serializePlayer(player, this);
-		super.writeLong(player.lastOnline);
+		super.writeLong(player.getLastUpdate());
 	}
 	
 	public static void serializePlayer(Player player, OutgoingMessage msg)
 	{
-		msg.writeStr(player.id);
-		msg.writeStr(player.name);
-		msg.writeStr(player.avatar);
-		msg.writeStr(player.country);
-		msg.writeInt(player.xp);
-		msg.writeInt(player.level);
-		msg.writeInt(player.matches);
-		msg.writeInt(player.wins);
-		msg.writeInt(player.losses);
+		msg.writeStr(player.getId());
+		msg.writeStr(player.getName());
+		msg.writeStr(player.getAvatar());
+		msg.writeStr(player.getCountry());
+		msg.writeInt(player.getXp());
+		msg.writeInt(player.getLevel());
+		msg.writeInt(player.getMatches());
+		msg.writeInt(player.getWins());
+		msg.writeInt(player.getLosses());
 	}
 }

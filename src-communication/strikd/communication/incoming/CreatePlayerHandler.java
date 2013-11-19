@@ -20,7 +20,7 @@ public class CreatePlayerHandler extends MessageHandler
 		if(!session.isLoggedIn())
 		{
 			Player player = session.getServer().getPlayerRegister().newPlayer();
-			session.send(new CredentialsMessage(player.id, player.token));
+			session.send(new CredentialsMessage(player.getId(), player.getToken()));
 		}
 	}
 }

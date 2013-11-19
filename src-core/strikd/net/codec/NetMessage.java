@@ -42,8 +42,6 @@ public abstract class NetMessage<T extends Enum<?>>
 		StringBuilder sb = new StringBuilder();
 		
 		// Message type
-		sb.append((this instanceof IncomingMessage) ? '<' : '>');
-		sb.append(' ');
 		sb.append(this.op.name());
 		sb.append(' ');
 		

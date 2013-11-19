@@ -78,18 +78,18 @@ public class Experience
 	{
 		// Add points and calculate new level
 		Player player = session.getPlayer();
-		player.xp += points;
-		int newLevel = calculateLevel(player.xp);
+		player.setXp(player.getXp() + points);
+		int newLevel = calculateLevel(player.getXp());
 		
 		// Handle level ups
-		if(newLevel != player.level)
+		if(newLevel != player.getLevel())
 		{
 			// Process all new levels
-			for(int level = player.level; level <= newLevel; level++)
+			for(int level = player.getLevel(); level <= newLevel; level++)
 			{
 				onLevelUp(session, level);
 			}
-			player.level = newLevel;
+			player.setLevel(newLevel);
 		}
 		
 		// Save this stuff immediately
@@ -99,7 +99,7 @@ public class Experience
 	public static void addExp(Player player, int points)
 	{
 		// Limit reached?
-		if(player.level >= MAX_LEVEL)
+		if(player.getLevel() >= MAX_LEVEL)
 		{
 			return;
 		}
@@ -112,16 +112,16 @@ public class Experience
 		while(pointsLeft > 0)
 		{
 			// Add XP, but within the current level
-			int endXP = getLevelEnd(player.level);
-			int pointsToNext = (endXP - player.xp);
-			int pointsToAdd = (pointsLeft < pointsToNext || player.level == MAX_LEVEL) ? pointsLeft : pointsToNext;
-			player.xp += pointsToAdd;
+			int endXP = getLevelEnd(player.getLevel());
+			int pointsToNext = (endXP - player.getXp());
+			int pointsToAdd = (pointsLeft < pointsToNext || player.getLevel() == MAX_LEVEL) ? pointsLeft : pointsToNext;
+			player.setXp(player.getXp() + pointsToAdd);
 			
 			// Level up?
-			if(player.xp == endXP)
+			if(player.getXp() == endXP)
 			{
-				player.level++;
-				onLevelUp(null, player.level);
+				player.setLevel(player.getLevel() + 1);
+				onLevelUp(null, player.getLevel());
 			}
 			
 			// Added some points!
@@ -143,8 +143,8 @@ public class Experience
 	public static void main(String[] args)
 	{
 		Player john = new Player();
-		john.xp = 0;
-		john.level = 0;
+		john.setXp(0);
+		john.setLevel(0);
 		addExp(john, Integer.MAX_VALUE);
 		
 		System.out.println(calculateLevel(Integer.MAX_VALUE - 1));

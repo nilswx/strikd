@@ -65,15 +65,20 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 	
 	private boolean finalized;
 	
-	public ByteBuf finalizeBuffer()
+	public ByteBuf getBuffer()
 	{
+		// First invocation?
 		if(!this.finalized)
 		{
+			// Finalize length header, improve buffer sizing
 			this.buf.setShort(0, this.length());
 			MessageAllocatorExpert.reportSize(super.op, super.buf.readableBytes());
-			finalized = true;
+			
+			// Only do this once
+			this.finalized = true;
 		}
 		
-		return this.buf.copy();
+		// NOTE: crypto will modify this buffer: multiple receivers? -> use duplicate()
+		return this.buf;
 	}
 }

@@ -1,13 +1,14 @@
 package strikd.communication.incoming;
 
-import org.apache.log4j.Logger;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.communication.Opcodes;
 
 public final class MessageHandlers
 {
-	private static final Logger logger = Logger.getLogger(MessageHandlers.class);
+	private static final Logger logger = LoggerFactory.getLogger(MessageHandlers.class);
 	private static final MessageHandler[] handlers = new MessageHandler[Opcodes.Outgoing.values().length];
 	
 	private MessageHandlers() { }

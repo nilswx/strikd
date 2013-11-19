@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.game.player.Player;
@@ -13,13 +13,13 @@ import strikd.net.NetConnection;
 
 public class SessionManager extends Server.Referent
 {
-	private static final Logger logger = Logger.getLogger(SessionManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(SessionManager.class);
 	
 	private final AtomicLong sessionCounter = new AtomicLong();
 	private final Map<Long, Session> sessions = new ConcurrentHashMap<Long, Session>();
 	
 	private final AtomicLong loginCounter = new AtomicLong();
-	private final Map<ObjectId, Session> playerSessions = new ConcurrentHashMap<ObjectId, Session>();
+	private final Map<Long, Session> playerSessions = new ConcurrentHashMap<Long, Session>();
 	
 	public SessionManager(Server server)
 	{
@@ -55,7 +55,7 @@ public class SessionManager extends Server.Referent
 			}
 			else
 			{
-				this.playerSessions.remove(player.id);
+				this.playerSessions.remove(player.getId());
 				logger.debug(String.format("%s logged out (%s)", player, reason));
 			}
 			session.onEnd();
@@ -69,16 +69,16 @@ public class SessionManager extends Server.Referent
 		if(player != null)
 		{
 			// Disconnect old login (if online)
-			Session concurrent = this.getPlayerSession(player.id);
+			Session concurrent = this.getPlayerSession(player.getId());
 			if(concurrent != null)
 			{
 				this.endSession(concurrent.getSessionId(), "concurrent login");
 			}
 			
 			// Add to player map and increment logins
-			this.playerSessions.put(player.id, session);
+			this.playerSessions.put(player.getId(), session);
 			this.loginCounter.incrementAndGet();
-			player.logins++;
+			player.setLogins(player.getLogins() + 1);
 			
 			// Post story
 			/*if(player.isFacebookLinked())
@@ -86,7 +86,7 @@ public class SessionManager extends Server.Referent
 				this.getServer().getFacebook().publish(new PersonBeatedStory(player.fbIdentity, "100000541030001"));
 			}*/
 			
-			logger.info(String.format("%s logged in (#%d) in from %s (%s)", player, player.logins, session.getConnection().getIpAddress(), player.platform));
+			logger.info(String.format("%s logged in (#%d) in from %s (%s)", player, player.getLogins(), session.getConnection().getIpAddress(), player.getPlatform()));
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class SessionManager extends Server.Referent
 		return this.sessions.get(sessionId);
 	}
 	
-	public Session getPlayerSession(ObjectId playerId)
+	public Session getPlayerSession(long playerId)
 	{
 		return this.playerSessions.get(playerId);
 	}

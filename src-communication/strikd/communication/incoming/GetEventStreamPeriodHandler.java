@@ -3,8 +3,6 @@ package strikd.communication.incoming;
 import java.util.Date;
 import java.util.List;
 
-import org.bson.types.ObjectId;
-
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.EventStreamMessage;
@@ -29,7 +27,7 @@ public class GetEventStreamPeriodHandler extends MessageHandler
 		if(stream != null)
 		{
 			// Resolve player
-			ObjectId playerId = new ObjectId(request.readStr());
+			long playerId = request.readLong();
 			Player player = session.getServer().getPlayerRegister().findPlayer(playerId);
 			if(player != null)
 			{
