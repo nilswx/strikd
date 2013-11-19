@@ -1,6 +1,7 @@
 .settings/
 target/
 *.log*
+*.sql
 
 .idea/*
 .DS_Store
