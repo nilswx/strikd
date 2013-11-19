@@ -27,19 +27,22 @@ public class WordDictionary
 		this.locale = locale;
 		this.index = useIndexes ? new WordDictionaryIndex() : null;
 		
-		// Load and normalize words, one word per line
-		String line;
-		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 		List<Word> select = new ArrayList<Word>();
 		Set<String> check = new HashSet<String>();
-		while((line = reader.readLine()) != null)
+		
+		// Load and normalize words, one word per line
+		String line;
+		try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))))
 		{
-			Word word = Word.parse(line);
-			select.add(word);
-			check.add(word.toString());
-			if(useIndexes)
+			while((line = reader.readLine()) != null)
 			{
-				this.index.addWord(word.toString());
+				Word word = Word.parse(line);
+				select.add(word);
+				check.add(word.toString());
+				if(useIndexes)
+				{
+					this.index.addWord(word.toString());
+				}
 			}
 		}
 		
