@@ -8,37 +8,77 @@
 	<name>strikd</name>
 	<description>Game server for the smartphone game 'Strik'.</description>
 
+	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+  		<maven.compiler.target>1.7</maven.compiler.target>
+  		
+		<ebeanorm.version>3.2.4</ebeanorm.version>
+		<ebeanorm-mavenenhancer.version>3.2.2</ebeanorm-mavenenhancer.version>
+		<skipTests>true</skipTests>
+	</properties>
+
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
+		<plugins>        
+        			<plugin>
+				<groupId>org.avaje.ebeanorm</groupId>
+				<artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
+				<version>${ebeanorm-mavenenhancer.version}</version>
 				<executions>
 					<execution>
-						<id>process-ebean-enhancement</id>
+						<id>main</id>
 						<phase>process-classes</phase>
-						<configuration>
-							<tasks>
-								<property name="compile_classpath" refid="maven.compile.classpath" />
-								<taskdef name="ebeanEnhance"
-									classname="com.avaje.ebean.enhance.ant.AntEnhanceTask"
-									classpath="${compile_classpath}" />
-								<ebeanEnhance classSource="${project.build.outputDirectory}"
-									packages="strikd.**" transformArgs="debug=1" />
-							</tasks>
-							<encoding>UTF-8</encoding>
-						</configuration>
 						<goals>
-							<goal>run</goal>
+							<goal>enhance</goal>
 						</goals>
+						<configuration>
+							<packages>strikd.**</packages>
+							<transformArgs>debug=2</transformArgs>
+							<classSource>${project.build.outputDirectory}</classSource>
+							<classDestination>${project.build.outputDirectory}</classDestination>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+        
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.avaje.ebeanorm
+										</groupId>
+										<artifactId>
+											avaje-ebeanorm-mavenenhancer
+										</artifactId>
+										<versionRange>
+											[3.2.2,)
+										</versionRange>
+										<goals>
+											<goal>enhance</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -48,13 +88,15 @@
 		<dependency>
 			<groupId>org.avaje.ebeanorm</groupId>
 			<artifactId>avaje-ebeanorm</artifactId>
-			<version>3.2.4</version>
+			<version>${ebeanorm.version}</version>
 		</dependency>
 
+		<!-- the Maven plugin that enhances the entity classes in the process-classes 
+			phase -->
 		<dependency>
 			<groupId>org.avaje.ebeanorm</groupId>
-			<artifactId>avaje-ebeanorm-agent</artifactId>
-			<version>3.2.2</version>
+			<artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
+			<version>${ebeanorm-mavenenhancer.version}</version>
 		</dependency>
 
 		<dependency>
@@ -68,39 +110,24 @@
 			<artifactId>reflections</artifactId>
 			<version>0.9.9-RC1</version>
 		</dependency>
-		
-<dependency>
-	<groupId>com.restfb</groupId>
-	<artifactId>restfb</artifactId>
-	<version>1.6.12</version>
-</dependency>
 
+		<dependency>
+			<groupId>com.restfb</groupId>
+			<artifactId>restfb</artifactId>
+			<version>1.6.12</version>
+		</dependency>
 
-
-
+		<!-- Vendor stuff for DB -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.27</version>
 		</dependency>
-		
-		<dependency>
-	<groupId>postgresql</groupId>
-	<artifactId>postgresql</artifactId>
-	<version>9.1-901.jdbc4</version>
-</dependency>
-           
-            
-	</dependencies>
 
-	<repositories>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Maven Central Repository</name>
-			<url>http://repo1.maven.org/maven2</url>
-		</repository>
-	</repositories>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901.jdbc4</version>
+		</dependency>
+	</dependencies>
 </project>

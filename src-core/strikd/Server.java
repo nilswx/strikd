@@ -139,7 +139,6 @@ public class Server
 		ds.setPassword(props.getProperty("db.password"));  
 		ds.setUrl(props.getProperty("db.url"));
 		ds.setDriver(props.getProperty("db.driver"));  
-		ds.setHeartbeatSql("select 1");
 		if(props.containsKey("db.pool.min"))
 		{
 			ds.setMinConnections(Integer.parseInt(props.getProperty("db.pool.min")));
@@ -149,8 +148,6 @@ public class Server
 			ds.setMaxConnections(Integer.parseInt(props.getProperty("db.pool.max")));
 		}
 		conf.setDataSourceConfig(ds);
-		
-		// Logging
 		
 		// DDL options  
 		conf.setDdlGenerate(true);  
