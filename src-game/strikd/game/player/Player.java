@@ -29,10 +29,18 @@ public class Player
 	@Column(length=32,nullable=false)
 	private String name;
 	
+	@Column(nullable=false)
+	private Date joined;
+	
+	
 	@Embedded
 	private Avatar avatar;
 	
 	private String language;
+	
+	private String country;
+	
+	private String platform;
 	
 	@Column(nullable=false)
 	private int serverId;
@@ -57,18 +65,11 @@ public class Player
 	@Column(nullable=false)
 	private int losses;
 	
-	private String platform;
-	
-	@Column(nullable=false)
-	private Date joined;
-	
 	@Column(nullable=false)
 	private int balance;
 	
 	@Transient
 	private List<ItemInstance> items = new ArrayList<ItemInstance>();
-	
-	private String country;
 	
 	@Embedded
 	private FacebookIdentity facebook;
