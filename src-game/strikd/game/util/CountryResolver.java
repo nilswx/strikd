@@ -51,8 +51,9 @@ public class CountryResolver
 				}
 				else
 				{
-					logger.debug("{} -> '{}' ('{}')", ip, country.get2c(), country.getName());
-					return country.get2cStr();
+					String code = country.get2cStr();
+					logger.debug("{} -> '{}' ({})", ip, code, country.getName());
+					return code;
 				}
 			}
 			catch (IOException e)
