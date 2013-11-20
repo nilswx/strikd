@@ -19,6 +19,7 @@ import strikd.game.items.shop.Shop;
 import strikd.game.match.MatchManager;
 import strikd.game.player.PlayerRegister;
 import strikd.game.stream.EventStreamManager;
+import strikd.game.util.CountryResolver;
 import strikd.locale.LocaleBundleManager;
 import strikd.net.NetServer;
 import strikd.net.security.DiffieHellman;
@@ -102,6 +103,9 @@ public class Server
 		
 		// Force message registry loading
 		MessageHandlers.load();
+		
+		// Load country database
+		CountryResolver.reload();
 		
 		// Start accepting connections
 		try

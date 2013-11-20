@@ -51,8 +51,12 @@ public class LoginHandler extends MessageHandler
 			}
 			else
 			{
-				// Resolve country
-				player.setCountry(CountryResolver.getCountry(session.getConnection().getIpAddress()));
+				// Update country
+				String newCountry = CountryResolver.getCountryCode(session.getConnection().getIpAddress());
+				if(newCountry != null)
+				{
+					player.setCountry(newCountry);
+				}
 				
 				// Login OK!
 				session.setPlayer(player, String.format("%s @ %s", hardware, systemVersion));

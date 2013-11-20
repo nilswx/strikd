@@ -1,10 +1,66 @@
 package strikd.game.util;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Stopwatch;
+
+import net.firefang.ip2c.Country;
+import net.firefang.ip2c.IP2Country;
+
 public class CountryResolver
 {
-	public static String getCountry(String ip)
+	private static final Logger logger = LoggerFactory.getLogger(CountryResolver.class);
+	
+	private static IP2Country database;
+
+	public static void reload()
 	{
-		// TODO: use ip2c library with offline database
-		return "NL";
+		try
+		{
+			Stopwatch sw = new Stopwatch().start();
+			database = new IP2Country(IP2Country.MEMORY_CACHE);
+			sw.stop();
+			
+			logger.info("loaded database in {} ms", sw.elapsedMillis());
+		}
+		catch(IOException e)
+		{
+			logger.warn("cannot reload ip2country database, need a valid ip-to-country.bin in " + System.getProperty("user.dir"));
+		}
+		
+		if(database == null)
+		{
+			logger.warn("country lookups will not be available");
+		}
+	}
+	
+	public static String getCountryCode(String ip)
+	{
+		if (database != null)
+		{
+			try
+			{
+				Country country = database.getCountry(ip);
+				if(country == null)
+				{
+					logger.warn("{} -> ???", ip);
+					return null;
+				}
+				else
+				{
+					logger.debug("{} -> '{}' ('{}')", ip, country.get2c(), country.getName());
+					return country.get2cStr();
+				}
+			}
+			catch (IOException e)
+			{
+				logger.error("error resolving country for {}", ip, e);
+			}
+		}
+		
+		return null;
 	}
 }
