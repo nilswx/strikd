@@ -80,6 +80,9 @@ public class Match
 		// Don't waste bytes & buffers
 		if(this.playerTwo instanceof MatchBotPlayer)
 		{
+			// Original buffer
+			this.playerOne.getSession().getConnection().send(msg);
+			
 			// Just for triggering events etc (like an IRC bot!)
 			this.playerTwo.send(msg);
 		}
