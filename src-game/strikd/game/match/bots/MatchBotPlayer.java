@@ -77,12 +77,6 @@ public class MatchBotPlayer extends MatchPlayer implements Runnable
 		this.handleEvents(msg);
 	}
 	
-	@Override
-	public void sendDuplicate(OutgoingMessage msg)
-	{
-		this.handleEvents(msg);
-	}
-	
 	private void handleEvents(OutgoingMessage msg)
 	{
 		if(msg instanceof MatchStartedMessage)

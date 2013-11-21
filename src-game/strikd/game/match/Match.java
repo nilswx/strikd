@@ -11,6 +11,7 @@ import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Board;
 import strikd.game.board.impl.HanzeBoard;
+import strikd.game.match.bots.MatchBotPlayer;
 import strikd.locale.LocaleBundle;
 import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.OutgoingMessage;
@@ -73,11 +74,21 @@ public class Match
 	
 	public void broadcast(OutgoingMessage msg)
 	{
-		// First receiver gets a duplicate
-		this.playerOne.sendDuplicate(msg);
+		// Log it seperately
+		logger.debug("> {}", msg);
 		
-		// Second receiver can keep and modify the real one
-		this.playerTwo.send(msg);
+		// Don't waste bytes & buffers
+		if(this.playerTwo instanceof MatchBotPlayer)
+		{
+			// Just for triggering events etc (like an IRC bot!)
+			this.playerTwo.send(msg);
+		}
+		else
+		{
+			// The copy requirement is because crypto (if enabled) ciphers in-place
+			this.playerOne.getSession().getConnection().sendCopy(msg);
+			this.playerTwo.getSession().getConnection().send(msg);
+		}
 	}
 	
 	public void checkReady()

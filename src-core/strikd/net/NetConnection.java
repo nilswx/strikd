@@ -86,11 +86,11 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 		}
 	}
 	
-	public void sendDuplicate(OutgoingMessage msg)
+	public void sendCopy(OutgoingMessage msg)
 	{
 		if(this.channel.isOpen())
 		{
-			this.channel.writeAndFlush(msg.getBuffer().duplicate());
+			this.channel.writeAndFlush(msg.getBuffer().copy());
 		}
 	}
 	

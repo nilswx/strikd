@@ -158,11 +158,6 @@ public class Session extends Server.Referent
 		this.connection.send(msg);
 	}
 	
-	public void sendDuplicate(OutgoingMessage msg)
-	{
-		this.connection.sendDuplicate(msg);
-	}
-	
 	public long getSessionId()
 	{
 		return this.sessionId;
