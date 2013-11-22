@@ -16,7 +16,7 @@ public class TileSelectionExtendedMessage extends OutgoingMessage
 		super.writeByte((byte)tiles.size());
 		for(Tile tile : tiles)
 		{
-			super.writeByte((byte)(tile.getColumn() << 4 | tile.getRow()));
+			super.writeByte(tile.getTileId());
 		}
 	}
 }
