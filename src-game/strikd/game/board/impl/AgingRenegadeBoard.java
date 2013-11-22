@@ -9,11 +9,10 @@ import strikd.game.board.Board;
 import strikd.game.board.Tile;
 import strikd.game.board.triggers.Trigger;
 import strikd.game.match.Match;
-import strikd.locale.StaticLocale;
 import strikd.util.NamedThreadFactory;
 import strikd.words.WordDictionary;
 
-public final class AgingHanzeBoard extends HanzeBoard implements Runnable
+public final class AgingRenegadeBoard extends RenegadeBoard implements Runnable
 {
 	private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("AgingThread"));
 
@@ -21,7 +20,7 @@ public final class AgingHanzeBoard extends HanzeBoard implements Runnable
 	private final ScheduledFuture<?> aging;
 	private final int maxAge;
 	
-	public AgingHanzeBoard(int width, int height, WordDictionary dictionary, Match match, int agingDelaySeconds, int maxAge)
+	public AgingRenegadeBoard(int width, int height, WordDictionary dictionary, Match match, int agingDelaySeconds, int maxAge)
 	{
 		super(width, height, dictionary);
 		this.match = match;
@@ -88,11 +87,5 @@ public final class AgingHanzeBoard extends HanzeBoard implements Runnable
 		{
 			return (++this.age);
 		}
-	}
-	
-	public static void main(String[] args)
-	{
-		Board board = new AgingHanzeBoard(5, 5, StaticLocale.getDictionary(), null, 0, 5);
-		board.rebuild();
 	}
 }

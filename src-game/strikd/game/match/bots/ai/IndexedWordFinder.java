@@ -10,14 +10,14 @@ import com.google.common.collect.Lists;
 import strikd.game.board.Board;
 import strikd.game.board.Direction8;
 import strikd.game.board.Tile;
-import strikd.game.board.impl.HanzeBoard;
+import strikd.game.board.impl.RenegadeBoard;
 import strikd.locale.StaticLocale;
 import strikd.words.WordDictionary;
 import strikd.words.index.LetterNode;
 
 public class IndexedWordFinder
 {
-	private static Direction8[] SEARCH_DIRECTIONS = Direction8.all();
+	private static final Direction8[] SEARCH_DIRECTIONS = Direction8.all();
 	
 	public static void main(String[] args)
 	{
@@ -25,7 +25,7 @@ public class IndexedWordFinder
 		WordDictionary dict = StaticLocale.getDictionary();
 		
 		// The board
-		Board board = new HanzeBoard(20, 20, dict);
+		Board board = new RenegadeBoard(20, 20, dict);
 		board.rebuild();
 		
 		// The progress holders
