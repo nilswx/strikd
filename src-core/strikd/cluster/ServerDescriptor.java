@@ -23,23 +23,24 @@ public class ServerDescriptor
 	private long totalMatches;
 	private int avgWaitingTime;
 	private String version;
+	private Date lastUpdate;
 	
 	@Version
-	private Date lastUpdate;
+	private int heartbeat;
 	
 	public int getId()
 	{
-		return id;
+		return this.id;
 	}
 
-	public void setId(int serverId)
+	public void setId(int id)
 	{
-		this.id = serverId;
+		this.id = id;
 	}
 
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name)
@@ -49,7 +50,7 @@ public class ServerDescriptor
 
 	public String getHost()
 	{
-		return host;
+		return this.host;
 	}
 
 	public void setHost(String host)
@@ -59,7 +60,7 @@ public class ServerDescriptor
 
 	public int getPort()
 	{
-		return port;
+		return this.port;
 	}
 
 	public void setPort(int port)
@@ -69,7 +70,7 @@ public class ServerDescriptor
 
 	public Date getStarted()
 	{
-		return started;
+		return this.started;
 	}
 
 	public void setStarted(Date started)
@@ -77,19 +78,9 @@ public class ServerDescriptor
 		this.started = started;
 	}
 
-	public Date getLastUpdate()
-	{
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(Date lastUpdate)
-	{
-		this.lastUpdate = lastUpdate;
-	}
-
 	public float getMemoryUsage()
 	{
-		return memoryUsage;
+		return this.memoryUsage;
 	}
 
 	public void setMemoryUsage(float memoryUsage)
@@ -99,7 +90,7 @@ public class ServerDescriptor
 
 	public int getOnlinePlayers()
 	{
-		return onlinePlayers;
+		return this.onlinePlayers;
 	}
 
 	public void setOnlinePlayers(int onlinePlayers)
@@ -109,7 +100,7 @@ public class ServerDescriptor
 
 	public long getTotalLogins()
 	{
-		return totalLogins;
+		return this.totalLogins;
 	}
 
 	public void setTotalLogins(long totalLogins)
@@ -119,7 +110,7 @@ public class ServerDescriptor
 
 	public int getActiveMatches()
 	{
-		return activeMatches;
+		return this.activeMatches;
 	}
 
 	public void setActiveMatches(int activeMatches)
@@ -129,7 +120,7 @@ public class ServerDescriptor
 
 	public long getTotalMatches()
 	{
-		return totalMatches;
+		return this.totalMatches;
 	}
 
 	public void setTotalMatches(long totalMatches)
@@ -139,7 +130,7 @@ public class ServerDescriptor
 
 	public int getAvgWaitingTime()
 	{
-		return avgWaitingTime;
+		return this.avgWaitingTime;
 	}
 
 	public void setAvgWaitingTime(int avgWaitingTime)
@@ -149,12 +140,32 @@ public class ServerDescriptor
 
 	public String getVersion()
 	{
-		return version;
+		return this.version;
 	}
 
 	public void setVersion(String version)
 	{
 		this.version = version;
+	}
+
+	public Date getLastUpdate()
+	{
+		return this.lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate)
+	{
+		this.lastUpdate = lastUpdate;
+	}
+
+	public int getHeartbeat()
+	{
+		return this.heartbeat;
+	}
+
+	public void setHeartbeat(int heartbeat)
+	{
+		this.heartbeat = heartbeat;
 	}
 
 	@Override

@@ -60,6 +60,7 @@ public class ServerCluster extends Server.Referent implements Runnable
 		this.self.setActiveMatches(server.getMatchMgr().active());
 		this.self.setTotalMatches(server.getMatchMgr().matchCounter());
 		this.self.setAvgWaitingTime(12);
+		this.self.setLastUpdate(new Date());
 		
 		// Flush to database
 		this.getDatabase().save(this.self);
