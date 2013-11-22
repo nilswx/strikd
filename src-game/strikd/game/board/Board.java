@@ -206,15 +206,15 @@ public abstract class Board
 	{
 		StringBuilder sb = new StringBuilder();
 
-		for(int y = this.getHeight() - 1; y >= 0; y--)
+		for(int row = this.getHeight() - 1; row >= 0; row--)
 		{
-			sb.append(y);
+			sb.append(row);
 			sb.append("  ");
-			for(int x = 0; x < this.getWidth(); x++)
+			for(int column = 0; column < this.getWidth(); column++)
 			{
 				sb.append('[');
 
-				Tile tile = this.getTile(x, y);
+				Tile tile = this.getTile(row, column);
 				if(tile == null)
 				{
 					sb.append("   ");
@@ -241,10 +241,10 @@ public abstract class Board
 		}
 
 		sb.append("   ");
-		for(int x = 0; x < this.getWidth(); x++)
+		for(int column = 0; column < this.getWidth(); column++)
 		{
 			sb.append("  ");
-			sb.append(x);
+			sb.append(column);
 			sb.append("  ");
 		}
 
