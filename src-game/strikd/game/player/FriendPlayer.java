@@ -1,13 +1,13 @@
 package strikd.game.player;
 
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
+//import javax.persistence.Table;
 
 import strikd.facebook.FacebookIdentity;
 
-@Entity @Table(name="players")
+//@Entity @Table(name="players")
 public class FriendPlayer
 {
 	@Id
