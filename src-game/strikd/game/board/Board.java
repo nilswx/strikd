@@ -9,11 +9,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public abstract class Board
 {
+	private static final Logger logger = LoggerFactory.getLogger(Board.class);
+			
 	protected final int width;
 	protected final int height;
 
@@ -100,7 +105,7 @@ public abstract class Board
 		if(this.tiles.containsKey(tile.getTileId()))
 		{
 			// Woo
-			System.out.println("removed " + tile);
+			logger.debug("removed tile #{} ('{}')", tile.getTileId(), tile.getLetter());
 
 			// Cancel selections etc
 			//tile.remove();
