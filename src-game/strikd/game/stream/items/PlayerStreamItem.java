@@ -1,9 +1,9 @@
 package strikd.game.stream.items;
 
-import strikd.game.stream.EventStreamItem;
+import strikd.game.stream.ActivityStreamItem;
 import strikd.game.stream.StreamPlayer;
 
-public abstract class PlayerStreamItem extends EventStreamItem
+public abstract class PlayerStreamItem extends ActivityStreamItem
 {
 	public StreamPlayer player;
 	

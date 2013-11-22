@@ -20,7 +20,7 @@ public interface Opcodes
 	    FACEBOOK_UNLINK,
 	    FACEBOOK_CLAIM_LIKE,
 	    FACEBOOK_REGISTER_INVITES,
-	    GET_EVENT_STREAM_PERIOD,
+	    GET_ACTIVITY_STREAM,
 	    GET_PLAYER_PROFILE;
 		
 		private static final Opcodes.Incoming[] values = values();
@@ -57,7 +57,7 @@ public interface Opcodes
 		ALERT,
 		SERVER_SHUTTING_DOWN,
 		SERVER_REDIRECT,
-		EVENT_STREAM,
+		ACTIVITY_STREAM,
 		PLAYER_PROFILE;
 	}
 }

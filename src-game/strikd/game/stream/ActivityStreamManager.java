@@ -2,7 +2,6 @@ package strikd.game.stream;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,12 +11,12 @@ import strikd.Server;
 import strikd.game.player.Player;
 import strikd.game.stream.items.NewsStreamItem;
 
-public class EventStreamManager extends Server.Referent
+public class ActivityStreamManager extends Server.Referent
 {
-	private static final Logger logger = LoggerFactory.getLogger(EventStreamManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(ActivityStreamManager.class);
 	private List<NewsStreamItem> news = Collections.emptyList();
 	
-	public EventStreamManager(Server server)
+	public ActivityStreamManager(Server server)
 	{
 		super(server);
 		logger.info(String.format("%d events", 0));
@@ -48,14 +47,14 @@ public class EventStreamManager extends Server.Referent
 		}*/
 	}
 	
-	public void postItem(EventStreamItem item)
+	public void postItem(ActivityStreamItem item)
 	{
 		/*
 		item.timestamp = new Date();
 		this.dbStream.save(item);*/
 	}
 	
-	public List<EventStreamItem> getPlayerStream(Player player, Date periodBegin, Date periodEnd, Player requester)
+	public List<ActivityStreamItem> getPlayerStream(Player player, int begin, int end, Player requester)
 	{
 		return Collections.emptyList();
 		/*
@@ -82,10 +81,10 @@ public class EventStreamManager extends Server.Referent
 		return result;*/
 	}
 	
-	private static final Comparator<EventStreamItem> TIMESTAMP_SORTER = new Comparator<EventStreamItem>()
+	private static final Comparator<ActivityStreamItem> TIMESTAMP_SORTER = new Comparator<ActivityStreamItem>()
 	{
 		@Override
-		public int compare(EventStreamItem a, EventStreamItem b)
+		public int compare(ActivityStreamItem a, ActivityStreamItem b)
 		{
 			return a.timestamp.compareTo(b.timestamp);
 		}

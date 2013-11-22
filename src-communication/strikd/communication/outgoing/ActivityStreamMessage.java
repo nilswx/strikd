@@ -1,10 +1,9 @@
 package strikd.communication.outgoing;
 
-import java.util.Date;
 import java.util.List;
 
 import strikd.communication.Opcodes;
-import strikd.game.stream.EventStreamItem;
+import strikd.game.stream.ActivityStreamItem;
 import strikd.game.stream.StreamPlayer;
 import strikd.game.stream.items.FriendMatchResultStreamItem;
 import strikd.game.stream.items.ItemReceivedStreamItem;
@@ -12,20 +11,20 @@ import strikd.game.stream.items.LevelUpStreamItem;
 import strikd.game.stream.items.NewsStreamItem;
 import strikd.net.codec.OutgoingMessage;
 
-public class EventStreamMessage extends OutgoingMessage
+public class ActivityStreamMessage extends OutgoingMessage
 {
 	private static final byte TYPE_NEWS = 1;
 	private static final byte TYPE_LEVEL_UP = 2;
 	private static final byte TYPE_ITEM_RECEIVED = 3;
 	private static final byte TYPE_FRIEND_BEATED = 4;
 	
-	public EventStreamMessage(Date begin, Date end, List<EventStreamItem> items)
+	public ActivityStreamMessage(int start, int end, List<ActivityStreamItem> items)
 	{
-		super(Opcodes.Outgoing.EVENT_STREAM);
-		super.writeLong(begin);
-		super.writeLong(end);
+		super(Opcodes.Outgoing.ACTIVITY_STREAM);
+		super.writeInt(start);
+		super.writeInt(end);
 		super.writeInt(items.size());
-		for(EventStreamItem item : items)
+		for(ActivityStreamItem item : items)
 		{
 			if(item instanceof NewsStreamItem)
 			{
