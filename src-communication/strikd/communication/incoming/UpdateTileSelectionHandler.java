@@ -107,7 +107,7 @@ public class UpdateTileSelectionHandler extends MessageHandler
                         match.broadcast(board.generateUpdateMessage());
 
                         // Kiekeboe!
-                        System.out.println(board.toMatrixString());
+                        //System.out.println(board.toMatrixString());
 					}
 				}
 				
