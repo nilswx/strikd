@@ -5,7 +5,6 @@ import java.util.List;
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookFriendsMessage;
-import strikd.game.player.FriendPlayer;
 import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 
@@ -32,7 +31,7 @@ public class UpdateFacebookFriendsHandler extends MessageHandler
 			}
 			
 			// Send the player the latest friendlist
-			List<FriendPlayer> friends = session.getServer().getPlayerRegister().getFriendPlayers(friendIds);
+			List<Player> friends = session.getServer().getPlayerRegister().getFriendPlayers(friendIds);
 			session.send(new FacebookFriendsMessage(friends));
 		}
 	}

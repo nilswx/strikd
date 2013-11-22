@@ -3,7 +3,6 @@ package strikd.game.match.bots;
 import java.util.Random;
 
 import strikd.game.match.MatchPlayer;
-import strikd.game.player.Avatar;
 import strikd.game.player.Player;
 
 public class MatchBotFactory
@@ -15,7 +14,7 @@ public class MatchBotFactory
 		Player bot = new Player();
 		bot.setId(488228);
 		bot.setName(String.format("Bot-%d", rand.nextInt(1000)));
-		bot.setAvatar(new Avatar());
+		bot.setAvatar("hd-8.ft-9.blabla");
 		bot.setCountry("bot"); // A cog wheel or so!
 		
 		bot.setMatches(rand.nextInt(300) + 1);
