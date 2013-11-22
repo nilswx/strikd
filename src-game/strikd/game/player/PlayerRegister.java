@@ -108,6 +108,11 @@ public class PlayerRegister extends Server.Referent
 		return friendIds;
 	}
 	
+	public List<FriendPlayer> getFriendPlayers(long[] playerIds)
+	{
+		return this.getDatabase().createQuery(FriendPlayer.class).where().in("id", playerIds).findList();
+	}
+	
 	public PlayerProfile getProfile(long playerId)
 	{
 		return null;/*this.dbPlayers.findOne(playerId)
