@@ -36,6 +36,13 @@ public class NetRequestHandler extends ChannelInboundHandlerAdapter
 		}
 	}
 	
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception
+	{
+		System.out.println("OH NOES");
+		cause.printStackTrace();
+	}
+	
 	private static final EventExecutorGroup eventExecutorGroup = new DefaultEventExecutorGroup(NUM_HANDLER_THREADS, new NamedThreadFactory("Network/RequestHandler #%d")); 
 	
 	public static final EventExecutorGroup getEventExecutorGroup()

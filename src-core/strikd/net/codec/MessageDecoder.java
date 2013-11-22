@@ -9,12 +9,13 @@ import strikd.communication.Opcodes;
 
 public class MessageDecoder extends ByteToMessageDecoder
 {
-	private static final int MAX_MESSAGE_SIZE = 512;
+	private static final int MAX_MESSAGE_SIZE = 5120000;
 	
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception
 	{
 		// Length header available? (2 bytes)
+		System.out.println("READABLE=" + buffer.readableBytes());
 		if(buffer.isReadable(2))
 		{
 			// Mark reader index
@@ -35,6 +36,8 @@ public class MessageDecoder extends ByteToMessageDecoder
 			}
 			else
 			{
+				System.out.println("NEEDED=" + length);
+				
 				// Restart reading again when there's more data
 				buffer.resetReaderIndex();
 			}
