@@ -39,8 +39,11 @@ public class MessageDecoder extends ByteToMessageDecoder
 					Opcodes.Incoming op = Opcodes.Incoming.valueOf(buffer.readByte());
 					
 					// Retain buffer (NEVER FORGET TO RELEASE AFTER HANDLING THE MESSAGE!) and use it
-					buffer.retain();
-					out.add(new IncomingMessage(op, buffer.readSlice(length)));
+					//buffer.retain();
+					//out.add(new IncomingMessage(op, buffer.readSlice(length)));
+					
+					// FIXME: the above is more efficient, but seems to cause race conditions in busy traffic
+					out.add(new IncomingMessage(op, buffer.readBytes(length - 1)));
 				}
 				else
 				{
@@ -51,8 +54,12 @@ public class MessageDecoder extends ByteToMessageDecoder
 			}
 			else
 			{
-				// Something is messed up, we are not going to buffer this shit!
-				logger.warn("length={} is invalid (max={}), killing connection", length, MAX_MESSAGE_SIZE);
+				// Something is messed up, forget about it!
+				int available = buffer.readableBytes();
+				buffer.skipBytes(available);
+				logger.warn("length={} is invalid (max={} available={}), killing connection", length, MAX_MESSAGE_SIZE, available);
+				
+				// Bye!
 				ctx.close();
 			}
 		}

@@ -31,7 +31,7 @@ public class NetRequestHandler extends ChannelInboundHandlerAdapter
 			}
 			finally
 			{
-				msg.release(); // DON'T FORGET THIS
+				//msg.release(); // DON'T FORGET THIS
 			}
 		}
 	}
