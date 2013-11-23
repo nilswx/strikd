@@ -106,7 +106,7 @@ public class Session extends Server.Referent
 
 		// Re-calculate level (XP zones could have changed)
 		this.player.setLevel(Experience.calculateLevel(this.player.getLevel()));
-		logger.debug(String.format("%s is level %d (%d XP)", this.player, this.player.getLevel(), this.player.getXp()));
+		logger.debug("{} is level {} ({} XP)", this.player, this.player.getLevel(), this.player.getXp());
 		
 		// Facebook?!
 		if(this.player.isFacebookLinked())
@@ -115,7 +115,7 @@ public class Session extends Server.Referent
 			PlayerRegister register = this.getServer().getPlayerRegister();
 			for(long playerId : register.getFriends(this.player.getFacebook()))
 			{
-				logger.debug(String.format("%s is a friend of %s", register.findPlayer(playerId), this.player));
+				logger.debug("{} is a friend of {}", register.findPlayer(playerId), this.player);
 			}
 		}
 		

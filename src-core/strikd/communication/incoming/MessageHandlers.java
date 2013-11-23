@@ -29,7 +29,7 @@ public final class MessageHandlers
 		{
 			MessageHandler handler = clazz.newInstance();
 			handlers[handler.getOpcode().ordinal()] = handler;
-			logger.debug(String.format("%s > %s", handler.getOpcode(), clazz.getName()));
+			logger.debug("{} > {}", handler.getOpcode(), clazz.getName());
 		}
 		catch(InstantiationException | IllegalAccessException e)
 		{

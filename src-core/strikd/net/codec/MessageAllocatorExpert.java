@@ -23,7 +23,7 @@ public final class MessageAllocatorExpert
 		{
 			if(doDebug)
 			{
-				logger.debug(String.format("%s: %d -> %d bytes", op, bestSizes[op.ordinal()], size));
+				logger.debug("{}: {} -> {} bytes", op, bestSizes[op.ordinal()], size);
 			}
 			bestSizes[op.ordinal()] = size;
 		}

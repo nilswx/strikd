@@ -29,7 +29,7 @@ public class Shop extends Server.Referent
 		{
 			this.offers.put(offer.offerId, offer);
 		}
-		logger.info(String.format("%d available offers", this.offers.size()));*/
+		logger.info("%d available offers", this.offers.size()));*/
 	}
 	
 	public List<ItemInstance> purchaseOffer(int offerId, Player player)
@@ -38,14 +38,14 @@ public class Shop extends Server.Referent
 		ShopOffer offer = this.offers.get(offerId);
 		if(offer == null)
 		{
-			logger.warn(String.format("%s tried to purchase unknown offer #%d", player, offerId));
+			logger.warn("{} tried to purchase unknown offer #{}", player, offerId);
 			return null;
 		}
 		
 		// Enough coins?
 		if(player.getBalance() < offer.price)
 		{
-			logger.warn(String.format("%s tried to purchase too expensive offer #%d", player, offerId));
+			logger.warn("{} tried to purchase too expensive offer #{}", player, offerId);
 			return null;
 		}
 		
@@ -60,7 +60,7 @@ public class Shop extends Server.Referent
 		}
 		
 		// TODO: write transaction log for player (and statistics)
-		logger.info(String.format("%s purchased offer #%d for %d coins", player, offerId, offer.price));
+		logger.info("{} purchased offer #{} for {} coins", player, offerId, offer.price);
 		
 		return items;
 	}

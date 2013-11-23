@@ -30,13 +30,13 @@ public abstract class FacebookStory implements Runnable
 			FacebookClient api = new DefaultFacebookClient(FacebookManager.getSharedAppAccessToken());
 
 			// Make the request
-			logger.debug(String.format("publishing a new %s", this));
+			logger.debug("publishing a new {}", this);
 			api.publish(String.format("%d/%s:%s", this.identity.getUserId(), FacebookManager.getSharedAppNamespace(), this.getAction()), JsonObject.class,
 					Parameter.with(this.getObjectType(), this.getObject()));
 		}
 		catch(Exception e)
 		{
-			logger.warn(String.format("error publishing a new %s", this), e);
+			logger.warn("error publishing a new {}", this, e);
 		}
 	}
 

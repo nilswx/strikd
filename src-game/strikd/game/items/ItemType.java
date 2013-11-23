@@ -106,7 +106,7 @@ public enum ItemType
 	{
 		for(ItemType type : ItemType.values())
 		{
-			logger.debug(String.format("registered %s (type=%s)", type, type.kind));
+			logger.debug("registered {} (type={})", type, type.kind);
 		}
 	}
 }

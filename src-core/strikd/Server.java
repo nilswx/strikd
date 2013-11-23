@@ -63,7 +63,7 @@ public class Server
 		{
 			throw new Exception(String.format("could not load %s", propsFile), e);
 		}
-		logger.info(String.format("loaded %d entries from %s", props.size(), propsFile));
+		logger.info("loaded {} entries from {}", props.size(), propsFile);
 
 		// Test crypto
 		DiffieHellman.testGenerator();
@@ -117,10 +117,10 @@ public class Server
 		{
 			throw new Exception("could not start network server", e);
 		}
-		logger.info(String.format("listening on %s", this.netServer.getLocalAddress()));
+		logger.info("listening on {}", this.netServer.getLocalAddress());
 		
 		// Print server info
-		logger.info(String.format("SERVER ONLINE %s", this.serverCluster.getSelf()));
+		logger.info("SERVER ONLINE {}", this.serverCluster.getSelf());
 		
 		// Start sync worker
 		int syncInterval = Integer.parseInt(props.getProperty("cluster.sync.interval", "5"));
@@ -185,7 +185,7 @@ public class Server
 			// Set shutdown mode so it can't be triggered twice in a row
 			this.isShutdownMode = true;
 			this.shutdownMessage = message;
-			logger.info(String.format("shutdown received (\"%s\")", message));
+			logger.info("shutdown received (\"{}\")", message);
 			
 			// Can safely shutdown right now?
 			if(this.matchMgr.active() == 0)

@@ -37,7 +37,7 @@ public class MatchManager extends Server.Referent
 			PlayerQueue queue = new TimedPlayerQueue(locale, this, 2, new MatchBotFactory());
 			this.queues.put(locale.getLocale(), queue);
 			
-			logger.info(String.format("%s: created %s", locale, queue.getClass().getName()));
+			logger.info("{}: created {}", locale, queue.getClass().getName());
 		}
 	}
 	
@@ -51,7 +51,7 @@ public class MatchManager extends Server.Referent
 			
 			// Destroy this match
 			match.destroy();
-			logger.info(String.format("destroyed %s", match));
+			logger.info("destroyed {}", match);
 			
 			// Is this server in shutdown mode?
 			if(this.getServer().isShutdownMode() && this.active() == 0)
@@ -102,7 +102,7 @@ public class MatchManager extends Server.Referent
 			Match match = new Match(matchId, locale, this, playerOne, playerTwo);
 			
 			// Add to map
-			logger.info(String.format("created %s", match));
+			logger.info("created {}", match);
 			this.active.put(matchId, match);
 			
 			// Notify players of the new match and start preparing the board after that
@@ -126,7 +126,7 @@ public class MatchManager extends Server.Referent
 	
 	private void writeMatchJournal(Match match)
 	{
-		logger.debug(String.format("writing match journal for %s", match));
+		logger.debug("writing match journal for {}", match);
 		
 		// TODO: stats
 	}

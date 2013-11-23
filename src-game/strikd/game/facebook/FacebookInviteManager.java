@@ -20,13 +20,13 @@ public class FacebookInviteManager extends Server.Referent
 		super(server);
 		//this.dbInvites = server.getDbCluster().getCollection("invites");
 		
-		logger.info(String.format("pending invites for %d persons", 0));//this.dbInvites.count()));
+		logger.info("pending invites for {} persons", 0);//this.dbInvites.count()));
 	}
 	
 	public void registerInvite(long personId, Player inviter)
 	{
 		//this.dbInvites.update("{_id:#}", personId).upsert().with("{$addToSet:{by:#}}", inviter.getId());	
-		logger.info(String.format("%s invited person #%d!", inviter, personId));
+		logger.info("{} invited person #{}!", inviter, personId);
 	}
 	
 	public void processInvites(long personId)
@@ -43,7 +43,7 @@ public class FacebookInviteManager extends Server.Referent
 				Player player = register.findPlayer(playerId);
 				if(player != null)
 				{
-					logger.info(String.format("FB user #%d linked, rewarding %s for invite", personId, player));
+					logger.info("FB user #{} linked (welcome!), rewarding {} for invite", personId, player);
 				}
 			}
 		}

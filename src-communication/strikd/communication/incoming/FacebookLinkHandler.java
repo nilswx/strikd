@@ -47,7 +47,7 @@ public class FacebookLinkHandler extends MessageHandler
 		}
 		catch(Exception e)
 		{
-			logger.warn(String.format("Facebook link for %s failed!", session.getPlayer()), e);
+			logger.warn("Facebook link for {} failed!", session.getPlayer(), e);
 			newIdentity = null;
 		}
 		
@@ -59,5 +59,5 @@ public class FacebookLinkHandler extends MessageHandler
 		session.send(new FacebookStatusMessage(session.getPlayer().isFacebookLinked(), session.getPlayer().isLiked()));
 	}
 	
-	//logger.debug(String.format("FB #%s (\"%s %s\", %s) has %d FB friends", profile.getId(), profile.getFirstName(), profile.getLastName(), profile.getGender(), facebook.friendOperations().getFriendIds().size())); 
+	//logger.debug("FB #%s (\"%s %s\", %s) has %d FB friends", profile.getId(), profile.getFirstName(), profile.getLastName(), profile.getGender(), facebook.friendOperations().getFriendIds().size())); 
 }

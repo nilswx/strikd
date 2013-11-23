@@ -31,10 +31,10 @@ public class FacebookManager extends Server.Referent
 		this.appAccessToken = appAccessToken;
 		
 		// Log namespace and a masked copy of the token
-		logger.info(String.format("pageId='%s' [og:namespace='%s', access_token=%s]",
+		logger.info("pageId='{}' [og:namespace='{}', access_token={}]",
 				pageId,
 				appNamespace,
-				appAccessToken.substring(0, appAccessToken.indexOf('|') + 1) + "<SECRET>"));
+				appAccessToken.substring(0, appAccessToken.indexOf('|') + 1) + "<SECRET>");
 		
 		// Create nested invite manager
 		this.inviteMgr = new FacebookInviteManager(server);

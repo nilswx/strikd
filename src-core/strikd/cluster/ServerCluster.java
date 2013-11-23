@@ -46,7 +46,7 @@ public class ServerCluster extends Server.Referent implements Runnable
 		this.syncSelf();
 		
 		// Output to logs
-		logger.info(String.format("joining as server #%d (%s:%d)", serverId, this.self.getHost(), this.self.getPort()));
+		logger.info("joining as server #{} ({}:{})", serverId, this.self.getHost(), this.self.getPort());
 	}
 	
 	private void syncSelf()
@@ -75,7 +75,7 @@ public class ServerCluster extends Server.Referent implements Runnable
 		}
 		catch(Exception ex)
 		{
-			logger.error(String.format("error refreshing server #%d", this.self.getId()), ex);
+			logger.error("error refreshing server #{}", this.self.getId(), ex);
 		}
 	}
 	
@@ -118,12 +118,12 @@ public class ServerCluster extends Server.Referent implements Runnable
 	
 	private void onDiscover(ServerDescriptor server)
 	{
-		logger.info(String.format("discovered server #%d ('%s') -> %s:%d", server.getId(), server.getName(), server.getHost(), server.getPort()));
+		logger.info("discovered server #{} ('{}') -> {}:{}", server.getId(), server.getName(), server.getHost(), server.getPort());
 	}
 	
 	private void onUndiscover(ServerDescriptor server)
 	{
-		logger.info(String.format("server #%d ('%s') went away", server.getId(), server.getName()));
+		logger.info("server #{} ('{}') went away", server.getId(), server.getName());
 	}
 	
 	public ServerDescriptor getSelf()

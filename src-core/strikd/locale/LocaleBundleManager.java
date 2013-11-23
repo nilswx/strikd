@@ -30,7 +30,7 @@ public class LocaleBundleManager
 	
 	public void reload()
 	{
-		logger.info(String.format("reloading and indexing locales from %s...", this.bundleDir));
+		logger.info("reloading and indexing locales from {}...", this.bundleDir);
 		
 		// Load all bundles
 		Map<String, LocaleBundle> bundles = new HashMap<String, LocaleBundle>();
@@ -44,12 +44,12 @@ public class LocaleBundleManager
 				LocaleBundle bundle = new LocaleBundle(locale, file);
 				if(bundle.getDictionary(DictionaryType.COMPLETE) == null)
 				{
-					logger.warn(String.format("not loaded %s, missing critical %s dict", locale, DictionaryType.COMPLETE));
+					logger.warn("not loaded {}, missing critical {} dict", locale, DictionaryType.COMPLETE);
 				}
 				else
 				{
 					bundles.put(locale, bundle);
-					logger.info(String.format("loaded %s (%d dicts)", locale, bundle.size()));
+					logger.info("loaded {} ({} dicts)", locale, bundle.size());
 				}
 			}
 		}
@@ -57,7 +57,7 @@ public class LocaleBundleManager
 		// Found bundles?
 		if(bundles.isEmpty())
 		{
-			logger.warn(String.format("no locale bundles at all, reload aborted"));
+			logger.warn("no locale bundles at all, reload aborted");
 		}
 		else
 		{

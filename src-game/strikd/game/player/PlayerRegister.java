@@ -33,7 +33,7 @@ public class PlayerRegister extends Server.Referent
 	{
 		super(server);
 		
-		logger.info(String.format("%d players", this.getDatabase().find(Player.class).findRowCount()));
+		logger.info("{} players", this.getDatabase().find(Player.class).findRowCount());
 	}
 	
 	public Player newPlayer()
@@ -49,7 +49,7 @@ public class PlayerRegister extends Server.Referent
 		
 		// Save to database
 		this.getDatabase().save(player);
-		logger.debug(String.format("created player %s", player));
+		logger.debug("created player {}", player);
 		
 		return player;
 	}
@@ -100,7 +100,7 @@ public class PlayerRegister extends Server.Referent
 			}
 			catch(Exception e)
 			{
-				logger.error(String.format("could not retrieve friend players for %s", identity), e);
+				logger.error("could not retrieve friend players for {}", identity, e);
 				friendIds = Collections.emptyList();
 			}
 		}

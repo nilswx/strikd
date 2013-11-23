@@ -136,7 +136,7 @@ public class Match
 			// Draw?
 			if(winner == null)
 			{
-				logger.debug(String.format("%s: draw...", this));
+				logger.debug("{}: draw...", this);
 			}
 			else
 			{
@@ -146,7 +146,7 @@ public class Match
 				// Update stats
 				winner.getInfo().setWins(winner.getInfo().getWins() + 1);
 				loser.getInfo().setLosses(loser.getInfo().getLosses() + 1);
-				logger.debug(String.format("%s: %s wins, %s loses!", this, winner, loser));
+				logger.debug("{}: {} wins, {} loses!", this, winner, loser);
 			}
 			
 			// Broadcast event

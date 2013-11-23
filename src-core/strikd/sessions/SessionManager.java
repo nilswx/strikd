@@ -35,7 +35,7 @@ public class SessionManager extends Server.Referent
 		
 		// Add to session map
 		this.sessions.put(sessionId, session);
-		logger.debug(String.format("session #%d connected from %s", session.getSessionId(), session.getConnection().getIpAddress()));
+		logger.debug("session #{} connected from {}", session.getSessionId(), session.getConnection().getIpAddress());
 		
 		// Greet session
 		session.hello();
@@ -51,12 +51,12 @@ public class SessionManager extends Server.Referent
 			Player player = session.getPlayer();
 			if(player == null)
 			{
-				logger.warn(String.format("session #%d (%s) ended early (%s)", sessionId, session.getConnection().getIpAddress(), reason));
+				logger.warn("session #{} ({}) ended early ({})", sessionId, session.getConnection().getIpAddress(), reason);
 			}
 			else
 			{
 				this.playerSessions.remove(player.getId());
-				logger.debug(String.format("%s logged out (%s)", player, reason));
+				logger.debug("{} logged out ({})", player, reason);
 			}
 			session.onEnd();
 		}
@@ -80,7 +80,7 @@ public class SessionManager extends Server.Referent
 			this.loginCounter.incrementAndGet();
 			player.setLogins(player.getLogins() + 1);
 			
-			logger.info(String.format("%s logged in (#%d) in from %s (%s)", player, player.getLogins(), session.getConnection().getIpAddress(), player.getPlatform()));
+			logger.info("{} logged in (#{}) in from {} ({})", player, player.getLogins(), session.getConnection().getIpAddress(), player.getPlatform());
 		}
 	}
 	

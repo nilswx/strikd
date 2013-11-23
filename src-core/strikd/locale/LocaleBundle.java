@@ -31,7 +31,7 @@ public class LocaleBundle
 			}
 			catch(Exception ex)
 			{
-				logger.debug(String.format("%s: could not load dict for %s", locale, type));
+				logger.debug("{}: could not load dict for {}", locale, type);
 			}
 		}
 	}

@@ -19,7 +19,7 @@ public class ActivityStreamManager extends Server.Referent
 	public ActivityStreamManager(Server server)
 	{
 		super(server);
-		logger.info(String.format("%d events", 0));
+		logger.info("{} events", 0);
 	}
 	
 	public void reloadNews()
@@ -38,12 +38,12 @@ public class ActivityStreamManager extends Server.Referent
 		
 		// Load them all into memory
 		this.news = Lists.newArrayList(this.dbNews.find().as(NewsStreamItem.class));
-		logger.info(String.format("%d news items", this.news.size()));
+		logger.info("%d news items", this.news.size()));
 		
 		// Print them
 		for(NewsStreamItem news : this.news)
 		{
-			logger.debug(String.format("\"%s\" published on %s", news.headline, news.timestamp));
+			logger.debug("\"%s\" published on %s", news.headline, news.timestamp));
 		}*/
 	}
 	

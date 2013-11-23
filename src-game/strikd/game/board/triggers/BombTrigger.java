@@ -18,6 +18,6 @@ public class BombTrigger extends Trigger
 	@Override
 	public void execute(MatchPlayer player)
 	{
-		logger.debug(String.format("Player %s says BOOOOOM!", player));
+		logger.debug("Player {} says BOOOOOM!", player);
 	}
 }

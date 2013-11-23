@@ -24,7 +24,7 @@ public class SimpleMatchBotAI extends MatchBotAI
 	public int getNextMoveDelay()
 	{
 		int delay = new Random().nextInt(10*1000);
-		//logger.debug(String.format("%s: I'M BREAKING A SWEAT (%d ms)", this.getPlayer(), delay));
+		//logger.debug("%s: I'M BREAKING A SWEAT (%d ms)", this.getPlayer(), delay));
 		
 		return delay;
 	}
@@ -32,7 +32,7 @@ public class SimpleMatchBotAI extends MatchBotAI
 	@Override
 	public List<Tile> nextMove()
 	{
-		//logger.debug(String.format("%s: IT'S ALRIGHT", this.getPlayer()));
+		//logger.debug("%s: IT'S ALRIGHT", this.getPlayer()));
 		return null;
 	}
 }
