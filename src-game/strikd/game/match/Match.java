@@ -150,7 +150,7 @@ public class Match
 			}
 			
 			// Broadcast event
-			this.broadcast(new MatchEndedMessage());
+			this.broadcast(new MatchEndedMessage(winner));
 			
 			// Request match to be destroyed
 			this.matchMgr.destroyMatch(this.matchId);
