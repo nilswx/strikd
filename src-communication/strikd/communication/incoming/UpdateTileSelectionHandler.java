@@ -3,8 +3,9 @@ package strikd.communication.incoming;
 import java.util.ArrayList;
 import java.util.List;
 
-import strikd.sessions.Session;
-import strikd.words.Word;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.TileSelectionClearedMessage;
 import strikd.communication.outgoing.TileSelectionExtendedMessage;
@@ -15,9 +16,13 @@ import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.IncomingMessage;
+import strikd.sessions.Session;
+import strikd.words.Word;
 
 public class UpdateTileSelectionHandler extends MessageHandler
 {
+	private static final Logger logger = LoggerFactory.getLogger(UpdateTileSelectionHandler.class);
+	
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
@@ -106,10 +111,15 @@ public class UpdateTileSelectionHandler extends MessageHandler
                         // Generate updates
 						board.update();
                         match.broadcast(board.generateUpdateMessage());
-
-                        // Kiekeboe!
-                        System.out.println(board.toMatrixString());
 					}
+					else
+					{
+						logger.debug("unknown word '{}'", word);
+					}
+				}
+				else
+				{
+					logger.debug("invalid selection");
 				}
 				
 				// Clear selection 
