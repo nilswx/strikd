@@ -55,7 +55,8 @@ public class UpdateTileSelectionHandler extends MessageHandler
 				// Any updates?
 				if(newSelected.size() > 0)
 				{
-					match.broadcast(new TileSelectionExtendedMessage(player, newSelected));
+					// Just to opponent
+					match.getOpponent(player).send(new TileSelectionExtendedMessage(player, newSelected));
 				}
 			}
 			else

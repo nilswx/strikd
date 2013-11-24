@@ -9,24 +9,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public abstract class Board
 {
-	private static final Logger logger = LoggerFactory.getLogger(Board.class);
-			
-	protected final int width;
-	protected final int height;
+	private final int width;
+	private final int height;
 
-	protected final WordDictionary dictionary;
+	private final WordDictionary dictionary;
 
 	private byte tileIdAllocator;
 	private final Map<Byte, Tile> tiles;
-	protected final List<Tile>[] columns;
+	private final List<Tile>[] columns;
 
 	private List<Tile> addedTiles;
 	private List<Tile> removedTiles;
@@ -64,7 +59,7 @@ public abstract class Board
 		return this.addTile(column, letter, trigger);
 	}
 
-	public Tile addTile(int column, char letter, Trigger trigger)
+	public final Tile addTile(int column, char letter, Trigger trigger)
 	{
 		// Factory method for creating Tiles
 		Tile tile = this.newTile(this.allocateId(), column, letter, trigger);
@@ -79,7 +74,7 @@ public abstract class Board
 		return tile;
 	}
 	
-	private synchronized byte allocateId()
+	private final synchronized byte allocateId()
 	{
 		do
 		{
@@ -115,7 +110,7 @@ public abstract class Board
 		}
 	}
 	
-	public BoardUpdateMessage generateUpdateMessage()
+	public final BoardUpdateMessage generateUpdateMessage()
 	{
 		BoardUpdateMessage update = new BoardUpdateMessage(this.removedTiles, this.addedTiles);
 		this.clearUpdates();
@@ -123,7 +118,7 @@ public abstract class Board
 		return update;
 	}
 
-	public void clearUpdates()
+	public final void clearUpdates()
 	{
 		this.removedTiles.clear();
 		this.addedTiles.clear();
@@ -160,12 +155,12 @@ public abstract class Board
 		return null;
 	}
 
-	public Tile getTile(byte tileId)
+	public final Tile getTile(byte tileId)
 	{
 		return this.tiles.get(tileId);
 	}
 	
-	public Collection<Tile> getTiles()
+	public final Collection<Tile> getTiles()
 	{
 		return this.tiles.values();
 	}
@@ -181,12 +176,12 @@ public abstract class Board
 		return this.height;
 	}
 
-	public List<Tile> getColumn(int column)
+	public final List<Tile> getColumn(int column)
 	{
 		return this.columns[column];
 	}
 
-	public WordDictionary getDictionary()
+	public final WordDictionary getDictionary()
 	{
 		return this.dictionary;
 	}
