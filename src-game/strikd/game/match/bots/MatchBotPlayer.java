@@ -46,8 +46,11 @@ public class MatchBotPlayer extends MatchPlayer implements Runnable
 	
 	public void cancelAI()
 	{
-		this.pendingAiTask.cancel(false);
-		this.pendingAiTask = null;
+		if(this.pendingAiTask != null)
+		{
+			this.pendingAiTask.cancel(false);
+			this.pendingAiTask = null;
+		}
 	}
 	
 	@Override

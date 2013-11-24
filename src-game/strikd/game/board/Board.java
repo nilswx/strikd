@@ -75,7 +75,6 @@ public abstract class Board
 
 		// For update message
 		this.addedTiles.add(tile);
-		System.out.println("added " + tile);
 
 		return tile;
 	}
@@ -104,9 +103,6 @@ public abstract class Board
 		// Known tile?
 		if(this.tiles.containsKey(tile.getTileId()))
 		{
-			// Woo
-			logger.debug("removed tile #{} ('{}')", tile.getTileId(), tile.getLetter());
-
 			// Cancel selections etc
 			//tile.remove();
 
