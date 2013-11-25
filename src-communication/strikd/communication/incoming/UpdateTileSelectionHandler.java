@@ -68,22 +68,25 @@ public class UpdateTileSelectionHandler extends MessageHandler
 			{
 				// Validate selection and concat letters
 				StringBuilder letters = new StringBuilder(player.getSelection().size());
-				Tile previous = null;
 				for(Tile tile : player.getSelection())
 				{
-					// Check tile + distance (anti-cheat)
-					if(previous == null || (Math.abs(tile.getColumn() - previous.getColumn()) <= 1 && Math.abs(tile.getRow() - previous.getRow()) <= 1))
-					{
-						letters.append(tile.getLetter());
-						previous = tile;
-					}
-					else
-					{
-						// Invalid selection
-						letters = null;
-						break;
-					}
+					letters.append(tile.getLetter());
 				}
+				
+				// FIXME: Check tile + distance (anti-cheat), getRow() returns old values?
+				/*
+				if(previous == null || (Math.abs(tile.getColumn() - previous.getColumn()) <= 1 && Math.abs(tile.getRow() - previous.getRow()) <= 1))
+				{
+					letters.append(tile.getLetter());
+					previous = tile;
+				}
+				else
+				{
+					// Invalid selection
+					letters = null;
+					logger.debug("invalid selection, distance too big ({} -> {})", previous, tile);
+					break;
+				}*/
 				
 				// Valid selection?
 				if(letters != null && letters.length() > 0)
@@ -92,8 +95,11 @@ public class UpdateTileSelectionHandler extends MessageHandler
 					Word word = Word.parse(letters.toString());
 					if(match.getLocale().getDictionary(DictionaryType.COMPLETE).contains(word))
 					{
-						// Assign points!
+						// Word correct!
 						int points = word.length();
+						logger.debug("found '{}' ({} points)", word, points);
+						
+						// Assign points
 						session.getMatchPlayer().modScore(+points);
 						match.broadcast(new WordFoundMessage(session.getMatchPlayer(), word, +points));
 
@@ -116,10 +122,6 @@ public class UpdateTileSelectionHandler extends MessageHandler
 					{
 						logger.debug("unknown word '{}'", word);
 					}
-				}
-				else
-				{
-					logger.debug("invalid selection");
 				}
 				
 				// Clear selection 
