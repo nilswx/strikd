@@ -5,6 +5,7 @@ import java.util.List;
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.AlertMessage;
+import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.ItemsAddedMessage;
 import strikd.game.items.ItemInstance;
 import strikd.game.items.shop.Shop;
@@ -35,14 +36,17 @@ public class PurchaseItemHandler extends MessageHandler
 		}
 		else
 		{
+			// Save immediately
+			session.saveData();
+			
+			// You have been charged!
+			session.send(new CurrencyBalanceMessage(session.getPlayer().getBalance()));
+			
 			// Add items
 			for(ItemInstance item : items)
 			{
 				session.getPlayer().getItems().add(item);
 			}
-			session.saveData();
-			
-			// Notify player
 			session.send(new ItemsAddedMessage(items));
 		}
 	}
