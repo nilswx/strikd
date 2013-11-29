@@ -23,6 +23,11 @@ public enum ItemType
 	SAND(ItemKind.POWERUP),
 	
 	/**
+	 * Makes the opponents screen shake for x seconds, hindering selection!
+	 */
+	EARTHQUAKE(ItemKind.POWERUP),
+	
+	/**
 	 * Auto-solver AI for x seconds.
 	 */
 	JUNIOR_ASIAN(ItemKind.POWERUP),
