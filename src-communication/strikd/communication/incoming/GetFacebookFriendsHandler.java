@@ -8,7 +8,7 @@ import strikd.communication.outgoing.FacebookFriendsMessage;
 import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 
-public class UpdateFacebookFriendsHandler extends MessageHandler
+public class GetFacebookFriendsHandler extends MessageHandler
 {
 	@Override
 	public Opcodes.Incoming getOpcode()

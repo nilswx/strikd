@@ -14,11 +14,11 @@ public class FacebookFriendsMessage extends OutgoingMessage
 		super.writeInt(friends.size());
 		for(Player friend : friends)
 		{
+			super.writeLong(friend.getFacebook().getUserId());
+			super.writeStr(friend.getFacebook().getName());
 			super.writeLong(friend.getId());
 			super.writeStr(friend.getName());
 			super.writeStr(friend.getAvatar());
-			super.writeLong(friend.getFacebook().getUserId());
-			super.writeStr(friend.getFacebook().getName());
 			super.writeBool(friend.isOnline());
 			super.writeBool(friend.isInMatch());
 		}
