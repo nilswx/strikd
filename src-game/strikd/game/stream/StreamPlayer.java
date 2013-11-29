@@ -7,6 +7,7 @@ public class StreamPlayer
 	public static final StreamPlayer SELF = null;
 	
 	public long playerId;
-	public String realName;
+	public String name;
 	public Avatar avatar;
+	public String realName;
 }

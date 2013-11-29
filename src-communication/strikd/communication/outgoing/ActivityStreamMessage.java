@@ -79,13 +79,14 @@ public class ActivityStreamMessage extends OutgoingMessage
 	{
 		if(player == StreamPlayer.SELF)
 		{
-			super.writeStr(null);
+			super.writeLong(0);
 		}
 		else
 		{
 			super.writeLong(player.playerId);
-			super.writeStr(player.realName);
+			super.writeStr(player.name);
 			super.writeStr(player.avatar);
+			super.writeStr(player.realName);
 		}
 	}
 }
