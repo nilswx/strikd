@@ -40,7 +40,7 @@ public class PlayerRegister extends Server.Referent
 	{
 		// Create new player with default data
 		Player player = this.getDatabase().createEntityBean(Player.class);
-		player.setToken(UUID.randomUUID().toString());
+		player.setToken(UUID.randomUUID().toString().replace("-", "").toUpperCase());
 		player.setJoined(new Date());
 		player.setName(this.generateDefaultName());
 		player.setLanguage("en_US");
