@@ -155,7 +155,7 @@ public class Server
 		
 		// DDL options  
 		conf.setDdlGenerate(true);  
-		conf.setDdlRun(true);  
+		conf.setDdlRun(true);
 		
 		return EbeanServerFactory.create(conf);
 	}
