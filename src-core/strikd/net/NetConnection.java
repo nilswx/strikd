@@ -90,7 +90,7 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 	{
 		if(this.channel.isOpen())
 		{
-			this.channel.writeAndFlush(msg.getBuffer().duplicate());
+			this.channel.writeAndFlush(msg.getBuffer().copy());
 		}
 	}
 	
