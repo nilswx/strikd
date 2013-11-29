@@ -53,14 +53,9 @@ public enum ItemType
 	SNITCH(ItemKind.POWERUP),
 	
 	/**
-	 * Select and destroy 3 arbitrary tiles.
+	 * Select and destroy 1 arbitrary tile.
 	 */
-	HAMMER_3(ItemKind.POWERUP),
-	
-	/**
-	 * Select and destroy 5 arbitrary tiles.
-	 */
-	HAMMER_5(ItemKind.POWERUP),
+	HAMMER(ItemKind.POWERUP),
 	
 	/**
 	 * Received when the user logs in on his/her Facebook birthday.
