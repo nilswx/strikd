@@ -34,7 +34,7 @@ public class Player
 	
 	private String avatar;
 	
-	private String language;
+	private String locale;
 	
 	private String country;
 	
@@ -119,14 +119,14 @@ public class Player
 		this.avatar = avatar;
 	}
 
-	public String getLanguage()
+	public String getLocale()
 	{
-		return language;
+		return locale;
 	}
 
-	public void setLanguage(String language)
+	public void setLocale(String locale)
 	{
-		this.language = language;
+		this.locale = locale;
 	}
 
 	public int getServerId()

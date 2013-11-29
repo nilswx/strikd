@@ -43,8 +43,7 @@ public class PlayerRegister extends Server.Referent
 		player.setToken(UUID.randomUUID().toString().replace("-", "").toUpperCase());
 		player.setJoined(new Date());
 		player.setName(this.generateDefaultName());
-		player.setLanguage("en_US");
-		player.setCountry("nl"); // From FB
+		player.setLocale("en_US");
 		player.setBalance(5);
 		
 		// Save to database

@@ -22,7 +22,8 @@ public interface Opcodes
 	    FACEBOOK_CLAIM_LIKE,
 	    FACEBOOK_REGISTER_INVITES,
 	    GET_ACTIVITY_STREAM,
-	    GET_PLAYER_PROFILE;
+	    GET_PLAYER_PROFILE,
+	    CHANGE_LOCALE;
 		
 		private static final Opcodes.Incoming[] values = values();
 		
