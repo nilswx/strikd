@@ -142,7 +142,7 @@ public abstract class Board
 
 
 
-	public final Tile getTile(int row, int column)
+	public final Tile getTile(int column, int row)
 	{
 		if(column >= 0 && column < this.columns.length)
 		{
@@ -205,7 +205,7 @@ public abstract class Board
 			{
 				sb.append('[');
 
-				Tile tile = this.getTile(row, column);
+				Tile tile = this.getTile(column, row);
 				if(tile == null)
 				{
 					sb.append("   ");

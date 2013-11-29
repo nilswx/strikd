@@ -17,12 +17,12 @@ public class BoardInitMessage extends OutgoingMessage
 		super.writeByte((byte)height);
 		
 		// All tiles
-		for(int x = 0; x < width; x++)
+		for(int column = 0; column < width; column++)
 		{
-			for(int y = 0; y < height; y++)
+			for(int row = 0; row < height; row++)
 			{
 				// Something here?
-				Tile tile = board.getTile(x, y);
+				Tile tile = board.getTile(column, row);
 				if(tile == null)
 				{
 					// Nothing 'ere!
