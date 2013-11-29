@@ -28,6 +28,11 @@ public enum ItemType
 	EARTHQUAKE(ItemKind.POWERUP),
 	
 	/**
+	 * Allows the player to swap two tiles.
+	 */
+	SWAP(ItemKind.POWERUP),
+	
+	/**
 	 * Auto-solver AI for x seconds.
 	 */
 	JUNIOR_ASIAN(ItemKind.POWERUP),
