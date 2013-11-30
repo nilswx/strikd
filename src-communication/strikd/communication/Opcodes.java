@@ -60,5 +60,6 @@ public interface Opcodes
 		SERVER_SHUTTING_DOWN,
 		SERVER_REDIRECT,
 		ACTIVITY_STREAM,
+		NEWS
 	}
 }

@@ -3,7 +3,6 @@ package strikd.communication.outgoing;
 import java.util.List;
 
 import strikd.communication.Opcodes;
-import strikd.game.news.NewsItem;
 import strikd.game.player.Player;
 import strikd.game.stream.activity.ActivityStreamItem;
 import strikd.game.stream.activity.FriendMatchResultStreamItem;
@@ -43,15 +42,6 @@ public class ActivityStreamMessage extends OutgoingMessage
 				this.writePlayer(self, ((FriendMatchResultStreamItem)item).getLoser());
 			}
 		}
-	}
-	
-	@SuppressWarnings("unused")
-	private void writeNews(NewsItem news)
-	{
-		this.writeType("n");
-		super.writeStr(news.getHeadline());
-		super.writeStr(news.getImageUrl());
-		super.writeStr(news.getBody());
 	}
 	
 	private void writeType(String type)
