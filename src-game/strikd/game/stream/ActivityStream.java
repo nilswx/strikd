@@ -47,9 +47,6 @@ public class ActivityStream extends Server.Referent
 	
 			// Join partial player data
 			.fetch("player", "id,name,avatar")
-			
-			// Just need the 
-			.fetch("player.facebook", "name")
 				
 			// Last first
 			.orderBy().desc("timestamp")

@@ -69,9 +69,9 @@ public class PlayerRegister extends Server.Referent
 	public Map<Long, Long> getFacebookMapping(List<Long> userIds)
 	{
 		Map<Long, Long> mapping = Maps.newHashMapWithExpectedSize(userIds.size());
-		for(SqlRow row : this.getDatabase().createSqlQuery("select id,facebook_user_id fid from players where facebook_user_id in(:ids)").setParameter("ids", userIds).findList())
+		for(SqlRow row : this.getDatabase().createSqlQuery("select fb_uid,id from players where fb_uid in(:ids)").setParameter("ids", userIds).findList())
 		{
-			mapping.put(row.getLong("id"), row.getLong("fid"));
+			mapping.put(row.getLong("fb_uid"), row.getLong("id"));
 		}
 		
 		return mapping;

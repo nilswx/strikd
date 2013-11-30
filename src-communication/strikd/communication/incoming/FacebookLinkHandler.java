@@ -45,9 +45,6 @@ public class FacebookLinkHandler extends MessageHandler
 			// Process pending invites
 			FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
 			inviteMgr.processInvites(newIdentity.getUserId());
-			
-			// Store link with reference to player
-			session.getServer().getDatabase().save(newIdentity);
 		}
 		catch(Exception e)
 		{
