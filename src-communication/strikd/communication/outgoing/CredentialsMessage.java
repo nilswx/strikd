@@ -5,10 +5,10 @@ import strikd.net.codec.OutgoingMessage;
 
 public class CredentialsMessage extends OutgoingMessage
 {
-	public CredentialsMessage(long id, String token)
+	public CredentialsMessage(long playerId, String token)
 	{
 		super(Opcodes.Outgoing.CREDENTIALS);
-		super.writeStr(id);
+		super.writeLong(playerId);
 		super.writeStr(token);
 	}
 }

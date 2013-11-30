@@ -112,13 +112,6 @@ public class PlayerRegister extends Server.Referent
 		return this.getDatabase().createQuery(Player.class).where().in("id", playerIds).findList();
 	}
 	
-	public PlayerProfile getProfile(long playerId)
-	{
-		return null;/*this.dbPlayers.findOne(playerId)
-				//.projection(...)
-				.as(PlayerProfile.class);*/
-	}
-	
 	public String generateDefaultName()
 	{
 		return String.format("Player-%d", RandomUtil.pickInt(100000, 999999));

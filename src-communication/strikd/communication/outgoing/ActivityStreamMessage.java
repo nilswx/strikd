@@ -3,90 +3,76 @@ package strikd.communication.outgoing;
 import java.util.List;
 
 import strikd.communication.Opcodes;
+import strikd.game.player.Player;
 import strikd.game.stream.ActivityStreamItem;
-import strikd.game.stream.StreamPlayer;
+import strikd.game.stream.NewsItem;
 import strikd.game.stream.items.FriendMatchResultStreamItem;
 import strikd.game.stream.items.ItemReceivedStreamItem;
 import strikd.game.stream.items.LevelUpStreamItem;
-import strikd.game.stream.items.NewsStreamItem;
 import strikd.net.codec.OutgoingMessage;
 
 public class ActivityStreamMessage extends OutgoingMessage
 {
-	private static final byte TYPE_NEWS = 1;
-	private static final byte TYPE_LEVEL_UP = 2;
-	private static final byte TYPE_ITEM_RECEIVED = 3;
-	private static final byte TYPE_FRIEND_BEATED = 4;
-	
-	public ActivityStreamMessage(int start, int end, List<ActivityStreamItem> items)
+	public ActivityStreamMessage(int start, int end, List<ActivityStreamItem> items, Player self)
 	{
 		super(Opcodes.Outgoing.ACTIVITY_STREAM);
+		
+		// Write range
 		super.writeInt(start);
 		super.writeInt(end);
+		
+		// Serialize items
 		super.writeInt(items.size());
 		for(ActivityStreamItem item : items)
 		{
-			if(item instanceof NewsStreamItem)
+			super.writeLong(item.getTimestamp());
+			this.writePlayer(self, item.getPlayer());
+			if(item instanceof LevelUpStreamItem)
 			{
-				this.writeNews((NewsStreamItem)item);
-			}
-			else if(item instanceof LevelUpStreamItem)
-			{
-				this.writeLevelUp((LevelUpStreamItem)item);
+				this.writeType(LevelUpStreamItem.TYPE);
+				super.writeInt(((LevelUpStreamItem)item).getLevel());
 			}
 			else if(item instanceof ItemReceivedStreamItem)
 			{
-				this.writeItemReceived((ItemReceivedStreamItem)item);
+				this.writeType(ItemReceivedStreamItem.TYPE);
+				super.writeStr(((ItemReceivedStreamItem)item).getItem().name());
 			}
 			else if(item instanceof FriendMatchResultStreamItem)
 			{
-				this.writeFriendMatchResult((FriendMatchResultStreamItem)item);
+				this.writeType(FriendMatchResultStreamItem.TYPE);
+				this.writePlayer(self, ((FriendMatchResultStreamItem)item).getLoser());
 			}
-			super.writeLong(item.timestamp);
 		}
 	}
 	
-	private void writeNews(NewsStreamItem news)
+	@SuppressWarnings("unused")
+	private void writeNews(NewsItem news)
 	{
-		super.writeByte(TYPE_NEWS);
-		super.writeStr(news.headline);
-		super.writeStr(news.imageUrl);
-		super.writeStr(news.body);
+		this.writeType("n");
+		super.writeStr(news.getHeadline());
+		super.writeStr(news.getImageUrl());
+		super.writeStr(news.getBody());
 	}
 	
-	private void writeLevelUp(LevelUpStreamItem levelUp)
+	private void writeType(String type)
 	{
-		this.writeByte(TYPE_LEVEL_UP);
-		this.writePlayer(levelUp.player);
-		this.writeByte((byte)levelUp.level);
+		// More compact (saves 2 bytes!)
+		this.writeByte((byte)type.charAt(0));
 	}
 	
-	private void writeItemReceived(ItemReceivedStreamItem itemReceived)
+	private void writePlayer(Player self, Player player)
 	{
-		this.writeByte(TYPE_ITEM_RECEIVED);
-		this.writePlayer(itemReceived.player);
-		this.writeStr(itemReceived.item.name());
-	}
-	
-	private void writeFriendMatchResult(FriendMatchResultStreamItem result)
-	{
-		this.writeByte(TYPE_FRIEND_BEATED);
-		this.writePlayer(result.player);
-		this.writePlayer(result.loser);
-	}
-	
-	private void writePlayer(StreamPlayer player)
-	{
-		if(player == StreamPlayer.SELF)
+		// Save bandwidth flag
+		boolean isSelf = (player.getId() == self.getId());
+		super.writeBool(isSelf);
+		
+		// Player data follows?
+		if(!isSelf)
 		{
-			super.writeLong(0);
-		}
-		else
-		{
-			super.writeLong(player.playerId);
-			super.writeStr(player.name);
-			super.writeStr(player.avatar);
-			super.writeStr(player.realName);
+			super.writeLong(player.getId());
+			super.writeStr(player.getName());
+			super.writeStr(player.getAvatar());
+			super.writeStr(player.isFacebookLinked() ? player.getFacebook().getName() : null);
 		}
 	}
 }

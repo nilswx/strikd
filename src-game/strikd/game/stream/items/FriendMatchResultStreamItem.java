@@ -1,20 +1,27 @@
 package strikd.game.stream.items;
 
-import strikd.game.stream.StreamPlayer;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
-public class FriendMatchResultStreamItem extends PlayerStreamItem
+import strikd.game.player.Player;
+import strikd.game.stream.ActivityStreamItem;
+
+@Entity @DiscriminatorValue(FriendMatchResultStreamItem.TYPE)
+public class FriendMatchResultStreamItem extends ActivityStreamItem
 {
-	public StreamPlayer loser;
+	@ManyToOne(optional=true)
+	private Player loser;
 	
-	public String getSummary()
+	public Player getLoser()
 	{
-		if(this.loser == StreamPlayer.SELF)
-		{
-			return String.format("%s defeated you", this.player);
-		}
-		else
-		{
-			return String.format("you defeated %s", this.loser);
-		}
+		return this.loser;
 	}
+
+	public void setLoser(Player loser)
+	{
+		this.loser = loser;
+	}
+	
+	public static final String TYPE = "m";
 }

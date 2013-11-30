@@ -89,9 +89,8 @@ public class Server
 		// Load shop assortment
 		this.shop = new Shop(this);
 		
-		// Setup event manager
+		// Setup activity stream
 		this.activityStreamMgr = new ActivityStreamManager(this);
-		this.activityStreamMgr.reloadNews();
 		
 		// Create FB manager, share global config with the rest
 		this.facebook = new FacebookManager(

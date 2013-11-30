@@ -1,8 +1,25 @@
 package strikd.game.stream.items;
 
-import strikd.game.items.ItemType;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-public class ItemReceivedStreamItem extends PlayerStreamItem
+import strikd.game.items.ItemType;
+import strikd.game.stream.ActivityStreamItem;
+
+@Entity @DiscriminatorValue(ItemReceivedStreamItem.TYPE)
+public class ItemReceivedStreamItem extends ActivityStreamItem
 {
-	public ItemType item;
+	private ItemType item;
+
+	public ItemType getItem()
+	{
+		return this.item;
+	}
+
+	public void setItem(ItemType item)
+	{
+		this.item = item;
+	}
+	
+	public static final String TYPE = "i";
 }

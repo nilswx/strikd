@@ -25,19 +25,14 @@ public class GetActivityStreamHandler extends MessageHandler
 		ActivityStreamManager stream = session.getServer().getActivityStream();
 		if(stream != null)
 		{
-			// Resolve player
-			long playerId = request.readLong();
-			Player player = session.getServer().getPlayerRegister().findPlayer(playerId);
-			if(player != null)
-			{
-				// Determine period
-				int begin = request.readInt();
-				int end = request.readInt();
-				
-				// Send all items in this period
-				List<ActivityStreamItem> items = stream.getPlayerStream(player, begin, end, session.getPlayer());
-				session.send(new ActivityStreamMessage(begin, end, items));
-			}
+			// Determine span
+			int start = request.readInt();
+			int end = request.readInt();
+			Player player = session.getPlayer();
+			
+			// Send all items in this period
+			List<ActivityStreamItem> items = stream.getPlayerStream(player, start, (end - start));
+			session.send(new ActivityStreamMessage(start, end, items, player));
 		}
 	}
 }

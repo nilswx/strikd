@@ -15,7 +15,7 @@ public class PlayerInfoMessage extends OutgoingMessage
 	
 	public static void serializePlayer(Player player, OutgoingMessage msg)
 	{
-		msg.writeStr(player.getId());
+		msg.writeLong(player.getId());
 		msg.writeStr(player.getName());
 		msg.writeStr(player.getAvatar());
 		msg.writeStr(player.getCountry());
