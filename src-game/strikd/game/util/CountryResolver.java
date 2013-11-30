@@ -51,7 +51,7 @@ public class CountryResolver
 				}
 				else
 				{
-					String code = country.get2cStr();
+					String code = country.get2cStr().toLowerCase();
 					logger.debug("{} -> '{}' ({})", ip, code, country.getName());
 					return code;
 				}
