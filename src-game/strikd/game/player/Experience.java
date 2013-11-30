@@ -5,7 +5,7 @@ import strikd.sessions.Session;
 @SuppressWarnings("unused")
 public class Experience
 {
-	private static final int MAX_LEVEL = 45;
+	public static final int MAX_LEVEL = 45;
 	private static final int FORMULA_BASE = 100;
 	private static final float FORMULA_MULTIPLIER = 1.20f;
 	

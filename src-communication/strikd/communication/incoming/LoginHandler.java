@@ -66,13 +66,6 @@ public class LoginHandler extends MessageHandler
 				session.send(new CurrencyBalanceMessage(player.getBalance()));
 				session.send(new ItemsMessage(player.getItems()));
 				
-				// Post story
-				/*
-				if(player.isFacebookLinked())
-				{
-					session.getServer().getFacebook().publish(new PersonBeatedStory(player.getFacebook(), "100000541030001"));
-				}*/
-				
 				// Welcome!
 				session.send(new AlertMessage(String.format("Welcome aboard Strik (server %s), bier en tieten ad infinitum!\r\rLogins: %d\rPlatform: %s\r\rThanks for staying with us!", session.getServer().getServerCluster().getSelf(), player.getLogins(), player.getPlatform())));
 			}

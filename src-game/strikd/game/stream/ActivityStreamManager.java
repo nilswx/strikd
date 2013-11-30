@@ -25,6 +25,8 @@ public class ActivityStreamManager extends Server.Referent
 	{
 		item.setTimestamp(new Date());
 		this.getDatabase().insert(item);
+		
+		logger.debug("posted {} for {}", item, item.getPlayer());
 	}
 
 	public List<ActivityStreamItem> getPlayerStream(Player player, int start, int amount)
