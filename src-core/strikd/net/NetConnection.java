@@ -39,12 +39,12 @@ public class NetConnection extends ChannelInboundHandlerAdapter
 		// Split messages etc
 		this.channel.pipeline().addLast(new MessageDecoder());
 		
+		// Connection state events and misc stuff (exception handling)
+		this.channel.pipeline().addLast(this);
+		
 		// Handle incoming messages outside of IO loop
 		this.channel.pipeline().addLast(NetRequestHandler.getEventExecutorGroup(),
 				NetRequestHandler.getRequestHandler(this.session));
-		
-		// Connection state events and misc stuff (exception handling)
-		this.channel.pipeline().addLast(this);
 	}
 	
 	public void close()

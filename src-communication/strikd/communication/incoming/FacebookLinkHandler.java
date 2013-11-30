@@ -37,6 +37,8 @@ public class FacebookLinkHandler extends MessageHandler
 			// Set user ID for quick lookups later
 			newIdentity.setUserId(Long.parseLong(user.getId()));
 			
+			// TODO: delete old link
+			
 			// Rename player to person's first name
 			session.renamePlayer(user.getFirstName());
 			
