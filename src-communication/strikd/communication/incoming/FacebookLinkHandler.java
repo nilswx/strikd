@@ -38,12 +38,14 @@ public class FacebookLinkHandler extends MessageHandler
 			newIdentity.setUserId(Long.parseLong(user.getId()));
 			
 			// Rename player to person's first name
-			newIdentity.setName(user.getName());
 			session.renamePlayer(user.getFirstName());
 			
 			// Process pending invites
 			FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
 			inviteMgr.processInvites(newIdentity.getUserId());
+			
+			// Store link with reference to player
+			session.getServer().getDatabase().save(newIdentity);
 		}
 		catch(Exception e)
 		{

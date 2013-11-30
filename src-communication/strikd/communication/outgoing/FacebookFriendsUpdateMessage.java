@@ -6,16 +6,14 @@ import strikd.communication.Opcodes;
 import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 
-public class FacebookFriendsMessage extends OutgoingMessage
+public class FacebookFriendsUpdateMessage extends OutgoingMessage
 {
-	public FacebookFriendsMessage(List<Player> friends)
+	public FacebookFriendsUpdateMessage(List<Player> friends)
 	{
-		super(Opcodes.Outgoing.FACEBOOK_FRIENDS);
+		super(Opcodes.Outgoing.FACEBOOK_FRIENDS_UPDATE);
 		super.writeInt(friends.size());
 		for(Player friend : friends)
 		{
-			super.writeLong(friend.getFacebook().getUserId());
-			super.writeStr(friend.getFacebook().getName());
 			super.writeLong(friend.getId());
 			super.writeStr(friend.getName());
 			super.writeStr(friend.getAvatar());

@@ -153,8 +153,12 @@ public class Server
 		conf.setDataSourceConfig(ds);
 		
 		// DDL options  
-		conf.setDdlGenerate(true);  
-		conf.setDdlRun(true);
+		if("1".equals(props.getProperty("dev.db.reset")))
+		{
+			logger.info("Requesting database DDL reset...");
+			conf.setDdlGenerate(true);  
+			conf.setDdlRun(true);
+		}
 		
 		return EbeanServerFactory.create(conf);
 	}

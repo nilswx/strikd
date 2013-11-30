@@ -1,5 +1,6 @@
 package strikd.sessions;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -19,7 +20,6 @@ import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.player.Experience;
 import strikd.game.player.Player;
-import strikd.game.player.PlayerRegister;
 import strikd.game.stream.activity.ItemReceivedStreamItem;
 import strikd.game.stream.activity.LevelUpStreamItem;
 import strikd.net.NetConnection;
@@ -41,6 +41,8 @@ public class Session extends Server.Referent
 	private Player player;
 	private MatchPlayer matchPlayer;
 	private PlayerQueue.Entry queueEntry;
+	
+	private List<Long> friendList;
 
 	public Session(long sessionId, NetConnection connection, Server server)
 	{
@@ -123,17 +125,6 @@ public class Session extends Server.Referent
 		ir.setPlayer(this.player);
 		ir.setItem(RandomUtil.pickOne(ItemType.values()));
 		this.getServer().getActivityStream().postItem(ir);
-		
-		// Facebook?!
-		if(this.player.isFacebookLinked())
-		{
-			// Find all friends
-			PlayerRegister register = this.getServer().getPlayerRegister();
-			for(long playerId : register.getFriends(this.player.getFacebook()))
-			{
-				logger.debug("{} is a friend of {}", register.findPlayer(playerId), this.player);
-			}
-		}
 	}
 
 	private void onLogout()
@@ -217,6 +208,15 @@ public class Session extends Server.Referent
 		}
 	}
 
+	public void renamePlayer(String newName)
+	{
+		if(this.isLoggedIn())
+		{
+			this.player.setName(newName);
+			this.send(new NameChangedMessage(newName));
+		}
+	}
+
 	public boolean isInQueue()
 	{
 		return (this.queueEntry != null);
@@ -273,13 +273,14 @@ public class Session extends Server.Referent
 		}
 		this.queueEntry = entry;
 	}
-
-	public void renamePlayer(String newName)
+	
+	public void setFriendList(List<Long> friendList)
 	{
-		if(this.isLoggedIn())
-		{
-			this.player.setName(newName);
-			this.send(new NameChangedMessage(newName));
-		}
+		this.friendList = friendList;
+	}
+	
+	public List<Long> getFriendList()
+	{
+		return this.friendList;
 	}
 }

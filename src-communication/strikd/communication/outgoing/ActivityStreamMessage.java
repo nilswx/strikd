@@ -62,7 +62,6 @@ public class ActivityStreamMessage extends OutgoingMessage
 			super.writeLong(player.getId());
 			super.writeStr(player.getName());
 			super.writeStr(player.getAvatar());
-			super.writeStr(player.isFacebookLinked() ? player.getFacebook().getName() : null);
 		}
 	}
 }

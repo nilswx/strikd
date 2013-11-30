@@ -30,17 +30,33 @@ public class ActivityStream extends Server.Referent
 
 	public List<ActivityStreamItem> getPlayerStream(Player player, int start, int amount)
 	{
+		// Use pure SQL?
+		/*
+		for(SqlRow row : this.getDatabase()
+			.createSqlQuery("select s.type,s.timestamp,p.id,p.name,p.avatar,f.name AS rname from stream s join players p on p.id=s.player_id join facebook f on f.user_id=p.facebook_user_id where id=" + player.getId())
+			.findList())
+		{
+			System.out.println(row);
+		}*/
+		
 		// Find items
 		List<ActivityStreamItem> items = this.getDatabase().createQuery(ActivityStreamItem.class)
+				
+			// Read only!
+			.setReadOnly(true)
 	
 			// Join partial player data
 			.fetch("player", "id,name,avatar")
+			
+			// Just need the 
+			.fetch("player.facebook", "name")
 				
 			// Last first
 			.orderBy().desc("timestamp")
 	
 			// Add criteria
 			.where().eq("player.id", player.getId())
+			
 			// TODO: or loser.id is player ID
 			// TODO: or player.id is in friendslist
 	

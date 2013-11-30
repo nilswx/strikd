@@ -63,5 +63,11 @@ public class MessageDecoder extends ByteToMessageDecoder
 				ctx.close();
 			}
 		}
+		else
+		{
+			// Bye!
+			logger.debug("EOF");
+			ctx.close();
+		}
 	}
 }

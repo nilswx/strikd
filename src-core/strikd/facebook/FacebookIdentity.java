@@ -1,35 +1,36 @@
 package strikd.facebook;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 
-@Embeddable
+@Entity @Table(name="facebook")
 public class FacebookIdentity
 {
-	@Column(name="fb_uid")
-	private Long userId;
-	@Column(name="fb_token")
+	@Id
+	private long userId;
+	
+	@Column(nullable=false)
 	private String token;
-	@Column(name="fb_name")
-	private String name;
 	
 	@Transient
 	private FacebookClient api;
 	
-	public Long getUserId()
+	public long getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(Long userId)
+	public void setUserId(long userId)
 	{
 		this.userId = userId;
 	}
-
+	
 	public String getToken()
 	{
 		return token;
@@ -38,16 +39,6 @@ public class FacebookIdentity
 	public void setToken(String token)
 	{
 		this.token = token;
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 
 	public FacebookClient getAPI()
