@@ -1,9 +1,7 @@
-package strikd.game.stream.items;
+package strikd.game.stream.activity;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-
-import strikd.game.stream.ActivityStreamItem;
 
 @Entity @DiscriminatorValue(LevelUpStreamItem.TYPE)
 public class LevelUpStreamItem extends ActivityStreamItem

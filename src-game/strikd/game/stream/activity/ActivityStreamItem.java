@@ -1,4 +1,4 @@
-package strikd.game.stream;
+package strikd.game.stream.activity;
 
 import java.util.Date;
 

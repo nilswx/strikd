@@ -6,8 +6,8 @@ import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.ActivityStreamMessage;
 import strikd.game.player.Player;
-import strikd.game.stream.ActivityStreamItem;
 import strikd.game.stream.ActivityStreamManager;
+import strikd.game.stream.activity.ActivityStreamItem;
 import strikd.net.codec.IncomingMessage;
 
 public class GetActivityStreamHandler extends MessageHandler

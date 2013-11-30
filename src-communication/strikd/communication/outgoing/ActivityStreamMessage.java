@@ -3,12 +3,12 @@ package strikd.communication.outgoing;
 import java.util.List;
 
 import strikd.communication.Opcodes;
+import strikd.game.news.NewsItem;
 import strikd.game.player.Player;
-import strikd.game.stream.ActivityStreamItem;
-import strikd.game.stream.NewsItem;
-import strikd.game.stream.items.FriendMatchResultStreamItem;
-import strikd.game.stream.items.ItemReceivedStreamItem;
-import strikd.game.stream.items.LevelUpStreamItem;
+import strikd.game.stream.activity.ActivityStreamItem;
+import strikd.game.stream.activity.FriendMatchResultStreamItem;
+import strikd.game.stream.activity.ItemReceivedStreamItem;
+import strikd.game.stream.activity.LevelUpStreamItem;
 import strikd.net.codec.OutgoingMessage;
 
 public class ActivityStreamMessage extends OutgoingMessage

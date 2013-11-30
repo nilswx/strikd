@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.game.player.Player;
+import strikd.game.stream.activity.ActivityStreamItem;
 
 public class ActivityStreamManager extends Server.Referent
 {
