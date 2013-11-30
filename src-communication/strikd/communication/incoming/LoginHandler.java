@@ -69,7 +69,6 @@ public class LoginHandler extends MessageHandler
 				
 				// Push player data
 				session.send(new PlayerInfoMessage(player));
-				session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
 				session.send(new CurrencyBalanceMessage(player.getBalance()));
 				session.send(new ItemsMessage(player.getItems()));
 				
@@ -79,6 +78,9 @@ public class LoginHandler extends MessageHandler
 						player.getLogins(),
 						player.getPlatform(),
 						player.isFacebookLinked() ? player.getFacebook().getUserId() : "unlinked")));
+				
+				// Will force client to validate
+				session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
 			}
 		}
 	}
