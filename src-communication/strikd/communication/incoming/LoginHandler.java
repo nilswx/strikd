@@ -61,7 +61,7 @@ public class LoginHandler extends MessageHandler
 				if(player.getCountry() == null)
 				{
 					player.setCountry("nl");
-					logger.debug("{} had no country, set it to '{}'", player.getCountry());
+					logger.debug("{} had no country, set it to '{}'", player, player.getCountry());
 				}
 				
 				// Login OK!
