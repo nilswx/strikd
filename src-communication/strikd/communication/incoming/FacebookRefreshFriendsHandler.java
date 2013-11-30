@@ -13,7 +13,7 @@ public class FacebookRefreshFriendsHandler extends MessageHandler
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
-		return Opcodes.Incoming.FACEBOOK_INIT_FRIENDLIST;
+		return Opcodes.Incoming.FACEBOOK_REFRESH_FRIENDS;
 	}
 	
 	@Override
