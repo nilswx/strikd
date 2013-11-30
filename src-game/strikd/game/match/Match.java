@@ -147,6 +147,8 @@ public class Match
 				winner.getInfo().setWins(winner.getInfo().getWins() + 1);
 				loser.getInfo().setLosses(loser.getInfo().getLosses() + 1);
 				logger.debug("{}: {} wins, {} loses!", this, winner, loser);
+				
+				// TODO: post activity when playing against a friend
 			}
 			
 			// Broadcast event

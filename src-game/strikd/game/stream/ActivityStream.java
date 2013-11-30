@@ -10,12 +10,11 @@ import strikd.Server;
 import strikd.game.player.Player;
 import strikd.game.stream.activity.ActivityStreamItem;
 
-public class ActivityStreamManager extends Server.Referent
+public class ActivityStream extends Server.Referent
 {
-	private static final Logger logger = LoggerFactory
-			.getLogger(ActivityStreamManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(ActivityStream.class);
 
-	public ActivityStreamManager(Server server)
+	public ActivityStream(Server server)
 	{
 		super(server);
 		logger.info("{} events");
@@ -42,6 +41,8 @@ public class ActivityStreamManager extends Server.Referent
 	
 			// Add criteria
 			.where().eq("player.id", player.getId())
+			// TODO: or loser.id is player ID
+			// TODO: or player.id is in friendslist
 	
 			// Determine range to fetch
 			.setFirstRow(start)
