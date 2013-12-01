@@ -44,8 +44,8 @@ public class Session extends Server.Referent
 	private MatchPlayer matchPlayer;
 	private PlayerQueue.Entry queueEntry;
 	
-	private List<Long> friendList;
-	private List<Long> following;
+	private List<Integer> friendList;
+	private List<Integer> following;
 
 	public Session(long sessionId, NetConnection connection, Server server)
 	{
@@ -280,17 +280,17 @@ public class Session extends Server.Referent
 		this.queueEntry = entry;
 	}
 	
-	public void setFriendList(List<Long> friendList)
+	public void setFriendList(List<Integer> friendList)
 	{
 		this.friendList = friendList;
 	}
 	
-	public List<Long> getFriendList()
+	public List<Integer> getFriendList()
 	{
 		return this.friendList;
 	}
 
-	public List<Long> getFollowing()
+	public List<Integer> getFollowing()
 	{
 		if(this.following == null)
 		{

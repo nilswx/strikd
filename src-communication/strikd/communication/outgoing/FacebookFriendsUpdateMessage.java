@@ -14,7 +14,7 @@ public class FacebookFriendsUpdateMessage extends OutgoingMessage
 		super.writeInt(friends.size());
 		for(Player friend : friends)
 		{
-			super.writeLong(friend.getId());
+			super.writeInt(friend.getId());
 			super.writeStr(friend.getName());
 			super.writeStr(friend.getAvatar());
 			super.writeStr(friend.getMotto());

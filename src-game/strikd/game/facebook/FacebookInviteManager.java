@@ -32,12 +32,12 @@ public class FacebookInviteManager extends Server.Referent
 	public void processInvites(long personId)
 	{
 		// Was this FB user invited by existing players?
-		List<Long> invites = Lists.newArrayList();//this.dbInvites.findAndModify("{_id:#}", personId).remove().as(InvitedByList.class);
+		List<Integer> invites = Lists.newArrayList();//this.dbInvites.findAndModify("{_id:#}", personId).remove().as(InvitedByList.class);
 		if(invites != null)
 		{
 			// Reward these guys
 			PlayerRegister register = this.getServer().getPlayerRegister();
-			for(long playerId : invites)
+			for(int playerId : invites)
 			{
 				// Player _should_ still exist
 				Player player = register.findPlayer(playerId);

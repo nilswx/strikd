@@ -8,13 +8,13 @@ import strikd.net.codec.OutgoingMessage;
 
 public class FacebookFriendPlayersMessage extends OutgoingMessage
 {
-	public FacebookFriendPlayersMessage(Map<Long, Long> mapping)
+	public FacebookFriendPlayersMessage(Map<Integer, Long> mapping)
 	{
 		super(Opcodes.Outgoing.FACEBOOK_FRIEND_PLAYERS);
 		super.writeInt(mapping.size());
-		for(Entry<Long, Long> entry : mapping.entrySet())
+		for(Entry<Integer, Long> entry : mapping.entrySet())
 		{
-			super.writeLong(entry.getKey());
+			super.writeInt(entry.getKey());
 			super.writeLong(entry.getValue());
 		}
 	}

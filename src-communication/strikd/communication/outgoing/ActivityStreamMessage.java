@@ -25,7 +25,7 @@ public class ActivityStreamMessage extends OutgoingMessage
 		for(ActivityStreamItem item : items)
 		{
 			super.writeLong(item.getTimestamp());
-			super.writeLong(item.getPlayer().getId());
+			super.writeInt(item.getPlayer().getId());
 			if(item instanceof LevelUpStreamItem)
 			{
 				this.writeType(LevelUpStreamItem.TYPE);
@@ -39,7 +39,7 @@ public class ActivityStreamMessage extends OutgoingMessage
 			else if(item instanceof FriendMatchResultStreamItem)
 			{
 				this.writeType(FriendMatchResultStreamItem.TYPE);
-				this.writeLong(((FriendMatchResultStreamItem)item).getLoser().getId());
+				this.writeInt(((FriendMatchResultStreamItem)item).getLoser().getId());
 			}
 		}
 	}

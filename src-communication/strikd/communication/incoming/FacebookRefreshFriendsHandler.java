@@ -20,9 +20,10 @@ public class FacebookRefreshFriendsHandler extends MessageHandler
 	public void handle(Session session, IncomingMessage request)
 	{
 		// Friendlist initialized?
-		List<Long> friendList = session.getFriendList();
+		List<Integer> friendList = session.getFriendList();
 		if(friendList != null)
 		{
+			// Refresh all players (use a 'syncTimestamp' for Last Modified comparison?)
 			List<Player> players = session.getServer().getPlayerRegister().getPlayers(friendList);
 			session.send(new FacebookFriendsUpdateMessage(players));
 		}

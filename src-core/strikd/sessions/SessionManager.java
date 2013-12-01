@@ -19,7 +19,7 @@ public class SessionManager extends Server.Referent
 	private final Map<Long, Session> sessions = new ConcurrentHashMap<Long, Session>();
 	
 	private final AtomicLong loginCounter = new AtomicLong();
-	private final Map<Long, Session> playerSessions = new ConcurrentHashMap<Long, Session>();
+	private final Map<Integer, Session> playerSessions = new ConcurrentHashMap<Integer, Session>();
 	
 	public SessionManager(Server server)
 	{
@@ -89,7 +89,7 @@ public class SessionManager extends Server.Referent
 		return this.sessions.get(sessionId);
 	}
 	
-	public Session getPlayerSession(long playerId)
+	public Session getPlayerSession(int playerId)
 	{
 		return this.playerSessions.get(playerId);
 	}

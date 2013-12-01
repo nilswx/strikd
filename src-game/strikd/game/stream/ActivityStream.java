@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.game.stream.activity.ActivityStreamItem;
-
 import static com.avaje.ebean.Expr.in;
 
 public class ActivityStream extends Server.Referent
@@ -29,7 +28,7 @@ public class ActivityStream extends Server.Referent
 		logger.debug("posted {} for {}", item, item.getPlayer());
 	}
 
-	public List<ActivityStreamItem> filterItems(List<Long> relevantPlayerIds, int start, int amount)
+	public List<ActivityStreamItem> filterItems(List<Integer> relevantPlayers, int start, int amount)
 	{
 		// Use pure SQL for performance?
 		/*
@@ -50,8 +49,8 @@ public class ActivityStream extends Server.Referent
 				// Add criteria
 				.where().or
 				(
-					in("player.id", relevantPlayerIds),
-					in("loser.id", relevantPlayerIds)
+					in("player.id", relevantPlayers),
+					in("loser.id", relevantPlayers)
 				)
 				
 				// Last first

@@ -32,7 +32,7 @@ public class LoginHandler extends MessageHandler
 		if(!session.isLoggedIn())
 		{
 			// Read login info
-			long playerId = request.readLong();
+			int playerId = request.readInt();
 			String token = request.readStr();
 			String hardware = request.readStr();
 			String systemVersion = request.readStr();

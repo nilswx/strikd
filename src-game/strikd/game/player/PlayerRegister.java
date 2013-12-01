@@ -52,7 +52,7 @@ public class PlayerRegister extends Server.Referent
 		this.getDatabase().update(player);
 	}
 	
-	public Player findPlayer(long playerId)
+	public Player findPlayer(int playerId)
 	{
 		Session session = this.getServer().getSessionMgr().getPlayerSession(playerId);
 		if(session != null)
@@ -65,17 +65,17 @@ public class PlayerRegister extends Server.Referent
 		}
 	}
 	
-	public List<Player> getPlayers(List<Long> playerIds)
+	public List<Player> getPlayers(List<Integer> playerIds)
 	{
 		return this.getDatabase().createQuery(Player.class).where().in("id", playerIds).findList();
 	}
 	
-	public Map<Long, Long> getFacebookMapping(List<Long> userIds)
+	public Map<Integer, Long> getFacebookMapping(List<Long> userIds)
 	{
-		Map<Long, Long> mapping = Maps.newHashMapWithExpectedSize(userIds.size());
-		for(SqlRow row : this.getDatabase().createSqlQuery("select fb_uid,id from players where fb_uid in(:ids)").setParameter("ids", userIds).findList())
+		Map<Integer, Long> mapping = Maps.newHashMapWithExpectedSize(userIds.size());
+		for(SqlRow row : this.getDatabase().createSqlQuery("select id,fb_uid from players where fb_uid in(:ids)").setParameter("ids", userIds).findList())
 		{
-			mapping.put(row.getLong("fb_uid"), row.getLong("id"));
+			mapping.put(row.getInteger("id"), row.getLong("fb_uid"));
 		}
 		
 		return mapping;

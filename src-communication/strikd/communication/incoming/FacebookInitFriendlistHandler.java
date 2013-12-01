@@ -35,11 +35,11 @@ public class FacebookInitFriendlistHandler extends MessageHandler
 				userIds.add(request.readLong());
 			}
 			
-			// Retrieve mapping (user -> player)
-			Map<Long, Long> mapping = session.getServer().getPlayerRegister().getFacebookMapping(userIds);
+			// Retrieve mapping (player -> user)
+			Map<Integer, Long> mapping = session.getServer().getPlayerRegister().getFacebookMapping(userIds);
 			
 			// Store the friendlist in the session
-			session.setFriendList(ImmutableList.copyOf(mapping.values()));
+			session.setFriendList(ImmutableList.copyOf(mapping.keySet()));
 			
 			// Follow ALL friends in the stream (prevent duplicates when reinitializing)
 			if(session.getFollowing().size() > 1)
