@@ -25,7 +25,7 @@ public class FacebookInitFriendlistHandler extends MessageHandler
 	{
 		// User has Facebook and not initialized yet?
 		Player player = session.getPlayer();
-		if(player.isFacebookLinked() && session.getFriendList() == null)
+		if(player.isFacebookLinked())
 		{
 			// Collect all friend ID's (Facebook user ID)
 			int amount = request.readInt();
@@ -41,7 +41,15 @@ public class FacebookInitFriendlistHandler extends MessageHandler
 			// Store the friendlist in the session
 			session.setFriendList(ImmutableList.copyOf(mapping.values()));
 			
-			// Follow all these people in the stream
+			// Friendlist was initialized earlier this session? (reload)
+			if(session.getFollowing().size() > 1)
+			{
+				// Clear it and re-add self
+				session.getFollowing().clear();
+				session.getFollowing().add(player.getId());
+			}
+			
+			// Follow all friends in the stream
 			session.getFollowing().addAll(session.getFriendList());
 			
 			// Send the mapping!
