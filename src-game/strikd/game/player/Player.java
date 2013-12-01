@@ -34,6 +34,8 @@ public class Player
 	
 	private String avatar;
 	
+	private String motto;
+	
 	private String locale;
 	
 	private String country;
@@ -117,6 +119,16 @@ public class Player
 	public void setAvatar(String avatar)
 	{
 		this.avatar = avatar;
+	}
+	
+	public String getMotto()
+	{
+		return this.motto;
+	}
+	
+	public void setMotto(String motto)
+	{
+		this.motto = motto;
 	}
 
 	public String getLocale()

@@ -25,7 +25,7 @@ public class ActivityStreamMessage extends OutgoingMessage
 		for(ActivityStreamItem item : items)
 		{
 			super.writeLong(item.getTimestamp());
-			this.writePlayer(self, item.getPlayer());
+			super.writeLong(item.getPlayer().getId());
 			if(item instanceof LevelUpStreamItem)
 			{
 				this.writeType(LevelUpStreamItem.TYPE);
@@ -39,7 +39,7 @@ public class ActivityStreamMessage extends OutgoingMessage
 			else if(item instanceof FriendMatchResultStreamItem)
 			{
 				this.writeType(FriendMatchResultStreamItem.TYPE);
-				this.writePlayer(self, ((FriendMatchResultStreamItem)item).getLoser());
+				this.writeLong(((FriendMatchResultStreamItem)item).getLoser().getId());
 			}
 		}
 	}
@@ -48,20 +48,5 @@ public class ActivityStreamMessage extends OutgoingMessage
 	{
 		// More compact (saves 2 bytes!)
 		this.writeByte((byte)type.charAt(0));
-	}
-	
-	private void writePlayer(Player self, Player player)
-	{
-		// Save bandwidth flag
-		boolean isSelf = (player.getId() == self.getId());
-		super.writeBool(isSelf);
-		
-		// Player data follows?
-		if(!isSelf)
-		{
-			super.writeLong(player.getId());
-			super.writeStr(player.getName());
-			super.writeStr(player.getAvatar());
-		}
 	}
 }

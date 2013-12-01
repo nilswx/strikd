@@ -18,6 +18,7 @@ public class PlayerInfoMessage extends OutgoingMessage
 		msg.writeLong(player.getId());
 		msg.writeStr(player.getName());
 		msg.writeStr(player.getAvatar());
+		msg.writeStr(player.getMotto());
 		msg.writeStr(player.getCountry());
 		msg.writeInt(player.getXp());
 		msg.writeInt(player.getLevel());

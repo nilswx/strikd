@@ -17,6 +17,7 @@ public class FacebookFriendsUpdateMessage extends OutgoingMessage
 			super.writeLong(friend.getId());
 			super.writeStr(friend.getName());
 			super.writeStr(friend.getAvatar());
+			super.writeStr(friend.getMotto());
 			super.writeBool(friend.isOnline());
 			super.writeBool(friend.isInMatch());
 		}

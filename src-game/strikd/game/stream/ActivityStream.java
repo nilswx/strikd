@@ -45,6 +45,7 @@ public class ActivityStream extends Server.Referent
 				
 				// Join partial player data
 				.fetch("player", "id,name,avatar")
+				.fetch("loser", "id,name,avatar")
 
 				// Add criteria
 				.where().or
