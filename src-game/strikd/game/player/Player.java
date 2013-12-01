@@ -32,19 +32,25 @@ public class Player
 	@Column(nullable=false)
 	private Date joined;
 	
+	@Column(nullable=false)
 	private String avatar;
 	
+	@Column(nullable=false)
 	private String motto;
 	
+	@Column(nullable=false)
 	private String locale;
 	
+	@Column(nullable=false)
 	private String country;
 	
+	@Column(nullable=false)
 	private String platform;
 	
 	@Column(nullable=false)
 	private int serverId;
 	
+	@Column(nullable=false)
 	private long opponentId;
 	
 	@Column(nullable=false)
