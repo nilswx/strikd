@@ -10,7 +10,7 @@ import strikd.game.items.ItemType;
 @Entity @DiscriminatorValue(ItemReceivedStreamItem.TYPE)
 public class ItemReceivedStreamItem extends ActivityStreamItem
 {
-	@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.ORDINAL)
 	private ItemType item;
 
 	public ItemType getItem()
