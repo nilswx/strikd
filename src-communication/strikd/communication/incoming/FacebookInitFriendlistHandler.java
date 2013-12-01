@@ -41,15 +41,12 @@ public class FacebookInitFriendlistHandler extends MessageHandler
 			// Store the friendlist in the session
 			session.setFriendList(ImmutableList.copyOf(mapping.values()));
 			
-			// Friendlist was initialized earlier this session? (reload)
+			// Follow ALL friends in the stream (prevent duplicates when reinitializing)
 			if(session.getFollowing().size() > 1)
 			{
-				// Clear it and re-add self
 				session.getFollowing().clear();
 				session.getFollowing().add(player.getId());
 			}
-			
-			// Follow all friends in the stream
 			session.getFollowing().addAll(session.getFriendList());
 			
 			// Send the mapping!
