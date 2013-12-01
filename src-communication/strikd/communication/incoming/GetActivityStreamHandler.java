@@ -5,7 +5,6 @@ import java.util.List;
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.ActivityStreamMessage;
-import strikd.game.player.Player;
 import strikd.game.stream.ActivityStream;
 import strikd.game.stream.activity.ActivityStreamItem;
 import strikd.net.codec.IncomingMessage;
@@ -28,11 +27,10 @@ public class GetActivityStreamHandler extends MessageHandler
 			// Determine span
 			int start = request.readInt();
 			int end = request.readInt();
-			Player player = session.getPlayer();
 			
 			// Send all items in this period
-			List<ActivityStreamItem> items = stream.getPlayerStream(player, start, (end - start));
-			session.send(new ActivityStreamMessage(start, end, items, player));
+			List<ActivityStreamItem> items = stream.filterItems(session.getFollowing(), start, (end - start));
+			session.send(new ActivityStreamMessage(start, end, items, session.getPlayer()));
 		}
 	}
 }

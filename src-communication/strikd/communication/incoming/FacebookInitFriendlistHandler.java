@@ -23,9 +23,9 @@ public class FacebookInitFriendlistHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		// User has Facebook?
+		// User has Facebook and not initialized yet?
 		Player player = session.getPlayer();
-		if(player.isFacebookLinked())
+		if(player.isFacebookLinked() && session.getFriendList() == null)
 		{
 			// Collect all friend ID's (Facebook user ID)
 			int amount = request.readInt();
@@ -38,8 +38,11 @@ public class FacebookInitFriendlistHandler extends MessageHandler
 			// Retrieve mapping (user -> player)
 			Map<Long, Long> mapping = session.getServer().getPlayerRegister().getFacebookMapping(userIds);
 			
-			// Store the player IDs in session
+			// Store the friendlist in the session
 			session.setFriendList(ImmutableList.copyOf(mapping.values()));
+			
+			// Follow all these people in the stream
+			session.getFollowing().addAll(session.getFriendList());
 			
 			// Send the mapping!
 			session.send(new FacebookFriendPlayersMessage(mapping));

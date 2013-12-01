@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
+
 import strikd.Server;
 import strikd.cluster.ServerDescriptor;
 import strikd.communication.Opcodes;
@@ -43,6 +45,7 @@ public class Session extends Server.Referent
 	private PlayerQueue.Entry queueEntry;
 	
 	private List<Long> friendList;
+	private List<Long> following;
 
 	public Session(long sessionId, NetConnection connection, Server server)
 	{
@@ -108,7 +111,7 @@ public class Session extends Server.Referent
 	private void onLogin()
 	{
 		// Add xp!
-		this.player.setXp(player.getXp() + 5);
+		this.player.setXp(this.player.getXp() + 5);
 
 		// Re-calculate level (XP zones could have changed)
 		this.player.setLevel(Experience.calculateLevel(this.player.getLevel()));
@@ -125,6 +128,9 @@ public class Session extends Server.Referent
 		ir.setPlayer(this.player);
 		ir.setItem(RandomUtil.pickOne(ItemType.values()));
 		this.getServer().getActivityStream().postItem(ir);
+		
+		// Subscribe to own stream items
+		this.getFollowing().add(this.player.getId());
 	}
 
 	private void onLogout()
@@ -282,5 +288,14 @@ public class Session extends Server.Referent
 	public List<Long> getFriendList()
 	{
 		return this.friendList;
+	}
+
+	public List<Long> getFollowing()
+	{
+		if(this.following == null)
+		{
+			this.following = Lists.newArrayList();
+		}
+		return this.following;
 	}
 }

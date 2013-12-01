@@ -7,8 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import strikd.Server;
-import strikd.game.player.Player;
 import strikd.game.stream.activity.ActivityStreamItem;
+
+import static com.avaje.ebean.Expr.in;
 
 public class ActivityStream extends Server.Referent
 {
@@ -28,9 +29,9 @@ public class ActivityStream extends Server.Referent
 		logger.debug("posted {} for {}", item, item.getPlayer());
 	}
 
-	public List<ActivityStreamItem> getPlayerStream(Player player, int start, int amount)
+	public List<ActivityStreamItem> filterItems(List<Long> relevantPlayerIds, int start, int amount)
 	{
-		// Use pure SQL?
+		// Use pure SQL for performance?
 		/*
 		for(SqlRow row : this.getDatabase()
 			.createSqlQuery("select s.type,s.timestamp,p.id,p.name,p.avatar,f.name AS rname from stream s join players p on p.id=s.player_id join facebook f on f.user_id=p.facebook_user_id where id=" + player.getId())
@@ -39,32 +40,27 @@ public class ActivityStream extends Server.Referent
 			System.out.println(row);
 		}*/
 		
-		// Find items
-		List<ActivityStreamItem> items = this.getDatabase().createQuery(ActivityStreamItem.class)
+		// Build query
+		return this.getDatabase().createQuery(ActivityStreamItem.class)
 				
-			// Read only!
-			.setReadOnly(true)
-	
-			// Join partial player data
-			.fetch("player", "id,name,avatar")
+				// Join partial player data
+				.fetch("player", "id,name,avatar")
+
+				// Add criteria
+				.where().or
+				(
+					in("player.id", relevantPlayerIds),
+					in("loser.id", relevantPlayerIds)
+				)
 				
-			// Last first
-			.orderBy().desc("timestamp")
-	
-			// Add criteria
-			.where().eq("player.id", player.getId())
-			
-			// TODO: or loser.id is player ID
-			// TODO: or player.id is in friendslist
-	
-			// Determine range to fetch
-			.setFirstRow(start)
-			.setMaxRows(amount)
-	
-			// Return as stream items
-			.findList();
-		
-		// Done!
-		return items;
+				// Last first
+				.orderBy().desc("timestamp")
+				
+				// Range to fetch (paging)
+				.setFirstRow(start)
+				.setMaxRows(amount)
+				
+				// Fetch results
+				.findList();
 	}
 }

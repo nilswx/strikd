@@ -130,11 +130,10 @@ public class Server
 	
 	private EbeanServer setupDb(Properties props)
 	{
-		// Don't use Ebean singleton
+		// Register with singleton
 		ServerConfig conf = new ServerConfig();
 		conf.setName("db");
-		conf.setRegister(false);  
-		conf.setDefaultServer(false); 
+		conf.setDefaultServer(true); 
 		
 		// Configure data source
 		DataSourceConfig ds = new DataSourceConfig();  
@@ -155,7 +154,7 @@ public class Server
 		// DDL options  
 		if("1".equals(props.getProperty("dev.db.reset")))
 		{
-			logger.info("Requesting database DDL reset...");
+			logger.warn("!!! REQUESTING DATABASE DDL RESET !!");
 			conf.setDdlGenerate(true);  
 			conf.setDdlRun(true);
 		}
