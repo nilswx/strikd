@@ -17,7 +17,7 @@ public class ActivityStream extends Server.Referent
 	public ActivityStream(Server server)
 	{
 		super(server);
-		logger.info("{} events");
+		logger.info("{} events", server.getDatabase().find(ActivityStreamItem.class).findRowCount());
 	}
 
 	public void postItem(ActivityStreamItem item)
