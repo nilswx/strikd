@@ -73,10 +73,11 @@ public class LoginHandler extends MessageHandler
 				session.send(new ItemsMessage(player.getItems()));
 				
 				// Welcome!
-				session.send(new AlertMessage(String.format("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rFacebook: %s\r\rThanks for staying with us!",
+				session.send(new AlertMessage(String.format("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rFacebook: %s\r\rThanks for staying with us!",
 						session.getServer().getServerCluster().getSelf(),
 						player.getLogins(),
 						player.getPlatform(),
+						player.getMotto(),
 						player.isFacebookLinked() ? player.getFacebook().getUserId() : "unlinked")));
 				
 				// Will force client to validate
