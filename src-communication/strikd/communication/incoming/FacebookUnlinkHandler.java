@@ -26,7 +26,7 @@ public class FacebookUnlinkHandler extends MessageHandler
 			session.send(new FacebookStatusMessage(false, player.isLiked()));
 			
 			// Restore name to a random name
-			String newName = session.getServer().getPlayerRegister().generateDefaultName();
+			String newName = session.getServer().getPlayerRegister().getDefaultName();
 			session.renamePlayer(newName);
 			
 			// Save immediately

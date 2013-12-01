@@ -32,9 +32,13 @@ public class PlayerRegister extends Server.Referent
 		Player player = this.getDatabase().createEntityBean(Player.class);
 		player.setToken(UUID.randomUUID().toString().replace("-", "").toUpperCase());
 		player.setJoined(new Date());
-		player.setName(this.generateDefaultName());
-		player.setLocale("en_US");
-		player.setBalance(5);
+		player.setName(this.getDefaultName());
+		player.setAvatar(this.getDefaultAvatar());
+		player.setMotto(this.getDefaultMotto());
+		player.setLocale(""); // Player will send CHANGE_LOCALE
+		player.setCountry(""); // Will change after LOGIN
+		player.setPlatform(""); // Will change after LOGIN
+		player.setBalance(this.getDefaultBalance());
 		
 		// Save to database
 		this.getDatabase().save(player);
@@ -77,8 +81,23 @@ public class PlayerRegister extends Server.Referent
 		return mapping;
 	}
 	
-	public String generateDefaultName()
+	public String getDefaultName()
 	{
 		return String.format("Player-%d", RandomUtil.pickInt(100000, 999999));
+	}
+	
+	public String getDefaultAvatar()
+	{
+		return "ht1.hd2.ey4";
+	}
+	
+	public String getDefaultMotto()
+	{
+		return "Hey I'm new!";
+	}
+	
+	public int getDefaultBalance()
+	{
+		return 5;
 	}
 }
