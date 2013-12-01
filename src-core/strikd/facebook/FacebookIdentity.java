@@ -10,7 +10,7 @@ import com.restfb.FacebookClient;
 @Embeddable
 public class FacebookIdentity
 {
-	@Column(name="fb_uid")
+	@Column(name="fb_uid",unique=true)
 	private Long userId;
 	
 	@Column(name="fb_token")
