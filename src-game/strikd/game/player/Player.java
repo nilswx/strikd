@@ -30,19 +30,16 @@ public class Player
 	private String name;
 	
 	@Column(nullable=false)
-	private Date joined;
-	
-	@Column(nullable=false)
 	private String avatar;
 	
 	@Column(nullable=false)
 	private String motto;
 	
 	@Column(nullable=false)
-	private String locale;
+	private String country;
 	
 	@Column(nullable=false)
-	private String country;
+	private String locale;
 	
 	@Column(nullable=false)
 	private String platform;
@@ -82,6 +79,9 @@ public class Player
 	
 	@Column(nullable=false)
 	private boolean liked;
+	
+	@Column(nullable=false)
+	private Date joined;
 	
 	@Version
 	@Column(nullable=false)
