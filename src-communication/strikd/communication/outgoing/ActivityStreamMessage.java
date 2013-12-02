@@ -8,6 +8,7 @@ import strikd.game.stream.activity.ActivityStreamItem;
 import strikd.game.stream.activity.FriendMatchResultStreamItem;
 import strikd.game.stream.activity.ItemReceivedStreamItem;
 import strikd.game.stream.activity.LevelUpStreamItem;
+import strikd.game.stream.activity.PlayerJoinedStreamItem;
 import strikd.net.codec.OutgoingMessage;
 
 public class ActivityStreamMessage extends OutgoingMessage
@@ -40,6 +41,10 @@ public class ActivityStreamMessage extends OutgoingMessage
 			{
 				this.writeType(FriendMatchResultStreamItem.TYPE);
 				this.writeInt(((FriendMatchResultStreamItem)item).getLoser().getId());
+			}
+			else if(item instanceof PlayerJoinedStreamItem)
+			{
+				this.writeType(PlayerJoinedStreamItem.TYPE);
 			}
 		}
 	}

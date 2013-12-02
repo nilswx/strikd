@@ -12,6 +12,7 @@ import com.avaje.ebean.SqlRow;
 import com.google.common.collect.Maps;
 
 import strikd.Server;
+import strikd.game.stream.activity.PlayerJoinedStreamItem;
 import strikd.sessions.Session;
 import strikd.util.RandomUtil;
 
@@ -44,6 +45,11 @@ public class PlayerRegister extends Server.Referent
 		// Save to database
 		this.getDatabase().save(player);
 		logger.debug("created player {}", player);
+		
+		// Hello world!
+		PlayerJoinedStreamItem pj = new PlayerJoinedStreamItem();
+		pj.setPlayer(player);
+		this.getServer().getActivityStream().postItem(pj);
 		
 		return player;
 	}
