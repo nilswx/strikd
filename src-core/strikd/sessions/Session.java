@@ -112,7 +112,10 @@ public class Session extends Server.Referent
 
 	private void onLogin()
 	{
-		// Add xp!
+		// Save on logout!
+		this.setSaveOnLogout(true);
+		
+		// Add some XP!
 		this.player.setXp(this.player.getXp() + 5);
 
 		// Re-calculate level (XP zones could have changed)
