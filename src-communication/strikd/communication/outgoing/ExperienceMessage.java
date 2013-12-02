@@ -18,5 +18,7 @@ public class ExperienceMessage extends OutgoingMessage
 		super.writeInt(beginXP);
 		super.writeInt(currentXP);
 		super.writeInt(endXP);
+		
+		System.out.println(String.format("[L%d]     %d/%d -> %d/%d     [L%d]", level, beginXP, endXP, currentXP, endXP, level + 1));
 	}
 }

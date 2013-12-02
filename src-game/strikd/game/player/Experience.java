@@ -1,19 +1,26 @@
 package strikd.game.player;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import strikd.communication.outgoing.ExperienceMessage;
 import strikd.sessions.Session;
 
 @SuppressWarnings("unused")
 public class Experience
 {
 	public static final int MAX_LEVEL = 45;
+	
 	private static final int FORMULA_BASE = 100;
 	private static final float FORMULA_MULTIPLIER = 1.20f;
 	
 	private static final int[] LEVEL_EXPERIENCE;
 	
+	private static final Logger logger = LoggerFactory.getLogger(Experience.class);
+	
 	static
 	{
-		// Fill cache
+		// Fill XP cache
 		LEVEL_EXPERIENCE = new int[MAX_LEVEL + 1];
 		for(int level = 1; level <= MAX_LEVEL; level++)
 		{
@@ -74,79 +81,65 @@ public class Experience
 		}
 	}
 	
-	public static void addExperience(Session session, int points)
+	public static ExperienceMessage addExperience(Player player, Session session, int points)
 	{
-		// Add points and calculate new level
-		Player player = session.getPlayer();
-		player.setXp(player.getXp() + points);
-		int newLevel = calculateLevel(player.getXp());
-		
-		// Handle level ups
-		if(newLevel != player.getLevel())
+		// Need to do anything? 
+		if(points > 0 && player.getLevel() < MAX_LEVEL)
 		{
-			// Process all new levels
-			for(int level = player.getLevel(); level <= newLevel; level++)
-			{
-				onLevelUp(session, level);
-			}
-			player.setLevel(newLevel);
-		}
-		
-		// Save this stuff immediately
-		session.saveData();
-	}
-	
-	public static void addExp(Player player, int points)
-	{
-		// Limit reached?
-		if(player.getLevel() >= MAX_LEVEL)
-		{
-			return;
-		}
-		
-		// Calculate goal
-		//Player player = session.getPlayer();
-		
-		// Add all the experience points
-		int pointsLeft = points;
-		while(pointsLeft > 0)
-		{
-			// Add XP, but within the current level
-			int endXP = getLevelEnd(player.getLevel());
-			int pointsToNext = (endXP - player.getXp());
-			int pointsToAdd = (pointsLeft < pointsToNext || player.getLevel() == MAX_LEVEL) ? pointsLeft : pointsToNext;
-			player.setXp(player.getXp() + pointsToAdd);
+			// Determine amount of levelups
+			int resultLevel = calculateLevel(player.getXp() + points);
+			int levelUps = (resultLevel - player.getLevel());
+			ExperienceMessage msg = new ExperienceMessage(points, levelUps + 1);
 			
-			// Level up?
-			if(player.getXp() == endXP)
+			// Add all the experience points while stepping through the levels
+			int currentLevel = player.getLevel(), currentXP = player.getXp(), pointsLeft = points;
+			while(pointsLeft > 0)
 			{
-				player.setLevel(player.getLevel() + 1);
-				onLevelUp(null, player.getLevel());
+				// Add XP, but within the current level
+				int endXP = getLevelEnd(currentLevel);
+				int pointsToNext = (endXP - currentXP);
+				int pointsToAdd = (pointsLeft < pointsToNext || currentLevel == MAX_LEVEL) ? pointsLeft : pointsToNext;
+				currentXP += pointsToAdd;
+				
+				// Write to message
+				msg.writeLevel(currentLevel, getLevelBegin(currentLevel), currentXP, endXP);
+				
+				// Level up?
+				if(currentXP == endXP)
+				{
+					currentLevel++;
+					onLevelUp(player, session, currentLevel);
+				}
+				
+				// Added some points!
+				pointsLeft -= pointsToAdd;
 			}
 			
-			// Added some points!
-			pointsLeft -= pointsToAdd;
+			// Set final level and XP
+			player.setXp(currentXP);
+			player.setLevel(currentLevel);
 		}
 		
-		pointsLeft = 0;
+		return null;
 	}
 	
-	private static void onLevelUp(Session session, int level)
+	private static void onLevelUp(Player player, Session session, int level)
 	{
-		System.out.println("DING, reached " + level);
+		// Hurray!
+		logger.debug("DING, {} reached {}", player.getName(), level);
 		
-		// TODO: create event in feeds
+		// TODO: create event in stream + publish FB story
 		
-		// TODO: reward with items for level x
+		// TODO: reward with items / coins for level x
 	}
 	
 	public static void main(String[] args)
 	{
 		Player john = new Player();
+		john.setName("John");
 		john.setXp(0);
-		john.setLevel(0);
-		addExp(john, Integer.MAX_VALUE);
-		
-		System.out.println(calculateLevel(Integer.MAX_VALUE - 1));
+		john.setLevel(calculateLevel(john.getXp()));
+	
+		addExperience(john, null, 3);
 	}
 }
