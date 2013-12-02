@@ -55,9 +55,15 @@ public class SessionManager extends Server.Referent
 			}
 			else
 			{
+				// Set server
+				player.setServerId(0);
+				
+				// Remove session
 				this.playerSessions.remove(player.getId());
 				logger.debug("{} logged out ({})", player, reason);
 			}
+			
+			// Process destroy logic
 			session.onEnd();
 		}
 	}
@@ -75,11 +81,15 @@ public class SessionManager extends Server.Referent
 				this.endSession(concurrent.getSessionId(), "concurrent login");
 			}
 			
-			// Add to player map and increment logins
+			// Set server
+			player.setLogins(player.getLogins() + 1);
+			player.setServerId(this.getServer().getServerCluster().getSelf().getId());
+			
+			// Add to player map
 			this.playerSessions.put(player.getId(), session);
 			this.loginCounter.incrementAndGet();
-			player.setLogins(player.getLogins() + 1);
-			
+
+			// Hello!
 			logger.info("{} logged in (#{}) in from {} ({})", player, player.getLogins(), session.getConnection().getIpAddress(), player.getPlatform());
 		}
 	}

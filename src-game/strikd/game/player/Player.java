@@ -161,6 +161,7 @@ public class Player
 
 	public void setServerId(int serverId)
 	{
+		this.setOpponentId(0);
 		this.serverId = serverId;
 	}
 
