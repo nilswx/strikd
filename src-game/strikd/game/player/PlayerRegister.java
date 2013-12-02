@@ -34,6 +34,7 @@ public class PlayerRegister extends Server.Referent
 		player.setName(this.getDefaultName());
 		player.setAvatar(this.getDefaultAvatar());
 		player.setMotto(this.getDefaultMotto());
+		player.setLevel(1); // Start at lvl 1
 		player.setLocale(""); // Player will send CHANGE_LOCALE
 		player.setCountry(""); // Will change after LOGIN
 		player.setPlatform(""); // Will change after LOGIN

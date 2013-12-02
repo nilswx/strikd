@@ -7,7 +7,7 @@ public class ExperienceMessage extends OutgoingMessage
 {
 	public ExperienceMessage(int added, int levels)
 	{
-		super(Opcodes.Outgoing.CURRENCY_BALANCE);
+		super(Opcodes.Outgoing.EXPERIENCE);
 		super.writeInt(added);
 		super.writeByte((byte)levels);
 	}

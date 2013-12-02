@@ -115,13 +115,6 @@ public class Session extends Server.Referent
 		// Save on logout!
 		this.setSaveOnLogout(true);
 		
-		// Add some XP!
-		this.player.setXp(this.player.getXp() + 5);
-
-		// Re-calculate level (XP zones could have changed)
-		this.player.setLevel(Experience.calculateLevel(this.player.getLevel()));
-		logger.debug("{} is level {} ({} XP)", this.player, this.player.getLevel(), this.player.getXp());
-		
 		// Post a levelup activity
 		LevelUpStreamItem lup = new LevelUpStreamItem();
 		lup.setPlayer(this.player);

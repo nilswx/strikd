@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import strikd.communication.outgoing.ExperienceMessage;
 import strikd.sessions.Session;
 
-@SuppressWarnings("unused")
 public class Experience
 {
 	public static final int MAX_LEVEL = 45;
@@ -34,11 +33,12 @@ public class Experience
 			int levelBegin = getLevelBegin(level);
 			int levelEnd = getLevelEnd(level);
 			int levelNeed = (levelEnd - levelBegin);
-			//System.out.println(String.format("Level %d: %d-%d (%d needed, %d more)", level, levelBegin, levelEnd, levelNeed, (levelNeed - prevNeed)));
+			System.out.println(String.format("Level %d: %d-%d (%d needed, %d more)", level, levelBegin, levelEnd, levelNeed, (levelNeed - prevNeed)));
 			
 			// Save for next
 			prevNeed = levelNeed;
 		}
+		System.out.println();
 	}
 	
 	public static int calculateLevel(int experience)
@@ -83,44 +83,50 @@ public class Experience
 	
 	public static ExperienceMessage addExperience(Player player, Session session, int points)
 	{
-		// Need to do anything? 
-		if(points > 0 && player.getLevel() < MAX_LEVEL)
+		// Impose limits?
+		if(points < 0 || player.getLevel() >= MAX_LEVEL)
 		{
-			// Determine amount of levelups
-			int resultLevel = calculateLevel(player.getXp() + points);
-			int levelUps = (resultLevel - player.getLevel());
-			ExperienceMessage msg = new ExperienceMessage(points, levelUps + 1);
-			
-			// Add all the experience points while stepping through the levels
-			int currentLevel = player.getLevel(), currentXP = player.getXp(), pointsLeft = points;
-			while(pointsLeft > 0)
-			{
-				// Add XP, but within the current level
-				int endXP = getLevelEnd(currentLevel);
-				int pointsToNext = (endXP - currentXP);
-				int pointsToAdd = (pointsLeft < pointsToNext || currentLevel == MAX_LEVEL) ? pointsLeft : pointsToNext;
-				currentXP += pointsToAdd;
-				
-				// Write to message
-				msg.writeLevel(currentLevel, getLevelBegin(currentLevel), currentXP, endXP);
-				
-				// Level up?
-				if(currentXP == endXP)
-				{
-					currentLevel++;
-					onLevelUp(player, session, currentLevel);
-				}
-				
-				// Added some points!
-				pointsLeft -= pointsToAdd;
-			}
-			
-			// Set final level and XP
-			player.setXp(currentXP);
-			player.setLevel(currentLevel);
+			points = 0;
 		}
 		
-		return null;
+		// Cache values and determine amount of level-ups
+		int currentLevel = player.getLevel(), currentXP = player.getXp();
+		int resultLevel = calculateLevel(currentXP + points);
+		int levelUps = (resultLevel - currentLevel);
+		logger.debug("adding {} xp to {} will cause {} level-ups", points, player.getName(), levelUps);
+		
+		// Initialize the experience message
+		ExperienceMessage msg = new ExperienceMessage(points, levelUps + 1);
+		
+		do
+		{
+			// Add XP, but within the current level
+			int endXP = getLevelEnd(currentLevel);
+			int pointsToNext = (endXP - currentXP);
+			int pointsToAdd = (points < pointsToNext || currentLevel == MAX_LEVEL) ? points : pointsToNext;
+			currentXP += pointsToAdd;
+			
+			// Write progress on this level to message
+			msg.writeLevel(currentLevel, getLevelBegin(currentLevel), currentXP, endXP);
+			
+			// Level up?
+			if(currentXP == endXP)
+			{
+				currentLevel++;
+				onLevelUp(player, session, currentLevel);
+			}
+			
+			// Added some points!
+			points -= pointsToAdd;
+		}
+		while(points > 0);
+		
+		// Set final level and XP
+		player.setXp(currentXP);
+		player.setLevel(currentLevel);
+		
+		// Return the composed update message
+		return msg;
 	}
 	
 	private static void onLevelUp(Player player, Session session, int level)
