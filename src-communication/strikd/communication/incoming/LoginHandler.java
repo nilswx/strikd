@@ -43,6 +43,7 @@ public class LoginHandler extends MessageHandler
 			{
 				// Don't know what the client is doing, but his credentials are invalid
 				session.send(new PlayerUnknownMessage(playerId));
+				session.end(String.format("bad login on player #%d", playerId));
 			}
 			else
 			{
