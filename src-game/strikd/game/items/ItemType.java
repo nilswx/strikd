@@ -114,4 +114,18 @@ public enum ItemType
 			logger.debug("registered {} (type={})", type, type.kind);
 		}
 	}
+
+	private static final ItemType[] values = values();
+	
+	public static ItemType valueOf(int typeId)
+	{
+		if(typeId >= 0 && typeId < values.length)
+		{
+			return values[typeId];
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
