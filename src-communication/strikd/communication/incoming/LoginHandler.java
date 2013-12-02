@@ -71,7 +71,7 @@ public class LoginHandler extends MessageHandler
 			session.send(new ItemsMessage(player.getItems()));
 			
 			// Add experience!
-			session.send(Experience.addExperience(player, session, +10));
+			Experience.addExperience(player, session, +10);
 			
 			// Welcome!
 			session.send(new AlertMessage(String.format("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rBalance: %d coins\r\rThanks for flying with us!",

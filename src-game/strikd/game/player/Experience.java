@@ -33,7 +33,7 @@ public class Experience
 			int levelBegin = getLevelBegin(level);
 			int levelEnd = getLevelEnd(level);
 			int levelNeed = (levelEnd - levelBegin);
-			System.out.println(String.format("Level %d: %d-%d (%d needed, %d more)", level, levelBegin, levelEnd, levelNeed, (levelNeed - prevNeed)));
+			logger.debug("Level {}: {}-{} ({} needed, {} more)", level, levelBegin, levelEnd, levelNeed, (levelNeed - prevNeed));
 			
 			// Save for next
 			prevNeed = levelNeed;
@@ -81,7 +81,7 @@ public class Experience
 		}
 	}
 	
-	public static ExperienceMessage addExperience(Player player, Session session, int points)
+	public static void addExperience(Player player, Session session, int points)
 	{
 		// Impose limits?
 		if(points < 0 || player.getLevel() >= MAX_LEVEL)
@@ -96,7 +96,7 @@ public class Experience
 		logger.debug("adding {} xp to {} will cause {} level-ups", points, player.getName(), levelUps);
 		
 		// Initialize the experience message
-		ExperienceMessage msg = new ExperienceMessage(points, levelUps + 1);
+		ExperienceMessage msg = (session != null) ? new ExperienceMessage(points, levelUps + 1) : null;
 		
 		do
 		{
@@ -107,7 +107,10 @@ public class Experience
 			currentXP += pointsToAdd;
 			
 			// Write progress on this level to message
-			msg.writeLevel(currentLevel, getLevelBegin(currentLevel), currentXP, endXP);
+			if(msg != null)
+			{
+				msg.writeLevel(currentLevel, getLevelBegin(currentLevel), currentXP, endXP);
+			}
 			
 			// Level up?
 			if(currentXP == endXP)
@@ -125,8 +128,11 @@ public class Experience
 		player.setXp(currentXP);
 		player.setLevel(currentLevel);
 		
-		// Return the composed update message
-		return msg;
+		// Session to update?
+		if(session != null)
+		{
+			session.send(msg);
+		}
 	}
 	
 	private static void onLevelUp(Player player, Session session, int level)
