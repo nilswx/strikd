@@ -116,16 +116,19 @@ public class Session extends Server.Referent
 		this.setSaveOnLogout(true);
 		
 		// Post a levelup activity
-		LevelUpStreamItem lup = new LevelUpStreamItem();
-		lup.setPlayer(this.player);
-		lup.setLevel(RandomUtil.nextInt(Experience.MAX_LEVEL));
-		this.getServer().getActivityStream().postItem(lup);
-		
-		// Post an item received activity
-		ItemReceivedStreamItem ir = new ItemReceivedStreamItem();
-		ir.setPlayer(this.player);
-		ir.setItem(RandomUtil.pickOne(ItemType.values()));
-		this.getServer().getActivityStream().postItem(ir);
+		if(this.player.getLogins() > 1)
+		{
+			LevelUpStreamItem lup = new LevelUpStreamItem();
+			lup.setPlayer(this.player);
+			lup.setLevel(RandomUtil.nextInt(Experience.MAX_LEVEL));
+			this.getServer().getActivityStream().postItem(lup);
+			
+			// Post an item received activity
+			ItemReceivedStreamItem ir = new ItemReceivedStreamItem();
+			ir.setPlayer(this.player);
+			ir.setItem(RandomUtil.pickOne(ItemType.values()));
+			this.getServer().getActivityStream().postItem(ir);
+		}
 		
 		// Subscribe to own stream items
 		this.getFollowing().add(this.player.getId());
