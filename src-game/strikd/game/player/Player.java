@@ -17,11 +17,15 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import com.avaje.ebean.annotation.NamedUpdate;
+
 import strikd.facebook.FacebookIdentity;
 import strikd.game.items.ItemInstance;
 import strikd.game.stream.activity.ActivityStreamItem;
 
 @Entity @Table(name="players")
+@NamedUpdate(name = "clearServer",
+	update = "update Player set serverId = 0, opponentId = 0 where serverId = :serverId")
 public class Player
 {
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)

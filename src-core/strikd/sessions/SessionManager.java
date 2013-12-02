@@ -25,7 +25,7 @@ public class SessionManager extends Server.Referent
 	{
 		super(server);
 	}
-
+	
 	public Session newSession(NetConnection connection)
 	{
 		// Create a session with a new ID

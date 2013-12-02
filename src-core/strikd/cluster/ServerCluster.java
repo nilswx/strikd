@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.Version;
+import strikd.game.player.Player;
 
 public class ServerCluster extends Server.Referent implements Runnable
 {
@@ -47,6 +48,16 @@ public class ServerCluster extends Server.Referent implements Runnable
 		
 		// Output to logs
 		logger.info("joining as server #{} ({}:{})", serverId, this.self.getHost(), this.self.getPort());
+		
+		// Clear player's server property in case this server had a dirty shutdown
+		int clearCount = this.getDatabase()
+				.createNamedUpdate(Player.class, "clearServer")
+				.set("serverId", serverId)
+				.execute();
+		if(clearCount > 0)
+		{
+			logger.info("cleared {} dirty sessions", clearCount);
+		}
 	}
 	
 	private void syncSelf()
@@ -118,7 +129,8 @@ public class ServerCluster extends Server.Referent implements Runnable
 	
 	private void onDiscover(ServerDescriptor server)
 	{
-		logger.info("discovered server #{} ('{}') -> {}:{}", server.getId(), server.getName(), server.getHost(), server.getPort());
+		logger.info("discovered server #{} ('{}') -> {}:{}",
+				server.getId(), server.getName(), server.getHost(), server.getPort());
 	}
 	
 	private void onUndiscover(ServerDescriptor server)
