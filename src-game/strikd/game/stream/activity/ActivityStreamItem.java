@@ -7,7 +7,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import strikd.game.player.Player;
@@ -17,7 +17,7 @@ import strikd.game.player.Player;
 @DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.CHAR, length=1)
 public abstract class ActivityStreamItem
 {
-	@OneToOne(optional=false)
+	@ManyToOne(optional=false)
 	private Player player;
 	
 	private Date timestamp;

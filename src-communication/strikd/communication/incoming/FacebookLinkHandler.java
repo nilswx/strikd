@@ -6,9 +6,12 @@ import org.slf4j.LoggerFactory;
 import com.restfb.types.User;
 
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.CredentialsMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.facebook.FacebookIdentity;
 import strikd.game.facebook.FacebookInviteManager;
+import strikd.game.player.Player;
+import strikd.game.player.PlayerRegister;
 import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
 
@@ -29,36 +32,61 @@ public class FacebookLinkHandler extends MessageHandler
 		FacebookIdentity newIdentity = new FacebookIdentity();
 		newIdentity.setToken(request.readStr());
 		
+		// Test token by retrieving own user object
+		User user = null;
 		try
 		{
-			// If this operation succeeds, then the token is valid
-			User user = newIdentity.getAPI().fetchObject("me", User.class);
-			
-			// Set user ID for quick lookups later
+			user = newIdentity.getAPI().fetchObject("me", User.class);
 			newIdentity.setUserId(Long.parseLong(user.getId()));
-			
-			// TODO: delete old link
-			
-			// Rename player to person's first name
-			session.renamePlayer(user.getFirstName());
-			
-			// Process pending invites
-			FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
-			inviteMgr.processInvites(newIdentity.getUserId());
 		}
-		catch(Exception e)
+		catch(Exception ex)
 		{
-			logger.warn("Facebook link for {} failed!", session.getPlayer(), e);
+			ex.printStackTrace();
+			logger.warn("Facebook link for {} failed!", session.getPlayer());
 			newIdentity = null;
 		}
 		
-		// Save current link status
-		session.getPlayer().setFacebook(newIdentity);
-		session.saveData();
+		// Valid token?
+		if(newIdentity != null)
+		{
+			// Awesome! We now have a user ID. Who's account is this?
+			PlayerRegister register = session.getServer().getPlayerRegister();
+			Player oldPlayer = register.getDatabase().find(Player.class).where().eq("fb_uid", newIdentity.getUserId()).findUnique();
+			
+			// Player already exists?
+			if(oldPlayer != null)
+			{
+				// Reset token and delete the current account
+				oldPlayer.setToken(register.generateToken());
+				register.savePlayer(oldPlayer);
+				register.deletePlayer(session.getPlayer());
+				
+				// Tell client to use this account!
+				session.send(new CredentialsMessage(oldPlayer.getId(), oldPlayer.getToken()));
+				
+				// Ditch this session
+				session.setSaveOnLogout(false);
+				session.end(String.format("recovered %s", oldPlayer));
+				
+				// Bail here
+				return;
+			}
+			else
+			{
+				// Rename this player to person's first name
+				session.renamePlayer(user.getFirstName());
+					
+				// Process pending invites
+				FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();
+				inviteMgr.processInvites(newIdentity.getUserId());
+		
+				// Save current link status
+				session.getPlayer().setFacebook(newIdentity);
+				session.saveData();
+			}
+		}
 		
 		// Send current status
 		session.send(new FacebookStatusMessage(session.getPlayer().isFacebookLinked(), session.getPlayer().isLiked()));
 	}
-	
-	//logger.debug("FB #%s (\"%s %s\", %s) has %d FB friends", profile.getId(), profile.getFirstName(), profile.getLastName(), profile.getGender(), facebook.friendOperations().getFriendIds().size())); 
 }

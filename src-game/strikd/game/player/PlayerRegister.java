@@ -90,7 +90,7 @@ public class PlayerRegister extends Server.Referent
 		return mapping;
 	}
 	
-	private String generateToken()
+	public String generateToken()
 	{
 		return (UUID.randomUUID().toString()).replace("-", "").toUpperCase();
 	}
