@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.AlertMessage;
-import strikd.communication.outgoing.CredentialsMessage;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.ItemsMessage;
@@ -37,16 +36,13 @@ public class LoginHandler extends MessageHandler
 			String hardware = request.readStr();
 			String systemVersion = request.readStr();
 			
-			// Correct account and password?
+			// Valid account?
 			Player player = session.getServer().getPlayerRegister().findPlayer(playerId);
 			if(player == null || !token.equals(player.getToken()))
 			{
-				// Hmm...
-				logger.warn("incorrect login for player #{}, creating new player", playerId);
-				
-				// Create a new player and treat it like a registration
-				player = session.getServer().getPlayerRegister().newPlayer();
-				session.send(new CredentialsMessage(player.getId(), player.getToken()));
+				// This is bad!
+				session.send(new AlertMessage("Your account is invalid. Please reinstall."));
+				session.end(String.format("bad login for player #%d", playerId));
 			}
 			else
 			{
