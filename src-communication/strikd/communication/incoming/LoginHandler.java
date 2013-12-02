@@ -36,12 +36,12 @@ public class LoginHandler extends MessageHandler
 			String hardware = request.readStr();
 			String systemVersion = request.readStr();
 			
-			// Valid account?
+			// Valid credentials?
 			Player player = session.getServer().getPlayerRegister().findPlayer(playerId);
 			if(player == null || !token.equals(player.getToken()))
 			{
-				// This is bad!
-				session.send(new AlertMessage("Your account is invalid or has been tampered with. Please reinstall."));
+				// Don't know what the client is doing, but his credentials are invalid
+				session.send(new AlertMessage("Your account is unknown or invalid. Please reinstall."));
 				session.end(String.format("bad login for player #%d", playerId));
 			}
 			else
