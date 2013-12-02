@@ -41,6 +41,8 @@ public class Session extends Server.Referent
 
 	private boolean handshakeOK;
 	private Player player;
+	private boolean saveOnLogout;
+	
 	private MatchPlayer matchPlayer;
 	private PlayerQueue.Entry queueEntry;
 	
@@ -145,8 +147,11 @@ public class Session extends Server.Referent
 			this.exitMatch();
 		}
 
-		// Save complete player object
-		this.saveData();
+		// Save player?
+		if(this.saveOnLogout)
+		{
+			this.saveData();
+		}
 	}
 
 	public void onNetMessage(IncomingMessage msg)
@@ -212,6 +217,11 @@ public class Session extends Server.Referent
 		{
 			this.getServer().getPlayerRegister().savePlayer(this.player);
 		}
+	}
+	
+	public void setSaveOnLogout(boolean saveOnLogout)
+	{
+		this.saveOnLogout = saveOnLogout;
 	}
 
 	public void renamePlayer(String newName)

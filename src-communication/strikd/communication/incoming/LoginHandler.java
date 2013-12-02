@@ -9,6 +9,7 @@ import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.ItemsMessage;
 import strikd.communication.outgoing.PlayerInfoMessage;
+import strikd.communication.outgoing.PlayerUnknownMessage;
 import strikd.game.player.Player;
 import strikd.game.util.CountryResolver;
 import strikd.net.codec.IncomingMessage;
@@ -41,8 +42,7 @@ public class LoginHandler extends MessageHandler
 			if(player == null || !token.equals(player.getToken()))
 			{
 				// Don't know what the client is doing, but his credentials are invalid
-				session.send(new AlertMessage("Your account is unknown or invalid. Please reinstall."));
-				session.end(String.format("bad login for player #%d", playerId));
+				session.send(new PlayerUnknownMessage(playerId));
 			}
 			else
 			{

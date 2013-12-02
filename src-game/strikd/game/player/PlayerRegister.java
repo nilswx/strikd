@@ -30,8 +30,7 @@ public class PlayerRegister extends Server.Referent
 	{
 		// Create new player with default data
 		Player player = this.getDatabase().createEntityBean(Player.class);
-		player.setToken(UUID.randomUUID().toString().replace("-", "").toUpperCase());
-		player.setJoined(new Date());
+		player.setToken(this.generateToken());
 		player.setName(this.getDefaultName());
 		player.setAvatar(this.getDefaultAvatar());
 		player.setMotto(this.getDefaultMotto());
@@ -39,6 +38,7 @@ public class PlayerRegister extends Server.Referent
 		player.setCountry(""); // Will change after LOGIN
 		player.setPlatform(""); // Will change after LOGIN
 		player.setBalance(this.getDefaultBalance());
+		player.setJoined(new Date());
 		
 		// Save to database
 		this.getDatabase().save(player);
@@ -49,7 +49,16 @@ public class PlayerRegister extends Server.Referent
 	
 	public void savePlayer(Player player)
 	{
+		logger.debug("saving player {}", player);
+		
 		this.getDatabase().update(player);
+	}
+	
+	public void deletePlayer(Player player)
+	{
+		logger.info("deleting player {}", player);
+		
+		this.getDatabase().delete(player);
 	}
 	
 	public Player findPlayer(int playerId)
@@ -79,6 +88,11 @@ public class PlayerRegister extends Server.Referent
 		}
 		
 		return mapping;
+	}
+	
+	private String generateToken()
+	{
+		return (UUID.randomUUID().toString()).replace("-", "").toUpperCase();
 	}
 	
 	public String getDefaultName()
