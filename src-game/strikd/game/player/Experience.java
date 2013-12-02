@@ -52,11 +52,6 @@ public class Experience
 		return level;
 	}
 	
-	public static int calculateNextGoal(int experience)
-	{
-		return 0; // formula
-	}
-	
 	public static int getLevelBegin(int level)
 	{
 		if(level >= 0 && level <= MAX_LEVEL)
