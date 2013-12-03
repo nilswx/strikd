@@ -11,9 +11,9 @@ import strikd.net.codec.OutgoingMessage;
 
 public class ItemTypesMessage extends OutgoingMessage
 {
-	private static final byte TROPHY = 1;
-	private static final byte POWER_UP = 2;
-	private static final byte AVATAR_PART = 3;
+	private static final byte TROPHY = 't';
+	private static final byte POWER_UP = 'p';
+	private static final byte AVATAR_PART = 'a';
 	
 	public ItemTypesMessage(Collection<ItemType> types)
 	{
@@ -21,8 +21,6 @@ public class ItemTypesMessage extends OutgoingMessage
 		super.writeInt(types.size());
 		for(ItemType type : types)
 		{
-			super.writeInt(type.getId());
-			super.writeStr(type.getCode());
 			if(type instanceof Trophy)
 			{
 				super.writeByte(TROPHY);
@@ -35,6 +33,8 @@ public class ItemTypesMessage extends OutgoingMessage
 			{
 				super.writeByte(AVATAR_PART);
 			}
+			super.writeInt(type.getId());
+			super.writeStr(type.getCode());
 		}
 	}
 }
