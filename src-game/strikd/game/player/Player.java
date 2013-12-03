@@ -39,6 +39,9 @@ public class Player
 	@Column(name="avatar", nullable=false)
 	private String avatarData;
 	
+	@Transient
+	private Avatar avatar;
+	
 	@Column(nullable=false)
 	private String motto;
 	
@@ -80,6 +83,9 @@ public class Player
 
 	@Column(name="inventory", nullable=false)
 	private String inventoryData;
+	
+	@Transient
+	private ItemInventory inventory;
 	
 	@Embedded
 	private FacebookIdentity facebook;
@@ -127,12 +133,14 @@ public class Player
 		this.name = name;
 	}
 	
-	@Transient
-	private Avatar avatar;
+	public String getAvatarData()
+	{
+		return this.avatarData;
+	}
 	
 	private void setAvatarData(String avatarData)
 	{
-		this.avatar = null;
+		//this.avatar = null;
 		this.avatarData = avatarData;
 	}
 
@@ -140,7 +148,7 @@ public class Player
 	{
 		if(this.avatar == null)
 		{
-			return Avatar.parseAvatar(this.avatarData);
+			this.avatar = Avatar.parseAvatar(this.avatarData);
 		}
 		
 		return this.avatar;
@@ -272,12 +280,9 @@ public class Player
 		this.balance = balance;
 	}
 
-	@Transient
-	private ItemInventory inventory;
-
 	private void setInventoryData(String inventoryData)
 	{
-		this.inventory = null;
+		//this.inventory = null;
 		this.inventoryData = inventoryData;
 	}
 	
