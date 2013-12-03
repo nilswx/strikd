@@ -62,7 +62,7 @@ public class ItemInventory
 			if(!first) sb.append(ITEM_DELIMITER); else first = false;
 			sb.append(item.getValue());
 			sb.append(QUANTITY_DELIMITER);
-			sb.append(item.getKey().ordinal());
+			sb.append(item.getKey().id());
 		}
 		
 		return sb.toString();
@@ -79,7 +79,7 @@ public class ItemInventory
 			
 			int split = item.indexOf(QUANTITY_DELIMITER);
 			int quantity = Integer.parseInt(item.substring(0, split));
-			ItemType type = ItemType.valueOf(Integer.parseInt(item.substring(split + 1)));
+			ItemType type = ItemType.byId(Integer.parseInt(item.substring(split + 1)));
 			
 			if(type != null)
 			{
