@@ -46,9 +46,9 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 		this.buf.writeBytes(bytes);
 	}
 	
-	public final void writeLong(Date d)
+	public final void writeTime(Date d)
 	{
-		this.writeLong(d != null ? d.getTime() : 0);
+		this.writeInt((int)(d != null ? (d.getTime() / 1000) : 0));
 	}
 	
 	public final void writeStr(Object o)

@@ -26,7 +26,7 @@ public class ActivityStreamMessage extends OutgoingMessage
 		super.writeInt(items.size());
 		for(ActivityStreamItem item : items)
 		{
-			super.writeLong(item.getTimestamp());
+			super.writeTime(item.getTimestamp());
 			super.writeInt(item.getPlayer().getId());
 			if(item instanceof LevelUpStreamItem)
 			{
