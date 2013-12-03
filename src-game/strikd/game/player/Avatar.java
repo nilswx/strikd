@@ -2,6 +2,8 @@ package strikd.game.player;
 
 import strikd.game.items.AvatarPart;
 import strikd.game.items.AvatarPart.PartType;
+import strikd.game.items.ItemType;
+import strikd.game.items.ItemTypeRegistry;
 
 public final class Avatar
 {
@@ -64,5 +66,26 @@ public final class Avatar
 		}
 		
 		return sb.toString();
+	}
+	
+	public static Avatar parseAvatar(String str)
+	{
+		Avatar ava = new Avatar();
+		
+		if(str != null)
+		{
+			int pos = 0, end;
+			while ((end = str.indexOf(PART_DELIMITER, pos)) != -1)
+			{
+				ItemType item = ItemTypeRegistry.getType(Integer.parseInt(str.substring(pos, end)));
+				if(item instanceof AvatarPart)
+				{
+					ava.set((AvatarPart)item);
+				}
+				pos = end + 1;
+			}
+		}
+		
+		return ava;
 	}
 }
