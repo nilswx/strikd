@@ -9,6 +9,7 @@ import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.PlayerInfoMessage;
 import strikd.communication.outgoing.PlayerUnknownMessage;
+import strikd.game.items.ItemTypesMessageCache;
 import strikd.game.player.Experience;
 import strikd.game.player.Player;
 import strikd.game.util.CountryResolver;
@@ -67,7 +68,6 @@ public class LoginHandler extends MessageHandler
 			// Push player data
 			session.send(new PlayerInfoMessage(player));
 			session.send(new CurrencyBalanceMessage(player.getBalance()));
-			//session.send(new ItemsMessage(player.getItems()));
 			
 			// Add experience!
 			Experience.addExperience(player, session, +10);
@@ -82,6 +82,9 @@ public class LoginHandler extends MessageHandler
 			
 			// Will force client to validate
 			session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
+			
+			// Push item type registry
+			session.getConnection().sendCopy(ItemTypesMessageCache.getMessage());
 		}
 	}
 }
