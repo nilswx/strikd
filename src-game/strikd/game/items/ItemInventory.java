@@ -1,19 +1,17 @@
 package strikd.game.items;
 
-import java.util.EnumMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import com.google.common.collect.Maps;
-
-import static strikd.game.items.ItemType.*;
 
 public class ItemInventory
 {
 	private static final char ITEM_DELIMITER = '|';
 	private static final char QUANTITY_DELIMITER = 'x';
 	
-	private final EnumMap<ItemType, Integer> items = Maps.newEnumMap(ItemType.class);
+	private final Map<ItemType, Integer> items = Maps.newHashMap();
 	
 	public void add(ItemType type, int amount)
 	{
@@ -62,7 +60,7 @@ public class ItemInventory
 			if(!first) sb.append(ITEM_DELIMITER); else first = false;
 			sb.append(item.getValue());
 			sb.append(QUANTITY_DELIMITER);
-			sb.append(item.getKey().id());
+			sb.append(item.getKey().getId());
 		}
 		
 		return sb.toString();
@@ -79,7 +77,7 @@ public class ItemInventory
 			
 			int split = item.indexOf(QUANTITY_DELIMITER);
 			int quantity = Integer.parseInt(item.substring(0, split));
-			ItemType type = ItemType.byId(Integer.parseInt(item.substring(split + 1)));
+			ItemType type = ItemTypeRegistry.getType(Integer.parseInt(item.substring(split + 1)));
 			
 			if(type != null)
 			{
@@ -88,25 +86,5 @@ public class ItemInventory
 		}
 		
 		return inv;
-	}
-	
-	public static void main(String[] args)
-	{
-		ItemInventory inv = new ItemInventory();
-		inv.add(SAND, 5);
-		inv.add(EARTHQUAKE, 1);
-		inv.add(HAMMER, 8);
-		
-		String str = inv.toString();
-		System.out.println(str);
-		
-		ItemInventory inv2 = ItemInventory.parseInventory(str);
-		System.out.println(inv2.toString());
-		
-		inv2.take(HAMMER, 5);
-		System.out.println(inv2);
-		
-		inv2.take(HAMMER, 6);
-		System.out.println(inv2);
 	}
 }

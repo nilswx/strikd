@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import strikd.cluster.ServerCluster;
 import strikd.communication.incoming.MessageHandlers;
 import strikd.facebook.FacebookManager;
-import strikd.game.items.ItemType;
+import strikd.game.items.ItemTypeRegistry;
 import strikd.game.items.shop.Shop;
 import strikd.game.match.MatchManager;
 import strikd.game.player.PlayerRegister;
@@ -83,8 +83,8 @@ public class Server
 		// Join server cluster
 		this.serverCluster = new ServerCluster(this, props);
 		
-		// Print item types
-		ItemType.debugTypes();
+		// Load item register
+		ItemTypeRegistry.allTypes();
 		
 		// Load shop assortment
 		this.shop = new Shop(this);

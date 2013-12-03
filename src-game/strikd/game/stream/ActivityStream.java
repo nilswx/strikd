@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import strikd.Server;
-import strikd.game.stream.activity.ActivityStreamItem;
 import static com.avaje.ebean.Expr.in;
 
 public class ActivityStream extends Server.Referent

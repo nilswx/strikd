@@ -16,7 +16,7 @@ import strikd.communication.outgoing.NameChangedMessage;
 import strikd.communication.outgoing.ServerCryptoMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.communication.outgoing.VersionCheckMessage;
-import strikd.game.items.ItemType;
+import strikd.game.items.ItemTypeRegistry;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
@@ -126,7 +126,7 @@ public class Session extends Server.Referent
 			// Post an item received activity
 			ItemReceivedStreamItem ir = new ItemReceivedStreamItem();
 			ir.setPlayer(this.player);
-			ir.setItem(RandomUtil.pickOne(ItemType.values()));
+			ir.setItem(RandomUtil.pickOne(ItemTypeRegistry.allTypes()));
 			this.getServer().getActivityStream().postItem(ir);
 		}
 		

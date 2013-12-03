@@ -2,25 +2,22 @@ package strikd.game.stream.activity;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
+import strikd.game.items.ItemTypeRegistry;
 import strikd.game.items.ItemType;
+import strikd.game.stream.IntParameterStreamItem;
 
 @Entity @DiscriminatorValue(ItemReceivedStreamItem.TYPE)
-public class ItemReceivedStreamItem extends ActivityStreamItem
+public class ItemReceivedStreamItem extends IntParameterStreamItem
 {
-	@Enumerated(EnumType.ORDINAL)
-	private ItemType item;
-
 	public ItemType getItem()
 	{
-		return this.item;
+		return ItemTypeRegistry.getType(super.getParameter());
 	}
-
+	
 	public void setItem(ItemType item)
 	{
-		this.item = item;
+		super.setParameter(item.getId());
 	}
 	
 	public static final String TYPE = "i";

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import strikd.game.player.Player;
+import strikd.game.stream.ActivityStreamItem;
 
 @Entity @DiscriminatorValue(FriendMatchResultStreamItem.TYPE)
 public class FriendMatchResultStreamItem extends ActivityStreamItem

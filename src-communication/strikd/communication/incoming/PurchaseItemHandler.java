@@ -1,13 +1,9 @@
 package strikd.communication.incoming;
 
-import java.util.List;
-
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
-import strikd.communication.outgoing.ItemsAddedMessage;
-import strikd.game.items.ItemInstance;
 import strikd.game.items.shop.Shop;
 import strikd.net.codec.IncomingMessage;
 
@@ -27,7 +23,7 @@ public class PurchaseItemHandler extends MessageHandler
 		
 		// Attempt to purchase the offer
 		Shop shop = session.getServer().getShop();
-		List<ItemInstance> items = shop.purchaseOffer(offerId, session.getPlayer());
+		Object items = shop.purchaseOffer(offerId, session.getPlayer());
 		
 		// Purchased successfully?
 		if(items == null)
@@ -43,11 +39,6 @@ public class PurchaseItemHandler extends MessageHandler
 			session.send(new CurrencyBalanceMessage(session.getPlayer().getBalance()));
 			
 			// Add items
-			for(ItemInstance item : items)
-			{
-				session.getPlayer().getItems().add(item);
-			}
-			session.send(new ItemsAddedMessage(items));
 		}
 	}
 }

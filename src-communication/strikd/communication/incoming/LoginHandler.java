@@ -7,7 +7,6 @@ import strikd.communication.Opcodes;
 import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
-import strikd.communication.outgoing.ItemsMessage;
 import strikd.communication.outgoing.PlayerInfoMessage;
 import strikd.communication.outgoing.PlayerUnknownMessage;
 import strikd.game.player.Experience;
@@ -68,7 +67,7 @@ public class LoginHandler extends MessageHandler
 			// Push player data
 			session.send(new PlayerInfoMessage(player));
 			session.send(new CurrencyBalanceMessage(player.getBalance()));
-			session.send(new ItemsMessage(player.getItems()));
+			//session.send(new ItemsMessage(player.getItems()));
 			
 			// Add experience!
 			Experience.addExperience(player, session, +10);

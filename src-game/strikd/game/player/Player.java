@@ -1,6 +1,5 @@
 package strikd.game.player;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +13,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import com.avaje.ebean.annotation.NamedUpdate;
-
 import strikd.facebook.FacebookIdentity;
-import strikd.game.items.ItemInstance;
-import strikd.game.stream.activity.ActivityStreamItem;
+import strikd.game.stream.ActivityStreamItem;
+
+import com.avaje.ebean.annotation.NamedUpdate;
 
 @Entity @Table(name="players")
 @NamedUpdate(name = "clearServer",
@@ -79,9 +76,6 @@ public class Player
 	@Column(nullable=false)
 	private int balance;
 	
-	@Transient
-	private List<ItemInstance> items = new ArrayList<ItemInstance>();
-
 	@Embedded
 	private FacebookIdentity facebook;
 	
@@ -257,16 +251,6 @@ public class Player
 	public void setBalance(int balance)
 	{
 		this.balance = balance;
-	}
-
-	public List<ItemInstance> getItems()
-	{
-		return items;
-	}
-
-	public void setItems(List<ItemInstance> items)
-	{
-		this.items = items;
 	}
 
 	public String getCountry()
