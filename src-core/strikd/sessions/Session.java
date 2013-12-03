@@ -16,7 +16,7 @@ import strikd.communication.outgoing.NameChangedMessage;
 import strikd.communication.outgoing.ServerCryptoMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.communication.outgoing.VersionCheckMessage;
-import strikd.game.items.ItemInventory;
+import strikd.game.items.ItemType;
 import strikd.game.items.ItemTypeRegistry;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
@@ -49,8 +49,6 @@ public class Session extends Server.Referent
 	
 	private List<Integer> friendList;
 	private List<Integer> following;
-	
-	private ItemInventory inventory;
 
 	public Session(long sessionId, NetConnection connection, Server server)
 	{
@@ -118,21 +116,25 @@ public class Session extends Server.Referent
 		// Save on logout!
 		this.setSaveOnLogout(true);
 		
-		// Parse inventory
-		this.inventory = new ItemInventory();
-		
-		// Post a levelup activity
+		// Not first login?
 		if(this.player.getLogins() > 1)
 		{
+			// Level up!
 			LevelUpStreamItem lup = new LevelUpStreamItem();
 			lup.setPlayer(this.player);
 			lup.setLevel(RandomUtil.nextInt(Experience.MAX_LEVEL));
 			this.getServer().getActivityStream().postItem(lup);
 			
-			// Post an item received activity
+			// Give an item!
+			ItemType item = RandomUtil.pickOne(ItemTypeRegistry.allTypes());
+			this.getPlayer().getInventory().add(item);
+			this.getPlayer().saveInventory();
+			this.saveData();
+			
+			// And brag about it. Hard.
 			ItemReceivedStreamItem ir = new ItemReceivedStreamItem();
 			ir.setPlayer(this.player);
-			ir.setItem(RandomUtil.pickOne(ItemTypeRegistry.allTypes()));
+			ir.setItem(item);
 			this.getServer().getActivityStream().postItem(ir);
 		}
 		
@@ -312,15 +314,5 @@ public class Session extends Server.Referent
 			this.following = Lists.newArrayList();
 		}
 		return this.following;
-	}
-	
-	public ItemInventory getInventory()
-	{
-		return this.inventory;
-	}
-
-	public void setInventory(ItemInventory inventory)
-	{
-		this.inventory = inventory;
 	}
 }

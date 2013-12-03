@@ -80,18 +80,21 @@ public class ItemInventory
 	{
 		ItemInventory inv = new ItemInventory();
 		
-		StringTokenizer st = new StringTokenizer(str, Character.toString(ITEM_DELIMITER));
-		while(st.hasMoreTokens())
+		if(str != null)
 		{
-			String item = st.nextToken();
-			
-			int split = item.indexOf(QUANTITY_DELIMITER);
-			int quantity = Integer.parseInt(item.substring(0, split));
-			ItemType type = ItemTypeRegistry.getType(Integer.parseInt(item.substring(split + 1)));
-			
-			if(type != null)
+			StringTokenizer st = new StringTokenizer(str, Character.toString(ITEM_DELIMITER));
+			while(st.hasMoreTokens())
 			{
-				inv.add(type, quantity);
+				String item = st.nextToken();
+				
+				int split = item.indexOf(QUANTITY_DELIMITER);
+				int quantity = Integer.parseInt(item.substring(0, split));
+				ItemType type = ItemTypeRegistry.getType(Integer.parseInt(item.substring(split + 1)));
+				
+				if(type != null)
+				{
+					inv.add(type, quantity);
+				}
 			}
 		}
 		

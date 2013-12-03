@@ -40,6 +40,7 @@ public class PlayerRegister extends Server.Referent
 		player.setCountry(""); // Will change after LOGIN
 		player.setPlatform(""); // Will change after LOGIN
 		player.setBalance(this.getDefaultBalance());
+		player.saveInventory();
 		player.setJoined(new Date());
 		
 		// Save to database

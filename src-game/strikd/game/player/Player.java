@@ -13,9 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import strikd.facebook.FacebookIdentity;
+import strikd.game.items.ItemInventory;
 import strikd.game.stream.ActivityStreamItem;
 
 import com.avaje.ebean.annotation.NamedUpdate;
@@ -75,6 +77,9 @@ public class Player
 	
 	@Column(nullable=false)
 	private int balance;
+
+	@Column(nullable=false)
+	private String items;
 	
 	@Embedded
 	private FacebookIdentity facebook;
@@ -251,6 +256,30 @@ public class Player
 	public void setBalance(int balance)
 	{
 		this.balance = balance;
+	}
+	
+	public void setItems(String items)
+	{
+		this.items = items;
+		this.inventory = null;
+	}
+	
+	@Transient
+	private ItemInventory inventory;
+	
+	public ItemInventory getInventory()
+	{
+		if(this.inventory == null)
+		{
+			this.inventory = ItemInventory.parseInventory(this.items);
+		}
+		
+		return this.inventory;
+	}
+	
+	public void saveInventory()
+	{
+		this.setItems(this.getInventory().toString());
 	}
 
 	public String getCountry()
