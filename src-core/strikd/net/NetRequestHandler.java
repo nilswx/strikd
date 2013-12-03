@@ -36,7 +36,7 @@ public class NetRequestHandler extends ChannelInboundHandlerAdapter
 		}
 	}
 	
-	private static final EventExecutorGroup eventExecutorGroup = new DefaultEventExecutorGroup(NUM_HANDLER_THREADS, new NamedThreadFactory("Network/RequestHandler #%d")); 
+	private static final EventExecutorGroup eventExecutorGroup = new DefaultEventExecutorGroup(NUM_HANDLER_THREADS, new NamedThreadFactory("Network/RH #%d")); 
 	
 	public static final EventExecutorGroup getEventExecutorGroup()
 	{
