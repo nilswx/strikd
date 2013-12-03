@@ -44,7 +44,7 @@ public class PlayerRegister extends Server.Referent
 		
 		// Default inventory and avatar
 		this.defaults.stockInventory(player);
-		this.defaults.giveDefaultAvatar(player);
+		this.defaults.getAvatar().generateDefaultAvatar(player);
 		
 		// Save to database
 		this.getDatabase().save(player);
