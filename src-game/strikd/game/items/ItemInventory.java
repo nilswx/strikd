@@ -19,7 +19,10 @@ public class ItemInventory
 	
 	public void add(ItemType type, int amount)
 	{
-		this.items.put(type, this.getAmount(type) + amount);
+		if(type != null)
+		{
+			this.items.put(type, this.getAmount(type) + amount);
+		}
 	}
 	
 	public void take(ItemType type)
