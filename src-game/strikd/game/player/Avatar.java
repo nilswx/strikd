@@ -33,7 +33,10 @@ public final class Avatar
 
 	public void set(AvatarPart part)
 	{
-		this.set(part.getType(), part);
+		if(part != null)
+		{
+			this.set(part.getType(), part);
+		}
 	}
 	
 	public void remove(PartType type)
