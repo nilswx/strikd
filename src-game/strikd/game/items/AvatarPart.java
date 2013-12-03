@@ -7,12 +7,30 @@ import strikd.sessions.Session;
  */
 public abstract class AvatarPart extends ItemType
 {
-	public AvatarPart(int id, String code)
+	private final PartType type;
+	
+	public AvatarPart(int id, String code, PartType type)
 	{
 		super(id, code);
+		this.type = type;
 	}
 	
 	public abstract void onEquip(Session session);
 	
 	public abstract void onRemove(Session session);
+	
+	public PartType getType()
+	{
+		return this.type;
+	}
+	
+	public enum PartType
+	{
+		HAT,
+		HAIR,
+		EYES,
+		MOUTH,
+		HEAD,
+		BASE
+	}
 }
