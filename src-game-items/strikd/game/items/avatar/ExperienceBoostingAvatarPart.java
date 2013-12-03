@@ -5,9 +5,9 @@ import strikd.sessions.Session;
 
 public class ExperienceBoostingAvatarPart extends AvatarPart
 {
-	public ExperienceBoostingAvatarPart(int id, String code, PartType type)
+	public ExperienceBoostingAvatarPart(int id, String code, PartSlot slot)
 	{
-		super(id, code, type);
+		super(id, code, slot);
 	}
 
 	@Override

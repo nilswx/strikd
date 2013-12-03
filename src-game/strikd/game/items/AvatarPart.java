@@ -7,42 +7,30 @@ import strikd.sessions.Session;
  */
 public abstract class AvatarPart extends ItemType
 {
-	private final PartType type;
+	private final PartSlot slot;
 	
-	public AvatarPart(int id, String code, PartType type)
+	public AvatarPart(int id, String code, PartSlot slot)
 	{
 		super(id, code);
-		this.type = type;
+		this.slot = slot;
 	}
 	
 	public abstract void onEquip(Session session);
 	
 	public abstract void onRemove(Session session);
 	
-	public PartType getType()
+	public PartSlot getSlot()
 	{
-		return this.type;
+		return this.slot;
 	}
 	
-	public enum PartType
+	public enum PartSlot
 	{
-		HAT("ht"),
-		HAIR("hr"),
-		EYES("ey"),
-		MOUTH("mo"),
-		HEAD("hd"),
-		BASE("bd");
-		
-		final String code;
-		
-		private PartType(String code)
-		{
-			this.code = code;
-		}
-		
-		public String code()
-		{
-			return this.code;
-		}
+		HAT,
+		HAIR,
+		EYES,
+		MOUTH,
+		HEAD,
+		BASE
 	}
 }

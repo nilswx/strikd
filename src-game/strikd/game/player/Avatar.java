@@ -3,7 +3,7 @@ package strikd.game.player;
 import com.google.common.base.Strings;
 
 import strikd.game.items.AvatarPart;
-import strikd.game.items.AvatarPart.PartType;
+import strikd.game.items.AvatarPart.PartSlot;
 import strikd.game.items.ItemType;
 import strikd.game.items.ItemTypeRegistry;
 
@@ -11,46 +11,46 @@ public final class Avatar
 {
 	private static final char PART_DELIMITER = ':';
 	
-	private final AvatarPart[] parts = new AvatarPart[PartType.values().length];
+	private final AvatarPart[] parts = new AvatarPart[PartSlot.values().length];
 	
-	public AvatarPart get(PartType type)
+	public AvatarPart get(PartSlot slot)
 	{
-		return this.parts[type.ordinal()];
+		return this.parts[slot.ordinal()];
 	}
 	
-	public boolean has(PartType type)
+	public boolean has(PartSlot slot)
 	{
-		return (this.get(type) != null);
+		return (this.get(slot) != null);
 	}
 	
 	public boolean hasPart(AvatarPart part)
 	{
-		return (this.get(part.getType()) == part);
+		return (this.get(part.getSlot()) == part);
 	}
 	
-	private void set(PartType type, AvatarPart part)
+	private void set(PartSlot slot, AvatarPart part)
 	{
-		this.parts[type.ordinal()] = part;
+		this.parts[slot.ordinal()] = part;
 	}
 
 	public void set(AvatarPart part)
 	{
 		if(part != null)
 		{
-			this.set(part.getType(), part);
+			this.set(part.getSlot(), part);
 		}
 	}
 	
-	public void remove(PartType type)
+	public void remove(PartSlot slot)
 	{
-		this.set(type, null);
+		this.set(slot, null);
 	}
 	
 	public void remove(AvatarPart part)
 	{
 		if(this.hasPart(part))
 		{
-			this.remove(part.getType());
+			this.remove(part.getSlot());
 		}
 	}
 	

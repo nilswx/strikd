@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import strikd.game.items.powerup.*;
 import strikd.game.items.avatar.*;
 import strikd.game.player.Avatar;
-import static strikd.game.items.AvatarPart.PartType.*;
+import static strikd.game.items.AvatarPart.PartSlot.*;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;

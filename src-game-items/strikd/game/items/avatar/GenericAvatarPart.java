@@ -5,9 +5,9 @@ import strikd.sessions.Session;
 
 public class GenericAvatarPart extends AvatarPart
 {
-	public GenericAvatarPart(int id, String code, PartType type)
+	public GenericAvatarPart(int id, String code, PartSlot slot)
 	{
-		super(id, code, type);
+		super(id, code, slot);
 	}
 
 	@Override

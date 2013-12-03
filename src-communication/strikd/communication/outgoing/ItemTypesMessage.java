@@ -34,7 +34,7 @@ public class ItemTypesMessage extends OutgoingMessage
 			else if(type instanceof AvatarPart)
 			{
 				super.writeByte(AVATAR_PART);
-				super.writeByte((byte)((AvatarPart)type).getType().ordinal());
+				super.writeByte((byte)((AvatarPart)type).getSlot().ordinal());
 			}
 		}
 	}
