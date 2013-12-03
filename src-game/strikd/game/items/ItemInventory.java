@@ -13,9 +13,19 @@ public class ItemInventory
 	
 	private final Map<ItemType, Integer> items = Maps.newHashMap();
 	
+	public void add(ItemType type)
+	{
+		this.add(type, 1);
+	}
+	
 	public void add(ItemType type, int amount)
 	{
 		this.items.put(type, this.getAmount(type) + amount);
+	}
+	
+	public void take(ItemType type)
+	{
+		this.take(type, 1);
 	}
 	
 	public void take(ItemType type, int amount)
