@@ -21,6 +21,8 @@ public class ItemTypesMessage extends OutgoingMessage
 		super.writeInt(types.size());
 		for(ItemType type : types)
 		{
+			super.writeInt(type.getId());
+			super.writeStr(type.getCode());
 			if(type instanceof Trophy)
 			{
 				super.writeByte(TROPHY);
@@ -32,9 +34,8 @@ public class ItemTypesMessage extends OutgoingMessage
 			else if(type instanceof AvatarPart)
 			{
 				super.writeByte(AVATAR_PART);
+				super.writeByte((byte)((AvatarPart)type).getType().ordinal());
 			}
-			super.writeInt(type.getId());
-			super.writeStr(type.getCode());
 		}
 	}
 }
