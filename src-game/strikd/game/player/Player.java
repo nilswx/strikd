@@ -36,8 +36,8 @@ public class Player
 	@Column(length=32,nullable=false)
 	private String name;
 	
-	@Column(nullable=false)
-	private String avatar;
+	@Column(name="avatar", nullable=false)
+	private String avatarData;
 	
 	@Column(nullable=false)
 	private String motto;
@@ -78,8 +78,8 @@ public class Player
 	@Column(nullable=false)
 	private int balance;
 
-	@Column(nullable=false)
-	private String items;
+	@Column(name="inventory", nullable=false)
+	private String inventoryData;
 	
 	@Embedded
 	private FacebookIdentity facebook;
@@ -126,15 +126,29 @@ public class Player
 	{
 		this.name = name;
 	}
-
-	public String getAvatar()
+	
+	@Transient
+	private Avatar avatar;
+	
+	private void setAvatarData(String avatarData)
 	{
-		return avatar;
+		this.avatar = null;
+		this.avatarData = avatarData;
 	}
 
-	public void setAvatar(String avatar)
+	public Avatar getAvatar()
 	{
-		this.avatar = avatar;
+		if(this.avatar == null)
+		{
+			return Avatar.parseAvatar(this.avatarData);
+		}
+		
+		return this.avatar;
+	}
+	
+	public void saveAvatar()
+	{
+		this.setAvatarData(this.getAvatar().toString());
 	}
 	
 	public String getMotto()
@@ -257,21 +271,21 @@ public class Player
 	{
 		this.balance = balance;
 	}
-	
-	public void setItems(String items)
-	{
-		this.items = items;
-		this.inventory = null;
-	}
-	
+
 	@Transient
 	private ItemInventory inventory;
+
+	private void setInventoryData(String inventoryData)
+	{
+		this.inventory = null;
+		this.inventoryData = inventoryData;
+	}
 	
 	public ItemInventory getInventory()
 	{
 		if(this.inventory == null)
 		{
-			this.inventory = ItemInventory.parseInventory(this.items);
+			this.inventory = ItemInventory.parseInventory(this.inventoryData);
 		}
 		
 		return this.inventory;
@@ -279,7 +293,7 @@ public class Player
 	
 	public void saveInventory()
 	{
-		this.setItems(this.getInventory().toString());
+		this.setInventoryData(this.getInventory().toString());
 	}
 
 	public String getCountry()

@@ -1,5 +1,7 @@
 package strikd.game.player;
 
+import com.google.common.base.Strings;
+
 import strikd.game.items.AvatarPart;
 import strikd.game.items.AvatarPart.PartType;
 import strikd.game.items.ItemType;
@@ -74,7 +76,7 @@ public final class Avatar
 	{
 		Avatar ava = new Avatar();
 		
-		if(str != null)
+		if(!Strings.isNullOrEmpty(str))
 		{
 			for(int pos = 0, end = 0; end != -1; pos = end + 1)
 			{

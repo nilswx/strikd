@@ -3,6 +3,7 @@ package strikd.game.items;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 public class ItemInventory
@@ -82,7 +83,7 @@ public class ItemInventory
 	{
 		ItemInventory inv = new ItemInventory();
 		
-		if(str != null)
+		if(!Strings.isNullOrEmpty(str))
 		{
 			for(int pos = 0, end = 0; end != -1; pos = end + 1)
 			{

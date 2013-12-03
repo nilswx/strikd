@@ -14,7 +14,7 @@ public class MatchBotFactory
 		Player bot = new Player();
 		bot.setId(488228);
 		bot.setName(String.format("Bot-%d", rand.nextInt(1000)));
-		bot.setAvatar("hd-8.ft-9.blabla");
+		bot.saveAvatar();
 		bot.setCountry("de"); // FROM DEUTSCHLAND!
 		
 		bot.setMatches(rand.nextInt(300) + 1);
