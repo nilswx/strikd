@@ -7,9 +7,9 @@ import strikd.game.match.MatchPlayer;
  * Temporarily overlays all tiles on the board with color hints for valid letter combinations.
  * Only visible to the user.
  */
-public class PaletteVisionPowerUp extends PowerUp
+public class ColorVisionPowerUp extends PowerUp
 {
-	public PaletteVisionPowerUp(int id, String code)
+	public ColorVisionPowerUp(int id, String code)
 	{
 		super(id, code);
 	}
@@ -17,6 +17,6 @@ public class PaletteVisionPowerUp extends PowerUp
 	@Override
 	public void onActivate(MatchPlayer player, String... args)
 	{
-		// Freeze opponents screen blabla
+		// Send color accents
 	}
 }
