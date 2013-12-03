@@ -16,6 +16,7 @@ import strikd.communication.outgoing.NameChangedMessage;
 import strikd.communication.outgoing.ServerCryptoMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.communication.outgoing.VersionCheckMessage;
+import strikd.game.items.ItemInventory;
 import strikd.game.items.ItemTypeRegistry;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
@@ -48,6 +49,8 @@ public class Session extends Server.Referent
 	
 	private List<Integer> friendList;
 	private List<Integer> following;
+	
+	private ItemInventory inventory;
 
 	public Session(long sessionId, NetConnection connection, Server server)
 	{
@@ -114,6 +117,9 @@ public class Session extends Server.Referent
 	{
 		// Save on logout!
 		this.setSaveOnLogout(true);
+		
+		// Parse inventory
+		this.inventory = new ItemInventory();
 		
 		// Post a levelup activity
 		if(this.player.getLogins() > 1)
@@ -306,5 +312,15 @@ public class Session extends Server.Referent
 			this.following = Lists.newArrayList();
 		}
 		return this.following;
+	}
+	
+	public ItemInventory getInventory()
+	{
+		return this.inventory;
+	}
+
+	public void setInventory(ItemInventory inventory)
+	{
+		this.inventory = inventory;
 	}
 }
