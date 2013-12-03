@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import strikd.game.items.powerup.*;
 import strikd.game.items.avatar.*;
+import strikd.game.player.Avatar;
 import static strikd.game.items.AvatarPart.PartType.*;
 
 import com.google.common.collect.ImmutableList;
@@ -69,5 +70,32 @@ public class ItemTypeRegistry
 		add(new HammerPowerUp(14, "HAMMER"));
 		add(new FreezePowerUp(17, "FREEZE"));
 		add(new SwapPowerUp(20, "SWAP"));
+	}
+	
+	public static void main(String[] args)
+	{
+		// define a few parts
+		AvatarPart alienEyes = new GenericAvatarPart(52, "ALIEN_EYES", EYES);
+		AvatarPart bigMoustache = new GenericAvatarPart(53, "BIG_MOUSTACHE", MOUTH);
+		add(alienEyes); add(bigMoustache);
+		
+		// make an avatar
+		Avatar av = new Avatar();
+		av.set(alienEyes);
+		av.set(bigMoustache);
+		
+		// parse an avatar
+		Avatar av2 = Avatar.parseAvatar(av.toString());
+		av2.toString();
+		
+		// make an inventory
+		ItemInventory inv = new ItemInventory();
+		inv.add(getType(17), 12);
+		inv.add(getType(20), 4);
+		inv.add(getType(512), 1);
+		
+		// parse an inventory
+		ItemInventory inv2 = ItemInventory.parseInventory(inv.toString());
+		inv2.toString();
 	}
 }
