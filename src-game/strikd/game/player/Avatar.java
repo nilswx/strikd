@@ -73,15 +73,15 @@ public final class Avatar
 		
 		if(str != null)
 		{
-			int pos = 0, end;
-			while ((end = str.indexOf(PART_DELIMITER, pos)) != -1)
+			for(int pos = 0, end = 0; end != -1; pos = end + 1)
 			{
-				ItemType item = ItemTypeRegistry.getType(Integer.parseInt(str.substring(pos, end)));
+				end = str.indexOf(PART_DELIMITER, pos);
+				
+				ItemType item = ItemTypeRegistry.getType(Integer.parseInt(end != -1 ? str.substring(pos, end) : str.substring(pos)));
 				if(item instanceof AvatarPart)
 				{
 					ava.set((AvatarPart)item);
 				}
-				pos = end + 1;
 			}
 		}
 		
