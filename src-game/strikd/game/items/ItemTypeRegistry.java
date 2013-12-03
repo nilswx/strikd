@@ -37,6 +37,16 @@ public class ItemTypeRegistry
 		}
 	}
 	
+	public static ItemType _I(int itemId)
+	{
+		return getType(itemId);
+	}
+
+	public static ItemType _I(String code)
+	{
+		return getType(code);
+	}
+	
 	public static ItemType getType(String code)
 	{
 		return itemMap.get(code);
