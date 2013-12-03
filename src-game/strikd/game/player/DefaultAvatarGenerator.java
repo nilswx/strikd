@@ -35,7 +35,7 @@ public class DefaultAvatarGenerator
 		player.saveInventory();
 		
 		// Pick a random gender
-		int gender = RandomUtil.flipCoin() ? 1 : 0;
+		int gender = RandomUtil.flipCoin() ? MALE : FEMALE;
 		
 		// Now generate a random avatar from the stock parts
 		Avatar ava = new Avatar();
