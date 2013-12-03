@@ -19,15 +19,15 @@ public class Avatar /*extends HashMap<PartType, String>*/
 		}
 		
 		return sb.toString();
-	}
+	}*/
 	
 	public enum PartType
 	{
-		Hat, // birthday hat!
-		Hair,
-		Head,
-		Eyes,
-		Mouth,
-		Shirt
-	}*/
+		HAT,
+		HAIR,
+		HEAD,
+		EYES,
+		MOUTH,
+		TORSO
+	}
 }
