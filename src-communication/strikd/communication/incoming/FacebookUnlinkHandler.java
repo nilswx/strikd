@@ -4,6 +4,7 @@ import strikd.sessions.Session;
 import strikd.communication.Opcodes;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.game.player.Player;
+import strikd.game.player.PlayerDefaults;
 import strikd.net.codec.IncomingMessage;
 
 public class FacebookUnlinkHandler extends MessageHandler
@@ -26,8 +27,8 @@ public class FacebookUnlinkHandler extends MessageHandler
 			session.send(new FacebookStatusMessage(false, player.isLiked()));
 			
 			// Restore name to a random name
-			String newName = session.getServer().getPlayerRegister().getDefaultName();
-			session.renamePlayer(newName);
+			PlayerDefaults defaults = session.getServer().getPlayerRegister().getDefaults();
+			session.renamePlayer(defaults.generateName());
 			
 			// Save immediately
 			session.saveData();

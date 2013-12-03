@@ -14,11 +14,12 @@ import com.google.common.collect.Maps;
 import strikd.Server;
 import strikd.game.stream.activity.PlayerJoinedStreamItem;
 import strikd.sessions.Session;
-import strikd.util.RandomUtil;
 
 public class PlayerRegister extends Server.Referent
 {
 	private static final Logger logger = LoggerFactory.getLogger(PlayerRegister.class);
+	
+	private final PlayerDefaults defaults = new PlayerDefaults();
 	
 	public PlayerRegister(Server server)
 	{
@@ -32,16 +33,18 @@ public class PlayerRegister extends Server.Referent
 		// Create new player with default data
 		Player player = this.getDatabase().createEntityBean(Player.class);
 		player.setToken(this.generateToken());
-		player.setName(this.getDefaultName());
-		player.setAvatar(this.getDefaultAvatar());
-		player.setMotto(this.getDefaultMotto());
+		player.setName(this.defaults.generateName());
+		player.setMotto(this.defaults.getMotto());
 		player.setLevel(1); // Start at lvl 1
 		player.setLocale(""); // Player will send CHANGE_LOCALE
 		player.setCountry(""); // Will change after LOGIN
 		player.setPlatform(""); // Will change after LOGIN
-		player.setBalance(this.getDefaultBalance());
-		player.saveInventory();
+		player.setBalance(this.defaults.getBalance());
 		player.setJoined(new Date());
+		
+		// Default inventory and avatar
+		this.defaults.stockInventory(player);
+		this.defaults.giveDefaultAvatar(player);
 		
 		// Save to database
 		this.getDatabase().save(player);
@@ -103,23 +106,8 @@ public class PlayerRegister extends Server.Referent
 		return (UUID.randomUUID().toString()).replace("-", "").toUpperCase();
 	}
 	
-	public String getDefaultName()
+	public PlayerDefaults getDefaults()
 	{
-		return String.format("Player-%d", RandomUtil.pickInt(100000, 999999));
-	}
-	
-	public String getDefaultAvatar()
-	{
-		return "ht1.hd2.ey4";
-	}
-	
-	public String getDefaultMotto()
-	{
-		return "Hey I'm new!";
-	}
-	
-	public int getDefaultBalance()
-	{
-		return 5;
+		return this.defaults;
 	}
 }
