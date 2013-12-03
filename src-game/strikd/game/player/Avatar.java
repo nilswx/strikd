@@ -60,7 +60,6 @@ public final class Avatar
 			if(this.parts[i] != null)
 			{
 				if(sep) sb.append(PART_DELIMITER); else sep = true;
-				sb.append(this.parts[i].getType().code());
 				sb.append(this.parts[i].getId());
 			}
 		}
