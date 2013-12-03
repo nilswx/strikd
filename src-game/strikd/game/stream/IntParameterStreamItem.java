@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 @Entity
 public abstract class IntParameterStreamItem extends ActivityStreamItem
 {
-	@Column(name="num")
+	@Column(name="param")
 	private int parameter;
 
 	public int getParameter()
