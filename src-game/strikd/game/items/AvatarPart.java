@@ -26,11 +26,23 @@ public abstract class AvatarPart extends ItemType
 	
 	public enum PartType
 	{
-		HAT,
-		HAIR,
-		EYES,
-		MOUTH,
-		HEAD,
-		BASE
+		HAT("ht"),
+		HAIR("hr"),
+		EYES("ey"),
+		MOUTH("mo"),
+		HEAD("hd"),
+		BASE("bd");
+		
+		final String code;
+		
+		private PartType(String code)
+		{
+			this.code = code;
+		}
+		
+		public String code()
+		{
+			return this.code;
+		}
 	}
 }
