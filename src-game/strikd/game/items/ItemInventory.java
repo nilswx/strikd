@@ -88,12 +88,12 @@ public class ItemInventory
 				String item = st.nextToken();
 				
 				int split = item.indexOf(QUANTITY_DELIMITER);
-				int quantity = Integer.parseInt(item.substring(0, split));
+				int amount = Integer.parseInt(item.substring(0, split));
 				ItemType type = ItemTypeRegistry.getType(Integer.parseInt(item.substring(split + 1)));
 				
-				if(type != null)
+				if(type != null && amount > 0)
 				{
-					inv.add(type, quantity);
+					inv.items.put(type, amount);
 				}
 			}
 		}
