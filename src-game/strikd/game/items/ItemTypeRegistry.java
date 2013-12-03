@@ -1,6 +1,7 @@
 package strikd.game.items;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import static strikd.game.items.AvatarPart.PartType.*;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class ItemTypeRegistry
 {
@@ -19,6 +21,7 @@ public class ItemTypeRegistry
 	
 	private static final ItemType[] items = new ItemType[1024];
 	private static final List<ItemType> itemList = Lists.newArrayList();
+	private static final Map<String, ItemType> itemMap = Maps.newHashMap();
 	
 	private ItemTypeRegistry() { }
 	
@@ -32,6 +35,11 @@ public class ItemTypeRegistry
 		{
 			return null;
 		}
+	}
+	
+	public static ItemType getType(String code)
+	{
+		return itemMap.get(code);
 	}
 	
 	public static List<ItemType> allTypes()
@@ -48,10 +56,17 @@ public class ItemTypeRegistry
 					type.getId(), type.getCode(),
 					other.getId(), other.getCode());
 		}
+		else if((other = itemMap.get(type.getCode())) != null)
+		{
+			logger.warn("#{} \"{}\" cannot use the same code as #{} \"{}\"!",
+					type.getId(), type.getCode(),
+					other.getId(), other.getCode());
+		}
 		else
 		{
 			items[type.getId()] = type;
 			itemList.add(type);
+			itemMap.put(type.getCode(), type);
 			
 			logger.debug("added #{} \"{}\" [{}]", type.getId(), type.getCode(), type.getClass().getSimpleName());
 		}
