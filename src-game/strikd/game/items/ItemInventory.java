@@ -2,7 +2,6 @@ package strikd.game.items;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.StringTokenizer;
 
 import com.google.common.collect.Maps;
 
@@ -82,10 +81,10 @@ public class ItemInventory
 		
 		if(str != null)
 		{
-			StringTokenizer st = new StringTokenizer(str, Character.toString(ITEM_DELIMITER));
-			while(st.hasMoreTokens())
+			for(int pos = 0, end = 0; end != -1; pos = end + 1)
 			{
-				String item = st.nextToken();
+				end = str.indexOf(ITEM_DELIMITER, pos);
+				String item = (end != -1 ? str.substring(pos, end) : str.substring(pos));
 				
 				int split = item.indexOf(QUANTITY_DELIMITER);
 				int amount = Integer.parseInt(item.substring(0, split));
