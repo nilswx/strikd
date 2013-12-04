@@ -116,27 +116,23 @@ public class Session extends Server.Referent
 		// Save on logout!
 		this.setSaveOnLogout(true);
 		
-		// Not first login?
-		if(this.player.getLogins() > 1)
-		{
-			// Level up!
-			LevelUpStreamItem lup = new LevelUpStreamItem();
-			lup.setPlayer(this.player);
-			lup.setLevel(RandomUtil.nextInt(Experience.MAX_LEVEL));
-			this.getServer().getActivityStream().postItem(lup);
-			
-			// Give an item!
-			ItemType item = RandomUtil.pickOne(ItemTypeRegistry.allTypes());
-			this.getPlayer().getInventory().add(item);
-			this.getPlayer().saveInventory();
-			this.saveData();
-			
-			// And brag about it. Hard.
-			ItemReceivedStreamItem ir = new ItemReceivedStreamItem();
-			ir.setPlayer(this.player);
-			ir.setItem(item);
-			this.getServer().getActivityStream().postItem(ir);
-		}
+		// Level up!
+		LevelUpStreamItem lup = new LevelUpStreamItem();
+		lup.setPlayer(this.player);
+		lup.setLevel(RandomUtil.nextInt(Experience.MAX_LEVEL));
+		this.getServer().getActivityStream().postItem(lup);
+		
+		// Give an item!
+		ItemType item = RandomUtil.pickOne(ItemTypeRegistry.allTypes());
+		this.getPlayer().getInventory().add(item);
+		this.getPlayer().saveInventory();
+		this.saveData();
+		
+		// And brag about it. Hard.
+		ItemReceivedStreamItem ir = new ItemReceivedStreamItem();
+		ir.setPlayer(this.player);
+		ir.setItem(item);
+		this.getServer().getActivityStream().postItem(ir);
 		
 		// Subscribe to own stream items
 		this.getFollowing().add(this.player.getId());

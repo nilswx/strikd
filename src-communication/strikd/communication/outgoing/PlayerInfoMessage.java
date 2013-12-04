@@ -10,7 +10,7 @@ public class PlayerInfoMessage extends OutgoingMessage
 	{
 		super(Opcodes.Outgoing.PLAYER_INFO);
 		serializePlayer(player, this);
-		super.writeTime(player.getLastUpdate());
+		super.writeTime(null);
 	}
 	
 	public static void serializePlayer(Player player, OutgoingMessage msg)

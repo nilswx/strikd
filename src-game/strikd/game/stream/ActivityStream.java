@@ -53,7 +53,7 @@ public class ActivityStream extends Server.Referent
 				)
 				
 				// Last first
-				.orderBy().desc("timestamp")
+				.orderBy().desc("id")
 				
 				// Range to fetch (paging)
 				.setFirstRow(start)

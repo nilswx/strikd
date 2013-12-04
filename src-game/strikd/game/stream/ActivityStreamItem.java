@@ -2,7 +2,11 @@ package strikd.game.stream;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.DiscriminatorColumn;
@@ -17,10 +21,19 @@ import strikd.game.player.Player;
 @DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.CHAR, length=1)
 public abstract class ActivityStreamItem
 {
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	private long id;
+	
 	@ManyToOne(optional=false)
 	private Player player;
 	
+	@Column(nullable=false)
 	private Date timestamp;
+	
+	public long getId()
+	{
+		return this.id;
+	}
 	
 	public Player getPlayer()
 	{

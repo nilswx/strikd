@@ -27,7 +27,7 @@ import com.avaje.ebean.annotation.NamedUpdate;
 	update = "update Player set serverId = 0, opponentId = 0 where serverId = :serverId")
 public class Player
 {
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
 	@Column(nullable=false)
@@ -97,8 +97,7 @@ public class Player
 	private Date joined;
 	
 	@Version
-	@Column(nullable=false)
-	private Date lastUpdate;
+	private int version;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<ActivityStreamItem> streamItems;
@@ -330,17 +329,7 @@ public class Player
 	{
 		this.joined = joined;
 	}
-
-	public Date getLastUpdate()
-	{
-		return lastUpdate;
-	}
 	
-	public void setLastUpdate(Date lastUpdate)
-	{
-		this.lastUpdate = lastUpdate;
-	}
-
 	public int getDraws()
 	{
 		return (this.matches - (this.wins - this.losses));
