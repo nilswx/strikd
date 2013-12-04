@@ -84,7 +84,7 @@ public class ItemTypeRegistry
 	
 	static
 	{
-		// TODO: fill register from .json file that can be shared with client too
+		// TODO: fill register from database that is shared with all server instances
 		add(new GenericAvatarPart(48, "BIG_MOUSE_EARS", HAT));
 		add(new GenericAvatarPart(49, "EYEPATCH", EYES));
 		add(new ExperienceBoostingAvatarPart(77, "BDAY_HAT", HAT));
@@ -95,19 +95,17 @@ public class ItemTypeRegistry
 		add(new HammerPowerUp(14, "HAMMER"));
 		add(new FreezePowerUp(17, "FREEZE"));
 		add(new SwapPowerUp(20, "SWAP"));
+		add(new GenericAvatarPart(52, "ALIEN_EYES", EYES));
+		add(new GenericAvatarPart(53, "BIG_MOUSTACHE", MOUTH));
 	}
 	
 	public static void main(String[] args)
 	{
-		// define a few parts
-		AvatarPart alienEyes = new GenericAvatarPart(52, "ALIEN_EYES", EYES);
-		AvatarPart bigMoustache = new GenericAvatarPart(53, "BIG_MOUSTACHE", MOUTH);
-		add(alienEyes); add(bigMoustache);
-		
 		// make an avatar
 		Avatar av = new Avatar();
-		av.set(alienEyes);
-		av.set(bigMoustache);
+		av.set((AvatarPart)_I("ALIEN_EYES"));
+		av.set((AvatarPart)_I("BIG_MOUSTACHE"));
+		av.set((AvatarPart)_I("XMAS_HAT"));
 		
 		// parse an avatar
 		Avatar av2 = Avatar.parseAvatar(av.toString());
@@ -115,9 +113,9 @@ public class ItemTypeRegistry
 		
 		// make an inventory
 		ItemInventory inv = new ItemInventory();
-		inv.add(getType(17), 12);
-		inv.add(getType(20), 4);
-		inv.add(getType(512), 1);
+		inv.add(_I("FREEZE"), 12);
+		inv.add(_I("HAMMER"), 4);
+		inv.add(_I("SWAP"), 1);
 		
 		// parse an inventory
 		ItemInventory inv2 = ItemInventory.parseInventory(inv.toString());
