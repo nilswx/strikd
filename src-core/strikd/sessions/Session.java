@@ -138,6 +138,11 @@ public class Session extends Server.Referent
 		// Recalculate level (XP zones could have changed)
 		player.setLevel(Experience.calculateLevel(player.getXp()));
 		
+		// Subscribe to own stream items
+		this.getFollowing().add(player.getId());
+		
+		// ==== HERE BE DRAGONS TESTING ====
+		
 		// Level up!
 		LevelUpStreamItem lup = new LevelUpStreamItem();
 		lup.setPlayer(player);
@@ -155,8 +160,7 @@ public class Session extends Server.Referent
 		ir.setItem(item);
 		this.getServer().getActivityStream().postItem(ir);
 		
-		// Subscribe to own stream items
-		this.getFollowing().add(player.getId());
+		// ==== HERE END DRAGONS TESTING ====
 		
 		// Flush any changes to database
 		this.saveData();
