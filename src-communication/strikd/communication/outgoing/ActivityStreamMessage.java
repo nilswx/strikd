@@ -3,9 +3,9 @@ package strikd.communication.outgoing;
 import java.util.List;
 
 import strikd.communication.Opcodes;
-import strikd.game.items.ItemType;
 import strikd.game.player.Player;
 import strikd.game.stream.ActivityStreamItem;
+import strikd.game.stream.IntParameterStreamItem;
 import strikd.game.stream.activity.FriendMatchResultStreamItem;
 import strikd.game.stream.activity.ItemReceivedStreamItem;
 import strikd.game.stream.activity.LevelUpStreamItem;
@@ -36,9 +36,7 @@ public class ActivityStreamMessage extends OutgoingMessage
 			else if(item instanceof ItemReceivedStreamItem)
 			{
 				this.writeType(ItemReceivedStreamItem.TYPE);
-				
-				ItemType itemType = ((ItemReceivedStreamItem)item).getItem();
-				super.writeStr(itemType != null ? itemType.getCode() : null);
+				this.writeInt(((IntParameterStreamItem)item).getParameter());
 			}
 			else if(item instanceof FriendMatchResultStreamItem)
 			{
