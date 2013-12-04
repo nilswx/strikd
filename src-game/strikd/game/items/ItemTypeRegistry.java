@@ -125,7 +125,7 @@ public class ItemTypeRegistry
 		add(new GenericAvatarPart(AO++, "HR_BROWN_M", HAIR));
 		add(new GenericAvatarPart(AO++, "HR_RED_M", HAIR));
 		add(new GenericAvatarPart(AO++, "HR_BLOND_F", HAIR));
-		add(new GenericAvatarPart(AO++, "HR_BLACK_MF", HAIR));
+		add(new GenericAvatarPart(AO++, "HR_BLACK_F", HAIR));
 		add(new GenericAvatarPart(AO++, "HR_BROWN_F", HAIR));
 		add(new GenericAvatarPart(AO++, "HR_RED_F", HAIR));
 	}
