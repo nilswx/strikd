@@ -85,18 +85,49 @@ public class ItemTypeRegistry
 	static
 	{
 		// TODO: fill register from database that is shared with all server instances
-		add(new GenericAvatarPart(48, "BIG_MOUSE_EARS", HAT));
-		add(new GenericAvatarPart(49, "EYEPATCH", EYES));
-		add(new ExperienceBoostingAvatarPart(77, "BDAY_HAT", HAT));
-		add(new GenericAvatarPart(61, "XMAS_HAT", HAT));
-		add(new Trophy(512, "LIKED"));
-		add(new Trophy(513, "WINS_5"));
-		add(new Trophy(514, "XMAS2013"));
-		add(new HammerPowerUp(14, "HAMMER"));
-		add(new FreezePowerUp(17, "FREEZE"));
-		add(new SwapPowerUp(20, "SWAP"));
-		add(new GenericAvatarPart(52, "ALIEN_EYES", EYES));
-		add(new GenericAvatarPart(53, "BIG_MOUSTACHE", MOUTH));
+		int IO = 100;
+		add(new GenericAvatarPart(IO++, "BIG_MOUSE_EARS", HAT));
+		add(new GenericAvatarPart(IO++, "EYEPATCH", EYES));
+		add(new ExperienceBoostingAvatarPart(IO++, "BDAY_HAT", HAT));
+		add(new GenericAvatarPart(IO++, "XMAS_HAT", HAT));
+		add(new Trophy(IO++, "LIKED"));
+		add(new Trophy(IO++, "WINS_5"));
+		add(new Trophy(IO++, "XMAS2013"));
+		add(new HammerPowerUp(IO++, "HAMMER"));
+		add(new FreezePowerUp(IO++, "FREEZE"));
+		add(new SwapPowerUp(IO++, "SWAP"));
+		add(new GenericAvatarPart(IO++, "ALIEN_EYES", EYES));
+		add(new GenericAvatarPart(IO++, "BIG_MOUSTACHE", MOUTH));
+		
+		// Bodies
+		int AO = 500;
+		add(new GenericAvatarPart(AO++, "BD_M", BASE));
+		add(new GenericAvatarPart(AO++, "BD_F", BASE));
+		
+		// Heads
+		add(new GenericAvatarPart(AO++, "HD_WHITE_M", HEAD));
+		add(new GenericAvatarPart(AO++, "HD_WHITE_F", HEAD));
+		add(new GenericAvatarPart(AO++, "HD_BLACK_M", HEAD));
+		add(new GenericAvatarPart(AO++, "HD_BLACK_F", HEAD));
+		
+		// Mouths
+		add(new GenericAvatarPart(AO++, "MO_M", MOUTH));
+		add(new GenericAvatarPart(AO++, "MO_F", MOUTH));
+		
+		// Eyes
+		add(new GenericAvatarPart(AO++, "EY_BLUE", EYES));
+		add(new GenericAvatarPart(AO++, "EY_BROWN", EYES));
+		add(new GenericAvatarPart(AO++, "EY_GREEN", EYES));
+		
+		// Hair
+		add(new GenericAvatarPart(AO++, "HR_BLOND_M", HAIR));
+		add(new GenericAvatarPart(AO++, "HR_BLACK_M", HAIR));
+		add(new GenericAvatarPart(AO++, "HR_BROWN_M", HAIR));
+		add(new GenericAvatarPart(AO++, "HR_RED_M", HAIR));
+		add(new GenericAvatarPart(AO++, "HR_BLOND_F", HAIR));
+		add(new GenericAvatarPart(AO++, "HR_BLACK_MF", HAIR));
+		add(new GenericAvatarPart(AO++, "HR_BROWN_F", HAIR));
+		add(new GenericAvatarPart(AO++, "HR_RED_F", HAIR));
 	}
 	
 	public static void main(String[] args)
