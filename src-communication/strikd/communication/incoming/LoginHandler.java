@@ -49,7 +49,7 @@ public class LoginHandler extends MessageHandler
 			session.send(new CurrencyBalanceMessage(player.getBalance()));
 			
 			// Push levels ranges
-			session.send(Experience.getLevelsMessage());
+			session.sendCopy(Experience.getLevelsMessage());
 			
 			// Welcome!
 			session.sendAlert("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rBalance: %d coins\r\rThanks for flying with us!",
@@ -63,7 +63,7 @@ public class LoginHandler extends MessageHandler
 			session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
 			
 			// Push item type registry
-			session.getConnection().sendCopy(ItemTypesMessageCache.getMessage());
+			session.sendCopy(ItemTypesMessageCache.getMessage());
 		}
 	}
 }

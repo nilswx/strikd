@@ -206,6 +206,13 @@ public class Session extends Server.Referent
 		this.connection.send(msg);
 	}
 	
+	public void sendCopy(OutgoingMessage msg)
+	{
+		logger.debug("> {}", msg);
+		
+		this.connection.sendCopy(msg);
+	}
+	
 	public long getSessionId()
 	{
 		return this.sessionId;
