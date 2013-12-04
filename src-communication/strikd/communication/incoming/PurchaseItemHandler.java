@@ -2,7 +2,6 @@ package strikd.communication.incoming;
 
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.game.items.shop.Shop;
 import strikd.game.player.Player;
@@ -30,7 +29,7 @@ public class PurchaseItemHandler extends MessageHandler
 		// Purchased successfully?
 		if(items == null)
 		{
-			session.send(new AlertMessage(player.localize("Purchase failed! You have not been charged.")));
+			session.sendAlert("Purchase failed! You have not been charged.");
 		}
 		else
 		{

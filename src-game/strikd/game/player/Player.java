@@ -19,6 +19,7 @@ import javax.persistence.Version;
 import strikd.facebook.FacebookIdentity;
 import strikd.game.items.ItemInventory;
 import strikd.game.stream.ActivityStreamItem;
+import strikd.game.util.Localization;
 
 import com.avaje.ebean.annotation.NamedUpdate;
 
@@ -368,7 +369,6 @@ public class Player
 	
 	public String localize(String text)
 	{
-		// TODO: localize for this player's 'locale'
-		return text;
+		return Localization.localize(this.locale, text);
 	}
 }

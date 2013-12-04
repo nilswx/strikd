@@ -12,6 +12,7 @@ import strikd.Server;
 import strikd.cluster.ServerDescriptor;
 import strikd.communication.Opcodes;
 import strikd.communication.incoming.MessageHandlers;
+import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.NameChangedMessage;
 import strikd.communication.outgoing.ServerCryptoMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
@@ -310,5 +311,20 @@ public class Session extends Server.Referent
 			this.following = Lists.newArrayList();
 		}
 		return this.following;
+	}
+	
+	public void sendAlert(String text, Object... args)
+	{
+		if(this.isLoggedIn())
+		{
+			text = this.player.localize(text);
+		}
+		
+		if(args.length > 0)
+		{
+			text = String.format(text, args);
+		}
+		
+		this.send(new AlertMessage(text));
 	}
 }

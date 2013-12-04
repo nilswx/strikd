@@ -9,7 +9,6 @@ import com.restfb.json.JsonObject;
 
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.facebook.FacebookIdentity;
 import strikd.game.player.Player;
@@ -39,10 +38,9 @@ public class FacebookClaimLikeHandler extends MessageHandler
 			if(player.isLiked())
 			{
 				// TODO: give item
-				session.send(new AlertMessage(player.localize("Thanks for liking Strik, here's your crappy item!")));
+				session.sendAlert("Thanks for liking Strik, here's your crappy item!");
 				
 				// Save data
-				player.setLiked(true);
 				session.saveData();
 			}
 		}

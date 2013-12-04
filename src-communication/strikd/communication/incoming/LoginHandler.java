@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.PlayerInfoMessage;
@@ -73,12 +72,12 @@ public class LoginHandler extends MessageHandler
 			Experience.addExperience(player, session, +10);
 			
 			// Welcome!
-			session.send(new AlertMessage(String.format(player.localize("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rBalance: %d coins\r\rThanks for flying with us!"),
+			session.sendAlert("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rBalance: %d coins\r\rThanks for flying with us!",
 					session.getServer().getServerCluster().getSelf(),
 					player.getLogins(),
 					player.getPlatform(),
 					player.getMotto(),
-					player.getBalance())));
+					player.getBalance());
 			
 			// Will force client to validate
 			session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));

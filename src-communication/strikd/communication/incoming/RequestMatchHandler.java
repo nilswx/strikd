@@ -3,7 +3,6 @@ package strikd.communication.incoming;
 import strikd.Server;
 import strikd.sessions.Session;
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.ServerShuttingDownMessage;
 import strikd.game.match.MatchManager;
 import strikd.game.match.queues.PlayerQueue;
@@ -48,7 +47,7 @@ public class RequestMatchHandler extends MessageHandler
 			}
 			else
 			{
-				session.send(new AlertMessage(session.getPlayer().localize("Could not join a queue!")));
+				session.sendAlert("Could not join a queue!");
 			}
 		}
 	}
