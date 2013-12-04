@@ -9,10 +9,9 @@ public class LevelsMessage extends OutgoingMessage
 	{
 		super(Opcodes.Outgoing.LEVELS);
 		super.writeByte((byte)levels.length);
-		for(byte level = 1; level <= levels.length; level++)
+		for(int beginXP : levels)
 		{
-			super.writeByte(level);
-			super.writeInt(levels[level - 1]); // begin XP
+			super.writeInt(beginXP);
 		}
 	}
 }
