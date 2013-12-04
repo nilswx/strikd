@@ -48,7 +48,7 @@ public class RequestMatchHandler extends MessageHandler
 			}
 			else
 			{
-				session.send(new AlertMessage("could not join a queue"));
+				session.send(new AlertMessage(session.getPlayer().localize("Could not join a queue!")));
 			}
 		}
 	}

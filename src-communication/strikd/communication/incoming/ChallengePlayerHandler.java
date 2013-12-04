@@ -23,20 +23,20 @@ public class ChallengePlayerHandler extends MessageHandler
 		// Find target
 		int opponentId = request.readInt();
 		Player opponent = session.getServer().getPlayerRegister().findPlayer(opponentId);
+		Player self = session.getPlayer();
 		
 		// Unavailable?
 		if(opponent == null || !opponent.isOnline() || opponent.isInMatch())
 		{
-			session.send(new AlertMessage("That player is not available right now."));
+			session.send(new AlertMessage(self.localize("That player is not available right now.")));
 		}
 		else
 		{
 			// Locale mismatch?
-			Player self = session.getPlayer();
 			if(!opponent.getLocale().equals(self.getLocale()))
 			{
 				// Give help! (TODO: special message instead of ALERT, maybe even with a prompt to change locale)
-				session.send(new AlertMessage(String.format("Hola! %s is playing in a different language. Consider changing your language to '%s' to play against %s.",
+				session.send(new AlertMessage(String.format(self.localize("Hola! %s is playing in a different language. Consider changing your language to '%s' to play against %s."),
 						opponent.getName(),
 						opponent.getLocale(),
 						opponent.getName())));
@@ -61,7 +61,7 @@ public class ChallengePlayerHandler extends MessageHandler
 					ServerDescriptor remote = cluster.getServerById(opponent.getServerId());
 					
 					// Redirect to server (TODO: send special RETRY redirect with host/port instead of ALERT)
-					session.send(new AlertMessage(String.format("%s is playing on server '%s', while you are on '%s'. You will be reconnected.",
+					session.send(new AlertMessage(String.format(self.localize("%s is playing on server '%s', while you are on '%s'. You will be reconnected."),
 							opponent.getName(),
 							remote.getName(),
 							cluster.getSelf().getName())));

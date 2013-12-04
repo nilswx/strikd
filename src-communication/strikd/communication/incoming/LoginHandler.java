@@ -73,7 +73,7 @@ public class LoginHandler extends MessageHandler
 			Experience.addExperience(player, session, +10);
 			
 			// Welcome!
-			session.send(new AlertMessage(String.format("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rBalance: %d coins\r\rThanks for flying with us!",
+			session.send(new AlertMessage(String.format(player.localize("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rBalance: %d coins\r\rThanks for flying with us!"),
 					session.getServer().getServerCluster().getSelf(),
 					player.getLogins(),
 					player.getPlatform(),

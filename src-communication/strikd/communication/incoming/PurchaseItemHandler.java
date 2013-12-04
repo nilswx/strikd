@@ -5,6 +5,7 @@ import strikd.communication.Opcodes;
 import strikd.communication.outgoing.AlertMessage;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.game.items.shop.Shop;
+import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 
 public class PurchaseItemHandler extends MessageHandler
@@ -23,12 +24,13 @@ public class PurchaseItemHandler extends MessageHandler
 		
 		// Attempt to purchase the offer
 		Shop shop = session.getServer().getShop();
-		Object items = shop.purchaseOffer(offerId, session.getPlayer());
+		Player player = session.getPlayer();
+		Object items = shop.purchaseOffer(offerId, player);
 		
 		// Purchased successfully?
 		if(items == null)
 		{
-			session.send(new AlertMessage("Purchase failed! You have not been charged."));
+			session.send(new AlertMessage(player.localize("Purchase failed! You have not been charged.")));
 		}
 		else
 		{
@@ -36,7 +38,7 @@ public class PurchaseItemHandler extends MessageHandler
 			session.saveData();
 			
 			// You have been charged!
-			session.send(new CurrencyBalanceMessage(session.getPlayer().getBalance()));
+			session.send(new CurrencyBalanceMessage(player.getBalance()));
 			
 			// Add items
 		}

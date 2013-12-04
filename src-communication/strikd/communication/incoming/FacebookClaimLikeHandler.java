@@ -39,7 +39,7 @@ public class FacebookClaimLikeHandler extends MessageHandler
 			if(player.isLiked())
 			{
 				// TODO: give item
-				session.send(new AlertMessage("Thanks for liking Strik, here's your crappy item!"));
+				session.send(new AlertMessage(player.localize("Thanks for liking Strik, here's your crappy item!")));
 				
 				// Save data
 				player.setLiked(true);

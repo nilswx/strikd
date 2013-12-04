@@ -365,4 +365,10 @@ public class Player
 	{
 		return String.format("#%s ('%s')", this.id, this.name);
 	}
+	
+	public String localize(String text)
+	{
+		// TODO: localize for this player's 'locale'
+		return text;
+	}
 }
