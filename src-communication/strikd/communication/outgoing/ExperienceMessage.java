@@ -5,20 +5,10 @@ import strikd.net.codec.OutgoingMessage;
 
 public class ExperienceMessage extends OutgoingMessage
 {
-	public ExperienceMessage(int added, int levels)
+	public ExperienceMessage(int added, int newTotal)
 	{
 		super(Opcodes.Outgoing.EXPERIENCE);
 		super.writeInt(added);
-		super.writeByte((byte)levels);
-	}
-	
-	public void writeLevel(int level, int beginXP, int currentXP, int endXP)
-	{
-		super.writeByte((byte)level);
-		super.writeInt(beginXP);
-		super.writeInt(currentXP);
-		super.writeInt(endXP);
-		
-		//System.out.println(String.format("[L%d]     %d/%d -> %d/%d     [L%d]", level, beginXP, endXP, currentXP, endXP, level + 1));
+		super.writeInt(newTotal);
 	}
 }

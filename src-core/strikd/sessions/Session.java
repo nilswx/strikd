@@ -26,6 +26,7 @@ import strikd.game.player.Experience;
 import strikd.game.player.Player;
 import strikd.game.stream.activity.ItemReceivedStreamItem;
 import strikd.game.stream.activity.LevelUpStreamItem;
+import strikd.game.util.CountryResolver;
 import strikd.net.NetConnection;
 import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.OutgoingMessage;
@@ -114,29 +115,51 @@ public class Session extends Server.Referent
 
 	private void onLogin()
 	{
+		// Shorthand var
+		Player player = this.player;
+		
 		// Save on logout!
 		this.setSaveOnLogout(true);
 		
+		// Update country
+		String newCountry = CountryResolver.getCountryCode(this.connection.getIpAddress());
+		if(newCountry != null)
+		{
+			player.setCountry(newCountry);
+		}
+		
+		// No country? (for localhost testing)
+		if(player.getCountry().isEmpty())
+		{
+			player.setCountry("nl");
+			logger.debug("{} had no country, setting it to '{}'", player, player.getCountry());
+		}
+		
+		// Recalculate level (XP zones could have changed)
+		player.setLevel(Experience.calculateLevel(player.getXp()));
+		
 		// Level up!
 		LevelUpStreamItem lup = new LevelUpStreamItem();
-		lup.setPlayer(this.player);
+		lup.setPlayer(player);
 		lup.setLevel(RandomUtil.nextInt(Experience.MAX_LEVEL));
 		this.getServer().getActivityStream().postItem(lup);
 		
 		// Give an item!
 		ItemType item = RandomUtil.pickOne(ItemTypeRegistry.allTypes());
-		this.getPlayer().getInventory().add(item);
-		this.getPlayer().saveInventory();
-		this.saveData();
+		player.getInventory().add(item);
+		player.saveInventory();
 		
 		// And brag about it. Hard.
 		ItemReceivedStreamItem ir = new ItemReceivedStreamItem();
-		ir.setPlayer(this.player);
+		ir.setPlayer(player);
 		ir.setItem(item);
 		this.getServer().getActivityStream().postItem(ir);
 		
 		// Subscribe to own stream items
-		this.getFollowing().add(this.player.getId());
+		this.getFollowing().add(player.getId());
+		
+		// Flush any changes to database
+		this.saveData();
 	}
 
 	private void onLogout()

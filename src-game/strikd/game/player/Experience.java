@@ -3,17 +3,18 @@ package strikd.game.player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import strikd.communication.outgoing.ExperienceMessage;
+import strikd.communication.outgoing.LevelsMessage;
 import strikd.sessions.Session;
 
 public class Experience
 {
-	public static final int MAX_LEVEL = 45;
+	public static final int MAX_LEVEL = 25;
 	
 	private static final int FORMULA_BASE = 100;
-	private static final float FORMULA_MULTIPLIER = 1.20f;
+	private static final float FORMULA_MULTIPLIER = 1 + (0.20f * (45/MAX_LEVEL));
 	
 	private static final int[] LEVEL_EXPERIENCE;
+	private static final LevelsMessage levelsMessage;
 	
 	private static final Logger logger = LoggerFactory.getLogger(Experience.class);
 	
@@ -26,7 +27,11 @@ public class Experience
 			LEVEL_EXPERIENCE[level] = (int)(FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level));
 		}
 		
+		// Precompute message
+		levelsMessage = new LevelsMessage(LEVEL_EXPERIENCE);
+		
 		// Print cache
+		logger.info("defined {} levels, message size: {} bytes", MAX_LEVEL, levelsMessage.length());
 		for(int level = 1, prevNeed = 0; level <= MAX_LEVEL; level++)
 		{
 			// Calculate level boundaries
@@ -90,9 +95,6 @@ public class Experience
 		int levelUps = (resultLevel - currentLevel);
 		logger.debug("adding {} xp to {} will cause {} level-ups", points, player.getName(), levelUps);
 		
-		// Initialize the experience message
-		ExperienceMessage msg = (session != null) ? new ExperienceMessage(points, levelUps + 1) : null;
-		
 		do
 		{
 			// Add XP, but within the current level
@@ -100,12 +102,6 @@ public class Experience
 			int pointsToNext = (endXP - currentXP);
 			int pointsToAdd = (points < pointsToNext || currentLevel == MAX_LEVEL) ? points : pointsToNext;
 			currentXP += pointsToAdd;
-			
-			// Write progress on this level to message
-			if(msg != null)
-			{
-				msg.writeLevel(currentLevel, getLevelBegin(currentLevel), currentXP, endXP);
-			}
 			
 			// Level up?
 			if(currentXP == endXP)
@@ -122,12 +118,6 @@ public class Experience
 		// Set final level and XP
 		player.setXp(currentXP);
 		player.setLevel(currentLevel);
-		
-		// Session to update?
-		if(session != null)
-		{
-			session.send(msg);
-		}
 	}
 	
 	private static void onLevelUp(Player player, Session session, int level)
@@ -138,6 +128,11 @@ public class Experience
 		// TODO: create event in stream + publish FB story
 		
 		// TODO: reward with items / coins for level x
+	}
+	
+	public static LevelsMessage getLevelsMessage()
+	{
+		return levelsMessage;
 	}
 	
 	public static void main(String[] args)
