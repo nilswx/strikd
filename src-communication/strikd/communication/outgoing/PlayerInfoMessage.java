@@ -21,7 +21,6 @@ public class PlayerInfoMessage extends OutgoingMessage
 		msg.writeStr(player.getMotto());
 		msg.writeStr(player.getCountry());
 		msg.writeInt(player.getXp());
-		msg.writeInt(player.getLevel());
 		msg.writeInt(player.getMatches());
 		msg.writeInt(player.getWins());
 		msg.writeInt(player.getLosses());

@@ -44,12 +44,12 @@ public class LoginHandler extends MessageHandler
 			// Login OK!
 			session.setPlayer(player, String.format("%s @ %s", hardware, systemVersion));
 			
+			// Push levels ranges
+			session.sendCopy(Experience.getLevelsMessage());
+						
 			// Push player data
 			session.send(new PlayerInfoMessage(player));
 			session.send(new CurrencyBalanceMessage(player.getBalance()));
-			
-			// Push levels ranges
-			session.sendCopy(Experience.getLevelsMessage());
 			
 			// Welcome!
 			session.sendAlert("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rBalance: %d coins\r\rThanks for flying with us!",
