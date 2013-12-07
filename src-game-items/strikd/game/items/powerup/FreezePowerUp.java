@@ -18,6 +18,7 @@ public class FreezePowerUp extends PowerUp
 	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Freeze opponents screen blabla
-		player.send(new AlertMessage(String.format("%s hit %s with a breezy FREEZE!", player.getInfo().getName(), player.getOpponent())));
-	}
+		
+		player.getOpponent().send(new AlertMessage(String.format("%s hit you with a breezy FREEZE!", player.getInfo().getName())));
+	}	
 }
