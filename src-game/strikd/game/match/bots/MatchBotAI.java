@@ -1,9 +1,6 @@
 package strikd.game.match.bots;
 
-import java.util.List;
-
 import strikd.game.board.Board;
-import strikd.game.board.Tile;
 import strikd.game.match.Match;
 
 public abstract class MatchBotAI
@@ -15,21 +12,21 @@ public abstract class MatchBotAI
 		this.bot = player;
 	}
 	
-	public abstract List<Tile> nextMove();
+	public abstract void nextMove();
 	
-	public abstract int getNextMoveDelay();
+	public abstract int nextMoveDelay();
 	
-	public MatchBotPlayer getPlayer()
+	public final MatchBotPlayer getPlayer()
 	{
 		return this.bot;
 	}
 	
-	protected Match getMatch()
+	protected final Match getMatch()
 	{
 		return this.bot.getMatch();
 	}
 	
-	protected Board getBoard()
+	protected final Board getBoard()
 	{
 		return this.getMatch().getBoard();
 	}

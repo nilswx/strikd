@@ -15,7 +15,7 @@ public class ColorVisionPowerUp extends PowerUp
 	}
 
 	@Override
-	public void onActivate(MatchPlayer player, String... args)
+	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Send color accents
 	}

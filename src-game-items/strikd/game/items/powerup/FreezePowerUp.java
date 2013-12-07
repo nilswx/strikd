@@ -1,5 +1,6 @@
 package strikd.game.items.powerup;
 
+import strikd.communication.outgoing.AlertMessage;
 import strikd.game.items.PowerUp;
 import strikd.game.match.MatchPlayer;
 
@@ -14,8 +15,9 @@ public class FreezePowerUp extends PowerUp
 	}
 
 	@Override
-	public void onActivate(MatchPlayer player, String... args)
+	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Freeze opponents screen blabla
+		player.send(new AlertMessage(String.format("%s hit %s with a breezy FREEZE!", player.getInfo().getName(), player.getOpponent())));
 	}
 }

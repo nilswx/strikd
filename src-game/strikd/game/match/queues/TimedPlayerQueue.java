@@ -31,7 +31,14 @@ public class TimedPlayerQueue extends PlayerQueue
 			@Override
 			public void run()
 			{
-				TimedPlayerQueue.this.makeMatches();
+				try
+				{
+					makeMatches();
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}, 0, MATCHMAKING_INTERVAL, TimeUnit.MILLISECONDS);
 		

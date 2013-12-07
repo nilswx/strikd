@@ -14,7 +14,7 @@ public class SnitchPowerUp extends PowerUp
 	}
 
 	@Override
-	public void onActivate(MatchPlayer player, String... args)
+	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Limited time: yield 50% of opponents score additions
 	}

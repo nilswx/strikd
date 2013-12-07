@@ -14,7 +14,7 @@ public class SwapPowerUp extends PowerUp
 	}
 
 	@Override
-	public void onActivate(MatchPlayer player, String... args)
+	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Swap the specified tiles
 	}

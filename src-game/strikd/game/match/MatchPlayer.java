@@ -115,6 +115,11 @@ public class MatchPlayer
 		this.selected.clear();
 	}
 	
+	public MatchPlayer getOpponent()
+	{
+		return this.match.getOpponent(this);
+	}
+	
 	@Override
 	public String toString()
 	{

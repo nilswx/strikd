@@ -14,7 +14,7 @@ public class WaterPowerUp extends PowerUp
 	}
 
 	@Override
-	public void onActivate(MatchPlayer player, String... args)
+	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Soak opponents screen blabla
 	}

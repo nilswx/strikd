@@ -14,7 +14,7 @@ public class HammerPowerUp extends PowerUp
 	}
 
 	@Override
-	public void onActivate(MatchPlayer player, String... args)
+	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Destroy the specified tile
 	}

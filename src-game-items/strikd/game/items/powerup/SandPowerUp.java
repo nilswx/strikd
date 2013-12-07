@@ -14,7 +14,7 @@ public class SandPowerUp extends PowerUp
 	}
 
 	@Override
-	public void onActivate(MatchPlayer player, String... args)
+	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Drop sand on opponents screen blabla
 	}

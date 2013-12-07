@@ -141,7 +141,7 @@ public class Match
 			else
 			{
 				// Determine loser
-				MatchPlayer loser = this.getOpponent(winner);
+				MatchPlayer loser = winner.getOpponent();
 				
 				// Update stats
 				winner.getInfo().setWins(winner.getInfo().getWins() + 1);
@@ -161,7 +161,7 @@ public class Match
 	
 	public void removePlayer(MatchPlayer player)
 	{
-		this.end(this.getOpponent(player));
+		this.end(player.getOpponent());
 	}
 
 	public void timerEnded()

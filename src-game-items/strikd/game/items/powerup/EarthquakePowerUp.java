@@ -14,7 +14,7 @@ public class EarthquakePowerUp extends PowerUp
 	}
 
 	@Override
-	public void onActivate(MatchPlayer player, String... args)
+	protected void onActivate(MatchPlayer player, String... args)
 	{
 		// Shake opponents screen blabla
 	}
