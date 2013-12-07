@@ -16,6 +16,7 @@ import strikd.game.board.Board;
 import strikd.game.board.Direction8;
 import strikd.game.board.Tile;
 import strikd.game.items.PowerUp;
+import strikd.game.match.SelectionValidator;
 import strikd.game.match.bots.MatchBotAI;
 import strikd.game.match.bots.MatchBotPlayer;
 import strikd.locale.LocaleBundle;
@@ -139,11 +140,20 @@ public class DefaultMatchBotAI extends MatchBotAI
 	
 	private void selectNextTile()
 	{
+		// Letters remaining?
 		Tile tile = this.toSelect.poll();
 		if(tile != null)
 		{
+			// Select the tile
 			MatchBotPlayer self = this.getPlayer();
+			self.selectTile(tile);
 			self.getOpponent().send(new TileSelectionExtendedMessage(self, ImmutableList.of(tile)));
+			
+			// Done?
+			if(this.toSelect.isEmpty())
+			{
+				SelectionValidator.validateSelection(self);
+			}
 		}
 	}
 	
