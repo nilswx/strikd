@@ -33,8 +33,7 @@ public class ExperienceHandler extends Server.Referent
 		}
 		else
 		{
-			// Determine current level and new XP
-			int currentLevel = player.getLevel();
+			// Determine new XP
 			int newXP = player.getXp() + points;
 			
 			// Overflowing max experience?
@@ -51,14 +50,17 @@ public class ExperienceHandler extends Server.Referent
 			// Set the new XP
 			player.setXp(newXP);
 			
-			// Level-up?
+			// Determine current and new level
+			int currentLevel = player.getLevel();
 			int newLevel = Experience.calculateLevel(newXP);
+			
+			// Leveling up?
 			if(newLevel > currentLevel)
 			{
 				// Process level-ups
 				for(int level = currentLevel + 1; level <= newLevel; level++)
 				{
-					onLevelUp(player, level);
+					this.onLevelUp(player, level);
 				}
 				
 				// Save level
