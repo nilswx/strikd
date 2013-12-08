@@ -19,7 +19,7 @@ public class ActivityStream extends Server.Referent
 		logger.info("{} events", server.getDatabase().find(ActivityStreamItem.class).findRowCount());
 	}
 
-	public void postItem(ActivityStreamItem item)
+	public void write(ActivityStreamItem item)
 	{
 		item.setTimestamp(new Date());
 		this.getDatabase().insert(item);

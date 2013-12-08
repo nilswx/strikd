@@ -147,7 +147,7 @@ public class Session extends Server.Referent
 		LevelUpStreamItem lup = new LevelUpStreamItem();
 		lup.setPlayer(player);
 		lup.setLevel(RandomUtil.nextInt(Experience.MAX_LEVEL));
-		this.getServer().getActivityStream().postItem(lup);
+		this.getServer().getActivityStream().write(lup);
 		
 		// Give an item!
 		ItemType item = RandomUtil.pickOne(ItemTypeRegistry.allTypes());
@@ -158,7 +158,7 @@ public class Session extends Server.Referent
 		ItemReceivedStreamItem ir = new ItemReceivedStreamItem();
 		ir.setPlayer(player);
 		ir.setItem(item);
-		this.getServer().getActivityStream().postItem(ir);
+		this.getServer().getActivityStream().write(ir);
 		
 		// ==== HERE END DRAGONS TESTING ====
 		

@@ -53,7 +53,7 @@ public class PlayerRegister extends Server.Referent
 		// Hello world!
 		PlayerJoinedStreamItem pj = new PlayerJoinedStreamItem();
 		pj.setPlayer(player);
-		this.getServer().getActivityStream().postItem(pj);
+		this.getServer().getActivityStream().write(pj);
 		
 		return player;
 	}
