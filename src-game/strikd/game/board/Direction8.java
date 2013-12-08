@@ -23,12 +23,18 @@ public enum Direction8
 	}
 
 	private static final Direction8[] values = values();
-
+	private static final Direction8[] nesw = { North, East, South, West };
+	
 	public static Direction8[] all()
 	{
 		return values;
 	}
-
+	
+	public static Direction8[] noDiagonals()
+	{
+		return nesw;
+	}
+	
 	public final Direction8 invert()
 	{
 		return values[(this.ordinal() + (values.length / 2)) % values.length];

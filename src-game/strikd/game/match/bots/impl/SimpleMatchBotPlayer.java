@@ -96,19 +96,19 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 	protected int nextMoveDelay()
 	{
 		// Working on a word?
+		int delay;
 		if(this.hasWord())
 		{
-			// 1-2 seconds per tile
-			return RandomUtil.pickInt(1000, 2000);
+			delay = RandomUtil.pickInt(500, 1550);
+			logger.debug("{} will select {} in {} ms", this, this.toSelect.peek(), delay);
 		}
 		else
 		{
-			// Max idle time
-			int idleTime = RandomUtil.pickInt(1000, 5000);
-			logger.debug("{} will be thinking for {} ms", this, idleTime);
-			
-			return idleTime;
+			delay = RandomUtil.pickInt(1000, 5000);
+			logger.debug("{} will search a new word in {} ms", this, delay);
 		}
+		
+		return delay;
 	}
 	
 	private boolean pickNewWord()
@@ -116,7 +116,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		// Get board ref
 		Board board = this.getMatch().getBoard();
 		
-		// Give it
+		// Give it a few tries
 		List<Tile> progress = Lists.newArrayList();
 		for(int attempt = 0; attempt < this.allowedFindAttempts; attempt++)
 		{
