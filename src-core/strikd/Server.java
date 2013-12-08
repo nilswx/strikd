@@ -17,6 +17,7 @@ import strikd.facebook.FacebookManager;
 import strikd.game.items.ItemTypeRegistry;
 import strikd.game.items.shop.Shop;
 import strikd.game.match.MatchManager;
+import strikd.game.player.ExperienceHandler;
 import strikd.game.player.PlayerRegister;
 import strikd.game.stream.ActivityStream;
 import strikd.game.util.CountryResolver;
@@ -44,6 +45,7 @@ public class Server
 	private final SessionManager sessionMgr;
 	private final PlayerRegister playerRegister;
 	private final MatchManager matchMgr;
+	private final ExperienceHandler experienceHandler;
 	private final Shop shop;
 	private final FacebookManager facebook;
 	private final ActivityStream activityStream;
@@ -79,6 +81,7 @@ public class Server
 		this.sessionMgr = new SessionManager(this);
 		this.playerRegister = new PlayerRegister(this);
 		this.matchMgr = new MatchManager(this);
+		this.experienceHandler = new ExperienceHandler(this);
 		
 		// Join server cluster
 		this.serverCluster = new ServerCluster(this, props);
@@ -234,6 +237,11 @@ public class Server
 	public MatchManager getMatchMgr()
 	{
 		return this.matchMgr;
+	}
+	
+	public ExperienceHandler getExperienceHandler()
+	{
+		return this.experienceHandler;
 	}
 	
 	public Shop getShop()

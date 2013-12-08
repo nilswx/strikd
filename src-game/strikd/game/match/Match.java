@@ -1,17 +1,21 @@
 package strikd.game.match;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import strikd.Server;
 import strikd.communication.outgoing.AnnounceMatchMessage;
 import strikd.communication.outgoing.BoardInitMessage;
 import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Board;
 import strikd.game.board.impl.AgingRenegadeBoard;
+import strikd.game.facebook.PersonBeatedStory;
 import strikd.game.match.bots.MatchBotPlayer;
+import strikd.game.stream.activity.FriendMatchResultStreamItem;
 import strikd.locale.LocaleBundle;
 import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.net.codec.OutgoingMessage;
@@ -133,6 +137,12 @@ public class Match
 			// Destroy the board
 			this.board.destroy();
 			
+			// Broadcast event
+			this.broadcast(new MatchEndedMessage(winner));
+			
+			// Get server instance
+			Server server = this.matchMgr.getServer();
+			
 			// Draw?
 			if(winner == null)
 			{
@@ -148,11 +158,32 @@ public class Match
 				loser.getInfo().setLosses(loser.getInfo().getLosses() + 1);
 				logger.debug("{}: {} wins, {} loses!", this, winner, loser);
 				
-				// TODO: post activity when playing against a friend
+				// Not a bot match?
+				if(!(this.playerOne instanceof MatchBotPlayer) && !(this.playerTwo instanceof MatchBotPlayer))
+				{
+					// Match between friends?
+					List<Integer> friendList = this.playerOne.getSession().getFriendList();
+					if(friendList.contains(this.playerTwo.getInfo().getId()))
+					{
+						// Post result to stream
+						FriendMatchResultStreamItem fmr = new FriendMatchResultStreamItem();
+						fmr.setPlayer(winner.getInfo());
+						fmr.setLoser(loser.getInfo());
+						server.getActivityStream().postItem(fmr);
+						
+						// And to Facebook?
+						if(winner.getInfo().isFacebookLinked() && loser.getInfo().isFacebookLinked())
+						{
+							PersonBeatedStory story = new PersonBeatedStory(winner.getInfo().getFacebook(), loser.getInfo().getFacebook().getUserId());
+							server.getFacebook().publish(story);
+						}
+					}
+				}
 			}
 			
-			// Broadcast event
-			this.broadcast(new MatchEndedMessage(winner));
+			// Reward with experience and items
+			server.getExperienceHandler().giveMatchExperience(this.playerOne, winner);
+			server.getExperienceHandler().giveMatchExperience(this.playerTwo, winner);
 			
 			// Request match to be destroyed
 			this.matchMgr.destroyMatch(this.matchId);

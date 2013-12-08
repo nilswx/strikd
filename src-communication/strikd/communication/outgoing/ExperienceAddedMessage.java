@@ -3,9 +3,9 @@ package strikd.communication.outgoing;
 import strikd.communication.Opcodes;
 import strikd.net.codec.OutgoingMessage;
 
-public class ExperienceMessage extends OutgoingMessage
+public class ExperienceAddedMessage extends OutgoingMessage
 {
-	public ExperienceMessage(int added, int newTotal)
+	public ExperienceAddedMessage(int added, int newTotal)
 	{
 		super(Opcodes.Outgoing.EXPERIENCE_ADDED);
 		super.writeInt(added);

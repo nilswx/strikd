@@ -41,8 +41,7 @@ public class FacebookLinkHandler extends MessageHandler
 		}
 		catch(Exception ex)
 		{
-			ex.printStackTrace();
-			logger.warn("Facebook link for {} failed!", session.getPlayer());
+			logger.warn("Facebook link for {} failed!", session.getPlayer(), ex);
 			newIdentity = null;
 		}
 		

@@ -4,48 +4,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import strikd.communication.outgoing.LevelsMessage;
-import strikd.sessions.Session;
 
-public class Experience
+/**
+ * Holds experience amounts per level.
+ */
+public final class Experience
 {
 	public static final int MAX_LEVEL = 25;
 	
 	private static final int FORMULA_BASE = 100;
 	private static final float FORMULA_MULTIPLIER = 1 + (0.20f * (45/MAX_LEVEL));
-	
 	private static final int[] LEVEL_EXPERIENCE;
+	
 	private static final LevelsMessage levelsMessage;
 	
 	private static final Logger logger = LoggerFactory.getLogger(Experience.class);
-	
-	static
-	{
-		// Fill XP cache
-		LEVEL_EXPERIENCE = new int[MAX_LEVEL + 1];
-		for(int level = 1; level <= MAX_LEVEL; level++)
-		{
-			LEVEL_EXPERIENCE[level] = (int)(FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level));
-		}
 		
-		// Precompute message
-		levelsMessage = new LevelsMessage(LEVEL_EXPERIENCE);
-		
-		// Print cache
-		logger.info("defined {} levels, message size: {} bytes", MAX_LEVEL, levelsMessage.length());
-		for(int level = 1, prevNeed = 0; level <= MAX_LEVEL; level++)
-		{
-			// Calculate level boundaries
-			int levelBegin = getLevelBegin(level);
-			int levelEnd = getLevelEnd(level);
-			int levelNeed = (levelEnd - levelBegin);
-			logger.debug("Level {}: {}-{} ({} needed, {} more)", level, levelBegin, levelEnd, levelNeed, (levelNeed - prevNeed));
-			
-			// Save for next
-			prevNeed = levelNeed;
-		}
-		System.out.println();
-	}
-	
 	public static int calculateLevel(int experience)
 	{
 		int level = 1;
@@ -81,67 +55,35 @@ public class Experience
 		}
 	}
 	
-	public static void addExperience(Player player, Session session, int points)
-	{
-		// Impose limits?
-		if(points < 0 || player.getLevel() >= MAX_LEVEL)
-		{
-			points = 0;
-		}
-		
-		// Cache values and determine amount of level-ups
-		int currentLevel = player.getLevel(), currentXP = player.getXp();
-		int resultLevel = calculateLevel(currentXP + points);
-		int levelUps = (resultLevel - currentLevel);
-		logger.debug("adding {} xp to {} will cause {} level-ups", points, player.getName(), levelUps);
-		
-		do
-		{
-			// Add XP, but within the current level
-			int endXP = getLevelEnd(currentLevel);
-			int pointsToNext = (endXP - currentXP);
-			int pointsToAdd = (points < pointsToNext || currentLevel == MAX_LEVEL) ? points : pointsToNext;
-			currentXP += pointsToAdd;
-			
-			// Level up?
-			if(currentXP == endXP)
-			{
-				currentLevel++;
-				onLevelUp(player, session, currentLevel);
-			}
-			
-			// Added some points!
-			points -= pointsToAdd;
-		}
-		while(points > 0);
-		
-		// Set final level and XP
-		player.setXp(currentXP);
-		player.setLevel(currentLevel);
-	}
-	
-	private static void onLevelUp(Player player, Session session, int level)
-	{
-		// Hurray!
-		logger.debug("DING, {} reached {}", player.getName(), level);
-		
-		// TODO: create event in stream + publish FB story
-		
-		// TODO: reward with items / coins for level x
-	}
-	
 	public static LevelsMessage getLevelsMessage()
 	{
 		return levelsMessage;
 	}
 	
-	public static void main(String[] args)
+	static
 	{
-		Player john = new Player();
-		john.setName("John");
-		john.setXp(0);
-		john.setLevel(calculateLevel(john.getXp()));
-	
-		addExperience(john, null, 3);
+		// Fill XP cache
+		LEVEL_EXPERIENCE = new int[MAX_LEVEL + 1];
+		for(int level = 1; level <= MAX_LEVEL; level++)
+		{
+			LEVEL_EXPERIENCE[level] = (int)(FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level));
+		}
+		
+		// Pre=compute message
+		levelsMessage = new LevelsMessage(LEVEL_EXPERIENCE);
+		
+		// Print cache
+		logger.info("defined {} levels, message size: {} bytes", MAX_LEVEL, levelsMessage.length());
+		for(int level = 1, prevNeed = 0; level <= MAX_LEVEL; level++)
+		{
+			// Calculate level boundaries
+			int levelBegin = getLevelBegin(level);
+			int levelEnd = getLevelEnd(level);
+			int levelNeed = (levelEnd - levelBegin);
+			logger.debug("Level {}: {}-{} ({} needed, {} more)", level, levelBegin, levelEnd, levelNeed, (levelNeed - prevNeed));
+			
+			// Save for next
+			prevNeed = levelNeed;
+		}
 	}
 }

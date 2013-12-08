@@ -5,6 +5,11 @@ import strikd.facebook.FacebookStory;
 
 public class PersonBeatedStory extends FacebookStory
 {
+	public PersonBeatedStory(FacebookIdentity identity, long userId)
+	{
+		super(identity, Long.toString(userId));
+	}
+	
 	public PersonBeatedStory(FacebookIdentity identity, String profileId)
 	{
 		super(identity, profileId);
