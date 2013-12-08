@@ -1,4 +1,4 @@
-package strikd.game.match.bots.ai;
+package strikd.game.match.bots.impl;
 
 import static strikd.game.items.ItemTypeRegistry._I;
 
@@ -17,36 +17,43 @@ import strikd.game.board.Direction8;
 import strikd.game.board.Tile;
 import strikd.game.items.PowerUp;
 import strikd.game.match.SelectionValidator;
-import strikd.game.match.bots.MatchBotAI;
 import strikd.game.match.bots.MatchBotPlayer;
+import strikd.game.player.Player;
 import strikd.locale.LocaleBundle;
-import strikd.locale.StaticLocale;
 import strikd.locale.LocaleBundle.DictionaryType;
 import strikd.util.RandomUtil;
 import strikd.words.WordDictionary;
 import strikd.words.index.LetterNode;
 
-public class DefaultMatchBotAI extends MatchBotAI
+public class SimpleMatchBotPlayer extends MatchBotPlayer
 {
-	private static final Logger logger = LoggerFactory.getLogger(DefaultMatchBotAI.class);
+	private static final Logger logger = LoggerFactory.getLogger(SimpleMatchBotPlayer.class);
 	
-	private Queue<Tile> toSelect = Lists.newLinkedList();
+	private int allowedFindAttempts;
+	private WordDictionary dictionary;
+	private PowerUp[] availablePowerUps;
 	
-	private final int allowedFindAttempts;
-	private final WordDictionary dictionary;
-	private final PowerUp[] availablePowerUps;
+	private final Queue<Tile> toSelect = Lists.newLinkedList();
 	
-	public DefaultMatchBotAI(MatchBotPlayer player)
+	public SimpleMatchBotPlayer(Player bot)
 	{
-		super(player);
-		
+		super(bot);
+	}
+	
+	@Override
+	protected boolean initializeAI()
+	{
 		// This bot knows all the words!
-		LocaleBundle locale = null;//super.getMatch().getLocale();
-		this.dictionary = StaticLocale.getDictionary();//locale.getDictionary(DictionaryType.COMPLETE);
+		LocaleBundle locale = super.getMatch().getLocale();
+		if(locale == null || (this.dictionary = locale.getDictionary(DictionaryType.COMPLETE)) == null)
+		{
+			logger.warn("{} couldn't resolve COMPLETE dict for locale '{}', AI disabled", this, this.getInfo().getLocale());
+			return false;
+		}
 		
 		// Use max x bruteforce attempts to find a word
 		this.allowedFindAttempts = 25;
-		
+				
 		// Configure available powerups
 		PowerUp[] powerUps =
 		{
@@ -58,17 +65,15 @@ public class DefaultMatchBotAI extends MatchBotAI
 		};
 		this.availablePowerUps = powerUps;
 		
-		// Up & running!
-		logger.debug("{}: {} dictionary ({} words)", null/*locale.getLocale()*/, this.dictionary.size());
-	}
-	
-	private boolean hasWord()
-	{
-		return !this.toSelect.isEmpty();
+		// Fertig!
+		logger.debug("{}: {} dictionary ({} words), {} powerups",
+				this, locale.getLocale(),
+				this.dictionary.size(), this.availablePowerUps.length);	
+		return true;
 	}
 
 	@Override
-	public void nextMove()
+	protected void nextMove()
 	{
 		if(this.hasWord())
 		{
@@ -76,7 +81,7 @@ public class DefaultMatchBotAI extends MatchBotAI
 		}
 		else
 		{
-			if(RandomUtil.getBool(0.7))
+			if(RandomUtil.getBool(0.85))
 			{
 				this.pickNewWord();
 			}
@@ -88,7 +93,7 @@ public class DefaultMatchBotAI extends MatchBotAI
 	}
 
 	@Override
-	public int nextMoveDelay()
+	protected int nextMoveDelay()
 	{
 		// Working on a word?
 		if(this.hasWord())
@@ -100,7 +105,7 @@ public class DefaultMatchBotAI extends MatchBotAI
 		{
 			// Max idle time
 			int idleTime = RandomUtil.pickInt(1000, 5000);
-			logger.debug("{} will be thinking for {} ms", this.getPlayer(), idleTime);
+			logger.debug("{} will be thinking for {} ms", this, idleTime);
 			
 			return idleTime;
 		}
@@ -108,8 +113,10 @@ public class DefaultMatchBotAI extends MatchBotAI
 	
 	private boolean pickNewWord()
 	{
-		// Give it a few tries
-		Board board = super.getBoard();
+		// Get board ref
+		Board board = this.getMatch().getBoard();
+		
+		// Give it
 		List<Tile> progress = Lists.newArrayList();
 		for(int attempt = 0; attempt < this.allowedFindAttempts; attempt++)
 		{
@@ -122,7 +129,7 @@ public class DefaultMatchBotAI extends MatchBotAI
 				if(found)
 				{
 					// Select them!
-					logger.debug("{} will select {} (found in {} tries)", super.getPlayer(), progress, attempt+1);
+					logger.debug("{} will select {} (found in {} tries)", this, progress, attempt+1);
 					return this.toSelect.addAll(progress);
 				}
 				else
@@ -134,7 +141,7 @@ public class DefaultMatchBotAI extends MatchBotAI
 		}
 		
 		// No word found in this board?
-		logger.debug("{} couldn't find jack shit", this.getPlayer());
+		logger.debug("{} couldn't find jack shit", this.getInfo());
 		return false;
 	}
 	
@@ -143,16 +150,15 @@ public class DefaultMatchBotAI extends MatchBotAI
 		// Letters remaining?
 		Tile tile = this.toSelect.poll();
 		if(tile != null)
-		{
+		{			
 			// Select the tile
-			MatchBotPlayer self = this.getPlayer();
-			self.selectTile(tile);
-			self.getOpponent().send(new TileSelectionExtendedMessage(self, ImmutableList.of(tile)));
+			this.selectTile(tile);
+			this.getOpponent().send(new TileSelectionExtendedMessage(this, ImmutableList.of(tile)));
 			
 			// Done?
 			if(this.toSelect.isEmpty())
 			{
-				SelectionValidator.validateSelection(self);
+				SelectionValidator.validateSelection(this);
 			}
 		}
 	}
@@ -162,8 +168,13 @@ public class DefaultMatchBotAI extends MatchBotAI
 		PowerUp powerUp = RandomUtil.pickOne(this.availablePowerUps);
 		if(powerUp != null)
 		{
-			powerUp.activate(super.getPlayer());
+			powerUp.activate(this);
 		}
+	}
+	
+	private boolean hasWord()
+	{
+		return !this.toSelect.isEmpty();
 	}
 	
 	private static final Direction8[] SEARCH_DIRECTIONS = Direction8.all();

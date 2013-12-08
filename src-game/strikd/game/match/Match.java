@@ -195,11 +195,6 @@ public class Match
 		return (player == this.playerOne) ? this.playerTwo : this.playerOne;
 	}
 	
-	public MatchPlayer[] getPlayers()
-	{
-		return new MatchPlayer[] { this.playerOne, this.playerTwo };
-	}
-	
 	public MatchTimer getTimer()
 	{
 		return this.timer;

@@ -3,6 +3,7 @@ package strikd.game.match;
 import java.util.ArrayList;
 import java.util.List;
 
+import strikd.communication.outgoing.TileSelectionClearedMessage;
 import strikd.game.board.Tile;
 import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
@@ -108,11 +109,15 @@ public class MatchPlayer
 	
 	public void clearSelection()
 	{
+		// Deselect all tiles
 		for(Tile tile : this.selected)
 		{
 			tile.onDeselect(this);
 		}
 		this.selected.clear();
+		
+		// Notify match
+		this.match.broadcast(new TileSelectionClearedMessage(this));
 	}
 	
 	public MatchPlayer getOpponent()

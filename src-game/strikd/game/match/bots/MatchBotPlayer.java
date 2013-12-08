@@ -8,19 +8,18 @@ import java.util.concurrent.TimeUnit;
 import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.match.MatchPlayer;
-import strikd.game.match.bots.ai.DefaultMatchBotAI;
 import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 import strikd.util.NamedThreadFactory;
 
-public class MatchBotPlayer extends MatchPlayer
+public abstract class MatchBotPlayer extends MatchPlayer
 {
 	private static final ScheduledExecutorService sharedAiExecutor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("AI Processor"));
 	
 	private final Player bot;
-	private final MatchBotAI ai;
+	private final Runnable aiLoop;
+	
 	private ScheduledFuture<?> pendingAiTask;
-	private final Runnable aiRunnable;
 	
 	public MatchBotPlayer(Player bot)
 	{
@@ -28,15 +27,14 @@ public class MatchBotPlayer extends MatchPlayer
 		super(null);
 		this.bot = bot;
 		
-		// Install default AI implementation
-		this.ai = new DefaultMatchBotAI(this);
-		this.aiRunnable = new Runnable()
+		// Construct AI loop
+		this.aiLoop = new Runnable()
 		{
 			@Override
 			public void run()
 			{
 				// Go go!
-				ai.nextMove();
+				nextMove();
 				
 				// Next!
 				scheduleNextMove();
@@ -47,30 +45,38 @@ public class MatchBotPlayer extends MatchPlayer
 		this.setReady();
 	}
 	
-	public boolean isIdle()
-	{
-		return (this.pendingAiTask == null);
-	}
+	protected abstract boolean initializeAI();
 	
-	public boolean isThinking()
+	protected abstract int nextMoveDelay();
+	
+	protected abstract void nextMove();
+	
+	public void startAI()
 	{
-		return !this.isIdle();
+		if(this.initializeAI())
+		{
+			this.scheduleNextMove();
+		}
 	}
 	
 	public void stopAI()
 	{
-		if(this.isThinking())
+		if(this.pendingAiTask != null)
 		{
 			this.pendingAiTask.cancel(false);
 			this.pendingAiTask = null;
 		}
 	}
-	
+
 	public void scheduleNextMove()
 	{
-		if(this.isIdle())
+		if(this.pendingAiTask == null)
 		{
-			this.pendingAiTask = sharedAiExecutor.schedule(this.aiRunnable, this.ai.nextMoveDelay(), TimeUnit.MILLISECONDS);
+			int delay = this.nextMoveDelay();
+			if(delay > 0)
+			{
+				this.pendingAiTask = sharedAiExecutor.schedule(this.aiLoop, delay, TimeUnit.MILLISECONDS);
+			}
 		}
 		else
 		{
@@ -89,7 +95,7 @@ public class MatchBotPlayer extends MatchPlayer
 	{
 		if(msg instanceof MatchStartedMessage)
 		{
-			this.scheduleNextMove();
+			this.startAI();
 		}
 		else if(msg instanceof MatchEndedMessage)
 		{

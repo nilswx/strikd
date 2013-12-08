@@ -3,6 +3,7 @@ package strikd.game.match.bots;
 import java.util.Random;
 
 import strikd.game.match.MatchPlayer;
+import strikd.game.match.bots.impl.SimpleMatchBotPlayer;
 import strikd.game.player.Player;
 
 public class MatchBotFactory
@@ -22,6 +23,6 @@ public class MatchBotFactory
 		bot.setWins(rand.nextInt(bot.getMatches()));
 		bot.setXp(bot.getMatches() * 45);
 		
-		return new MatchBotPlayer(bot);
+		return new SimpleMatchBotPlayer(bot);
 	}
 }

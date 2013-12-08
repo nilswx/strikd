@@ -1,4 +1,4 @@
-package strikd.game.match.bots.ai;
+package strikd.game.match.bots.impl;
 
 import strikd.game.board.*;
 import strikd.util.RandomUtil;

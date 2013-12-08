@@ -1,4 +1,4 @@
-package strikd.game.match.bots.ai;
+package strikd.game.match.bots.impl;
 
 import java.util.List;
 import java.util.Random;
