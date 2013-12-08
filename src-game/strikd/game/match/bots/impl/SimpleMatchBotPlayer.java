@@ -81,7 +81,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		}
 		else
 		{
-			if(RandomUtil.getBool(0.85))
+			if(RandomUtil.getBool(0.90))
 			{
 				this.pickNewWord();
 			}
