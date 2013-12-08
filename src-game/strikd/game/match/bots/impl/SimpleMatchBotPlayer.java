@@ -99,7 +99,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		int delay;
 		if(this.hasWord())
 		{
-			delay = RandomUtil.pickInt(500, 1550);
+			delay = RandomUtil.pickInt(500, 750);
 			logger.debug("{} will select {} in {} ms", this, this.toSelect.peek(), delay);
 		}
 		else
