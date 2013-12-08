@@ -27,14 +27,32 @@ public class ExperienceHandler extends Server.Referent
 	public int addExperience(Player player, int points)
 	{
 		// Can gain XP?
-		if(points > 0 && player.getLevel() < Experience.MAX_LEVEL)
+		if(points <= 0 || player.getLevel() >= Experience.MAX_LEVEL)
 		{
-			// Add XP
-			player.setXp(player.getXp() + points);
+			return 0;
+		}
+		else
+		{
+			// Determine current level and new XP
+			int currentLevel = player.getLevel();
+			int newXP = player.getXp() + points;
+			
+			// Overflowing max experience?
+			int maxXP = Experience.getLevelBegin(Experience.MAX_LEVEL);
+			if(newXP > maxXP)
+			{
+				// Impose XP cap
+				newXP = maxXP;
+				
+				// Adjust the amount of added points
+				points = (maxXP - player.getXp());
+			}
+			
+			// Set the new XP
+			player.setXp(newXP);
 			
 			// Level-up?
-			int currentLevel = player.getLevel();
-			int newLevel = Experience.calculateLevel(player.getXp());
+			int newLevel = Experience.calculateLevel(newXP);
 			if(newLevel > currentLevel)
 			{
 				// Process level-ups
@@ -73,7 +91,7 @@ public class ExperienceHandler extends Server.Referent
 		}
 	}
 	
-	public void giveMatchExperience(MatchPlayer p, MatchPlayer winner)
+	private void giveMatchExperience(MatchPlayer p, MatchPlayer winner)
 	{
 		// Bots work for free
 		if(p instanceof MatchBotPlayer)
