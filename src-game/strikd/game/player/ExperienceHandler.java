@@ -134,7 +134,7 @@ public class ExperienceHandler extends Server.Referent
 		int added = this.addExperience(player, xp);
 		if(added > 0)
 		{
-			p.getSession().send(new ExperienceAddedMessage(xp, player.getXp()));
+			p.getSession().send(new ExperienceAddedMessage(added, player.getXp()));
 		}
 			
 		// Save data
