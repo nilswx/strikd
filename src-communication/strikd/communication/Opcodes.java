@@ -28,6 +28,7 @@ public interface Opcodes
 		FACEBOOK_REGISTER_INVITES,
 		GET_ACTIVITY_STREAM,
 		GET_SHOP_PAGE,
+		GET_IN_APP_PURCHASE_PRODUCTS,
 		REDEEM_IN_APP_PURCHASE;
 		
 		private static final Opcodes.Incoming[] values = values();
@@ -74,6 +75,8 @@ public interface Opcodes
 		SERVER_REDIRECT,
 		ACTIVITY_STREAM,
 		NEWS,
-		SHOP_PAGE;
+		SHOP_PAGE,
+		IN_APP_PURCHASE_PRODUCTS,
+		IN_APP_PURCHASE_DELIVERED;
 	}
 }

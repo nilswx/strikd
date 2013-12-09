@@ -2,14 +2,18 @@ package strikd.game.items.shop;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 import strikd.communication.outgoing.CurrencyBalanceMessage;
+import strikd.communication.outgoing.InAppPurchaseDeliveredMessage;
 import strikd.communication.outgoing.ItemsAddedMessage;
 import strikd.game.player.Player;
+import strikd.game.util.AppStoreReceipts;
 import strikd.sessions.Session;
 
 import com.google.common.collect.Lists;
@@ -21,20 +25,21 @@ public class Shop extends Server.Referent
 	
 	private final Map<String, ShopPage> pages = Maps.newHashMap();
 	private final Map<Integer, ShopOffer> offers = Maps.newHashMap();
-	
-	private final ShopPage coinsPage;
+	private final Map<String, ShopOffer> iapProducts = Maps.newHashMap();
 	
 	public Shop(Server server)
 	{
 		super(server);
 				
 		// System pages
-		this.coinsPage = this.getPage("COINS");
-		this.pages.put("COINS", this.coinsPage);
+		this.pages.put("COINS", new ShopPage("COINS"));
 		this.pages.put("POWERUPS", new ShopPage("POWERUPS"));
 		this.pages.put("PARTS", new ShopPage("PARTS"));
 		
 		// TODO: load offers from db
+		
+		// Register IAP's (universal identifier for all platforms)
+		this.iapProducts.put("nl.indev.Strik.coins15", null);
 		
 		// Print shop
 		logger.info("pages = {}", this.pages.values());
@@ -51,7 +56,7 @@ public class Shop extends Server.Referent
 		
 		// Unknown offer?
 		ShopOffer offer = this.offers.get(offerId);
-		if(offer == null || this.coinsPage.getOffers().contains(offer))
+		if(offer == null || this.iapProducts.containsValue(offer))
 		{
 			logger.warn("{} tried to purchase unknown offer #{}", player, offerId);
 			return false;
@@ -110,24 +115,42 @@ public class Shop extends Server.Referent
 	
 	public boolean redeemAppStoreReceipt(Session session, String receipt)
 	{
-		// TODO: check receipt at Apple's servers
+		// Check receipt status at server
+		JSONObject result = AppStoreReceipts.verifyReceipt(receipt, true);
+		if(result.getInt("status") != 0)
+		{
+			return false;
+		}
 		
-		// TODO: check in own DB if receipt has been used before, flag 'used'
+		// TODO: verify/flag the transaction ID as being used
+		long transactionId = result.getLong("transaction_id");
 		
-		// TODO: parse purchase identifier
+		// Resolve IAP's offer
+		ShopOffer offer = this.iapProducts.get(result.getString("product_id"));
+		if(offer == null)
+		{
+			return false;
+		}
 		
-		// TODO: resolve matching offer
-		
-		// TODO: deliver products from offer
+		// Go go!
+		this.deliverProducts(session, offer);
 		
 		// Save data
 		session.saveData();
 		
-		return false;
+		// Force client to complete the transaction
+		session.send(new InAppPurchaseDeliveredMessage(transactionId));
+		
+		return true;
 	}
 	
 	public ShopPage getPage(String pageId)
 	{
 		return this.pages.get(pageId);
+	}
+	
+	public Set<String> getInAppPurchaseProductIds()
+	{
+		return this.iapProducts.keySet();
 	}
 }
