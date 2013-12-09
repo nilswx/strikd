@@ -27,7 +27,8 @@ public interface Opcodes
 		FACEBOOK_CLAIM_LIKE,
 		FACEBOOK_REGISTER_INVITES,
 		GET_ACTIVITY_STREAM,
-		GET_SHOP_PAGE;
+		GET_SHOP_PAGE,
+		REDEEM_IN_APP_PURCHASE;
 		
 		private static final Opcodes.Incoming[] values = values();
 		

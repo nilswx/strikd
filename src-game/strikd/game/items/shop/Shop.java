@@ -108,7 +108,7 @@ public class Shop extends Server.Referent
 		}
 	}
 	
-	public boolean purchaseWithAppStoreReceipt(Session session, String receipt)
+	public boolean redeemAppStoreReceipt(Session session, String receipt)
 	{
 		// TODO: check receipt at Apple's servers
 		
