@@ -1,6 +1,7 @@
 package strikd.game.util;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +21,11 @@ public class CountryResolver
 	{
 		try
 		{
-			Stopwatch sw = new Stopwatch().start();
+			Stopwatch sw = Stopwatch.createStarted();
 			database = new IP2Country(IP2Country.MEMORY_CACHE);
 			sw.stop();
 			
-			logger.info("loaded database in {} ms", sw.elapsedMillis());
+			logger.info("loaded database in {} ms", sw.elapsed(TimeUnit.MILLISECONDS));
 		}
 		catch(IOException e)
 		{

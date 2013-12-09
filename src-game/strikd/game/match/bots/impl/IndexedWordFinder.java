@@ -32,7 +32,7 @@ public class IndexedWordFinder
 		List<Tile> progress = Lists.newArrayList();
 		
 		// Keep finding
-		Stopwatch sw = new Stopwatch();
+		Stopwatch sw = Stopwatch.createUnstarted();
 
 		// Random source
 		Random rand = new Random();
@@ -58,7 +58,7 @@ public class IndexedWordFinder
 				{
 					printProgress(progress);
 					//System.out.println(board.toMatrixString());
-					System.out.println(String.format("%d ms (%d microseconds)", sw.elapsedMillis(), sw.elapsedTime(TimeUnit.MICROSECONDS)));
+					System.out.println(String.format("%d ms (%d microseconds)", sw.elapsed(TimeUnit.MILLISECONDS), sw.elapsed(TimeUnit.MICROSECONDS)));
 					System.out.println();
 				}
 				else

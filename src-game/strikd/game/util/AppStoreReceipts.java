@@ -1,4 +1,4 @@
-package strikd.game.items.shop;
+package strikd.game.util;
 
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
