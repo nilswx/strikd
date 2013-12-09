@@ -23,6 +23,7 @@ public class Shop extends Server.Referent
 	private final Map<Integer, ShopOffer> offers = Maps.newHashMap();
 	
 	private final ShopPage coinsPage;
+	
 	public Shop(Server server)
 	{
 		super(server);
@@ -39,8 +40,15 @@ public class Shop extends Server.Referent
 		logger.info("pages = {}", this.pages.values());
 	}
 	
-	public boolean purchaseOffer(int offerId, Player player)
+	public boolean purchaseOffer(Session session, int offerId)
 	{
+		// Get player
+		Player player = session.getPlayer();
+		if(player == null)
+		{
+			return false;
+		}
+		
 		// Unknown offer?
 		ShopOffer offer = this.offers.get(offerId);
 		if(offer == null || this.coinsPage.getOffers().contains(offer))
@@ -56,13 +64,23 @@ public class Shop extends Server.Referent
 			return false;
 		}
 		
+		// Charge player
+		player.setBalance(player.getBalance() - offer.getPrice());
+		session.send(new CurrencyBalanceMessage(player.getBalance()));
+		
+		// Deliver products
+		this.deliverProducts(session, offer);
+		
+		// Save all data
+		session.saveData();
+		
 		// TODO: write transaction log for player (and statistics)
 		logger.info("{} purchased offer #{} for {} coins", player, offerId, offer.getPrice());
 		
 		return true;
 	}
 	
-	public void giveProducts(Session session, ShopOffer offer)
+	private void deliverProducts(Session session, ShopOffer offer)
 	{
 		Player player = session.getPlayer();
 		
@@ -81,16 +99,31 @@ public class Shop extends Server.Referent
 				addedItems.add(product);
 			}
 		}
-		
-		// Save data
 		player.saveInventory();
-		session.saveData();
 		
 		// Send added items
 		if(!addedItems.isEmpty())
 		{
 			session.send(new ItemsAddedMessage(addedItems));
 		}
+	}
+	
+	public boolean purchaseWithAppStoreReceipt(Session session, String receipt)
+	{
+		// TODO: check receipt at Apple's servers
+		
+		// TODO: check in own DB if receipt has been used before, flag 'used'
+		
+		// TODO: parse purchase identifier
+		
+		// TODO: resolve matching offer
+		
+		// TODO: deliver products from offer
+		
+		// Save data
+		session.saveData();
+		
+		return false;
 	}
 	
 	public ShopPage getPage(String pageId)
