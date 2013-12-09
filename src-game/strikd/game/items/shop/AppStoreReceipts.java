@@ -33,7 +33,7 @@ public class AppStoreReceipts
 			// Create HTTPS connection to Apple
 			HttpURLConnection conn = (HttpsURLConnection)new URL(isSandbox ? SANDBOX_URL : PRODUCTION_URL).openConnection();
 			conn.setDoOutput(true);
-			logger.debug("validating receipt at {}: \"{}\"", conn.getURL(), json);
+			logger.debug("validating at {}: \"{}\"", conn.getURL().getHost(), json);
 			
 			// Write request
 			try(OutputStreamWriter request = new OutputStreamWriter(conn.getOutputStream()))
