@@ -58,8 +58,10 @@ public class AppStoreReceipts
 	
 	public static void main(String[] args) throws IOException
 	{
+		// roefrodent@planet.nl / Hemster10
+		
 		String receipt = Files.toString(new File("sandbox.receipt"), Charsets.UTF_8);
 		
-		logger.debug("result = {}", verifyReceipt(receipt, true));
+		logger.debug("result = {}", verifyReceipt(receipt, true).toString(1));
 	}
 }
