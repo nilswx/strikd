@@ -1,5 +1,7 @@
 package strikd.game.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
 
 public class AppStoreReceipts
 {
@@ -53,8 +56,10 @@ public class AppStoreReceipts
 		return null;
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
-		System.out.println(verifyReceipt("dafasdfasdf", true));
+		String receipt = Files.toString(new File("sandbox.receipt"), Charsets.UTF_8);
+		
+		logger.debug("result = {}", verifyReceipt(receipt, true));
 	}
 }
