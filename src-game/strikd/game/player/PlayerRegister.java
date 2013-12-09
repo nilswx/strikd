@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 
 import strikd.Server;
 import strikd.game.stream.activity.PlayerJoinedStreamItem;
+import strikd.game.util.Platform;
 import strikd.sessions.Session;
 
 public class PlayerRegister extends Server.Referent
@@ -38,7 +39,7 @@ public class PlayerRegister extends Server.Referent
 		player.setLevel(1); // Start at lvl 1
 		player.setLocale(""); // Player will send CHANGE_LOCALE
 		player.setCountry(""); // Will change after LOGIN
-		player.setPlatform(""); // Will change after LOGIN
+		player.setPlatform(Platform.UNKNOWN); // Will change after LOGIN
 		player.setBalance(this.defaults.getBalance());
 		player.setJoined(new Date());
 		

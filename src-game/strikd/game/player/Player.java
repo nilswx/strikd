@@ -20,6 +20,7 @@ import strikd.facebook.FacebookIdentity;
 import strikd.game.items.ItemInventory;
 import strikd.game.stream.ActivityStreamItem;
 import strikd.game.util.Localization;
+import strikd.game.util.Platform;
 
 import com.avaje.ebean.annotation.NamedUpdate;
 
@@ -53,7 +54,7 @@ public class Player
 	private String locale;
 	
 	@Column(nullable=false)
-	private String platform;
+	private Platform platform;
 	
 	@Column(nullable=false)
 	private int serverId;
@@ -260,12 +261,12 @@ public class Player
 		this.losses = losses;
 	}
 
-	public String getPlatform()
+	public Platform getPlatform()
 	{
 		return platform;
 	}
 
-	public void setPlatform(String platform)
+	public void setPlatform(Platform platform)
 	{
 		this.platform = platform;
 	}

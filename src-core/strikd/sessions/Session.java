@@ -238,12 +238,11 @@ public class Session extends Server.Referent
 		return this.player;
 	}
 
-	public void setPlayer(Player player, String platform)
+	public void setPlayer(Player player)
 	{
 		if(this.player == null)
 		{
 			this.player = player;
-			this.player.setPlatform(platform);
 			this.getServer().getSessionMgr().completeLogin(this);
 			this.onLogin();
 		}

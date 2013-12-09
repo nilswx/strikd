@@ -8,6 +8,7 @@ import strikd.communication.outgoing.PlayerUnknownMessage;
 import strikd.game.items.ItemTypesMessageCache;
 import strikd.game.player.Experience;
 import strikd.game.player.Player;
+import strikd.game.util.Platform;
 import strikd.net.codec.IncomingMessage;
 import strikd.sessions.Session;
 
@@ -28,8 +29,6 @@ public class LoginHandler extends MessageHandler
 		// Read login info
 		int playerId = request.readInt();
 		String token = request.readStr();
-		String hardware = request.readStr();
-		String systemVersion = request.readStr();
 		
 		// Valid credentials?
 		Player player = session.getServer().getPlayerRegister().findPlayer(playerId);
@@ -41,8 +40,19 @@ public class LoginHandler extends MessageHandler
 		}
 		else
 		{
+			// Figure out platform?
+			if(player.getPlatform() == Platform.UNKNOWN)
+			{
+				// Parse details
+				String hardware = request.readStr();
+				String systemVersion = request.readStr();
+				
+				// Set appropriate platform
+				player.setPlatform(Platform.determinePlatform(hardware, systemVersion));
+			}
+			
 			// Login OK!
-			session.setPlayer(player, String.format("%s @ %s", hardware, systemVersion));
+			session.setPlayer(player);
 			
 			// Push levels ranges
 			session.sendCopy(Experience.getLevelsMessage());
