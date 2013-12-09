@@ -22,16 +22,20 @@ public class Shop extends Server.Referent
 	private final Map<String, ShopPage> pages = Maps.newHashMap();
 	private final Map<Integer, ShopOffer> offers = Maps.newHashMap();
 	
+	private final ShopPage coinsPage;
 	public Shop(Server server)
 	{
 		super(server);
-		
-		// TODO: load offers from db
-		
-		this.pages.put("COINS", new ShopPage("COINS"));
+				
+		// System pages
+		this.coinsPage = this.getPage("COINS");
+		this.pages.put("COINS", this.coinsPage);
 		this.pages.put("POWERUPS", new ShopPage("POWERUPS"));
 		this.pages.put("PARTS", new ShopPage("PARTS"));
 		
+		// TODO: load offers from db
+		
+		// Print shop
 		logger.info("pages = {}", this.pages.values());
 	}
 	
@@ -39,7 +43,7 @@ public class Shop extends Server.Referent
 	{
 		// Unknown offer?
 		ShopOffer offer = this.offers.get(offerId);
-		if(offer == null)
+		if(offer == null || this.coinsPage.getOffers().contains(offer))
 		{
 			logger.warn("{} tried to purchase unknown offer #{}", player, offerId);
 			return false;
