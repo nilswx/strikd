@@ -27,6 +27,11 @@ public abstract class OutgoingMessage extends NetMessage<Opcodes.Outgoing>
 		this.buf.writeByte(b);
 	}
 	
+	public final void writeByte(int i)
+	{
+		this.buf.writeByte(i);
+	}
+	
 	public final void writeInt(int i)
 	{
 		this.buf.writeInt(i);
