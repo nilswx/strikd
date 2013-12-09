@@ -147,11 +147,11 @@ public class ExperienceHandler extends Server.Referent
 		this.giveMatchExperience(p1, winner);
 		this.giveMatchExperience(p2, winner);
 		
-		// Not a bot match?
-		if(!(p1 instanceof MatchBotPlayer) && !(p2 instanceof MatchBotPlayer))
+		// Not a draw?
+		if(winner != null)
 		{
-			// Not a draw?
-			if(winner != null)
+			// Not a bot match?
+			if(!(p1 instanceof MatchBotPlayer) && !(p2 instanceof MatchBotPlayer))
 			{
 				// Match between friends?
 				List<Integer> friendList = p1.getSession().getFriendList();
