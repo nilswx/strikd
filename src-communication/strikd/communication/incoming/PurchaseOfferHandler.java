@@ -5,12 +5,12 @@ import strikd.communication.Opcodes;
 import strikd.game.items.shop.Shop;
 import strikd.net.codec.IncomingMessage;
 
-public class PurchaseItemHandler extends MessageHandler
+public class PurchaseOfferHandler extends MessageHandler
 {
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
-		return Opcodes.Incoming.PURCHASE_ITEM;
+		return Opcodes.Incoming.PURCHASE_OFFER;
 	}
 	
 	@Override
