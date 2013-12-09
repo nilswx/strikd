@@ -79,6 +79,14 @@
 	</build>
 
 	<dependencies>
+	
+	<dependency>
+	<groupId>com.google.guava</groupId>
+	<artifactId>guava</artifactId>
+	<version>15.0</version>
+</dependency>
+            
+            
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -116,6 +124,12 @@
 			<artifactId>restfb</artifactId>
 			<version>1.6.12</version>
 		</dependency>
+		
+		<dependency>
+	<groupId>org.json</groupId>
+	<artifactId>json</artifactId>
+	<version>20131018</version>
+</dependency>
 
 		<!-- Vendor stuff for DB -->
 		<dependency>
