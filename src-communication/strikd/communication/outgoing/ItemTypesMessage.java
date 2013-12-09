@@ -7,6 +7,7 @@ import strikd.game.items.AvatarPart;
 import strikd.game.items.ItemType;
 import strikd.game.items.PowerUp;
 import strikd.game.items.Trophy;
+import strikd.game.items.shop.Coin;
 import strikd.net.codec.OutgoingMessage;
 
 public class ItemTypesMessage extends OutgoingMessage
@@ -14,6 +15,7 @@ public class ItemTypesMessage extends OutgoingMessage
 	private static final byte TROPHY = 't';
 	private static final byte POWER_UP = 'p';
 	private static final byte AVATAR_PART = 'a';
+	private static final byte COIN = 'c';
 	
 	public ItemTypesMessage(Collection<ItemType> types)
 	{
@@ -35,6 +37,10 @@ public class ItemTypesMessage extends OutgoingMessage
 			{
 				super.writeByte(AVATAR_PART);
 				super.writeByte((byte)((AvatarPart)type).getSlot().ordinal());
+			}
+			else if(type instanceof Coin)
+			{
+				super.writeByte(COIN);
 			}
 		}
 	}
