@@ -1,54 +1,96 @@
 package strikd.game.items.shop;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import strikd.Server;
+import strikd.communication.outgoing.CurrencyBalanceMessage;
+import strikd.communication.outgoing.ItemsAddedMessage;
 import strikd.game.player.Player;
+import strikd.sessions.Session;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class Shop extends Server.Referent
 {
 	private static final Logger logger = LoggerFactory.getLogger(Shop.class);
 	
+	private final Map<String, ShopPage> pages = Maps.newHashMap();
 	private final Map<Integer, ShopOffer> offers = Maps.newHashMap();
 	
 	public Shop(Server server)
 	{
 		super(server);
 		
-		// Load offers
-		/*
-		for(ShopOffer offer : server.getDbCluster().getCollection("shop").find().as(ShopOffer.class))
-		{
-			this.offers.put(offer.offerId, offer);
-		}
-		logger.info("%d available offers", this.offers.size()));*/
+		// TODO: load offers from db
+		
+		this.pages.put("COINS", new ShopPage("COINS"));
+		this.pages.put("POWERUPS", new ShopPage("POWERUPS"));
+		this.pages.put("PARTS", new ShopPage("PARTS"));
+		
+		logger.info("pages = {}", this.pages.values());
 	}
 	
-	public Object purchaseOffer(int offerId, Player player)
+	public boolean purchaseOffer(int offerId, Player player)
 	{
 		// Unknown offer?
 		ShopOffer offer = this.offers.get(offerId);
 		if(offer == null)
 		{
 			logger.warn("{} tried to purchase unknown offer #{}", player, offerId);
-			return null;
+			return false;
 		}
 		
 		// Enough coins?
-		if(player.getBalance() < offer.price)
+		if(player.getBalance() < offer.getPrice())
 		{
 			logger.warn("{} tried to purchase too expensive offer #{}", player, offerId);
-			return null;
+			return false;
 		}
 		
 		// TODO: write transaction log for player (and statistics)
-		logger.info("{} purchased offer #{} for {} coins", player, offerId, offer.price);
+		logger.info("{} purchased offer #{} for {} coins", player, offerId, offer.getPrice());
 		
-		return null;
+		return true;
+	}
+	
+	public void giveProducts(Session session, ShopOffer offer)
+	{
+		Player player = session.getPlayer();
+		
+		// Add coins and items
+		List<ShopProduct> addedItems = Lists.newArrayListWithCapacity(offer.getProducts().size());
+		for(ShopProduct product : offer.getProducts())
+		{
+			if(product.getItem() instanceof Coin)
+			{
+				player.setBalance(player.getBalance() + product.getQuantity());
+				session.send(new CurrencyBalanceMessage(player.getBalance()));
+			}
+			else
+			{
+				player.getInventory().add(product.getItem(), product.getQuantity());
+				addedItems.add(product);
+			}
+		}
+		
+		// Save data
+		player.saveInventory();
+		session.saveData();
+		
+		// Send added items
+		if(!addedItems.isEmpty())
+		{
+			session.send(new ItemsAddedMessage(addedItems));
+		}
+	}
+	
+	public ShopPage getPage(String pageId)
+	{
+		return this.pages.get(pageId);
 	}
 }

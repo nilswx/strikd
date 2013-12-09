@@ -4,6 +4,22 @@ import strikd.game.items.ItemType;
 
 public class ShopProduct
 {
-	public ItemType type;
-	public int quantity;
+	private final ItemType item;
+	private final int quantity;
+	
+	public ShopProduct(ItemType item, int quantity)
+	{
+		this.item = item;
+		this.quantity = quantity;
+	}
+	
+	public ItemType getItem()
+	{
+		return this.item;
+	}
+
+	public int getQuantity()
+	{
+		return this.quantity;
+	}
 }

@@ -26,7 +26,8 @@ public interface Opcodes
 		FACEBOOK_REFRESH_FRIENDS,
 		FACEBOOK_CLAIM_LIKE,
 		FACEBOOK_REGISTER_INVITES,
-		GET_ACTIVITY_STREAM;
+		GET_ACTIVITY_STREAM,
+		GET_SHOP_PAGE;
 		
 		private static final Opcodes.Incoming[] values = values();
 		
@@ -71,6 +72,7 @@ public interface Opcodes
 		SERVER_SHUTTING_DOWN,
 		SERVER_REDIRECT,
 		ACTIVITY_STREAM,
-		NEWS;
+		NEWS,
+		SHOP_PAGE;
 	}
 }

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import strikd.game.items.powerup.*;
+import strikd.game.items.shop.Coin;
 import strikd.game.items.avatar.*;
 import strikd.game.player.Avatar;
 import static strikd.game.items.AvatarPart.PartSlot.*;
@@ -85,6 +86,12 @@ public class ItemTypeRegistry
 	static
 	{
 		// TODO: fill register from database that is shared with all server instances
+		
+		// Internal usage
+		int O = 50;
+		add(new Coin(O++));
+		
+		// For coin packs
 		int IO = 100;
 		add(new GenericAvatarPart(IO++, "BIG_MOUSE_EARS", HAT));
 		add(new GenericAvatarPart(IO++, "EYEPATCH", EYES));
