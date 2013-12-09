@@ -11,7 +11,7 @@ public abstract class AvatarPart extends ItemType
 	
 	public AvatarPart(int id, String code, PartSlot slot)
 	{
-		super(id, code);
+		super('a', id, code);
 		this.slot = slot;
 	}
 	

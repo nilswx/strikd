@@ -7,6 +7,6 @@ public final class Trophy extends ItemType
 {
 	public Trophy(int id, String code)
 	{
-		super(id, code);
+		super('t', id, code);
 	}
 }

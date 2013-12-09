@@ -8,11 +8,13 @@ package strikd.game.items;
  */
 public abstract class ItemType
 {
+	private final char type;
 	private final int id;
 	private final String code;
 	
-	public ItemType(int id, String code)
+	public ItemType(char type, int id, String code)
 	{
+		this.type = type;
 		this.id = id;
 		this.code = code;
 	}
@@ -25,5 +27,10 @@ public abstract class ItemType
 	public String getCode()
 	{
 		return this.code;
+	}
+	
+	public char getTypeChar()
+	{
+		return this.type;
 	}
 }

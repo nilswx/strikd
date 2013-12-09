@@ -14,7 +14,7 @@ public abstract class PowerUp extends ItemType
 	
 	public PowerUp(int id, String code)
 	{
-		super(id, code);
+		super('p', id, code);
 	}
 	
 	public final void activate(MatchPlayer player, String... args)

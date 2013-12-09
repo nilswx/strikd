@@ -6,6 +6,6 @@ public class Coin extends ItemType
 {
 	public Coin(int typeId)
 	{
-		super(typeId, "COIN");
+		super('c', typeId, "COIN");
 	}
 }
