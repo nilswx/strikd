@@ -19,6 +19,8 @@ import strikd.sessions.Session;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import static strikd.game.items.ItemTypeRegistry._I;
+
 public class Shop extends Server.Referent
 {
 	private static final Logger logger = LoggerFactory.getLogger(Shop.class);
@@ -39,7 +41,9 @@ public class Shop extends Server.Referent
 		// TODO: load offers from db
 		
 		// Register IAP's (universal identifier for all platforms)
-		this.iapProducts.put("nl.indev.Strik.coins15", null);
+		ShopOffer pouch = new ShopOffer(1337, 0);
+		pouch.getProducts().add(new ShopProduct(_I("COIN"), 15));
+		this.iapProducts.put("nl.indev.Strik.coins15", pouch);
 		
 		// Print shop
 		logger.info("pages = {}", this.pages.values());
@@ -113,20 +117,21 @@ public class Shop extends Server.Referent
 		}
 	}
 	
-	public boolean redeemAppStoreReceipt(Session session, String receipt)
+	public boolean redeemAppStoreReceipt(Session session, String receiptStr)
 	{
 		// Check receipt status at server
-		JSONObject result = AppStoreReceipts.verifyReceipt(receipt, true);
+		JSONObject result = AppStoreReceipts.verifyReceipt(receiptStr, true);
 		if(result.getInt("status") != 0)
 		{
 			return false;
 		}
 		
 		// TODO: verify/flag the transaction ID as being used
-		long transactionId = result.getLong("transaction_id");
+		JSONObject receipt = result.getJSONObject("receipt");
+		long transactionId = receipt.getLong("transaction_id");
 		
 		// Resolve IAP's offer
-		ShopOffer offer = this.iapProducts.get(result.getString("product_id"));
+		ShopOffer offer = this.iapProducts.get(receipt.getString("product_id"));
 		if(offer == null)
 		{
 			return false;

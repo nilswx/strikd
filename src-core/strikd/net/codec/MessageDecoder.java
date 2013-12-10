@@ -15,7 +15,7 @@ public class MessageDecoder extends ByteToMessageDecoder
 {
 	private static final Logger logger = LoggerFactory.getLogger(MessageDecoder.class);
 	
-	private static final int MAX_MESSAGE_SIZE = 512;
+	private static final int MAX_MESSAGE_SIZE = 5120;
 	
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception
