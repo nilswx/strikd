@@ -141,6 +141,8 @@ public class Shop extends Server.Referent
 					transaction.getId(),
 					transaction.getPlayer().getId());
 			
+			// Forget it!
+			session.send(new InAppPurchaseDeliveredMessage(transactionId));
 			return false;
 		}
 		
