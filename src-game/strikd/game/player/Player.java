@@ -18,6 +18,7 @@ import javax.persistence.Version;
 
 import strikd.facebook.FacebookIdentity;
 import strikd.game.items.ItemInventory;
+import strikd.game.items.shop.InAppPurchaseTransaction;
 import strikd.game.stream.ActivityStreamItem;
 import strikd.game.util.Localization;
 import strikd.game.util.Platform;
@@ -101,8 +102,11 @@ public class Player
 	@Version
 	private int version;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
 	private List<ActivityStreamItem> streamItems;
+	
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+	private List<InAppPurchaseTransaction> transactions;
 	
 	public int getId()
 	{

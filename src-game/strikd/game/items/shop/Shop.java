@@ -126,9 +126,23 @@ public class Shop extends Server.Referent
 			return false;
 		}
 		
-		// TODO: verify/flag the transaction ID as being used
+		// Get the actual receipt data
 		JSONObject receipt = result.getJSONObject("receipt");
+		
+		// Look for the transaction in the DB
 		long transactionId = receipt.getLong("transaction_id");
+		InAppPurchaseTransaction transaction = this.getDatabase().find(InAppPurchaseTransaction.class, transactionId);
+		
+		// Used before?!
+		if(transaction != null)
+		{
+			logger.warn("{} tried to redeem the already completed transaction #{} (by #{})",
+					session.getPlayer(),
+					transaction.getId(),
+					transaction.getPlayer().getId());
+			
+			return false;
+		}
 		
 		// Resolve IAP's offer
 		ShopOffer offer = this.iapProducts.get(receipt.getString("product_id"));
@@ -142,6 +156,10 @@ public class Shop extends Server.Referent
 		
 		// Save data
 		session.saveData();
+		
+		// Log transaction
+		transaction = new InAppPurchaseTransaction(transactionId,session.getPlayer());
+		this.getDatabase().insert(transaction);
 		
 		// Force client to complete the transaction
 		session.send(new InAppPurchaseDeliveredMessage(transactionId));
