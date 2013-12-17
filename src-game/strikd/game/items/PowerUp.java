@@ -27,7 +27,7 @@ public abstract class PowerUp extends ItemType
 		}
 		catch(Exception e)
 		{
-			
+			logger.error("error activating {}", this, e);
 		}
 	}
 	

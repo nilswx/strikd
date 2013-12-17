@@ -57,7 +57,7 @@ public class SelectionValidator
 					// Fire trigger!
 					if(tile.hasTrigger())
 					{
-						tile.getTrigger().execute(player);
+						tile.getTrigger().activate(player, tile);
 					}
 					board.removeTile(tile);
 				}
