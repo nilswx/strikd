@@ -67,7 +67,7 @@ public final class Word
 	
 	private static String normalize(String str)
 	{
-		return NORMALIZER.matcher(str.toUpperCase()).replaceAll("").intern();
+		return NORMALIZER.matcher(str.toUpperCase()).replaceAll("");
 	}
 	
 	public static Word parse(String str)
