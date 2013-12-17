@@ -76,6 +76,12 @@ public class TimedPlayerQueue extends PlayerQueue
 	
 	private void makeMatches()
 	{
+		// Nothing to do?
+		if(this.players.isEmpty())
+		{
+			return;
+		}
+		
 		// Connect waiting players (simple FIFO fashion)
 		Entry waiting = null;
 		for(Entry entry : this.players)
