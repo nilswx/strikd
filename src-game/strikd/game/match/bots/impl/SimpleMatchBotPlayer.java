@@ -45,9 +45,9 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 	{
 		// This bot knows all the words!
 		LocaleBundle locale = super.getMatch().getLocale();
-		if(locale == null || (this.dictionary = locale.getDictionary(DictionaryType.COMPLETE)) == null)
+		if(locale == null || (this.dictionary = locale.getDictionary(DictionaryType.COMMON)) == null)
 		{
-			logger.warn("{} couldn't resolve COMPLETE dict for locale '{}', AI disabled", this, this.getInfo().getLocale());
+			logger.warn("{} couldn't resolve COMMON dict for locale '{}', AI disabled", this, this.getInfo().getLocale());
 			return false;
 		}
 		

@@ -26,8 +26,13 @@ public class LocaleBundle
 		{
 			try
 			{
+				boolean useIndexes = (type == DictionaryType.COMMON);
 				String path = dictDir + File.separator + String.format(DICTIONARY_PATH, type.toString().toLowerCase());
-				this.dicts.put(type, new WordDictionary(locale, new File(path), true));
+				
+				WordDictionary dict = new WordDictionary(locale, new File(path), useIndexes);
+				logger.debug("loaded {} {} (words={} | index={})", locale, type, dict.size(), (useIndexes ? "yes" : "no"));
+				
+				this.dicts.put(type, dict);
 			}
 			catch(Exception ex)
 			{
@@ -61,7 +66,7 @@ public class LocaleBundle
 	{
 		// Essential
 		COMPLETE,
-		GENERATOR,
+		COMMON,
 		
 		// Extras etc
 		SEASONAL,
