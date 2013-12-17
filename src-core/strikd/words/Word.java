@@ -7,7 +7,7 @@ public final class Word
 	private final String string;
 	private final char[] letters;
 	
-	private Word(String value)
+	public Word(String value)
 	{
 		if(value == null || value.length() == 0)
 		{

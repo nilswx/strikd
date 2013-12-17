@@ -26,17 +26,26 @@ public class LocaleBundle
 		{
 			try
 			{
+				// Build indexes for this dictionary?
 				boolean useIndexes = (type == DictionaryType.COMMON);
-				String path = dictDir + File.separator + String.format(DICTIONARY_PATH, type.toString().toLowerCase());
 				
-				WordDictionary dict = new WordDictionary(locale, new File(path), useIndexes);
-				logger.debug("loaded {} {} (words={} | index={})", locale, type, dict.size(), (useIndexes ? "yes" : "no"));
-				
-				this.dicts.put(type, dict);
+				// Locate file
+				File file = new File(dictDir + File.separator + String.format(DICTIONARY_PATH, type.toString().toLowerCase()));
+				if(file.exists())
+				{
+					WordDictionary dict = new WordDictionary(locale, file, useIndexes);
+					logger.debug("loaded {} {} (words={} | index={})", locale, type, dict.size(), (useIndexes ? "yes" : "no"));
+					
+					this.dicts.put(type, dict);
+				}
+				else
+				{
+					logger.warn("{}: could not locate dict for {}", locale, type);
+				}
 			}
-			catch(Exception ex)
+			catch(Exception e)
 			{
-				logger.debug("{}: could not load dict for {}", locale, type);
+				logger.error("{}: could not load dict for {}", locale, type, e);
 			}
 		}
 	}
