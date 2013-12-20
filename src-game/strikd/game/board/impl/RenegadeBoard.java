@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import strikd.game.board.Board;
 import strikd.game.board.Direction8;
 import strikd.game.board.Square;
+import strikd.game.board.Tile;
 import strikd.util.RandomUtil;
 import strikd.words.WordDictionary;
 
@@ -37,6 +38,14 @@ public class RenegadeBoard extends Board
 		// We don't want the first update() to be predictable
 		Collections.shuffle(empty);
 		this.emptySquares = Lists.newLinkedList(empty);
+	}
+	
+	@Override
+	public void removeTile(Tile tile)
+	{
+		this.emptySquares.add(new Square(tile.getColumn(), tile.getRow()));
+		
+		super.removeTile(tile);
 	}
 
 	@Override
@@ -85,7 +94,6 @@ public class RenegadeBoard extends Board
 		}
 	}
 	
-	@SuppressWarnings("serial")
 	private static class WordPlacement extends ArrayList<FutureTile> implements Comparable<WordPlacement>
 	{
 		private static final int LENGTH_SCORE = -5;
