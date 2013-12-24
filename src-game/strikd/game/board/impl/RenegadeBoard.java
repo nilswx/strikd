@@ -51,20 +51,18 @@ public class RenegadeBoard extends Board
 	{
 		// Pick a starting point
 		AbstractTile start;
-		if(col.size() > 100)
+		if(col.size() > 0)
 		{
 			start = col.get(col.size() - 1);
 		}
 		else
 		{
-			System.out.println("rand start");
 			start = new VirtualTile(column, 0, RandomUtil.generateRandomLetter());
 		}
-		//System.out.println("start=" + start);
 		
 		// Find/form a word starting from here
 		List<AbstractTile> progress = Lists.newArrayList();
-		boolean found = this.findWordStartingFrom(start, this.getDictionary().getIndex(), Direction8.North, progress);
+		boolean found = this.findWordStartingFrom(start, this.getDictionary().getIndex(), null, progress);
 		
 		// Evaluate result
 		if(found)
@@ -80,8 +78,6 @@ public class RenegadeBoard extends Board
 	
 	private boolean findWordStartingFrom(AbstractTile src, LetterNode letter, Direction8 origin, List<AbstractTile> progress)
 	{
-		System.out.println("looking for " + letter + " -> " + src.getLetter());
-		
 		// Link is in the dictionary?
 		LetterNode currentLetter = letter.node(src.getLetter());
 		if(currentLetter != null)
@@ -151,10 +147,6 @@ public class RenegadeBoard extends Board
 				// Pop
 				progress.remove(progress.size() - 1);
 			}
-		}
-		else
-		{
-			//System.out.println("no luck");
 		}
 		
 		// Got a word so far?

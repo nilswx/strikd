@@ -1,5 +1,6 @@
 package strikd.game.board.impl;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -10,7 +11,6 @@ import strikd.game.board.Tile;
 import strikd.game.board.triggers.Trigger;
 import strikd.game.match.Match;
 import strikd.util.NamedThreadFactory;
-import strikd.util.RandomUtil;
 import strikd.words.WordDictionary;
 
 public final class AgingRenegadeBoard extends RenegadeBoard implements Runnable
@@ -48,14 +48,30 @@ public final class AgingRenegadeBoard extends RenegadeBoard implements Runnable
 	@Override
 	public void run()
 	{
-		// Age tiles and crush the ones that are too old
-		int expired = 0;
-		for(Tile tile : this.getTiles())
+		// Age tiles and crush the ones that are too ol
+		/*for(Tile tile : this.getTiles())
 		{
 			if(((AgingTile)tile).age() >= this.maxAge)
 			{
 				expired++;
 				this.removeTile(tile);
+			}
+		}*/
+		
+		// Only age tiles in the bottom row (TODO: open a little bottom 'luikje' every x seconds?)
+		int expired = 0;
+		for(List<Tile> col : this.getColumns())
+		{
+			// Tile here?
+			if(!col.isEmpty())
+			{
+				// Age 'n check it
+				AgingTile tile = (AgingTile)col.get(0);
+				if(tile.age() >= this.maxAge)
+				{
+					expired++;
+					this.removeTile(tile);
+				}
 			}
 		}
 		
@@ -82,7 +98,6 @@ public final class AgingRenegadeBoard extends RenegadeBoard implements Runnable
 		public AgingTile(byte tileId, int column, char letter, Trigger trigger, Board board)
 		{
 			super(tileId, column, letter, trigger, board);
-			this.age = RandomUtil.pickInt((board.getHeight() - board.getColumn(column).size()), 20);
 		}
 		
 		public int age()
