@@ -10,7 +10,7 @@ import strikd.communication.outgoing.BoardInitMessage;
 import strikd.communication.outgoing.MatchEndedMessage;
 import strikd.communication.outgoing.MatchStartedMessage;
 import strikd.game.board.Board;
-import strikd.game.board.impl.RenegadeBoard;
+import strikd.game.board.impl.AgingRenegadeBoard;
 import strikd.game.match.bots.MatchBotPlayer;
 import strikd.game.player.ExperienceHandler;
 import strikd.locale.LocaleBundle;
@@ -46,7 +46,7 @@ public class Match
 		this.timer = new MatchTimer(this, (int)TimeUnit.MINUTES.toSeconds(2));
 		
 		// Install the board implementation
-        this.board = new RenegadeBoard(6, 6, locale.getDictionary(DictionaryType.COMMON));
+        this.board = new AgingRenegadeBoard(6, 6, locale.getDictionary(DictionaryType.COMMON), this, this.loadingTime, 300000000);
 
 		// Link the players to this match with a personal ID
 		this.playerOne = playerOne.setMatch(this, 1);

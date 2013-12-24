@@ -177,7 +177,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		return !this.toSelect.isEmpty();
 	}
 	
-	private static final Direction8[] SEARCH_DIRECTIONS = Direction8.all();
+	private static final Direction8[] SEARCH_DIRECTIONS = Direction8.noDiagonals();
 	
 	private static boolean findFirstWholeWord(Tile src, Direction8 origin, LetterNode letter, List<Tile> progress)
 	{

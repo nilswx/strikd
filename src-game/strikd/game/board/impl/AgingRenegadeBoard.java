@@ -10,6 +10,7 @@ import strikd.game.board.Tile;
 import strikd.game.board.triggers.Trigger;
 import strikd.game.match.Match;
 import strikd.util.NamedThreadFactory;
+import strikd.util.RandomUtil;
 import strikd.words.WordDictionary;
 
 public final class AgingRenegadeBoard extends RenegadeBoard implements Runnable
@@ -81,6 +82,7 @@ public final class AgingRenegadeBoard extends RenegadeBoard implements Runnable
 		public AgingTile(byte tileId, int column, char letter, Trigger trigger, Board board)
 		{
 			super(tileId, column, letter, trigger, board);
+			this.age = RandomUtil.pickInt((board.getHeight() - board.getColumn(column).size()), 20);
 		}
 		
 		public int age()
