@@ -25,7 +25,6 @@ import strikd.game.match.queues.PlayerQueue;
 import strikd.game.player.Experience;
 import strikd.game.player.Player;
 import strikd.game.stream.activity.ItemReceivedStreamItem;
-import strikd.game.stream.activity.LevelUpStreamItem;
 import strikd.game.util.CountryResolver;
 import strikd.net.NetConnection;
 import strikd.net.codec.IncomingMessage;
@@ -142,12 +141,6 @@ public class Session extends Server.Referent
 		this.getFollowing().add(player.getId());
 		
 		// ==== HERE BE DRAGONS TESTING ====
-		
-		// Level up!
-		LevelUpStreamItem lup = new LevelUpStreamItem();
-		lup.setPlayer(player);
-		lup.setLevel(RandomUtil.nextInt(Experience.MAX_LEVEL));
-		this.getServer().getActivityStream().write(lup);
 		
 		// Give an item!
 		ItemType item = RandomUtil.pickOne(ItemTypeRegistry.allTypes());
