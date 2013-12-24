@@ -67,10 +67,6 @@ public final class Experience
 		for(int level = 1; level <= MAX_LEVEL; level++)
 		{
 			LEVEL_EXPERIENCE[level] = (int)(FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level));
-			if(level == 1)
-			{
-				LEVEL_EXPERIENCE[level] -= FORMULA_BASE;
-			}
 		}
 		
 		// Pre=compute message

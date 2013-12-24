@@ -51,7 +51,7 @@ public class RenegadeBoard extends Board
 	{
 		// Pick a starting point
 		AbstractTile start;
-		if(col.size() > 0)
+		if(col.size() > 1000)
 		{
 			start = col.get(col.size() - 1);
 		}
