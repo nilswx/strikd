@@ -23,13 +23,13 @@ public class FacebookInviteManager extends Server.Referent
 		logger.info("pending invites for {} persons", 0);//this.dbInvites.count()));
 	}
 	
-	public void registerInvite(long personId, Player inviter)
+	public void registerInvite(long userId, Player inviter)
 	{
 		//this.dbInvites.update("{_id:#}", personId).upsert().with("{$addToSet:{by:#}}", inviter.getId());	
-		logger.info("{} invited person #{}!", inviter, personId);
+		logger.info("{} invited person #{}!", inviter, userId);
 	}
 	
-	public void processInvites(long personId)
+	public void processInvites(long userId)
 	{
 		// Was this FB user invited by existing players?
 		List<Integer> invites = Lists.newArrayList();//this.dbInvites.findAndModify("{_id:#}", personId).remove().as(InvitedByList.class);
@@ -43,7 +43,7 @@ public class FacebookInviteManager extends Server.Referent
 				Player player = register.findPlayer(playerId);
 				if(player != null)
 				{
-					logger.info("FB user #{} linked (welcome!), rewarding {} for invite", personId, player);
+					logger.info("FB user #{} linked (welcome!), rewarding {} for invite", userId, player);
 				}
 			}
 		}

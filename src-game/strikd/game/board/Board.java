@@ -37,7 +37,7 @@ public abstract class Board
 		this.columns = new List[width];
 		for(int x = 0; x < width; x++)
 		{
-			this.columns[x] = new ArrayList<Tile>();
+			this.columns[x] = new ArrayList<Tile>(height);
 		}
 
 		this.dictionary = dictionary;
@@ -61,6 +61,11 @@ public abstract class Board
 
 	public final Tile addTile(int column, char letter, Trigger trigger)
 	{
+		if(this.columns[column].size() >= this.height)
+		{
+			return null;
+		}
+		
 		// Factory method for creating Tiles
 		Tile tile = this.newTile(this.allocateId(), column, letter, trigger);
 
@@ -142,6 +147,12 @@ public abstract class Board
 
 
 
+	public final boolean isInRange(int column, int row)
+	{
+		return (column >= 0 && column < this.getWidth()
+				&& row >= 0 && row < this.getHeight());
+	}
+	
 	public final Tile getTile(int column, int row)
 	{
 		if(column >= 0 && column < this.columns.length)
@@ -184,6 +195,11 @@ public abstract class Board
 	public final WordDictionary getDictionary()
 	{
 		return this.dictionary;
+	}
+	
+	protected final List<Tile>[] getColumns()
+	{
+		return this.columns;
 	}
 
 	

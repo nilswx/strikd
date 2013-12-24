@@ -99,7 +99,6 @@ public class MatchPlayer
 	public void selectTile(Tile tile)
 	{
 		this.selected.add(tile);
-		tile.onSelect(this);
 	}
 	
 	public List<Tile> getSelection()
@@ -110,10 +109,6 @@ public class MatchPlayer
 	public void clearSelection()
 	{
 		// Deselect all tiles
-		for(Tile tile : this.selected)
-		{
-			tile.onDeselect(this);
-		}
 		this.selected.clear();
 		
 		// Notify match
