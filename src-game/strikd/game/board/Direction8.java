@@ -4,14 +4,14 @@ import java.util.Random;
 
 public enum Direction8
 {
-	North(0, +1),
-	NorthEast(+1, +1),
-	East(+1, 0),
-	SouthEast(+1, -1),
-	South(0, -1),
-	SouthWest(-1, -1),
-	West(-1, 0),
-	NorthWest(-1, +1);
+	NORTH(0, +1),
+	NORTH_EAST(+1, +1),
+	EAST(+1, 0),
+	SOUTH_EAST(+1, -1),
+	SOUTH(0, -1),
+	SOUTH_WEST(-1, -1),
+	WEST(-1, 0),
+	NORTH_WEST(-1, +1);
 
 	public final int x;
 	public final int y;
@@ -23,7 +23,7 @@ public enum Direction8
 	}
 
 	private static final Direction8[] values = values();
-	private static final Direction8[] nesw = { North, East, South, West };
+	private static final Direction8[] nesw = { NORTH, EAST, SOUTH, WEST };
 	
 	public static Direction8[] all()
 	{
