@@ -52,7 +52,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		}
 		
 		// Use max x bruteforce attempts to find a word
-		this.allowedFindAttempts = 25;
+		this.allowedFindAttempts = 75;
 				
 		// Configure available powerups
 		PowerUp[] powerUps =
@@ -81,7 +81,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		}
 		else
 		{
-			if(RandomUtil.getBool(0.90))
+			if(RandomUtil.getBool(0.95))
 			{
 				this.pickNewWord();
 			}
@@ -99,7 +99,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		int delay;
 		if(this.hasWord())
 		{
-			delay = RandomUtil.pickInt(500, 750);
+			delay = RandomUtil.pickInt(250, 750);
 			logger.debug("{} will select {} in {} ms", this, this.toSelect.peek(), delay);
 		}
 		else
@@ -177,7 +177,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		return !this.toSelect.isEmpty();
 	}
 	
-	private static final Direction8[] SEARCH_DIRECTIONS = Direction8.noDiagonals();
+	private static final Direction8[] SEARCH_DIRECTIONS = Direction8.all();
 	
 	private static boolean findFirstWholeWord(Tile src, Direction8 origin, LetterNode letter, List<Tile> progress)
 	{
