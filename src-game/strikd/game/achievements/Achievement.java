@@ -9,20 +9,16 @@ import javax.persistence.Table;
 public class Achievement
 {
 	@Id
-	private final int id;
+	private int id;
 	
 	@Column(nullable=false)
-	private final String code;
+	private String code;
 	
 	@Column(nullable=false)
-	private final int value;
+	private int maxProgress;
 	
-	public Achievement(int id, String code, int value)
-	{
-		this.id = id;
-		this.code = code;
-		this.value = value;
-	}
+	@Column(nullable=false)
+	private int value;
 	
 	public int getId()
 	{
@@ -32,6 +28,11 @@ public class Achievement
 	public String getCode()
 	{
 		return this.code;
+	}
+	
+	public int getMaxProgress()
+	{
+		return this.maxProgress;
 	}
 	
 	public int getValue()

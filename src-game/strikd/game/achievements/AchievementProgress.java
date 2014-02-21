@@ -17,7 +17,7 @@ public class AchievementProgress
 	private Achievement achievement;
 	
 	@Column(nullable=false)
-	private int value;
+	private int progress;
 	
 	public Player getPlayer()
 	{
@@ -39,13 +39,18 @@ public class AchievementProgress
 		this.achievement = achievement;
 	}
 	
-	public int getValue()
+	public int getProgress()
 	{
-		return this.value;
+		return this.progress;
 	}
 	
-	public void setValue(int value)
+	public void setProgress(int progress)
 	{
-		this.value = value;
+		this.progress = progress;
+	}
+	
+	public boolean isAchieved()
+	{
+		return (this.getProgress() >= this.getAchievement().getMaxProgress());
 	}
 }
