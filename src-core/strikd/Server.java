@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import strikd.cluster.ServerCluster;
 import strikd.communication.incoming.MessageHandlers;
 import strikd.facebook.FacebookManager;
+import strikd.game.achievements.AchievementManager;
 import strikd.game.items.ItemTypeRegistry;
 import strikd.game.items.shop.Shop;
 import strikd.game.match.MatchManager;
@@ -47,8 +48,9 @@ public class Server
 	private final MatchManager matchMgr;
 	private final ExperienceHandler experienceHandler;
 	private final Shop shop;
-	private final FacebookManager facebook;
 	private final ActivityStream activityStream;
+	private final AchievementManager achievementMgr;
+	private final FacebookManager facebook;
 	
 	private boolean isShutdownMode;
 	private String shutdownMessage;
@@ -95,11 +97,15 @@ public class Server
 		// Setup activity stream
 		this.activityStream = new ActivityStream(this);
 		
+		// Setup achievements
+		this.achievementMgr = new AchievementManager(this);
+		
 		// Create FB manager, share global config with the rest
 		this.facebook = new FacebookManager(
 				props.getProperty("facebook.page.id"),
 				props.getProperty("facebook.app.ns"),
-				props.getProperty("facebook.app.token"), this);
+				props.getProperty("facebook.app.token"),
+				this);
 		FacebookManager.setSharedAppNamespace(this.facebook.getAppNamespace());
 		FacebookManager.setSharedAppAccessToken(this.facebook.getAppAccessToken());
 		
@@ -252,6 +258,11 @@ public class Server
 	public ActivityStream getActivityStream()
 	{
 		return this.activityStream;
+	}
+	
+	public AchievementManager getAchievementMgr()
+	{
+		return this.achievementMgr;
 	}
 	
 	public FacebookManager getFacebook()

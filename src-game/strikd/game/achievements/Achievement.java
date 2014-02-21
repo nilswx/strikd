@@ -17,6 +17,18 @@ public class Achievement
 	@Column(nullable=false)
 	private int maxProgress;
 	
+	public Achievement(int id, String code)
+	{
+		this(id, code, 1);
+	}
+	
+	public Achievement(int id, String code, int maxProgress)
+	{
+		this.id = id;
+		this.code = code;
+		this.maxProgress = maxProgress;
+	}
+	
 	public int getId()
 	{
 		return this.id;
