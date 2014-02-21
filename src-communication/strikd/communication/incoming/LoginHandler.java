@@ -62,12 +62,13 @@ public class LoginHandler extends MessageHandler
 			session.send(new CurrencyBalanceMessage(player.getBalance()));
 			
 			// Welcome!
+			/*
 			session.sendAlert("Welcome aboard Strik! Server: %s\r\rLogins: %d\rPlatform: %s\rMotto: \"%s\"\rBalance: %d coins\r\rThanks for flying with us!",
 					session.getServer().getServerCluster().getSelf(),
 					player.getLogins(),
 					player.getPlatform(),
 					player.getMotto(),
-					player.getBalance());
+					player.getBalance());*/
 			
 			// Will force client to validate
 			session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
