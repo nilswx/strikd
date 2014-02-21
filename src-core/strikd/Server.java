@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import strikd.cluster.ServerCluster;
 import strikd.communication.incoming.MessageHandlers;
 import strikd.facebook.FacebookManager;
-import strikd.game.achievements.AchievementManager;
+import strikd.game.achievements.AchievementRegister;
 import strikd.game.items.ItemTypeRegistry;
 import strikd.game.items.shop.Shop;
 import strikd.game.match.MatchManager;
@@ -49,7 +49,7 @@ public class Server
 	private final ExperienceHandler experienceHandler;
 	private final Shop shop;
 	private final ActivityStream activityStream;
-	private final AchievementManager achievementMgr;
+	private final AchievementRegister achievementRegister;
 	private final FacebookManager facebook;
 	
 	private boolean isShutdownMode;
@@ -98,7 +98,7 @@ public class Server
 		this.activityStream = new ActivityStream(this);
 		
 		// Setup achievements
-		this.achievementMgr = new AchievementManager(this);
+		this.achievementRegister = new AchievementRegister(this);
 		
 		// Create FB manager, share global config with the rest
 		this.facebook = new FacebookManager(
@@ -260,9 +260,9 @@ public class Server
 		return this.activityStream;
 	}
 	
-	public AchievementManager getAchievementMgr()
+	public AchievementRegister getAchievementRegister()
 	{
-		return this.achievementMgr;
+		return this.achievementRegister;
 	}
 	
 	public FacebookManager getFacebook()

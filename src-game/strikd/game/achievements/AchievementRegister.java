@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 
 import strikd.Server;
 
-public class AchievementManager extends Server.Referent
+public class AchievementRegister extends Server.Referent
 {
-	private static final Logger logger = LoggerFactory.getLogger(AchievementManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(AchievementRegister.class);
 	
 	private Map<String, Achievement> achievements;
 	
-	public AchievementManager(Server server)
+	public AchievementRegister(Server server)
 	{
 		super(server);
 		
