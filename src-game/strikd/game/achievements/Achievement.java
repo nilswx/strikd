@@ -17,9 +17,6 @@ public class Achievement
 	@Column(nullable=false)
 	private int maxProgress;
 	
-	@Column(nullable=false)
-	private int value;
-	
 	public int getId()
 	{
 		return this.id;
@@ -33,10 +30,5 @@ public class Achievement
 	public int getMaxProgress()
 	{
 		return this.maxProgress;
-	}
-	
-	public int getValue()
-	{
-		return this.value;
 	}
 }
