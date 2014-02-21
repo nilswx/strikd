@@ -14,10 +14,14 @@ public class Achievement
 	@Column(nullable=false)
 	private final String code;
 	
-	public Achievement(int id, String code)
+	@Column(nullable=false)
+	private final int value;
+	
+	public Achievement(int id, String code, int value)
 	{
 		this.id = id;
 		this.code = code;
+		this.value = value;
 	}
 	
 	public int getId()
@@ -28,5 +32,10 @@ public class Achievement
 	public String getCode()
 	{
 		return this.code;
+	}
+	
+	public int getValue()
+	{
+		return this.value;
 	}
 }
