@@ -47,7 +47,7 @@ public class RequestMatchHandler extends MessageHandler
 			}
 			else
 			{
-				session.sendAlert("Could not join a queue!");
+				session.sendAlert("Could not join a queue! (locale set?)");
 			}
 		}
 	}
