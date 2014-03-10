@@ -35,6 +35,7 @@ public class PlayerRegister extends Server.Referent
 		Player player = this.getDatabase().createEntityBean(Player.class);
 		player.setToken(this.generateToken());
 		player.setName(this.defaults.generateName());
+		player.setAvatar(this.defaults.generateAvatar());
 		player.setLevel(1); // Start at lvl 1
 		player.setLocale(""); // Player will send CHANGE_LOCALE
 		player.setCountry(""); // Will change after LOGIN
@@ -44,7 +45,7 @@ public class PlayerRegister extends Server.Referent
 		
 		// Default inventory and avatar
 		this.defaults.stockInventory(player);
-		this.defaults.getAvatar().generateDefaultAvatar(player);
+		//this.defaults.getAvatar().generateDefaultAvatar(player);
 		
 		// Save to database
 		this.getDatabase().save(player);

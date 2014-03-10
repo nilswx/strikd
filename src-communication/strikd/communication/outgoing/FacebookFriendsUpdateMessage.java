@@ -16,7 +16,7 @@ public class FacebookFriendsUpdateMessage extends OutgoingMessage
 		{
 			super.writeInt(friend.getId());
 			super.writeStr(friend.getName());
-			super.writeStr(friend.getAvatarData());
+			super.writeStr(friend.getAvatar());
 			super.writeStr(""); // removed: motto
 			super.writeBool(friend.isOnline());
 			super.writeBool(friend.isInMatch());

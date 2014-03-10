@@ -38,13 +38,13 @@ public class DefaultAvatarGenerator
 		int gender = RandomUtil.flipCoin() ? MALE : FEMALE;
 		
 		// Now generate a random avatar from the stock parts
-		Avatar ava = player.getAvatar();
+		Avatar ava = new Avatar();// player.getAvatar();
 		ava.set((AvatarPart)RandomUtil.pickOne(bodies[gender]));
 		ava.set((AvatarPart)RandomUtil.pickOne(heads[gender]));
 		ava.set((AvatarPart)RandomUtil.pickOne(mouths[gender]));
 		ava.set((AvatarPart)RandomUtil.pickOne(eyes));
 		ava.set((AvatarPart)RandomUtil.pickOne(hair[gender]));
-		player.saveAvatar();
+		//player.saveAvatar();
 	}
 	
 	private static final int MALE = 0, FEMALE = 1;

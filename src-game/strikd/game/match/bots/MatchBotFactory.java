@@ -15,9 +15,9 @@ public class MatchBotFactory
 		Player bot = new Player();
 		bot.setId(488228);
 		bot.setName(String.format("TempoBot 3000", rand.nextInt(1000)));
-		bot.saveAvatar();
+		bot.setAvatar(Integer.toString(rand.nextInt(10) + 1));
 		bot.setLocale(opponent.getInfo().getLocale());
-		bot.setCountry("us"); // FROM DEUTSCHLAND!
+		bot.setCountry("de"); // FROM DEUTSCHLAND!
 		
 		bot.setMatches(rand.nextInt(300) + 1);
 		bot.setWins(rand.nextInt(bot.getMatches()));

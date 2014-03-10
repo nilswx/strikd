@@ -3,11 +3,11 @@ package strikd.communication.outgoing;
 import strikd.communication.Opcodes;
 import strikd.net.codec.OutgoingMessage;
 
-public class MottoChangedMessage extends OutgoingMessage
+public class AvatarChangedMessage extends OutgoingMessage
 {
-	public MottoChangedMessage(String newMotto)
+	public AvatarChangedMessage(String newAvatar)
 	{
 		super(Opcodes.Outgoing.AVATAR_CHANGED);
-		super.writeStr(newMotto);
+		super.writeStr(newAvatar);
 	}
 }

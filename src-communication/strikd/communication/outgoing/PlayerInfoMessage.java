@@ -17,7 +17,7 @@ public class PlayerInfoMessage extends OutgoingMessage
 	{
 		msg.writeInt(player.getId());
 		msg.writeStr(player.getName());
-		msg.writeStr(player.getAvatarData());
+		msg.writeStr(player.getAvatar());
 		msg.writeStr(""); // removed: motto
 		msg.writeStr(player.getCountry());
 		msg.writeInt(player.getXp());

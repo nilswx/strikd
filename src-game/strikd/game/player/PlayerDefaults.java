@@ -11,6 +11,11 @@ public class PlayerDefaults
 		return String.format("Player-%d", RandomUtil.pickInt(100000, 999999));
 	}
 	
+	public String generateAvatar()
+	{
+		return Integer.toString(RandomUtil.pickInt(1, Avatars.AMOUNT_OF_AVATARS));
+	}
+	
 	public int getBalance()
 	{
 		return 5;
@@ -25,12 +30,5 @@ public class PlayerDefaults
 		inv.add(_I(RandomUtil.flipCoin() ? "FREEZE" : "WATER"), 2);
 		inv.add(_I(RandomUtil.flipCoin() ? "FREEZE" : "WATER"), 2);
 		player.saveInventory();
-	}
-	
-	private final DefaultAvatarGenerator avatar = new DefaultAvatarGenerator();
-	
-	public DefaultAvatarGenerator getAvatar()
-	{
-		return this.avatar;
 	}
 }

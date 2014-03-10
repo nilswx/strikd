@@ -39,11 +39,8 @@ public class Player
 	@Column(length=32,nullable=false)
 	private String name;
 	
-	@Column(name="avatar", nullable=false)
-	private String avatarData;
-	
-	@Transient
-	private Avatar avatar;
+	@Column(nullable=false)
+	private String avatar;
 	
 	@Column(nullable=false)
 	private String country;
@@ -135,38 +132,22 @@ public class Player
 		this.name = name;
 	}
 	
-	public String getAvatarData()
+	public String getAvatar()
 	{
-		if(this.isFacebookLinked())
+		return this.avatar;
+		/*if(this.isFacebookLinked())
 		{
 			return "f" + this.getFacebook().getUserId();
 		}
 		else
 		{
 			return "1";
-		}
-		//return this.avatarData;
+		}*/
 	}
 	
-	private void setAvatarData(String avatarData)
+	public void setAvatar(String avatar)
 	{
-		//this.avatar = null;
-		this.avatarData = avatarData;
-	}
-
-	public Avatar getAvatar()
-	{
-		if(this.avatar == null)
-		{
-			this.avatar = Avatar.parseAvatar(this.avatarData);
-		}
-		
-		return this.avatar;
-	}
-	
-	public void saveAvatar()
-	{
-		this.setAvatarData(this.getAvatar().toString());
+		this.avatar = avatar;
 	}
 	
 	public String getLocale()
