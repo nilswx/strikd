@@ -7,5 +7,5 @@ public class Avatars
 		
 	}
 	
-	public static final int AMOUNT_OF_AVATARS = 12;
+	public static final int AMOUNT_OF_AVATARS = 16;
 }

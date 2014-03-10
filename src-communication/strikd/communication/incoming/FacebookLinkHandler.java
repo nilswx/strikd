@@ -74,6 +74,9 @@ public class FacebookLinkHandler extends MessageHandler
 			{
 				// Rename this player to person's first name
 				session.renamePlayer(user.getFirstName());
+				
+				// Change the avatar
+				session.changeAvatar("f" + newIdentity.getUserId());
 					
 				// Process pending invites
 				FacebookInviteManager inviteMgr = session.getServer().getFacebook().getInviteMgr();

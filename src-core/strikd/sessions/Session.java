@@ -13,6 +13,7 @@ import strikd.cluster.ServerDescriptor;
 import strikd.communication.Opcodes;
 import strikd.communication.incoming.MessageHandlers;
 import strikd.communication.outgoing.AlertMessage;
+import strikd.communication.outgoing.AvatarChangedMessage;
 import strikd.communication.outgoing.NameChangedMessage;
 import strikd.communication.outgoing.ServerCryptoMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
@@ -258,8 +259,17 @@ public class Session extends Server.Referent
 	{
 		if(this.isLoggedIn())
 		{
-			this.player.setName(newName);
+			this.getPlayer().setName(newName);
 			this.send(new NameChangedMessage(newName));
+		}
+	}
+	
+	public void changeAvatar(String newAvatar)
+	{
+		if(this.isLoggedIn())
+		{
+			this.getPlayer().setAvatar(newAvatar);
+			this.send(new AvatarChangedMessage(newAvatar));
 		}
 	}
 

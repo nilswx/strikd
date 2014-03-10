@@ -1,7 +1,6 @@
 package strikd.communication.incoming;
 
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.AvatarChangedMessage;
 import strikd.game.player.Avatars;
 import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
@@ -45,8 +44,7 @@ public class ChangeAvatarHandler extends MessageHandler
 			}
 		}
 		
-		// Set & send new avatar
-		player.setAvatar(newAvatar);
-		session.send(new AvatarChangedMessage(newAvatar));
+		// Issue the change
+		session.changeAvatar(newAvatar);
 	}
 }

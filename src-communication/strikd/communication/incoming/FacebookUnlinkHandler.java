@@ -30,8 +30,8 @@ public class FacebookUnlinkHandler extends MessageHandler
 			PlayerDefaults defaults = session.getServer().getPlayerRegister().getDefaults();
 			session.renamePlayer(defaults.generateName());
 			
-			// Save immediately
-			session.saveData();
+			// Restore avatar to a random avatar
+			session.changeAvatar(defaults.generateAvatar());
 		}
 	}
 }

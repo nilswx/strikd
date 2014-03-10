@@ -135,14 +135,6 @@ public class Player
 	public String getAvatar()
 	{
 		return this.avatar;
-		/*if(this.isFacebookLinked())
-		{
-			return "f" + this.getFacebook().getUserId();
-		}
-		else
-		{
-			return "1";
-		}*/
 	}
 	
 	public void setAvatar(String avatar)
