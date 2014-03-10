@@ -11,16 +11,10 @@ public class PlayerDefaults
 		return String.format("Player-%d", RandomUtil.pickInt(100000, 999999));
 	}
 	
-	public String getMotto()
-	{
-		return "Hey I'm new!";
-	}
-	
 	public int getBalance()
 	{
 		return 5;
 	}
-	
 	
 	public void stockInventory(Player player)
 	{

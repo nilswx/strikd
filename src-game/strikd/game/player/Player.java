@@ -46,9 +46,6 @@ public class Player
 	private Avatar avatar;
 	
 	@Column(nullable=false)
-	private String motto;
-	
-	@Column(nullable=false)
 	private String country;
 	
 	@Column(nullable=false)
@@ -172,16 +169,6 @@ public class Player
 		this.setAvatarData(this.getAvatar().toString());
 	}
 	
-	public String getMotto()
-	{
-		return this.motto;
-	}
-	
-	public void setMotto(String motto)
-	{
-		this.motto = motto;
-	}
-
 	public String getLocale()
 	{
 		return locale;

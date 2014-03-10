@@ -35,7 +35,6 @@ public class PlayerRegister extends Server.Referent
 		Player player = this.getDatabase().createEntityBean(Player.class);
 		player.setToken(this.generateToken());
 		player.setName(this.defaults.generateName());
-		player.setMotto(this.defaults.getMotto());
 		player.setLevel(1); // Start at lvl 1
 		player.setLocale(""); // Player will send CHANGE_LOCALE
 		player.setCountry(""); // Will change after LOGIN
