@@ -46,7 +46,7 @@ public class FacebookClaimLikeHandler extends MessageHandler
 		}
 		
 		// Refresh status
-		session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
+		session.send(new FacebookStatusMessage(player));
 	}
 	
 	private boolean checkUserLikesPage(FacebookIdentity identity, String pageId)

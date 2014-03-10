@@ -89,6 +89,6 @@ public class FacebookLinkHandler extends MessageHandler
 		}
 		
 		// Send current status
-		session.send(new FacebookStatusMessage(session.getPlayer().isFacebookLinked(), session.getPlayer().isLiked()));
+		session.send(new FacebookStatusMessage(session.getPlayer()));
 	}
 }

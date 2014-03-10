@@ -24,7 +24,7 @@ public class FacebookUnlinkHandler extends MessageHandler
 		{
 			// Remove Facebook data
 			player.setFacebook(null);
-			session.send(new FacebookStatusMessage(false, player.isLiked()));
+			session.send(new FacebookStatusMessage(player));
 			
 			// Restore name to a random name
 			PlayerDefaults defaults = session.getServer().getPlayerRegister().getDefaults();

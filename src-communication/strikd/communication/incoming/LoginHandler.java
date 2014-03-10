@@ -71,7 +71,7 @@ public class LoginHandler extends MessageHandler
 					player.getBalance());*/
 			
 			// Will force client to validate
-			session.send(new FacebookStatusMessage(player.isFacebookLinked(), player.isLiked()));
+			session.send(new FacebookStatusMessage(player));
 			
 			// Push item type registry
 			session.sendCopy(ItemTypesMessageCache.getMessage());
