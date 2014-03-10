@@ -17,7 +17,7 @@ public class SelectTilesHandler extends MessageHandler
 	@Override
 	public Opcodes.Incoming getOpcode()
 	{
-		return Opcodes.Incoming.UPDATE_TILE_SELECTION;
+		return Opcodes.Incoming.SELECT_TILES;
 	}
 	
 	@Override
