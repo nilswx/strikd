@@ -3,15 +3,12 @@ package strikd.game.match.bots.impl;
 import static strikd.game.items.ItemTypeRegistry._I;
 
 import java.util.List;
-import java.util.Queue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import strikd.communication.outgoing.TileSelectionExtendedMessage;
 import strikd.game.board.Board;
 import strikd.game.board.Direction8;
 import strikd.game.board.Tile;
@@ -32,8 +29,6 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 	private int allowedFindAttempts;
 	private WordDictionary dictionary;
 	private PowerUp[] availablePowerUps;
-	
-	private final Queue<Tile> toSelect = Lists.newLinkedList();
 	
 	public SimpleMatchBotPlayer(Player bot)
 	{
@@ -75,43 +70,27 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 	@Override
 	protected void nextMove()
 	{
-		if(this.hasWord())
+		this.selectNextWord();
+		/*if(RandomUtil.getBool(0.95))
 		{
-			this.selectNextTile();
+			this.selectNextWord();
 		}
 		else
 		{
-			if(RandomUtil.getBool(0.95))
-			{
-				this.pickNewWord();
-			}
-			else
-			{
-				this.useRandomPowerUp();
-			}
-		}
+			this.useRandomPowerUp();
+		}*/
 	}
 
 	@Override
 	protected int nextMoveDelay()
 	{
-		// Working on a word?
-		int delay;
-		if(this.hasWord())
-		{
-			delay = RandomUtil.pickInt(250, 750);
-			logger.debug("{} will select {} in {} ms", this, this.toSelect.peek(), delay);
-		}
-		else
-		{
-			delay = RandomUtil.pickInt(1000, 5000);
-			logger.debug("{} will search a new word in {} ms", this, delay);
-		}
+		int delay = RandomUtil.pickInt(3000, 9000);
+		logger.debug("{} will do a new move in {} ms", this, delay);
 		
 		return delay;
 	}
 	
-	private boolean pickNewWord()
+	private boolean selectNextWord()
 	{
 		// Get board ref
 		Board board = this.getMatch().getBoard();
@@ -130,7 +109,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 				{
 					// Select them!
 					logger.debug("{} will select {} (found in {} tries)", this, progress, attempt+1);
-					return this.toSelect.addAll(progress);
+					SelectionValidator.validateSelection(this, progress);
 				}
 				else
 				{
@@ -145,36 +124,13 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 		return false;
 	}
 	
-	private void selectNextTile()
-	{
-		// Letters remaining?
-		Tile tile = this.toSelect.poll();
-		if(tile != null)
-		{			
-			// Select the tile
-			this.selectTile(tile);
-			this.getOpponent().send(new TileSelectionExtendedMessage(this, ImmutableList.of(tile)));
-			
-			// Done?
-			if(this.toSelect.isEmpty())
-			{
-				SelectionValidator.validateSelection(this);
-			}
-		}
-	}
-	
-	private void useRandomPowerUp()
+	protected void useRandomPowerUp()
 	{
 		PowerUp powerUp = RandomUtil.pickOne(this.availablePowerUps);
 		if(powerUp != null)
 		{
 			powerUp.activate(this);
 		}
-	}
-	
-	private boolean hasWord()
-	{
-		return !this.toSelect.isEmpty();
 	}
 	
 	private static final Direction8[] SEARCH_DIRECTIONS = Direction8.all();

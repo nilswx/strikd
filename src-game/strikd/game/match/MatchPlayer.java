@@ -1,10 +1,5 @@
 package strikd.game.match;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import strikd.communication.outgoing.TileSelectionClearedMessage;
-import strikd.game.board.Tile;
 import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
@@ -17,8 +12,6 @@ public class MatchPlayer
 	private int playerId;
 	private boolean ready;
 	private int score;
-	
-	private List<Tile> selected = new ArrayList<Tile>();
 	
 	public MatchPlayer(Session session)
 	{
@@ -94,25 +87,6 @@ public class MatchPlayer
 	public void modScore(int points)
 	{
 		this.score += points;
-	}
-	
-	public void selectTile(Tile tile)
-	{
-		this.selected.add(tile);
-	}
-	
-	public List<Tile> getSelection()
-	{
-		return this.selected;
-	}
-	
-	public void clearSelection()
-	{
-		// Deselect all tiles
-		this.selected.clear();
-		
-		// Notify match
-		this.match.broadcast(new TileSelectionClearedMessage(this));
 	}
 	
 	public MatchPlayer getOpponent()

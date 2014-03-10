@@ -1,5 +1,7 @@
 package strikd.game.match;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,11 +15,11 @@ public class SelectionValidator
 {
 	private static final Logger logger = LoggerFactory.getLogger(SelectionValidator.class);
 	
-	public static boolean validateSelection(MatchPlayer player)
+	public static boolean validateSelection(MatchPlayer player, List<Tile> tiles)
 	{
 		// Validate selection and concat letters
-		StringBuilder letters = new StringBuilder(player.getSelection().size());
-		for(Tile tile : player.getSelection())
+		StringBuilder letters = new StringBuilder(tiles.size());
+		for(Tile tile : tiles)
 		{
 			letters.append(tile.getLetter());
 			if(tile.getColumn() == 1337) // TODO: anti-cheat (all tiles need to touch each other)
@@ -48,11 +50,11 @@ public class SelectionValidator
 				
 				// Assign points
 				player.modScore(+points);
-				match.broadcast(new WordFoundMessage(player, word, +points));
+				match.broadcast(new WordFoundMessage(player, word, +points, tiles));
 	
 				// Expend the 'used' tiles
 				Board board = match.getBoard();
-				for(Tile tile : player.getSelection())
+				for(Tile tile : tiles)
 				{
 					// Fire trigger!
 					if(tile.hasTrigger())
@@ -67,9 +69,6 @@ public class SelectionValidator
 	            match.broadcast(board.generateUpdateMessage());
 			}
 		}
-
-		// In all cases: clear selection
-		player.clearSelection();
 		
 		// Return result
 		return wordFound;
