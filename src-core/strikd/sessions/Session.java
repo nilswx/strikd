@@ -141,7 +141,7 @@ public class Session extends Server.Referent
 		// Subscribe to own stream items
 		this.getFollowing().add(player.getId());
 		
-		// ==== HERE BE DRAGONS TESTING ====
+		/* ==== HERE BE DRAGONS TESTING ====
 		
 		// Give an item!
 		ItemType item = RandomUtil.pickOne(ItemTypeRegistry.allTypes());
@@ -154,7 +154,7 @@ public class Session extends Server.Referent
 		ir.setItem(item);
 		this.getServer().getActivityStream().write(ir);
 		
-		// ==== HERE END DRAGONS TESTING ====
+		// ==== HERE END DRAGONS TESTING ====*/
 		
 		// Flush any changes to database
 		this.saveData();
