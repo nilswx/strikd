@@ -52,8 +52,8 @@ public class FacebookLinkHandler extends MessageHandler
 			PlayerRegister register = session.getServer().getPlayerRegister();
 			Player oldPlayer = register.getDatabase().find(Player.class).where().eq("fb_uid", newIdentity.getUserId()).findUnique();
 			
-			// Player already exists?
-			if(oldPlayer != null)
+			// Player already exists? (and is different)
+			if(oldPlayer != null && oldPlayer.getId() != session.getPlayer().getId())
 			{
 				// Reset token and delete the current account
 				oldPlayer.setToken(register.generateToken());
