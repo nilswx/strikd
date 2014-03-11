@@ -1,6 +1,7 @@
 package strikd.communication.incoming;
 
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.ExperienceAddedMessage;
 import strikd.communication.outgoing.NameRejectedMessage;
 import strikd.game.util.InputFilter;
 import strikd.net.codec.IncomingMessage;
@@ -30,6 +31,12 @@ public class ChangeNameHandler extends MessageHandler
 		else
 		{
 			session.renamePlayer(newName);
+			
+			// Try to add 50 XP
+			int added = session.getServer().getExperienceHandler().addExperience(session.getPlayer(), 50);
+			
+			// Notify player
+			session.send(new ExperienceAddedMessage(added, session.getPlayer().getXp()));
 		}
 	}
 }
