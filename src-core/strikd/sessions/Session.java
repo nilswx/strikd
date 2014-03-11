@@ -18,19 +18,15 @@ import strikd.communication.outgoing.NameChangedMessage;
 import strikd.communication.outgoing.ServerCryptoMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.communication.outgoing.VersionCheckMessage;
-import strikd.game.items.ItemType;
-import strikd.game.items.ItemTypeRegistry;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.player.Experience;
 import strikd.game.player.Player;
-import strikd.game.stream.activity.ItemReceivedStreamItem;
 import strikd.game.util.CountryResolver;
 import strikd.net.NetConnection;
 import strikd.net.codec.IncomingMessage;
 import strikd.net.codec.OutgoingMessage;
-import strikd.util.RandomUtil;
 
 public class Session extends Server.Referent
 {

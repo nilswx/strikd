@@ -5,7 +5,6 @@ import strikd.communication.outgoing.CurrencyBalanceMessage;
 import strikd.communication.outgoing.FacebookStatusMessage;
 import strikd.communication.outgoing.PlayerInfoMessage;
 import strikd.communication.outgoing.PlayerUnknownMessage;
-import strikd.game.items.ItemTypesMessageCache;
 import strikd.game.player.Experience;
 import strikd.game.player.Player;
 import strikd.game.util.Platform;
