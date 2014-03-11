@@ -66,14 +66,22 @@ public final class Experience
 		LEVEL_EXPERIENCE = new int[MAX_LEVEL + 1];
 		for(int level = 1; level <= MAX_LEVEL; level++)
 		{
+		    int total = 0;
+		    for (int i = 1; i <= level; i++)
+		    {
+		      total += (i + 300 * Math.pow(2, i / 7.0));
+		    }
+
+		   LEVEL_EXPERIENCE[level] = (int) (total * 2.5);
+		    /*
 			if(level == 1)
 			{
 				LEVEL_EXPERIENCE[level] = 100;
 			}
 			else
 			{
-				LEVEL_EXPERIENCE[level] = (int) (LEVEL_EXPERIENCE[level - 1] + (FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level)));
-			}
+				LEVEL_EXPERIENCE[level] = (int) (LEVEL_EXPERIENCE[level - 1] * 2) + FORMULA_BASE;//+ (FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level)));
+			}*/
 		}
 		
 		// Pre=compute message
