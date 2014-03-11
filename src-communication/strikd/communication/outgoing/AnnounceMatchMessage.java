@@ -10,12 +10,20 @@ public class AnnounceMatchMessage extends OutgoingMessage
 	public AnnounceMatchMessage(Match match, MatchPlayer player, MatchPlayer opponent)
 	{
 		super(Opcodes.Outgoing.ANNOUNCE_MATCH);
+		
+		// Match data
 		super.writeLong(match.getMatchId());
 		super.writeStr(match.getLocale().getLocale());
 		super.writeInt(match.getTimer().getDuration());
+		
+		// MatchPlayerID of self
 		super.writeByte((byte)player.getPlayerId());
+		
+		// Data of opponent
 		super.writeByte((byte)opponent.getPlayerId());
 		PlayerInfoMessage.serializePlayer(opponent.getInfo(), this);
-		super.writeByte(match.getLoadingTime()); // "Loading..." time in seconds
+		
+		 // "Loading..." time in seconds
+		super.writeByte(match.getLoadingTime());
 	}
 }
