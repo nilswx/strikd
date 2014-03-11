@@ -13,7 +13,7 @@ public final class Experience
 	public static final int MAX_LEVEL = 25;
 	
 	private static final int FORMULA_BASE = 100;
-	private static final float FORMULA_MULTIPLIER = 1 + (0.20f * (45/MAX_LEVEL));
+	private static final float FORMULA_MULTIPLIER = 1 + 0.30f;
 	private static final int[] LEVEL_EXPERIENCE;
 	
 	private static final LevelsMessage levelsMessage;
@@ -66,7 +66,14 @@ public final class Experience
 		LEVEL_EXPERIENCE = new int[MAX_LEVEL + 1];
 		for(int level = 1; level <= MAX_LEVEL; level++)
 		{
-			LEVEL_EXPERIENCE[level] = (int)(FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level));
+			if(level == 1)
+			{
+				LEVEL_EXPERIENCE[level] = 100;
+			}
+			else
+			{
+				LEVEL_EXPERIENCE[level] = (int) (LEVEL_EXPERIENCE[level - 1] + (FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level)));
+			}
 		}
 		
 		// Pre=compute message
@@ -85,5 +92,10 @@ public final class Experience
 			// Save for next
 			prevNeed = levelNeed;
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		Experience.class.toString();
 	}
 }

@@ -32,8 +32,8 @@ public class ChangeNameHandler extends MessageHandler
 		{
 			session.renamePlayer(newName);
 			
-			// Try to add 20 XP
-			int added = session.getServer().getExperienceHandler().addExperience(session.getPlayer(), 20);
+			// Try to add x XP
+			int added = session.getServer().getExperienceHandler().addExperience(session.getPlayer(), 70);
 			
 			// Notify player
 			session.send(new ExperienceAddedMessage(added, session.getPlayer().getXp()));
