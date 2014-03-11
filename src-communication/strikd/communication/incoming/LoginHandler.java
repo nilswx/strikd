@@ -74,7 +74,7 @@ public class LoginHandler extends MessageHandler
 			session.send(new FacebookStatusMessage(player));
 			
 			// Push item type registry
-			session.sendCopy(ItemTypesMessageCache.getMessage());
+			//session.sendCopy(ItemTypesMessageCache.getMessage());
 		}
 	}
 }
