@@ -33,13 +33,22 @@ public abstract class FacebookStory implements Runnable
 	@Override
 	public void run()
 	{
-		if(this.isPermissionGranted())
+		try
 		{
-			this.doPublish();
+			// TODO: cache this flag until we run into an exception, or enough time has elapsed?
+			boolean isPermissionGranted = this.checkPublishActionPermission();
+			if(isPermissionGranted)
+			{
+				this.doPublish();
+			}
+		}
+		catch(Exception e)
+		{
+			logger.warn("error handling {}", this, e);
 		}
 	}
 	
-	private boolean isPermissionGranted()
+	private boolean checkPublishActionPermission()
 	{
 		// Fetch user permissions
 		FacebookClient api = this.identity.getAPI();
