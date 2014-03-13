@@ -103,9 +103,6 @@ public abstract class Board
 		// Known tile?
 		if(this.tiles.containsKey(tile.getTileId()))
 		{
-			// Cancel selections etc
-			//tile.remove();
-
 			// Remove from index and grid
 			this.tiles.remove(tile);
 			this.columns[tile.getColumn()].remove(tile);

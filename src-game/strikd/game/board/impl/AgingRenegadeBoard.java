@@ -54,7 +54,7 @@ public final class AgingRenegadeBoard extends RenegadeBoard implements Runnable
 			if(((AgingTile)tile).age() >= this.maxAge)
 			{
 				expired++;
-				this.removeTile(tile);
+				tile.remove();
 			}
 		}*/
 		
@@ -70,7 +70,7 @@ public final class AgingRenegadeBoard extends RenegadeBoard implements Runnable
 				if(tile.age() >= this.maxAge)
 				{
 					expired++;
-					this.removeTile(tile);
+					tile.destroy();
 				}
 			}
 		}

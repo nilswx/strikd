@@ -25,7 +25,7 @@ public class BombTrigger extends Trigger
 			Tile other = board.getTile(tile.getColumn() + dir.x, tile.getRow() + dir.y);
 			if(other != null)
 			{
-				board.removeTile(other);
+				other.destroy();
 				destroyed++;
 			}
 		}

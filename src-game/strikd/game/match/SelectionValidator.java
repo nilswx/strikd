@@ -61,7 +61,7 @@ public class SelectionValidator
 					{
 						tile.getTrigger().activate(player, tile);
 					}
-					board.removeTile(tile);
+					tile.destroy();
 				}
 	
 	            // Generate updates

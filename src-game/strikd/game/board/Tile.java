@@ -49,6 +49,11 @@ public class Tile extends AbstractTile
 		return this.board.getColumn(this.getColumn()).indexOf(this);
 	}
 	
+	public void destroy()
+	{
+		this.board.removeTile(this);
+	}
+	
 	@Override
 	public String toString()
 	{
