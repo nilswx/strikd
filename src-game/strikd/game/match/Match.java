@@ -46,7 +46,7 @@ public class Match
 		this.timer = new MatchTimer(this, (int)TimeUnit.MINUTES.toSeconds(2));
 		
 		// Install the board implementation
-        this.board = new AgingRenegadeBoard(6, 6, locale.getDictionary(DictionaryType.COMMON), this, this.loadingTime, 15);
+        this.board = new AgingRenegadeBoard(5, 6, locale.getDictionary(DictionaryType.COMMON), this, this.loadingTime, 15);
 
 		// Link the players to this match with a personal ID
 		this.playerOne = playerOne.setMatch(this, 1);
