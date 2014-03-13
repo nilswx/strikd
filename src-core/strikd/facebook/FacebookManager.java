@@ -6,6 +6,9 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+
 import strikd.Server;
 import strikd.game.facebook.FacebookInviteManager;
 import strikd.util.NamedThreadFactory;
@@ -82,13 +85,22 @@ public class FacebookManager extends Server.Referent
 		sharedAppNamespace = appNamespace;
 	}
 	
-	public static String getSharedAppAccessToken()
-	{
-		return sharedAppAccessToken;
-	}
-	
 	public static void setSharedAppAccessToken(String accessToken)
 	{
 		sharedAppAccessToken = accessToken;
+	}
+	
+	private static final ThreadLocal<FacebookClient> sharedAppAPI = new ThreadLocal<FacebookClient>();
+	
+	public static FacebookClient getSharedAppAPI()
+	{
+		FacebookClient api = sharedAppAPI.get();
+		if(api == null)
+		{
+			api = new DefaultFacebookClient(sharedAppAccessToken);
+			sharedAppAPI.set(api);
+		}
+		
+		return api;
 	}
 }
