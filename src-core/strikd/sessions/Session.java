@@ -63,8 +63,11 @@ public class Session extends Server.Referent
 		// Crypto enabled?
 		if(USE_CRYPTO)
 		{
+			// Generate key
+			String keyStr = UUID.randomUUID().toString().toUpperCase();
+			
 			// Initiate handshake flow
-			byte[] key = UUID.randomUUID().toString().getBytes();
+			byte[] key = keyStr.getBytes();
 			this.send(new ServerCryptoMessage(key));
 			this.connection.setServerCrypto(key);
 		}
