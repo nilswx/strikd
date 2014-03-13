@@ -50,13 +50,24 @@ public abstract class FacebookStory implements Runnable
 	
 	private boolean checkPublishActionPermission()
 	{
-		// Fetch user permissions
-		FacebookClient api = this.identity.getAPI();
-		JsonArray data = api.fetchObject("me/permissions", JsonObject.class).optJsonArray("data");
-		JsonObject permissions = (data != null) ? data.optJsonObject(0) : null;
+		// Log what we're doing
+		logger.info("checking 'publish_stream' permission for %d", this.identity.getUserId());
 		
-		// Evaluate permissions
-		return (permissions != null && permissions.has("publish_stream"));
+		try
+		{
+			// Fetch user permissions
+			FacebookClient api = this.identity.getAPI();
+			JsonArray data = api.fetchObject("me/permissions", JsonObject.class).optJsonArray("data");
+			JsonObject permissions = (data != null) ? data.optJsonObject(0) : null;
+			
+			// Evaluate permissions
+			return (permissions != null && permissions.has("publish_stream"));
+		}
+		catch(Exception e)
+		{
+			logger.warn("could not check 'publish_stream' permission for %d", this.identity.getUserId());
+			return false;
+		}
 	}
 	
 	private void doPublish()
@@ -70,13 +81,13 @@ public abstract class FacebookStory implements Runnable
 			String namespace = FacebookManager.getSharedAppNamespace();
 			
 			// Make the request
-			logger.debug("publishing a new {}", this);
+			logger.info("publishing a new {}", this);
 			app.publish(String.format("%d/%s:%s", this.identity.getUserId(), namespace, this.getAction()), JsonObject.class,
 					Parameter.with(this.getObjectType(), this.getObject()));
 		}
 		catch(Exception e)
 		{
-			logger.warn("error publishing a new {}", this, e);
+			logger.warn("could not publish {}", this, e);
 		}
 	}
 	
