@@ -18,6 +18,7 @@ import strikd.communication.outgoing.NameChangedMessage;
 import strikd.communication.outgoing.ServerCryptoMessage;
 import strikd.communication.outgoing.SessionInfoMessage;
 import strikd.communication.outgoing.VersionCheckMessage;
+import strikd.game.match.ChallengeManager;
 import strikd.game.match.Match;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.queues.PlayerQueue;
@@ -47,6 +48,8 @@ public class Session extends Server.Referent
 	
 	private List<Integer> friendList;
 	private List<Integer> following;
+	
+	private ChallengeManager challengeMgr;
 
 	public Session(long sessionId, NetConnection connection, Server server)
 	{
@@ -155,12 +158,18 @@ public class Session extends Server.Referent
 		
 		// ==== HERE END DRAGONS TESTING ====*/
 		
+		// Create challenge manager
+		this.challengeMgr = new ChallengeManager(this);
+		
 		// Flush any changes to database
 		this.saveData();
 	}
 
 	private void onLogout()
 	{
+		// Boom!
+		this.challengeMgr.unavailable();
+		
 		// Exit queue or match
 		if(this.isInQueue())
 		{
@@ -289,7 +298,7 @@ public class Session extends Server.Referent
 
 	public void setMatchPlayer(MatchPlayer player)
 	{
-		// Leave the queue!
+		// Leave the current queue!
 		if(this.queueEntry != null)
 		{
 			this.exitQueue();
@@ -303,6 +312,12 @@ public class Session extends Server.Referent
 
 		// Set the new player reference
 		this.matchPlayer = player;
+		
+		// Go unavailable
+		if(this.isInMatch())
+		{
+			this.challengeMgr.unavailable();
+		}
 	}
 
 	public Match getMatch()
@@ -312,21 +327,32 @@ public class Session extends Server.Referent
 
 	public void exitMatch()
 	{
+		this.challengeMgr.available();
 		this.setMatchPlayer(null);
 	}
 
 	public void exitQueue()
 	{
+		this.challengeMgr.available();
 		this.setQueueEntry(null);
 	}
 
 	public void setQueueEntry(PlayerQueue.Entry entry)
 	{
+		// Leave the current queue
 		if(this.queueEntry != null)
 		{
 			this.queueEntry.exit();
 		}
+		
+		// Set the new queue reference
 		this.queueEntry = entry;
+		
+		// In queue now?
+		if(this.isInQueue())
+		{
+			this.challengeMgr.unavailable();
+		}
 	}
 	
 	public void setFriendList(List<Integer> friendList)
@@ -346,6 +372,11 @@ public class Session extends Server.Referent
 			this.following = Lists.newArrayList();
 		}
 		return this.following;
+	}
+	
+	public ChallengeManager getChallengeMgr()
+	{
+		return this.challengeMgr;
 	}
 	
 	public void sendAlert(String text, Object... args)

@@ -4,7 +4,7 @@ import strikd.sessions.Session;
 import strikd.cluster.ServerCluster;
 import strikd.cluster.ServerDescriptor;
 import strikd.communication.Opcodes;
-import strikd.communication.outgoing.ChallengeMessage;
+import strikd.communication.outgoing.ChallengeDeclinedMessage;
 import strikd.game.player.Player;
 import strikd.net.codec.IncomingMessage;
 
@@ -26,7 +26,8 @@ public class ChallengePlayerHandler extends MessageHandler
 		// Unavailable?
 		if(opponent == null || !opponent.isOnline() || opponent.isInMatch())
 		{
-			session.sendAlert("That player is not available right now.");
+			// Declined straight away!
+			session.send(new ChallengeDeclinedMessage(opponentId));
 		}
 		else
 		{
@@ -42,18 +43,8 @@ public class ChallengePlayerHandler extends MessageHandler
 			}
 			else
 			{
-				// Same server?
-				if(opponent.getServerId() == self.getServerId())
-				{
-					// Get session of target
-					Session target = session.getServer().getSessionMgr().getPlayerSession(opponent.getId());
-					if(target != null)
-					{
-						// KOM DAN JONGEN
-						target.send(new ChallengeMessage(self.getId()));
-					}
-				}
-				else
+				// Different server?
+				if(opponent.getServerId() != self.getServerId())
 				{
 					// Resolve server
 					ServerCluster cluster = session.getServer().getServerCluster();
@@ -64,6 +55,23 @@ public class ChallengePlayerHandler extends MessageHandler
 							opponent.getName(),
 							remote.getName(),
 							cluster.getSelf().getName());
+				}
+				else
+				{
+					// Get session of target
+					Session targetSession = session.getServer().getSessionMgr().getPlayerSession(opponent.getId());
+					if(targetSession != null)
+					{
+						// Try it!
+						if(session.getChallengeMgr().challenge(targetSession.getChallengeMgr()))
+						{
+							// Yay! Waiting...
+						}
+						else
+						{
+							session.send(new ChallengeDeclinedMessage(opponentId));
+						}
+					}
 				}
 			}
 		}

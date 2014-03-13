@@ -101,14 +101,17 @@ public class MatchManager extends Server.Referent
 			long matchId = this.matchCounter.incrementAndGet();
 			Match match = new Match(matchId, locale, this, playerOne, playerTwo);
 			
-			// Add to map
+			// Register match
 			logger.info("created {}", match);
 			this.active.put(matchId, match);
 			
-			// Notify players of the new match and start preparing the board after that
+			// Notify players of the new match
 			match.announce();
+			
+			// Prepare the board
 			match.prepareBoard();
 			
+			// Match ok!
 			return match;
 		}
 	}
