@@ -55,7 +55,9 @@ public class Match
 	
 	public void destroy()
 	{
-		
+		// Out before the bomb!
+		this.playerOne.leave();
+		this.playerTwo.leave();
 	}
 	
 	public void announce()
@@ -166,7 +168,17 @@ public class Match
 	
 	public void removePlayer(MatchPlayer player)
 	{
-		this.end(player.getOpponent());
+		// Match is still going?
+		if(!this.isEnded)
+		{
+			this.end(player.getOpponent());
+		}
+		
+		// Bye!
+		if(player.getSession() != null)
+		{
+			player.getSession().exitMatch();
+		}
 	}
 
 	public void timerEnded()

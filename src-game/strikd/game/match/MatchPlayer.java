@@ -13,6 +13,8 @@ public class MatchPlayer
 	private boolean ready;
 	private int score;
 	
+	private boolean hasLeft;
+	
 	public MatchPlayer(Session session)
 	{
 		this.session = session;
@@ -37,7 +39,11 @@ public class MatchPlayer
 	
 	public void leave()
 	{
-		this.match.removePlayer(this);
+		if(!this.hasLeft)
+		{
+			this.hasLeft = true;
+			this.match.removePlayer(this);
+		}
 	}
 	
 	public Session getSession()

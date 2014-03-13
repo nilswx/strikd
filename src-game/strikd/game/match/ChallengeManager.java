@@ -44,8 +44,8 @@ public class ChallengeManager
 	
 	public boolean challenge(ChallengeManager other)
 	{
-		// Willing to take it?
-		if(!other.is(AVAILABLE))
+		// Legal state?
+		if(!(this.is(AVAILABLE) && other.is(AVAILABLE)))
 		{
 			return false;
 		}
