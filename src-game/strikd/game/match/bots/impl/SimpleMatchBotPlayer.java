@@ -109,7 +109,7 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 				{
 					// Select them!
 					logger.debug("{} will select {} (found in {} tries)", this, progress, attempt+1);
-					SelectionValidator.validateSelection(this, progress);
+					return SelectionValidator.validateSelection(this, progress);
 				}
 				else
 				{
