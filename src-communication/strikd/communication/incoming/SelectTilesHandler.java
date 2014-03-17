@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import strikd.communication.Opcodes;
+import strikd.communication.outgoing.WordNotFoundMessage;
 import strikd.game.board.Board;
 import strikd.game.board.Tile;
 import strikd.game.match.Match;
@@ -44,7 +45,11 @@ public class SelectTilesHandler extends MessageHandler
 			}
 			
 			// Validate selection
-			SelectionValidator.validateSelection(player, tiles);
+			boolean isValid = SelectionValidator.validateSelection(player, tiles);
+			if(!isValid)
+			{
+				session.send(new WordNotFoundMessage());
+			}
 		}
 	}
 }
