@@ -4,11 +4,11 @@ import strikd.communication.Opcodes;
 import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 
-public class ChallengeDeclinedMessage extends OutgoingMessage
+public class ChallengeFailedMessage extends OutgoingMessage
 {
-	public ChallengeDeclinedMessage(Player player)
+	public ChallengeFailedMessage(Player player)
 	{
-		super(Opcodes.Outgoing.CHALLENGE_DECLINED);
+		super(Opcodes.Outgoing.CHALLENGE_FAILED);
 		super.writeInt(player.getId());
 	}
 }

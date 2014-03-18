@@ -56,7 +56,7 @@ public class ChallengeManager
 			other.set(CHALLENGED, this);
 			
 			// Ring, ring!
-			other.session.send(new ChallengeMessage(this.getPlayer().getId()));
+			other.session.send(new ChallengeMessage(this.getPlayer()));
 			
 			// The waiting game is on!
 			return true;
@@ -84,7 +84,7 @@ public class ChallengeManager
 	{
 		if(this.is(CHALLENGED))
 		{
-			this.reference.session.send(new ChallengeDeclinedMessage(this.getPlayer().getId()));
+			this.reference.session.send(new ChallengeDeclinedMessage(this.getPlayer()));
 			this.releaseBoth();
 		}
 	}
