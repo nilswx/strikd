@@ -48,10 +48,18 @@ public class MatchBotNameGenerator
 	private static String generateName(boolean isMale)
 	{
 		// Pick random first name
-		String firstName = RandomUtil.pickOne(isMale ? NAMES_MALE : NAMES_FEMALE);
+		String name = RandomUtil.pickOne(isMale ? NAMES_MALE : NAMES_FEMALE);
 		
-		// TODO: add emojis and stuff
-		String name = firstName + " " + Emoji.getRandomEmoji();
+		// Add emojis
+		int postfix = RandomUtil.pickInt(0, 2);
+		for(int i = 0; i < postfix; i++)
+		{
+			if(i == 0)
+			{
+				name += " ";
+			}
+			name += Emoji.getRandomEmoji();
+		}
 		
 		// Done!
 		return name;
