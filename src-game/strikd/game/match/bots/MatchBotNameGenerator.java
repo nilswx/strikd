@@ -1,5 +1,6 @@
 package strikd.game.match.bots;
 
+import strikd.game.util.Emoji;
 import strikd.util.RandomUtil;
 
 public class MatchBotNameGenerator
@@ -50,7 +51,7 @@ public class MatchBotNameGenerator
 		String firstName = RandomUtil.pickOne(isMale ? NAMES_MALE : NAMES_FEMALE);
 		
 		// TODO: add emojis and stuff
-		String name = firstName;
+		String name = firstName + " " + Emoji.getRandomEmoji();
 		
 		// Done!
 		return name;
