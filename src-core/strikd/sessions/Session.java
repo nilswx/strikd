@@ -131,7 +131,7 @@ public class Session extends Server.Referent
 		}
 		
 		// No country? (for localhost testing)
-		if(player.getCountry().isEmpty())
+		if(player.getCountry().isEmpty() || player.getCountry().equals("zz"))
 		{
 			player.setCountry("nl");
 			logger.debug("{} had no country, setting it to '{}'", player, player.getCountry());
