@@ -91,13 +91,16 @@ public class ChallengeManager
 	
 	private void releaseBoth()
 	{
-		this.reference.available();
-		this.available();
+		this.set(AVAILABLE, null);
+		this.set(AVAILABLE, null);
 	}
 	
 	public void available()
 	{
-		this.set(AVAILABLE, null);
+		if(this.is(UNAVAILABLE))
+		{
+			this.set(AVAILABLE, null);
+		}
 	}
 	
 	public void unavailable()
