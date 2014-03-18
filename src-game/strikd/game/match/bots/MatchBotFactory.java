@@ -17,7 +17,7 @@ public class MatchBotFactory
 		bot.setId(RandomUtil.pickInt(Integer.MIN_VALUE, -1));
 		
 		// Name is random with emojis
-		bot.setName(String.format("TempoBot 3000"));
+		bot.setName(RandomUtil.flipCoin() ? MatchBotNameGenerator.generateMaleName() : MatchBotNameGenerator.generateFemaleName());
 		
 		// Avatar is random, too
 		bot.setAvatar(Integer.toString(RandomUtil.pickInt(1, Avatars.AMOUNT_OF_AVATARS)));
