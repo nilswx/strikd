@@ -27,7 +27,7 @@ public abstract class PlayerQueue implements Iterable<PlayerQueue.Entry>
 	
 	protected Match newMatch(MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
-		return this.matchMgr.newMatch(this.locale, playerOne, playerTwo);
+		return this.matchMgr.newMatch(playerOne, playerTwo);
 	}
 	
 	public void close()

@@ -15,6 +15,7 @@ import strikd.game.match.bots.MatchBotFactory;
 import strikd.game.match.queues.PlayerQueue;
 import strikd.game.match.queues.TimedPlayerQueue;
 import strikd.locale.LocaleBundle;
+import strikd.locale.LocaleBundleManager;
 import strikd.sessions.Session;
 import strikd.util.NamedThreadFactory;
 
@@ -88,32 +89,48 @@ public class MatchManager extends Server.Referent
 		return null;
 	}
 
-	public Match newMatch(LocaleBundle locale, MatchPlayer playerOne, MatchPlayer playerTwo)
+	public Match newMatch(MatchPlayer playerOne, MatchPlayer playerTwo)
 	{
 		// Allow new matches?
 		if(this.getServer().isShutdownMode())
 		{
+			// No, no, no...
 			return null;
 		}
-		else
+		
+		// Locale mismatch?
+		String matchLocale = playerOne.getInfo().getLocale();
+		if(!playerTwo.getInfo().getLocale().equals(matchLocale))
 		{
-			// Initialize a new match with given details and a fresh match ID
-			long matchId = this.matchCounter.incrementAndGet();
-			Match match = new Match(matchId, locale, this, playerOne, playerTwo);
-			
-			// Register match
-			logger.info("created {}", match);
-			this.active.put(matchId, match);
-			
-			// Notify players of the new match
-			match.announce();
-			
-			// Prepare the board
-			match.prepareBoard();
-			
-			// Match ok!
-			return match;
+			// Just what the fuck is going on with you, anyway
+			return null;
 		}
+		
+		// Resolve locale bundle
+		LocaleBundleManager locMgr = super.getServer().getLocaleMgr();
+		LocaleBundle locale = locMgr.getBundle(matchLocale);
+		if(locale == null)
+		{
+			// BRO.
+			return null;
+		}
+			
+		// Initialize a new match with given details and a fresh match ID
+		long matchId = this.matchCounter.incrementAndGet();
+		Match match = new Match(matchId, locale, this, playerOne, playerTwo);
+		
+		// Register match
+		logger.info("created {}", match);
+		this.active.put(matchId, match);
+		
+		// Notify players of the new match
+		match.announce();
+		
+		// Prepare the board
+		match.prepareBoard();
+		
+		// Match ok!
+		return match;
 	}
 	
 	public synchronized void shutdownQueues(String message)

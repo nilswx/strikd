@@ -76,7 +76,7 @@ public class ChallengeManager
 			
 			// Create match
 			MatchManager matchMgr = this.session.getServer().getMatchMgr();
-			matchMgr.newMatch(null, p1, p2);
+			matchMgr.newMatch(p1, p2);
 		}
 	}
 	
