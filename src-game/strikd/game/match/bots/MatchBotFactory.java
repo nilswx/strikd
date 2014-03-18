@@ -1,28 +1,37 @@
 package strikd.game.match.bots;
 
-import java.util.Random;
-
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.bots.impl.SimpleMatchBotPlayer;
+import strikd.game.player.Avatars;
 import strikd.game.player.Player;
+import strikd.util.RandomUtil;
 
 public class MatchBotFactory
 {
 	public MatchBotPlayer newBotForOpponent(MatchPlayer opponent)
 	{
-		Random rand = new Random();
-		
 		Player bot = new Player();
-		bot.setId(488228);
-		bot.setName(String.format("TempoBot 3000", rand.nextInt(1000)));
-		bot.setAvatar(Integer.toString(rand.nextInt(10) + 1));
-		bot.setLocale(opponent.getInfo().getLocale());
-		bot.setCountry("de"); // FROM DEUTSCHLAND!
+		Player player = opponent.getInfo();
 		
-		bot.setMatches(rand.nextInt(300) + 1);
-		bot.setWins(rand.nextInt(bot.getMatches()));
+		// ID is negative & random
+		bot.setId(RandomUtil.pickInt(Integer.MIN_VALUE, -1));
+		
+		// Name is random with emojis
+		bot.setName(String.format("TempoBot 3000"));
+		
+		// Avatar is random, too
+		bot.setAvatar(Integer.toString(RandomUtil.pickInt(1, Avatars.AMOUNT_OF_AVATARS)));
+		
+		// Locale and country are equal to the player's
+		bot.setLocale(player.getLocale());
+		bot.setCountry(player.getCountry());
+		
+		// Statistics are similar to the player's
+		bot.setMatches(RandomUtil.pickInt(1, player.getMatches()));
+		bot.setWins(RandomUtil.pickInt(1, player.getWins()));
 		bot.setXp(bot.getMatches() * 45);
 		
+		// Fabricate bot
 		return new SimpleMatchBotPlayer(bot);
 	}
 }
