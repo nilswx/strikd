@@ -14,7 +14,7 @@ public class MatchBotFactory
 		Player player = opponent.getInfo();
 		
 		// ID is negative & random
-		bot.setId(-RandomUtil.pickInt(1, Integer.MAX_VALUE));
+		bot.setId(-RandomUtil.pickInt(1, Integer.MAX_VALUE - 1));
 		
 		// Name is random with emojis
 		bot.setName(RandomUtil.flipCoin() ? MatchBotNameGenerator.generateMaleName() : MatchBotNameGenerator.generateFemaleName());
@@ -27,8 +27,8 @@ public class MatchBotFactory
 		bot.setCountry(player.getCountry());
 		
 		// Statistics are similar to the player's
-		bot.setMatches(RandomUtil.pickInt(1, player.getMatches()));
-		bot.setWins(RandomUtil.pickInt(1, player.getWins()));
+		bot.setMatches(RandomUtil.pickInt(0, player.getMatches()));
+		bot.setWins(RandomUtil.pickInt(0, player.getWins()));
 		bot.setXp(bot.getMatches() * 45);
 		
 		// Fabricate bot
