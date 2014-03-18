@@ -44,6 +44,9 @@ public class SelectionValidator
 				// Word correct!
 				wordFound = true;
 				
+				// Remember word
+				player.getFoundWords().add(word);
+				
 				// Calculate points
 				int points = word.length();
 				logger.debug("{} found '{}' ({} points)", player, word, points);
@@ -51,7 +54,7 @@ public class SelectionValidator
 				// Assign points
 				player.modScore(+points);
 				match.broadcast(new WordFoundMessage(player, word, +points, tiles));
-	
+				
 				// Expend the 'used' tiles
 				Board board = match.getBoard();
 				for(Tile tile : tiles)

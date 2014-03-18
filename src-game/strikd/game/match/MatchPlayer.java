@@ -1,8 +1,13 @@
 package strikd.game.match;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import strikd.game.player.Player;
 import strikd.net.codec.OutgoingMessage;
 import strikd.sessions.Session;
+import strikd.words.Word;
 
 public class MatchPlayer
 {
@@ -12,6 +17,8 @@ public class MatchPlayer
 	private int playerId;
 	private boolean ready;
 	private int score;
+	
+	private List<Word> foundWords = Lists.newArrayList();
 	
 	private boolean hasLeft;
 	
@@ -104,5 +111,21 @@ public class MatchPlayer
 	public String toString()
 	{
 		return this.getInfo().getName();
+	}
+
+	public List<Word> getFoundWords()
+	{
+		return this.foundWords;
+	}
+	
+	public int getLetterCount()
+	{
+		int letterCount = 0;
+		for(Word word : this.getFoundWords())
+		{
+			letterCount += word.length();
+		}
+		
+		return letterCount;
 	}
 }

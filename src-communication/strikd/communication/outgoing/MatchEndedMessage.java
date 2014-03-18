@@ -6,9 +6,18 @@ import strikd.net.codec.OutgoingMessage;
 
 public class MatchEndedMessage extends OutgoingMessage
 {
-	public MatchEndedMessage(MatchPlayer winner)
+	public MatchEndedMessage(MatchPlayer p1, MatchPlayer p2, MatchPlayer winner)
 	{
 		super(Opcodes.Outgoing.MATCH_ENDED);
+		this.serializePlayer(p1);
+		this.serializePlayer(p2);
 		super.writeByte((byte)(winner != null ? winner.getPlayerId() : -1));
+	}
+	
+	private void serializePlayer(MatchPlayer player)
+	{
+		super.writeByte(player.getPlayerId());
+		super.writeInt(player.getFoundWords().size());
+		super.writeInt(player.getLetterCount());
 	}
 }

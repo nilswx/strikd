@@ -149,7 +149,7 @@ public class Match
 			}
 			
 			// Broadcast event
-			this.broadcast(new MatchEndedMessage(winner));
+			this.broadcast(new MatchEndedMessage(this.playerOne, this.playerTwo, winner));
 			
 			// Do post-match shit
 			ExperienceHandler exp = this.matchMgr.getServer().getExperienceHandler();
