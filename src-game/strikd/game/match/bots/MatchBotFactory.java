@@ -14,7 +14,7 @@ public class MatchBotFactory
 		Player player = opponent.getInfo();
 		
 		// ID is negative & random
-		bot.setId(RandomUtil.pickInt(Integer.MIN_VALUE, -1));
+		bot.setId(-RandomUtil.pickInt(1, Integer.MAX_VALUE));
 		
 		// Name is random with emojis
 		bot.setName(RandomUtil.flipCoin() ? MatchBotNameGenerator.generateMaleName() : MatchBotNameGenerator.generateFemaleName());
