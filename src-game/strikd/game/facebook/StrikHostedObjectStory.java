@@ -11,7 +11,7 @@ public abstract class StrikHostedObjectStory extends FacebookStory
 	}
 
 	// Generates Open Graph data for the given parameters (to be consumed by Facebook server)
-	private static final String OBJECT_URL_FORMAT = "http://strik.it/og/object.php?type=%s&data=%s";
+	private static final String OBJECT_URL_FORMAT = "http://strik.it/facebook/object.php?type=%s&data=%s";
 	
 	@Override
 	protected String getObject()
