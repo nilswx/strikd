@@ -91,7 +91,7 @@ public class ChallengeManager
 	
 	private void releaseBoth()
 	{
-		this.set(AVAILABLE, null);
+		this.reference.set(AVAILABLE, null);
 		this.set(AVAILABLE, null);
 	}
 	
