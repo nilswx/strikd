@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import strikd.util.NamedThreadFactory;
 
-public class MatchTimer implements Runnable
+public class MatchTimer
 {
 	private static final ScheduledExecutorService scheduler = 
 			Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("MatchTimer"));
@@ -32,7 +32,14 @@ public class MatchTimer implements Runnable
 		}
 		
 		this.startTime = System.currentTimeMillis();
-		this.timeout = scheduler.schedule(this, this.duration, TimeUnit.SECONDS);
+		this.timeout = scheduler.schedule(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				match.timerEnded();
+			}
+		}, this.duration, TimeUnit.SECONDS);
 	}
 	
 	public void stop()
@@ -44,12 +51,6 @@ public class MatchTimer implements Runnable
 		
 		this.timeout.cancel(false);
 		this.timeout = null;
-	}
-	
-	@Override
-	public void run()
-	{
-		this.match.timerEnded();
 	}
 	
 	public boolean isRunning()
