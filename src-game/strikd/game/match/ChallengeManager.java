@@ -97,10 +97,7 @@ public class ChallengeManager
 	
 	public void available()
 	{
-		if(this.is(UNAVAILABLE))
-		{
-			this.set(AVAILABLE, null);
-		}
+		this.set(AVAILABLE, null);
 	}
 	
 	public void unavailable()
