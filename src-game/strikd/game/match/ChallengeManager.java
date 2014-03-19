@@ -63,9 +63,9 @@ public class ChallengeManager
 		}
 	}
 	
-	public void acceptChallenge()
+	public void acceptChallenge(int playerId)
 	{
-		if(this.is(CHALLENGED))
+		if(this.is(CHALLENGED) && playerId == this.reference.getPlayer().getId())
 		{
 			// Create players
 			MatchPlayer p1 = new MatchPlayer(this.reference.session);
@@ -80,9 +80,9 @@ public class ChallengeManager
 		}
 	}
 	
-	public void declineChallenge()
+	public void declineChallenge(int playerId)
 	{
-		if(this.is(CHALLENGED))
+		if(this.is(CHALLENGED) && playerId == this.reference.getPlayer().getId())
 		{
 			this.reference.session.send(new ChallengeDeclinedMessage(this.getPlayer()));
 			this.releaseBoth();
@@ -108,15 +108,15 @@ public class ChallengeManager
 		// This player is being challenged?
 		if(this.is(CHALLENGED))
 		{
-			// Declined it!
-			this.declineChallenge();
+			// We decline them
+			this.declineChallenge(this.reference.getPlayer().getId());
 		}
 		
 		// This player is challenging someone?
 		else if(this.is(CHALLENGING))
 		{
-			// Get declined!
-			this.reference.declineChallenge();
+			// They decline us
+			this.reference.declineChallenge(this.getPlayer().getId());
 		}
 		
 		// Boom!

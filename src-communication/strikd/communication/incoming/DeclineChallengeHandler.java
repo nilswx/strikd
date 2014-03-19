@@ -15,6 +15,8 @@ public class DeclineChallengeHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		session.getChallengeMgr().declineChallenge();
+		int playerId = request.readInt();
+		
+		session.getChallengeMgr().declineChallenge(playerId);
 	}
 }

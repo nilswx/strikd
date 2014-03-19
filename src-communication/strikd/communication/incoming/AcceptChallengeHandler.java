@@ -15,6 +15,8 @@ public class AcceptChallengeHandler extends MessageHandler
 	@Override
 	public void handle(Session session, IncomingMessage request)
 	{
-		session.getChallengeMgr().acceptChallenge();
+		int playerId = request.readInt();
+		
+		session.getChallengeMgr().acceptChallenge(playerId);
 	}
 }
