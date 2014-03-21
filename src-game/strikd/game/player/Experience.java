@@ -10,10 +10,10 @@ import strikd.communication.outgoing.LevelsMessage;
  */
 public final class Experience
 {
-	public static final int MAX_LEVEL = 25;
+	public static final int MAX_LEVEL = 20;
 	
-	private static final int FORMULA_BASE = 100;
-	private static final float FORMULA_MULTIPLIER = 1 + 0.30f;
+	private static final int FORMULA_BASE = 75;
+	private static final float FORMULA_MULTIPLIER = 2.0f;
 	private static final int[] LEVEL_EXPERIENCE;
 	
 	private static final LevelsMessage levelsMessage;
@@ -66,21 +66,17 @@ public final class Experience
 		LEVEL_EXPERIENCE = new int[MAX_LEVEL + 1];
 		for(int level = 1; level <= MAX_LEVEL; level++)
 		{
-		    int total = 0;
-		    for (int i = 1; i <= level; i++)
-		    {
-		      total += (i + 300 * Math.pow(2, i / 7.0));
-		    }
-
-		   LEVEL_EXPERIENCE[level] = (int) (total * 2.5);
-		    /*
-			if(level == 1)
+			int prev = LEVEL_EXPERIENCE[level - 1];
+			
+			LEVEL_EXPERIENCE[level] = (int) (FORMULA_BASE + ((float)prev * (float)FORMULA_MULTIPLIER));
+			/*
+			if(level == 1000)
 			{
-				LEVEL_EXPERIENCE[level] = 100;
+				LEVEL_EXPERIENCE[level] = FORMULA_BASE/2;
 			}
 			else
 			{
-				LEVEL_EXPERIENCE[level] = (int) (LEVEL_EXPERIENCE[level - 1] * 2) + FORMULA_BASE;//+ (FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level)));
+				LEVEL_EXPERIENCE[level] = (int) ((LEVEL_EXPERIENCE[level - 1] + (FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level+1)))) + FORMULA_BASE;
 			}*/
 		}
 		
