@@ -6,9 +6,14 @@ import strikd.net.codec.OutgoingMessage;
 
 public class ChallengeFailedMessage extends OutgoingMessage
 {
-	public ChallengeFailedMessage(Player player)
+	public ChallengeFailedMessage(Player opponent)
+	{
+		this(opponent.getId());
+	}
+	
+	public ChallengeFailedMessage(int playerId)
 	{
 		super(Opcodes.Outgoing.CHALLENGE_FAILED);
-		super.writeInt(player.getId());
+		super.writeInt(playerId);
 	}
 }

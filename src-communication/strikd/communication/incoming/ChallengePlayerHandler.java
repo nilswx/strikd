@@ -30,7 +30,7 @@ public class ChallengePlayerHandler extends MessageHandler
 		if(opponent == null || !opponent.isOnline() || opponent.isInMatch())
 		{
 			// Failed!
-			session.send(new ChallengeFailedMessage(opponent));
+			session.send(new ChallengeFailedMessage(opponentId));
 		}
 		else
 		{
