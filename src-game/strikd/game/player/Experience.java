@@ -13,7 +13,7 @@ public final class Experience
 	public static final int MAX_LEVEL = 20;
 	
 	private static final int FORMULA_BASE = 75;
-	private static final float FORMULA_MULTIPLIER = 2.0f;
+	private static final float FORMULA_MULTIPLIER = 2.12f;
 	private static final int[] LEVEL_EXPERIENCE;
 	
 	private static final LevelsMessage levelsMessage;
