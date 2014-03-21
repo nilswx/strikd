@@ -51,7 +51,7 @@ public abstract class FacebookStory implements Runnable
 	private boolean checkPublishActionPermission()
 	{
 		// Log what we're doing
-		logger.info("checking 'publish_stream' permission for %d", this.identity.getUserId());
+		logger.info("checking 'publish_stream' permission for {}", this.identity.getUserId());
 		
 		try
 		{
@@ -65,7 +65,7 @@ public abstract class FacebookStory implements Runnable
 		}
 		catch(Exception e)
 		{
-			logger.warn("could not check 'publish_stream' permission for %d", this.identity.getUserId());
+			logger.warn("could not check 'publish_stream' permission for {}", this.identity.getUserId());
 			return false;
 		}
 	}
