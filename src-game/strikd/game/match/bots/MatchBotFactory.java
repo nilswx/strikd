@@ -3,6 +3,7 @@ package strikd.game.match.bots;
 import strikd.game.match.MatchPlayer;
 import strikd.game.match.bots.impl.SimpleMatchBotPlayer;
 import strikd.game.player.Avatars;
+import strikd.game.player.Experience;
 import strikd.game.player.Player;
 import strikd.util.RandomUtil;
 
@@ -30,6 +31,7 @@ public class MatchBotFactory
 		bot.setMatches(RandomUtil.pickInt(0, player.getMatches()));
 		bot.setWins(RandomUtil.pickInt(0, player.getWins()));
 		bot.setXp(bot.getMatches() * 45);
+		bot.setLevel(Experience.calculateLevel(bot.getXp()));
 		
 		// Fabricate bot
 		return new SimpleMatchBotPlayer(bot);

@@ -15,6 +15,7 @@ import strikd.game.board.Tile;
 import strikd.game.items.PowerUp;
 import strikd.game.match.SelectionValidator;
 import strikd.game.match.bots.MatchBotPlayer;
+import strikd.game.player.Experience;
 import strikd.game.player.Player;
 import strikd.locale.LocaleBundle;
 import strikd.locale.LocaleBundle.DictionaryType;
@@ -30,9 +31,16 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 	private WordDictionary dictionary;
 	private PowerUp[] availablePowerUps;
 	
+	private final float elitePercentage;
+	private final float noobPercentage;
+	
 	public SimpleMatchBotPlayer(Player bot)
 	{
 		super(bot);
+		
+		// How elite am I?
+		this.elitePercentage = (float)this.getInfo().getLevel() / (float)Experience.MAX_LEVEL;
+		this.noobPercentage = (1 - elitePercentage);
 	}
 	
 	@Override
@@ -84,7 +92,26 @@ public class SimpleMatchBotPlayer extends MatchBotPlayer
 	@Override
 	protected int nextMoveDelay()
 	{
-		int delay = RandomUtil.pickInt(3000, 9000);
+		// Player at lvl 1
+		final int noobMinDelay = 5000;
+		final int noobMaxDelay = 13*1000;
+		final int noobVariance = 5000;
+		
+		// Player at max level
+		final int eliteMinDelay = 1000;
+		final int eliteMaxDelay = 5000;
+		final int eliteVariance = 1000;
+		
+		// My delays (get shorter when bot has more XP)
+		int myMinDelay = Math.max(eliteMinDelay, (int)(noobMinDelay * this.noobPercentage));
+		int myMaxDelay = Math.max(eliteMaxDelay, noobMaxDelay - (int)(noobMaxDelay * this.elitePercentage));
+		
+		// Add some variance
+		myMinDelay += (noobVariance * this.noobPercentage);
+		myMaxDelay -= (eliteVariance * this.elitePercentage);
+		
+		// Pick a delay!
+		int delay = RandomUtil.pickInt(myMinDelay, myMaxDelay) ;
 		logger.debug("{} will do a new move in {} ms", this, delay);
 		
 		return delay;

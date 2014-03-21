@@ -12,14 +12,14 @@ public final class Experience
 {
 	// Level Cap
 	public static final int MAX_LEVEL = 20;
-	
 	// Formula and growth
-	private static final int FORMULA_BASE = 75;
+	private static final int FORMULA_BASE = 35;
 	private static final float GROW_PERCENTAGE = 0.3f;
 	
 	// Caches
 	private static final int[] LEVEL_EXPERIENCE;
 	private static final LevelsMessage levelsMessage;
+	public static final int getMaxExperience() { return LEVEL_EXPERIENCE[MAX_LEVEL]; }
 	
 	// Logger
 	private static final Logger logger = LoggerFactory.getLogger(Experience.class);
@@ -98,6 +98,7 @@ public final class Experience
 	
 	public static void main(String[] args)
 	{
+		System.out.println(Experience.getMaxExperience());
 		Experience.class.toString();
 	}
 }
