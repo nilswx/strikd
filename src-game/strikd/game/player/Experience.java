@@ -13,7 +13,7 @@ public final class Experience
 	public static final int MAX_LEVEL = 20;
 	
 	private static final int FORMULA_BASE = 75;
-	private static final float FORMULA_MULTIPLIER = 2.12f;
+	private static final float FORMULA_EXTRA_MP = 1.30f;
 	private static final int[] LEVEL_EXPERIENCE;
 	
 	private static final LevelsMessage levelsMessage;
@@ -67,18 +67,12 @@ public final class Experience
 		for(int level = 1; level <= MAX_LEVEL; level++)
 		{
 			int prev = LEVEL_EXPERIENCE[level - 1];
+			int prevNeed = (level > 1) ? (prev - LEVEL_EXPERIENCE[level - 2]) : 0;
+			int newNeed = (int) (prevNeed * FORMULA_EXTRA_MP);
 			
-			LEVEL_EXPERIENCE[level] = (int) (FORMULA_BASE + ((float)prev * (float)FORMULA_MULTIPLIER));
-			/*
-			if(level == 1000)
-			{
-				LEVEL_EXPERIENCE[level] = FORMULA_BASE/2;
-			}
-			else
-			{
-				LEVEL_EXPERIENCE[level] = (int) ((LEVEL_EXPERIENCE[level - 1] + (FORMULA_BASE * Math.pow(FORMULA_MULTIPLIER, level+1)))) + FORMULA_BASE;
-			}*/
+			LEVEL_EXPERIENCE[level] = FORMULA_BASE + prev + newNeed;
 		}
+		
 		
 		// Pre=compute message
 		levelsMessage = new LevelsMessage(LEVEL_EXPERIENCE);
