@@ -10,14 +10,18 @@ import strikd.communication.outgoing.LevelsMessage;
  */
 public final class Experience
 {
+	// Level Cap
 	public static final int MAX_LEVEL = 20;
 	
+	// Formula and growth
 	private static final int FORMULA_BASE = 75;
-	private static final float FORMULA_EXTRA_MP = 1.30f;
-	private static final int[] LEVEL_EXPERIENCE;
+	private static final float GROW_PERCENTAGE = 0.3f;
 	
+	// Caches
+	private static final int[] LEVEL_EXPERIENCE;
 	private static final LevelsMessage levelsMessage;
 	
+	// Logger
 	private static final Logger logger = LoggerFactory.getLogger(Experience.class);
 		
 	public static int calculateLevel(int experience)
@@ -68,7 +72,7 @@ public final class Experience
 		{
 			int prev = LEVEL_EXPERIENCE[level - 1];
 			int prevNeed = (level > 1) ? (prev - LEVEL_EXPERIENCE[level - 2]) : 0;
-			int newNeed = (int) (prevNeed * FORMULA_EXTRA_MP);
+			int newNeed = (int) (prevNeed * (1 + GROW_PERCENTAGE));
 			
 			LEVEL_EXPERIENCE[level] = FORMULA_BASE + prev + newNeed;
 		}
