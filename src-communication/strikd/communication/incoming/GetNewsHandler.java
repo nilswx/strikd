@@ -17,6 +17,6 @@ public class GetNewsHandler extends MessageHandler
 	public void handle(Session session, IncomingMessage request)
 	{
 		NewsManager news = session.getServer().getNewsMgr();
-		session.send(news.getCachedNewsMessage());
+		session.sendCopy(news.getCachedNewsMessage());
 	}
 }
