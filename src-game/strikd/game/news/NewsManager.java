@@ -2,6 +2,7 @@ package strikd.game.news;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class NewsManager extends Server.Referent
 			item.setHeadline("Development started!");
 			item.setBody("There's a lot of stuff to be done... Stay tuned.");
 			item.setImageUrl("http://cdn.strik.it/news/dev-started.png");
-			item.setTimestamp(null);
+			item.setTimestamp(DateTime.parse("2013-07-23T15:00:00Z").toDate());
 			this.getDatabase().insert(item);
 			
 			// XMAS!
@@ -41,7 +42,7 @@ public class NewsManager extends Server.Referent
 			item.setHeadline("Happy Holidays!");
 			item.setBody("Strik wishes you a Merry Christmas and a great 2014!");
 			item.setImageUrl("http://cdn.strik.it/news/holidays-2013.png");
-			item.setTimestamp(null);
+			item.setTimestamp(DateTime.parse("2013-12-20T13:00:00Z").toDate());
 			this.getDatabase().insert(item);
 		}
 		
