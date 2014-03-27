@@ -31,7 +31,8 @@ public interface Opcodes
 		GET_ACTIVITY_STREAM,
 		GET_SHOP_PAGE,
 		GET_IN_APP_PURCHASE_PRODUCTS,
-		REDEEM_IN_APP_PURCHASE;
+		REDEEM_IN_APP_PURCHASE,
+		GET_NEWS;
 		
 		private static final Opcodes.Incoming[] values = values();
 		

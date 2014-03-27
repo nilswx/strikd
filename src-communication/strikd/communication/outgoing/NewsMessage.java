@@ -14,6 +14,7 @@ public class NewsMessage extends OutgoingMessage
 		super.writeInt(items.size());
 		for(NewsItem item : items)
 		{
+			super.writeInt(item.getId());
 			super.writeStr(item.getHeadline());
 			super.writeTime(item.getTimestamp());
 			super.writeStr(item.getImageUrl());

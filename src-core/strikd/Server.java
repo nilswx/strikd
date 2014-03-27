@@ -18,6 +18,7 @@ import strikd.game.achievements.AchievementRegister;
 import strikd.game.items.ItemTypeRegistry;
 import strikd.game.items.shop.Shop;
 import strikd.game.match.MatchManager;
+import strikd.game.news.NewsManager;
 import strikd.game.player.ExperienceHandler;
 import strikd.game.player.PlayerRegister;
 import strikd.game.stream.ActivityStream;
@@ -51,6 +52,7 @@ public class Server
 	private final ActivityStream activityStream;
 	private final AchievementRegister achievementRegister;
 	private final FacebookManager facebook;
+	private final NewsManager newsMgr;
 	
 	private boolean isShutdownMode;
 	private String shutdownMessage;
@@ -108,6 +110,9 @@ public class Server
 				this);
 		FacebookManager.setSharedAppNamespace(this.facebook.getAppNamespace());
 		FacebookManager.setSharedAppAccessToken(this.facebook.getAppAccessToken());
+		
+		// Load news
+		this.newsMgr = new NewsManager(this);
 		
 		// Force message registry loading
 		MessageHandlers.load();
@@ -268,6 +273,11 @@ public class Server
 	public FacebookManager getFacebook()
 	{
 		return this.facebook;
+	}
+	
+	public NewsManager getNewsMgr()
+	{
+		return this.newsMgr;
 	}
 	
 	public boolean isShutdownMode()
