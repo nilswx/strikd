@@ -23,6 +23,28 @@ public class NewsManager extends Server.Referent
 	
 	public void reload()
 	{
+		// Needs seeding?
+		if(this.getDatabase().find(NewsItem.class).findRowCount() == 0)
+		{
+			// Strik development started!
+			NewsItem item = new NewsItem();
+			item.setId(1);
+			item.setHeadline("Development started!");
+			item.setBody("There's a lot of stuff to be done... Stay tuned.");
+			item.setImageUrl("http://cdn.strik.it/news/dev-started.png");
+			item.setTimestamp(null);
+			this.getDatabase().insert(item);
+			
+			// XMAS!
+			item = new NewsItem();
+			item.setId(2);
+			item.setHeadline("Happy Holidays!");
+			item.setBody("Strik wishes you a Merry Christmas and a great 2014!");
+			item.setImageUrl("http://cdn.strik.it/news/holidays-2013.png");
+			item.setTimestamp(null);
+			this.getDatabase().insert(item);
+		}
+		
 		// Load items and rebuild cache
 		this.items = this.getDatabase().find(NewsItem.class).orderBy().desc("timestamp").findList();
 		this.cachedMessage = new NewsMessage(this.items);
