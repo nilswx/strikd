@@ -2,7 +2,8 @@ package strikd;
 
 public class Version
 {
-	private static final String version = "0.4.1-dev";
+	// TODO: return from .pom or something
+	private static final String version = "0.4.2-dev";
 	
 	private Version() { }
 	
