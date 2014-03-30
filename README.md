@@ -5,7 +5,6 @@ strikd
 
 Java server software for the online multiplayer word game Strik. 
 
-http://dev.strik.it:1337/job/strikd/badge/icon
 Build with Maven 3. Using Eclipse IDE or IDEA IntelliJ? Install the plugin to auto-generate the EntityBeans. (required)
 
 Eclipse update site: http://avaje.org/eclipseupdate/
