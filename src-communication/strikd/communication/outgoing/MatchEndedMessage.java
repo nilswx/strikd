@@ -11,12 +11,12 @@ public class MatchEndedMessage extends OutgoingMessage
 		super(Opcodes.Outgoing.MATCH_ENDED);
 		this.serializePlayer(p1);
 		this.serializePlayer(p2);
-		super.writeByte((byte)(winner != null ? winner.getPlayerId() : -1));
+		super.writeByte((byte)(winner != null ? winner.getActorId() : -1));
 	}
 	
 	private void serializePlayer(MatchPlayer player)
 	{
-		super.writeByte(player.getPlayerId());
+		super.writeByte(player.getActorId());
 		super.writeInt(player.getFoundWords().size());
 		super.writeInt(player.getLetterCount());
 	}

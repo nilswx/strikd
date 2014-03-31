@@ -14,7 +14,7 @@ public class MatchPlayer
 	private final Session session;
 	
 	private Match match;
-	private int playerId;
+	private int actorId;
 	private boolean ready;
 	private int score;
 	
@@ -32,10 +32,10 @@ public class MatchPlayer
 		this.session.send(msg);
 	}
 	
-	public MatchPlayer setMatch(Match match, int playerId)
+	public MatchPlayer setMatch(Match match, int actorId)
 	{
 		this.match = match;
-		this.playerId = playerId;
+		this.actorId = actorId;
 		if(this.session != null)
 		{
 			this.session.setMatchPlayer(this);
@@ -68,9 +68,9 @@ public class MatchPlayer
 		return this.match;
 	}
 	
-	public int getPlayerId()
+	public int getActorId()
 	{
-		return this.playerId;
+		return this.actorId;
 	}
 	
 	public void setReady()

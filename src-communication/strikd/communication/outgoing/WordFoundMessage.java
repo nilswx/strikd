@@ -13,7 +13,7 @@ public class WordFoundMessage extends OutgoingMessage
 	public WordFoundMessage(MatchPlayer player, Word word, int points, List<Tile> tiles)
 	{
 		super(Opcodes.Outgoing.WORD_FOUND);
-		super.writeByte((byte)player.getPlayerId());
+		super.writeByte((byte)player.getActorId());
 		super.writeStr(word.toString());
 		super.writeInt(points);
 		super.writeByte((byte)tiles.size());

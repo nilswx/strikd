@@ -17,10 +17,10 @@ public class AnnounceMatchMessage extends OutgoingMessage
 		super.writeInt(match.getTimer().getDuration());
 		
 		// MatchPlayerID of self
-		super.writeByte((byte)player.getPlayerId());
+		super.writeByte((byte)player.getActorId());
 		
 		// Data of opponent
-		super.writeByte((byte)opponent.getPlayerId());
+		super.writeByte((byte)opponent.getActorId());
 		PlayerInfoMessage.serializePlayer(opponent.getInfo(), this);
 		
 		 // "Loading..." time in seconds
