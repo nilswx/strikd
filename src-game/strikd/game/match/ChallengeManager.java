@@ -123,7 +123,7 @@ public class ChallengeManager
 		else if(this.is(CHALLENGING))
 		{
 			// We revoke our challenge to them
-			this.reference.revokeChallenge(this.reference.getPlayer().getId());
+			this.revokeChallenge(this.reference.getPlayer().getId());
 		}
 		
 		// Boom!
