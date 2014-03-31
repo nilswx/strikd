@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import strikd.communication.outgoing.ChallengeDeclinedMessage;
 import strikd.communication.outgoing.ChallengeMessage;
+import strikd.communication.outgoing.ChallengeRevokedMessage;
 import strikd.game.player.Player;
 import strikd.sessions.Session;
 import static strikd.game.match.ChallengeManager.State.*;
@@ -89,6 +90,15 @@ public class ChallengeManager
 		}
 	}
 	
+	public void revokeChallenge(int playerId)
+	{
+		if(this.is(CHALLENGING) && playerId == this.reference.getPlayer().getId())
+		{
+			this.reference.session.send(new ChallengeRevokedMessage(this.getPlayer()));
+			this.releaseBoth();
+		}
+	}
+	
 	private void releaseBoth()
 	{
 		this.reference.set(AVAILABLE, null);
@@ -112,8 +122,8 @@ public class ChallengeManager
 		// This player is challenging someone?
 		else if(this.is(CHALLENGING))
 		{
-			// They decline us
-			this.reference.declineChallenge(this.getPlayer().getId());
+			// We revoke our challenge to them
+			this.reference.revokeChallenge(this.reference.getPlayer().getId());
 		}
 		
 		// Boom!
