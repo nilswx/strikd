@@ -1,7 +1,7 @@
 strikd 
 ======
 
-[![Build Status](http://dev.strik.it:1337/job/strikd/badge/icon)](http://dev.strik.it:1337/job/strikd/)
+[![Build Status](http://dev.strik.it:1337/buildStatus/icon?job=strikd)](http://dev.strik.it:1337/job/strikd/)
 
 Java server software for the online multiplayer word game Strik. 
 
