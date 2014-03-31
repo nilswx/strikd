@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.indev.strik</groupId>
 	<artifactId>strikd</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.4.3-SNAPSHOT</version>
 	<name>strikd</name>
-	<description>Standalone Java server software for the smartphone game 'Strik'.</description>
+	<description>Standalone Java server software that powers the game servers for Strik.</description>
 	
 	<properties>
 		<jdk.version>1.7</jdk.version>
@@ -80,21 +80,29 @@
 				</executions>
 			</plugin>
 			
-			<!-- Bake a JAR containing all dependencies -->
+			<!-- Bake a runnable JAR containing all dependencies -->
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.1</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-				
-			</plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>make-jar-with-dependencies</id>
+            <phase>package</phase>
+            <goals>
+                <goal>single</goal>
+            </goals>
+            <configuration>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+                <archive>
+                    <manifest>
+                        <mainClass>strikd.Bootstrapper</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
 		</plugins>
 		
 		
