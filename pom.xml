@@ -7,19 +7,59 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>strikd</name>
 	<description>Standalone Java server software for the smartphone game 'Strik'.</description>
-
+	
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-  		<maven.compiler.target>1.7</maven.compiler.target>
-  		
+		<jdk.version>1.7</jdk.version>
 		<ebeanorm.version>3.3.1-RC2</ebeanorm.version>
 		<ebeanorm-mavenenhancer.version>3.2.2</ebeanorm-mavenenhancer.version>
-		<skipTests>true</skipTests>
+		
+		<skipTests>true</skipTests>	
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
 	</properties>
 
 	<build>
-		<plugins>        
-        			<plugin>
+		<plugins>
+		
+		<!-- For compiling to the right Java version -->
+		 <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>2.3.2</version>
+		<configuration>
+			<source>${jdk.version}</source>
+			<target>${jdk.version}</target>
+		</configuration>
+	  </plugin>
+ 
+ 
+		
+			<!-- Because our source folders don't follow Maven conventions :( -->
+		<plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src-core</source>
+                <source>src-game</source>
+                <source>src-game-items</source>
+                <source>src-communication</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+              
+            <!-- Enhance entity beans after compiling them -->
+        	<plugin>
 				<groupId>org.avaje.ebeanorm</groupId>
 				<artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
 				<version>${ebeanorm-mavenenhancer.version}</version>
@@ -39,11 +79,28 @@
 					</execution>
 				</executions>
 			</plugin>
-        
+			
+			<!-- Bake a JAR containing all dependencies -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				
+			</plugin>
 		</plugins>
+		
+		
+		<!--This configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -60,7 +117,7 @@
 											avaje-ebeanorm-mavenenhancer
 										</artifactId>
 										<versionRange>
-											[3.2.2,)
+											[${ebeanorm-mavenenhancer-version},)
 										</versionRange>
 										<goals>
 											<goal>enhance</goal>
@@ -98,9 +155,7 @@
 			<artifactId>avaje-ebeanorm</artifactId>
 			<version>${ebeanorm.version}</version>
 		</dependency>
-
-		<!-- the Maven plugin that enhances the entity classes in the process-classes 
-			phase -->
+		
 		<dependency>
 			<groupId>org.avaje.ebeanorm</groupId>
 			<artifactId>avaje-ebeanorm-mavenenhancer</artifactId>
@@ -117,6 +172,14 @@
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
 			<version>0.9.9-RC1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.ip2c</groupId>
+			<artifactId>ip2c</artifactId> 
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/ip2c.jar</systemPath> 
 		</dependency>
 
 		<dependency>
